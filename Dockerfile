@@ -1,6 +1,25 @@
 FROM php:8.1-fpm-alpine
 
-RUN apk add --no-cache nginx wget php-gd php-soap
+RUN apk add --no-cache nginx wget
+
+# Install dependencies for GD and install GD with support for jpeg, png webp and freetype
+# Info about installing GD in PHP https://www.php.net/manual/en/image.installation.php
+RUN apk add --no-cache \
+        libjpeg-turbo-dev \
+        libpng-dev \
+        libwebp-dev \
+        freetype-dev \
+        libxml2-dev \
+        libzip-dev
+
+# As of PHP 7.4 we don't need to add --with-png
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
+
+RUN docker-php-ext-install gd
+
+RUN docker-php-ext-install soap
+
+RUN docker-php-ext-install zip
 
 RUN mkdir -p /run/nginx
 
