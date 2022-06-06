@@ -67,7 +67,7 @@
     </div>
 
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center container">
-        <h1 class="display-5 mb-3">{{ env('APP_NAME') }}</h1>
+        <h1 class="display-5 mb-3">{{ env('APP_NAME') }} Interno</h1>
         <div class="d-flex justify-content-center">
             <table class="align-self-center">
                 <tr>
