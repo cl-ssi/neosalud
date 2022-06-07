@@ -2,12 +2,11 @@
 
 @section('content')
 
-<div class="jumbotron mt-3">
-    <div class="container">
-        <h1 class="display-5">Portal de Salud</h1>
-        <p class="lead">Bienvenido al portal de salud de la región de Tarapacá.<br> 
-            Acá encontrarás la información que esté disponible para tí.</p>
-    </div>
+<div class="h-100 p-5 bg-light border rounded-3">
+    <h2>Portal interno del {{ env('APP_SS') }}</h2>
+    <p>Bienvenido NeoSalud, portal de salud de la región de Tarapacá.<br> 
+    Acá encontrarás la información que esté disponible para tí.</p>
+    <button class="btn btn-outline-secondary" type="button">Example button</button>
 </div>
 
 @endsection

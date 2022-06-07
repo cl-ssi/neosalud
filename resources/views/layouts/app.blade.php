@@ -7,35 +7,17 @@
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <title>{{ config('app.name', 'Laravel') }}</title>
-        <!-- Scripts -->
+
         <!-- Bootstrap -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-            crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
-            integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT"
-            crossorigin="anonymous"></script>
-
-        <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-mutate-approach="sync"></script>
-
-        <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-        <link href="{{ asset('css/nunito.css') }}" rel="stylesheet">
-        <!-- Styles -->
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-            crossorigin="anonymous">
-
+        
         <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
-
-        <!-- Bootstrap CSS -->
-        <!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"-->
-
+        <link href="{{ asset('css/nunito.css') }}" rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="{{ asset('css/ssi.css') }}" rel="stylesheet">
 
@@ -57,36 +39,34 @@
     </head>
     <body>
 
-    @livewireScripts
-    <nav class="navbar navbar-dark sticky-top bg-ssi flex-md-nowrap p-0 mb-3 shadow ssi-azul">
-            <a class="navbar-ssi @production ssi-rojo @else ssi-morado @endproduction col-md-3 col-lg-2 mr-0 px-3" href="{{ route('home') }}">Servicio de Salud</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <ul class="navbar-nav ml-auto mr-1">
-                <li class="nav-item">
+        @livewireScripts
 
-                    @if(auth()->check())
-                        <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->officialName }} <span class="caret"></span>
-                        </a>
-                    @endif
-                </li>
-            </ul>
-        </nav>
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand @production ssi-rojo @else ssi-morado @endproduction col-md-3 col-lg-2 me-0 px-3 fs-6" href="{{ route('home') }}">Servicio de Salud</a>
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="navbar-nav">
+                <div class="nav-item text-nowrap">
+                @if(auth()->check())
+                <a class="nav-link px-3" href="#">{{ Auth::user()->officialName }}</a>
+                @endif
+                </div>
+            </div>
+        </header>
+
         <div class="container-fluid">
             <div class="row">
-                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse d-print-none">
-                    <div class="sidebar-sticky pt-3">
-                        @auth
-                        @include('layouts.partials.nav')
-                        @endauth
-                    </div>
-                </nav>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        
+                @include('layouts.partials.nav')
+                        
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                     <h4 class="d-none d-print-block">{{ env('APP_NAME') }}</h4>
                     
+                    <div class="mb-3"></div>
+
                     @include('layouts.partials.errors')
                     @include('layouts.partials.flash_message')
                     
@@ -94,18 +74,17 @@
                 </main>
             </div>
         </div>
-        <!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script-->
+    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v6.1.1/js/all.js" integrity="sha384-xBXmu0dk1bEoiwd71wOonQLyH+VpgR1XcDH3rtxrLww5ajNTuMvBdL5SOiFZnNdp" crossorigin="anonymous"></script>
         <script>
             feather.replace()
         </script>
-
-        <!-- TODO: #64 eliminar bootstrap 4.6 @sickiqq // programador -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         @yield('custom_js')
 
