@@ -10,20 +10,20 @@
 - ```git clone https://github.com/cl-ssi/neosalud```
 - ```cd neosalud```
 - ```cp .env-example .env```
-- Configurar los datos de conexión a la base de datos en el .env
+- Configurar los datos de conexión a tu base de datos "unisalud" de tu local en el .env
 - ```docker build -t php8.1-ssi docker/php8.1/.```
 - ```docker run --rm -it -v $(pwd):/var/www/html -p 8000:8000 -d --name php8.1-ssi php8.1-ssi```
 - ```docker exec -it php8.1-ssi /bin/bash```
 - Esto abrirá un contenedor con nuestra aplicación
+- ```composer install```
 - ```php artisan key:generate```
 - ```php artisan serve --host=0.0.0.0 --port=8000```
 - Pudese usar el alias ```$ serve``` para este último comando, ver todos los alias: ```$ alias```
 
 # Navegador
-- Navigate to http://localhost:8000
+- Ir a http://localhost:8000
 
 ## License
-
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 Developed by Servicio de Salud Iquique.
