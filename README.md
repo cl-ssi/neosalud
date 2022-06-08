@@ -10,7 +10,7 @@
 - [Instalar Docker Desktop](https://www.docker.com/get-started/)
 - Instalar Git
 - MySql (en el host o en un contenedor)
-# Instalación 
+## Instalación 
 - Abrir un terminal de WSL (opcional [Instalar Windows Terminal](https://docs.microsoft.com/es-es/windows/terminal/))
 - ```git clone https://github.com/cl-ssi/neosalud```
 - ```cd neosalud```
@@ -25,7 +25,9 @@
 - ```php artisan serve --host=0.0.0.0 --port=8000```
 - Pudese usar el alias ```$ serve``` para este último comando, ver todos los alias: ```$ alias```
 
-# Abrir el navegador
+## Para detener el contenedor
+- ```docker stop php8.1-ssi```
+## Abrir el navegador
 - Ir a http://localhost:8000
 
 ## License
