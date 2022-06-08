@@ -3,6 +3,7 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use App\Logging\CloudLogging;
 
 return [
 
@@ -35,6 +36,12 @@ return [
     */
 
     'channels' => [
+        'cloudlogging' => [
+            'driver' => 'custom',
+            'via' => CloudLogging::class,
+            'level' => 'debug',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

@@ -17,4 +17,9 @@ class TestController extends Controller
         echo "get content: ";
         return $response->getBody();
     }
+
+    public function error()
+    {
+        abort(500, "The Partner was not found");
+    }
 }
