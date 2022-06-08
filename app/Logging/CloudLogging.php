@@ -19,9 +19,15 @@ class CloudLogging
         //$app['project_id'] = getenv('GOOGLE_PROJECT_ID');
         // putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('google.service_account.filepath'));
 
-        $logger = LoggingClient::psrBatchLogger('app');
-        $handler = new PsrHandler($logger);
+        // $logger = LoggingClient::psrBatchLogger('app');
+        // $handler = new PsrHandler($logger);
 
-        return new Logger('stackdriver', [$handler]);
+        // return new Logger('stackdriver', [$handler]);
+
+        $logging = new LoggingClient([
+            'projectId' => env('GOOGLE_PROJECT_ID')
+        ]);
+        
+        return $logging->psrLogger('app');
     }
 }

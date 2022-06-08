@@ -19,15 +19,23 @@ class TestController extends Controller
         return $response->getBody();
     }
 
-    public function error()
+    public function error($option = null)
     {
-        Log::info('Boom');
+        Log::info('Boom '.$option);
         //abort(500, "The Partner was not found");
-        echo "error)";
+        echo "Echo error";
+        if($option == 1)
+        {
+            return redirect()->route('asdfsdf');
+        }
+        if($option == 2)
+        {
+            abort(404);
+        }
     }
 
     public function getProjectId()
     {
-        echo getenv('GOOGLE_PROJECT_ID');
+        echo env('GOOGLE_PROJECT_ID');
     }
 }

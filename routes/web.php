@@ -703,7 +703,7 @@ Route::prefix('vista')->name('vista.')->group(function () {
 
 Route::get('/test/rayen' ,[RayenController::class, 'getUrgencyStatus'])->name('getUrgencyStatus');
 Route::get('/test/sendip',[TestController::class,'sendIp']);
-Route::get('/test/error',[TestController::class,'error']);
+Route::get('/test/error/{option?}',[TestController::class,'error']);
 Route::get('/test/projectid',[TestController::class,'getProjectId']);
 
 
