@@ -22,7 +22,8 @@ class TestController extends Controller
     public function error()
     {
         Log::info('Boom');
-        abort(500, "The Partner was not found");
+        //abort(500, "The Partner was not found");
+        echo "error)";
     }
 
     public function getProjectId()

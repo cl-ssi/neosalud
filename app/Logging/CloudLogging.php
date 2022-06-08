@@ -6,7 +6,7 @@ use Google\Cloud\Logging\LoggingClient;
 use Monolog\Handler\PsrHandler;
 use Monolog\Logger;
 
-class CreateStackdriverLogger
+class CloudLogging
 {
     /**
      * Create a custom Monolog instance.
