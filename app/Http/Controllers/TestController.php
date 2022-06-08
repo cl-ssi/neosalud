@@ -21,7 +21,7 @@ class TestController extends Controller
 
     public function error()
     {
-        Log::info('Boom');
+        Log::info('Boom')
         abort(500, "The Partner was not found");
     }
 }
