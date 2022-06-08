@@ -21,16 +21,18 @@ class TestController extends Controller
 
     public function error($option = null)
     {
-        Log::info('Boom '.$option);
-        //abort(500, "The Partner was not found");
-        echo "Echo error";
-        if($option == 1)
+        switch($option)
         {
-            return redirect()->route('asdfsdf');
-        }
-        if($option == 2)
-        {
-            abort(404);
+            case 1:
+                return redirect()->route('asdfsdf');
+                break;
+            case 2:
+                abort(500,"Error 500.000");
+                break;
+            case 3:
+                echo "Log: boom";
+                Log::info('Boom '.$option);
+                break;
         }
     }
 

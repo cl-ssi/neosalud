@@ -24,10 +24,16 @@ class CloudLogging
 
         // return new Logger('stackdriver', [$handler]);
 
-        $logging = new LoggingClient([
-            'projectId' => env('GOOGLE_PROJECT_ID')
-        ]);
+        // $logging = new LoggingClient([
+        //     'projectId' => env('GOOGLE_PROJECT_ID')
+        // ]);
         
-        return $logging->psrLogger('app');
+        // return $logging->psrLogger('app');
+
+        $logName = isset($config['logName']) ? $config['logName'] : 'app';
+        $psrLogger = LoggingClient::psrBatchLogger($logName);
+        $handler = new PsrHandler($psrLogger);
+        $logger = new Logger($logName, [$handler]);
+        return $logger;
     }
 }
