@@ -5,6 +5,7 @@ namespace App\Logging;
 use Google\Cloud\Logging\LoggingClient;
 use Monolog\Handler\PsrHandler;
 use Monolog\Logger;
+//use Monolog\Handler\AbstractProcessingHandler;
 
 class CloudLogging
 {
@@ -29,11 +30,27 @@ class CloudLogging
         // ]);
         
         // return $logging->psrLogger('app');
+        $logging = new LoggingClient(['projectId' => env('GOOGLE_PROJECT_ID')]);
+        $psrLogger = $logging->psrLogger('app');
+        // $logger = $logging->logger('app', [
+        //     'resource' => [
+        //         'type' => 'gcs_bucket',
+        //         'labels' => [
+        //             'bucket_name' => 'my_bucket'
+        //         ]
+        //     ]
+        // ]);
+        // dd($logger);
 
-        $logName = isset($config['logName']) ? $config['logName'] : 'app';
-        $psrLogger = LoggingClient::psrBatchLogger($logName);
+        // $entry = $logger->entry($message);
+        // $logger->write($entry);
+
+        // $logName = isset($config['logName']) ? $config['logName'] : 'app';
+        // $psrLogger = LoggingClient::psrBatchLogger('app');
+
         $handler = new PsrHandler($psrLogger);
-        $logger = new Logger($logName, [$handler]);
+        $logger = new Logger('app', [$handler]);
+        //dd($logger);
         return $logger;
     }
 }
