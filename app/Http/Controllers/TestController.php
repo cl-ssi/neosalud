@@ -24,7 +24,7 @@ class TestController extends Controller
         switch($option)
         {
             case 1:
-                return redirect()->route('asdfsdf');
+                return redirect()->route('ruta.inexistente');
                 break;
             case 2:
                 abort(500,"Error 500.000");
