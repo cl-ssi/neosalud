@@ -1,18 +1,20 @@
-# NeoSalud - Portal Interno de sistemas del Servicio de Salud Iquique
-## Dependencies
-- Docker Desktop
-- MySql (en el host)
-
+# Servicio de Salud Iquique
+# NeoSalud - Portal Interno de sistemas 
+## Dependencias (Windows con WSL2)
+- [Instalar WSL2](https://docs.microsoft.com/es-es/windows/wsl/install)
+- [Instalar Docker Desktop](https://docs.docker.com/desktop/windows/install)
+- MySql (en el host o en un contenedor)
+- Instalar Git en WSL2 (ej: ```$ sudo apt-get install git```)
 # Instalación 
+- Abrir un terminal de WSL (opcional [Instalar Windows Terminal](https://docs.microsoft.com/es-es/windows/terminal/))
 - ```git clone https://github.com/cl-ssi/neosalud```
 - ```cd neosalud```
 - ```cp .env-example .env```
-- Editar .env para que se conecte a MySql local: DB_HOST=host.docker.internal
+- Configurar los datos de conexión a la base de datos en el .env
 - ```docker build -t php8.1-ssi docker/php8.1/.```
 - ```docker run --rm -it -v $(pwd):/var/www/html -p 8000:8000 -d --name php8.1-ssi php8.1-ssi```
 - ```docker exec -it php8.1-ssi /bin/bash```
-- Abrir Docker Desktop, ir a Containers, ejecutar la consola del contenedor php8.1
-
+- Esto abrirá un contenedor con nuestra aplicación
 - ```php artisan key:generate```
 - ```php artisan serve --host=0.0.0.0 --port=8000```
 - Pudese usar el alias ```$ serve``` para este último comando, ver todos los alias: ```$ alias```
