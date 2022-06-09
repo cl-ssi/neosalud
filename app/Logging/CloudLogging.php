@@ -18,8 +18,13 @@ class CloudLogging
     public function __invoke(array $config)
     {
         //$app['project_id'] = getenv('GOOGLE_PROJECT_ID');
-        // putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('google.service_account.filepath'));
-
+        //putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('google.service_account.filepath'));
+        if (app()->environment(['local'])) {
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/html/.tic-ssi.json');
+        }
+        else {
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('google.service_account.filepath'));
+        }
         // $logger = LoggingClient::psrBatchLogger('app');
         // $handler = new PsrHandler($logger);
 
@@ -31,7 +36,7 @@ class CloudLogging
         
         // return $logging->psrLogger('app');
         $logging = new LoggingClient(['projectId' => env('GOOGLE_PROJECT_ID')]);
-        $psrLogger = $logging->psrLogger('app');
+        $psrLogger = $logging->psrLogger('neosalud');
         // $logger = $logging->logger('app', [
         //     'resource' => [
         //         'type' => 'gcs_bucket',
@@ -49,7 +54,7 @@ class CloudLogging
         // $psrLogger = LoggingClient::psrBatchLogger('app');
 
         $handler = new PsrHandler($psrLogger);
-        $logger = new Logger('app', [$handler]);
+        $logger = new Logger('neosalud', [$handler]);
         //dd($logger);
         return $logger;
     }
