@@ -26,8 +26,8 @@ class CloudLogging
         $logging = new LoggingClient(['projectId' => env('GOOGLE_PROJECT_ID')]);
         $psrLogger = $logging->psrLogger('neosalud');
         $handler = new PsrHandler($psrLogger);
-        $logger = new Logger('app', [$handler]);
-        return $logger;
+        $logger = new Logger('neosalud', [$handler]);
+        return $psrLogger;
         // $logger = LoggingClient::psrBatchLogger('app');
         // $handler = new PsrHandler($logger);
 
