@@ -2,7 +2,7 @@
 @if($shift->status == true)
     <div class="row">
         <div class="col-sm-6">
-            <select class="form-control" wire:model='user_id' required="required">
+            <select class="form-select" wire:model='user_id' required="required">
                 <option value="">Selecciona un usuario</option>
                 @foreach($users as $user => $id)
                 <!-- TODO: #62 Pasar a mayúscula @AquaroTorres -->
@@ -12,7 +12,7 @@
             @error('user_id') <span class="error">{{ $message }}</span> @enderror
         </div>
         <div class="col-sm-5">
-            <select class="form-control"  wire:model="job_type_id">
+            <select class="form-select" wire:model="job_type_id">
                 <option value="">Selecciona un tipo de trabajador</option>
                 @foreach($job_types as $jt)
                 <option value="{{ $jt->id }}">{{ $jt->name }}</option>

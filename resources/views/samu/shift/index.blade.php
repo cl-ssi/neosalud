@@ -61,22 +61,6 @@
                 @if($shift->status AND auth()->user()->cannot('SAMU auditor') )
                     @livewire('samu.shift-user', ['shift' => $shift])
                 @else
-                    {{-- @foreach($shift->users as $user)
-                    <div class="form-row m-1">
-                        <div class="col-6">
-                            <li>
-                                {{ optional($user)->officialFullName }}
-                            </li>
-                        </div>
-                        <div class="col-5">
-                            {{ optional($user->pivot)->JobType->name }}
-                        </div>
-                        <div class="col-1">
-
-                        </div>
-                    </div>
-                    @endforeach --}}
-
                     @foreach($shift->users as $user)
                     <div class="row">
                         <div class="col">
