@@ -10,39 +10,40 @@
     @csrf
     @method('POST')
 
-    <div class="form-row">
-
-        <fieldset class="form-group col-md-2">
+    <div class="row">
+        <fieldset class="form-group col-sm-3">
             <label for="for_type"><b>Tipo de Turno*</b> </label>
-            <select class="form-control" name="type" id="for_type" required>
+            <select class="form-select" name="type" id="for_type" required>
                 <option value=""></option>
                 <option value="Largo">Largo</option>
                 <option value="Noche">Noche</option>
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-sm-3">
             <label for="for_opening_at"><b>Apertura*</b> </label>
             <input type="datetime-local" class="form-control" name="opening_at" id="for_opening_at" required>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-sm-3">
             <label for="for_closing_at"><b> Cierre (opcional aproximado)</b> </label>
             <input type="datetime-local" class="form-control" name="closing_at" id="for_closing_at">
         </fieldset>
-
     </div>
-    <div class="form-row">
 
-        <fieldset class="form-group col-md-6">
+    </br>
+
+    <div class="row">
+        <fieldset class="form-group col-sm">
             <label for="for_observation"><b> Observación</b> </label>
             <textarea class="form-control" name="observation" id="for_observation" rows="6"></textarea>
         </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary button">Crear</button>
+    </br>
 
-    <a class="btn btn-outline-secondary" href="{{ route('samu.shift.index') }}">Cancelar</a>
+    <a class="btn btn-outline-secondary float-end ms-1" href="{{ route('samu.shift.index') }}">Cancelar</a>
+    <button type="submit" class="btn btn-primary float-end">Crear</button>
 
 </form>
 
@@ -50,4 +51,4 @@
 
 @section('custom_js')
 
-@endsection 
+@endsection
