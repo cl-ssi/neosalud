@@ -1,20 +1,20 @@
-<div class="form-row">
+<div class="row">
 
-    <fieldset class="form-group col-12 col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="for-applicant">Solicitante</label>
         <input type="text" class="form-control form-control @error('applicant') is-invalid @enderror" name="applicant" id="for-applicant"
             value="{{ old('applicant', optional($call)->applicant) }}">
-        @error('applicant')
+            @error('applicant')
             <div class="text-danger">
                 <small>{{ $message }}</small>
             </div>
         @enderror
     </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-sm-2">
         <label for="for-commune">Comuna</label>
-        <select class="form-control form-control @error('commune_id') is-invalid @enderror" name="commune_id" id="for-commune">
-            <option value="">Selecciona una comuna</option>
+        <select class="form-select @error('commune_id') is-invalid @enderror" name="commune_id" id="for-commune">
+            <option value="">Seleccione...</option>
             @foreach ($communes as $commune)
             <option value="{{ $commune->id }}" {{ optional($call)->commune_id == $commune->id ? 'selected' : '' }}>
                 {{ $commune->name }}
@@ -28,7 +28,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-12 col-md-4">
+    <fieldset class="form-group col-sm-4">
         <label for="for-address">Dirección</label>
         <div class="input-group">
             <input type="text" class="form-control form-control @error('address') is-invalid @enderror"
@@ -47,7 +47,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-12 col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="for-address-reference">Referencia dirección</label>
         <input type="text"
             class="form-control form-control @error('address_reference') is-invalid @enderror"
@@ -61,11 +61,11 @@
         @enderror
     </fieldset>
 
-
-
 </div>
 
-<div class="form-row">
+<br>
+
+<div class="row">
     <!-- <fieldset class="form-group col-12 col-md-3">
         <label for="for-reason">Motivo</label>
         <input type="reason" class="form-control form-control @error('reason') is-invalid @enderror" name="reason" id="for-reason"
@@ -77,7 +77,7 @@
         @enderror
     </fieldset> -->
 
-    <fieldset class="form-group col-12 col-md-2">
+    <fieldset class="form-group col-sm-3">
         <label for="for-telephone">Teléfono</label>
         <input type="text" class="form-control form-control @error('telephone') is-invalid @enderror" name="telephone" id="for-telephone"
             value="{{ old('telephone', optional($call)->telephone) }}">
@@ -88,10 +88,10 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-2">
+    <fieldset class="form-group col-sm-2">
         <label for="for-sex">Sexo</label>
-        <select class="form-control form-control @error('sex') is-invalid @enderror" name="sex" id="for-sex">
-            <option value="">Selecciona un Sexo</option>
+        <select class="form-select @error('sex') is-invalid @enderror" name="sex" id="for-sex">
+            <option value="">Selecciona...</option>
             <option value="MALE" {{ optional($call)->sex == 'MALE' ? 'selected' : '' }}>Masculino</option>
             <option value="FEMALE" {{ optional($call)->sex == 'FEMALE' ? 'selected' : '' }}>Femenino</option>
             <option value="UNKNOWN" {{ optional($call)->sex == 'UNKNOWN' ? 'selected' : '' }}>Indeterminado</option>
@@ -104,7 +104,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-year">Años</label>
         <input type="number" class="form-control form-control @error('year') is-invalid @enderror" name="year" id="for-year"
             value="{{ old('year', optional($call)->year) }}" >
@@ -115,7 +115,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-month">Meses</label>
         <input type="number" class="form-control form-control @error('month') is-invalid @enderror" name="month" id="for-month"
             value="{{ old('month', optional($call)->month) }}">
@@ -126,10 +126,10 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-12 col-md-2">
-        <label for="for-police_intervention">Intervención de carabineros</label>
-        <select class="form-control form-control @error('police_intervention') is-invalid @enderror" name="police_intervention" id="for-police_intervention">
-            <option value="">Selecciona una opción</option>
+    <fieldset class="form-group col-sm-2">
+        <label for="for-police_intervention">Intervención carabineros</label>
+        <select class="form-select @error('police_intervention') is-invalid @enderror" name="police_intervention" id="for-police_intervention">
+            <option value="">Selecciona...</option>
             <option value="1" {{ optional($call)->police_intervention == '1' ? 'selected' : '' }}>Si</option>
             <option value="0" {{ optional($call)->police_intervention == '0' ? 'selected' : '' }}>No</option>
         </select>
@@ -142,9 +142,11 @@
 
 </div>
 
+<br>
+
 <div class="form-row">
 
-    <fieldset class="form-group col-md-12">
+    <fieldset class="form-group col-sm-12">
         <label for="for-information">Información telefónica *</label>
         <textarea class="form-control form-control @error('information') is-invalid @enderror" name="information" rows="5" id="for-information" required>{{ old('information', optional($call)->information) }}</textarea>
         @error('information')
@@ -223,24 +225,33 @@
 </div>
 @endif
 
+<br>
+
 <div class="my-1">
-    <button type="submit" class="btn btn-primary">
+
+    <button type="button" onclick="showWarning()" class="btn btn-outline-secondary float-end ms-1">
+        Cancelar
+    </button>
+
+    <button type="submit" class="btn btn-primary float-end">
         Guardar
     </button>
 
-    <button type="button" onclick="showWarning()" class="btn btn-outline-secondary">
-        Cancelar
-    </button>
 </div>
+
+<br>
+<br>
+
+<hr>
 
 <div class="my-3">
     <label for="for-regulation">Mueva el pin para ubicar la llamada en el mapa</label>
     <div id="map"></div>
 </div>
 
-<div class="form-row">
+<div class="row">
 
-    <fieldset class="form-group col-6 col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="latitude">Latitud </label>
         <input type="text" class="form-control form-control @error('latitude') is-invalid @enderror" name="latitude" id="latitude"
             value="{{ old('latitude', optional($call)->latitude) }}">
@@ -251,7 +262,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="longitude">Longitud</label>
         <input type="text" class="form-control form-control @error('longitude') is-invalid @enderror" name="longitude" id="longitude"
             value="{{ old('longitude', optional($call)->longitude) }}">
@@ -263,6 +274,9 @@
     </fieldset>
 
 </div>
+
+<br>
+<br>
 
 <script>
     function showWarning() {
