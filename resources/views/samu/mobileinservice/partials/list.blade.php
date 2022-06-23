@@ -54,7 +54,7 @@
         @else
             <h4>Tripulación</h4>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-sm table-bordered">
                     <thead class="table-light">
                         <tr>
                             <th>Funcionario</th>
