@@ -14,9 +14,11 @@
         'noveltie' => $noveltie
     ])
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <br>
 
-    <a href="{{ route('samu.noveltie.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+    <a href="{{ route('samu.noveltie.index') }}" class="btn btn-outline-secondary float-end ms-1">Cancelar</a>
+    <button type="submit" class="btn btn-primary float-end">Guardar</button>
+
 
 </form>
 
