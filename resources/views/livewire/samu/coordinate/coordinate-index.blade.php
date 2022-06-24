@@ -2,14 +2,14 @@
     @include('samu.nav')
 
     <div class="row">
-        <div class="col">
+        <div class="col-sm-6">
             <h3>
                 <i class="fas fa-globe"></i> Coordenadas ingresadas
             </h3>
         </div>
-        <div class="col text-right">
+        <div class="col-sm-6">
             <button
-                class="btn btn-sm btn-primary"
+                class="btn btn-sm btn-primary float-end"
                 wire:click="refreshCoordinates"
                 wire:loading.attr="disabled">
                 <span
@@ -37,7 +37,7 @@
         <div class="col-12 col-md-2">
             <label class="form-label" for="for-paginate">Por página</label>
             <select
-                class="custom-select"
+                class="form-select"
                 wire:model="paginate"
                 id="for-paginate">
                 @foreach($paginates as $paginate)

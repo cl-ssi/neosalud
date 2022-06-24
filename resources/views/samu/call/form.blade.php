@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row g-3">
 
     <fieldset class="form-group col-sm-3">
         <label for="for-applicant">Solicitante</label>
@@ -11,7 +11,7 @@
         @enderror
     </fieldset>
 
-        <fieldset class="form-group col-sm-2">
+    <fieldset class="form-group col-sm-2">
         <label for="for-commune">Comuna</label>
         <select class="form-select @error('commune_id') is-invalid @enderror" name="commune_id" id="for-commune">
             <option value="">Seleccione...</option>
@@ -65,7 +65,7 @@
 
 <br>
 
-<div class="row">
+<div class="row g-2">
     <!-- <fieldset class="form-group col-12 col-md-3">
         <label for="for-reason">Motivo</label>
         <input type="reason" class="form-control form-control @error('reason') is-invalid @enderror" name="reason" id="for-reason"
@@ -77,7 +77,7 @@
         @enderror
     </fieldset> -->
 
-    <fieldset class="form-group col-sm-3">
+    <fieldset class="form-group col-sm-3 ">
         <label for="for-telephone">Teléfono</label>
         <input type="text" class="form-control form-control @error('telephone') is-invalid @enderror" name="telephone" id="for-telephone"
             value="{{ old('telephone', optional($call)->telephone) }}">
