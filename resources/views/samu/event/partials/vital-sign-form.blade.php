@@ -1,5 +1,5 @@
-<div class="form-row">
-    <fieldset class="form-group col-6 col-md-1">
+<div class="row">
+    <fieldset class="form-group col-sm-1">
         <label for="for-registered-at">Hora<br>&nbsp;</label>
 
         <input
@@ -16,7 +16,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-fc">Frecuencia <br>Cardiaca</label>
 
         <input
@@ -34,7 +34,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-fr">Frecuencia <br>Respiratoria</label>
 
         <input
@@ -51,7 +51,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-pa">Presión <br>Arterial</label>
 
         <input
@@ -68,7 +68,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-pam">Presión Arterial <br>Media</label>
 
         <input
@@ -86,7 +86,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-gl">Glasgow<br>&nbsp;</label>
 
         <input
@@ -103,7 +103,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-soam">% Saturacion <br>Oxigeno/Ambi.</label>
 
         <input
@@ -120,7 +120,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-soap">% Saturación <br>Oxigeno/Apoyo</label>
 
         <input
@@ -137,7 +137,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-hgt">HGT <br>mg/dl</label>
 
         <input
@@ -154,7 +154,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-fill-capillary">Llene <br>Capilar</label>
 
         <input
@@ -171,7 +171,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-6 col-md-1">
+    <fieldset class="form-group col-sm-1">
         <label for="for-t">Temperatura <br>°C</label>
 
         <input

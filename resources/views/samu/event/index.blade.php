@@ -5,17 +5,19 @@
 @include('samu.nav')
 
 <div class="row">
-    <div class="col-md-10 col-12">
+    <div class="col-sm-10">
         <table class="table table-sm">
-            <tr>
-                <th>Salida</th>
-                <th>Móvil</th>
-                <th>Tipo</th>
-                <th>Estado</th>
-                <th>Tripulación</th>
-                <th>O2 central</th>
-                <th>Colación</th>
-            </tr>
+            <thead class="table-light">
+                <tr>
+                    <th>Salida</th>
+                    <th>Móvil</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Tripulación</th>
+                    <th>O2 central</th>
+                    <th>Colación</th>
+                </tr>
+            </thead>
             @foreach($shift->mobilesInService->sortBy('position') as $mis)
                 <tr class="{{ (($mis->lunch_start_at AND !$mis->lunch_end_at) OR !$mis->status) ? 'bg-secondary text-white' : '' }}">
                     <td>{{ $mis->position }}</td>
@@ -50,7 +52,7 @@
             @endforeach
         </table>
     </div>
-    <div class="col-md-2 col-12">
+    <div class="col-sm-2">
         <table class="table table-sm">
             <tr><th>Codificación colores</th></tr>
             <tr><td class="table-danger">Aviso de salida</td></tr>
@@ -62,6 +64,8 @@
         </table>
     </div>
 </div>
+
+<br>
 
 <h3 class="mb-3">
     <i class="fas fa-phone"></i> Llamadas pendientes (sin cometido asociado)

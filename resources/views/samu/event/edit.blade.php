@@ -46,12 +46,14 @@
         'shift' => $shift,
     ])
 
+    <br>
+
     @if($event->status)
         <button type="submit" name="btn_save" class="btn btn-primary">
             <i class="fas fa-save"></i> Guardar
         </button>
 
-        <button type="submit" name="btn_save_close" id="btn_save_close" class="btn btn-success float-right">
+        <button type="submit" name="btn_save_close" id="btn_save_close" class="btn btn-success float-end">
             <i class="fas fa-lock"></i> Guardar y cerrar
         </button>
 
@@ -62,7 +64,7 @@
                 <i class="fas fa-print"></i> Imprimir
             </a>
             @if( $event->created_at->gt(now()->subDays(90)) )
-            <a class="btn btn-warning float-right" href="{{ route('samu.event.reopen',$event) }}">
+            <a class="btn btn-warning float-end" href="{{ route('samu.event.reopen',$event) }}">
                 <i class="fas fa-lock-open"></i> Reabrir < 90 días
             </a>
             @endif
