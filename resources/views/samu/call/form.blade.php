@@ -160,12 +160,12 @@
 
 
 @if(request()->routeIs('samu.call.edit'))
-
-<div class="form-row">
-    <fieldset class="form-group col-md-3">
+<br>
+<div class="row">
+    <fieldset class="form-group col-sm-3">
         <label for="for-classification">Clasificación</label>
         @if($call->classification != 'OT')
-        <select class="form-control form-control @error('classification') is-invalid @enderror" name="classification" id="for-classification">
+        <select class="form-select @error('classification') is-invalid @enderror" name="classification" id="for-classification">
             <option value="">Selecciona una Clasificación</option>
             <option value="T1" {{ old('classification', optional($call)->classification) == 'T1' ? 'selected' : '' }}>T1</option>
             <option value="T2" {{ old('classification', optional($call)->classification) == 'T2' ? 'selected' : '' }}>T2</option>
@@ -184,9 +184,9 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="for-key">Clave</label>
-        <select class="form-control form-control" name="key_id" id="for-key">
+        <select class="form-select" name="key_id" id="for-key">
             <option value="">Selecciona una Clave</option>
             @foreach($keys as $key)
             <option value="{{ $key->id }}" {{ old('key_id', optional($call)->key_id) == $key->id ? 'selected' : '' }}>
@@ -196,7 +196,7 @@
         </select>
     </fieldset>
 
-    <fieldset class="form-group col-md-3">
+    <fieldset class="form-group col-sm-3">
         <label for="for-key">BLS</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -212,9 +212,9 @@
 </div>
 <div class="form-row">
 
-    <fieldset class="form-group col-md-12">
+    <fieldset class="form-group col-sm">
         <label for="for-regulation">Regulación</label>
-        <textarea class="form-control form-control @error('regulation') is-invalid @enderror" name="regulation" rows="5" id="for-regulation">{{ old('regulation', optional($call)->regulation) }}</textarea>
+        <textarea class="form-control @error('regulation') is-invalid @enderror" name="regulation" rows="5" id="for-regulation">{{ old('regulation', optional($call)->regulation) }}</textarea>
         @error('regulation')
             <div class="text-danger">
                 <small>{{ $message }}</small>
