@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Event;
 
+use App\Rules\Samu\EventTimestamp;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class EventUpdateRequest extends FormRequest
 {
@@ -21,7 +23,7 @@ class EventUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'mobile_id'             => 'required|exists:samu_mobiles,id',
@@ -30,14 +32,14 @@ class EventUpdateRequest extends FormRequest
             'observation'           => 'nullable|string|min:0|max:5000',
             'external_crew'         => 'nullable|string|min:0|max:5000',
 
-            'departure_at'              => 'nullable|date_format:H:i',
-            'mobile_departure_at'       => 'nullable|date_format:H:i',
-            'mobile_arrival_at'         => 'nullable|date_format:H:i',
-            'route_to_healtcenter_at'   => 'nullable|date_format:H:i',
-            'healthcenter_at'           => 'nullable|date_format:H:i',
-            'patient_reception_at'      => 'nullable|date_format:H:i',
-            'return_base_at'            => 'nullable|date_format:H:i',
-            'on_base_at'                => 'nullable|date_format:H:i',
+            'departure_at'              => [ 'required', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'departure_at') ],
+            'mobile_departure_at'       => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'mobile_departure_at') ],
+            'mobile_arrival_at'         => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'mobile_arrival_at') ],
+            'route_to_healtcenter_at'   => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'route_to_healtcenter_at') ],
+            'healthcenter_at'           => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'healthcenter_at') ],
+            'patient_reception_at'      => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'patient_reception_at') ],
+            'return_base_at'            => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'return_base_at') ],
+            'on_base_at'                => [ 'nullable', "date_format:$request->timestampFormat", new EventTimestamp($request->all(), 'on_base_at') ],
 
             'address'           => 'nullable|string|min:0|max:255',
             'address_reference' => 'nullable|string|min:0|max:255',
@@ -65,7 +67,7 @@ class EventUpdateRequest extends FormRequest
             'soap'              => 'nullable|integer',
             'hgt'               => 'nullable|integer',
             'fill_capillary'    => 'nullable|integer',
-            't'                 => 'nullable|numeric',
+            't'                 => 'nullable|numeric|min:0|max:50',
 
             'registered_at'     => 'nullable|date_format:H:i',
 
