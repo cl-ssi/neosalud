@@ -4,11 +4,16 @@
 
 @include('samu.nav')
 
-<h3 class="mb-3"><i class="fas fa-ambulance"></i> Listado de Móviles
-    <a class="btn btn-success float-right" href="{{ route('samu.mobile.create') }}">
-        <i class="fas fa-plus"></i> Agregar
-    </a>
-</h3>
+<div class="row">
+    <div class="col-sm">
+        <h3 class="mb-3"><i class="fas fa-ambulance"></i> Listado de Móviles</h3>
+    </div>
+    <div class="col-sm">
+        <a class="btn btn-success float-end" href="{{ route('samu.mobile.create') }}">
+            <i class="fas fa-plus"></i> Agregar
+        </a>
+    </div>
+</div>
 
 <div class="row mb-4">
     <div class="col-12 col-md-6">

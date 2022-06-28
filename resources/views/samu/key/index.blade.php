@@ -4,17 +4,23 @@
 
 @include('samu.nav')
 
-<h3 class="mb-3"><i class="fas fa-user-injured"></i> Lista de Codificacion de Claves
-    <a class="btn btn-success float-right" href="{{ route('samu.key.create') }}">
-        <i class="fas fa-plus"></i> Agregar
-    </a>
-</h3>
+<div class="row">
+    <div class="col-sm">
+        <h3 class="mb-3"><i class="fas fa-user-injured"></i> Lista de Codificacion de Claves</h3>
+    </div>
+    <div class="col-sm">
+        <a class="btn btn-success float-end" href="{{ route('samu.key.create') }}">
+            <i class="fas fa-plus"></i> Agregar
+        </a>
+    </div>
+</div>
+
 
 <div class="row mb-4">
     <div class="col-12 col-md-6">
         <form method="GET" class="form-horizontal" action="{{ route('samu.key.index') }}">
             <div class="input-group mb-sm-0">
-                <input class="form-control" type="text" name="search_key" autocomplete="off" id="for_search" 
+                <input class="form-control" type="text" name="search_key" autocomplete="off" id="for_search"
                 style="text-transform: uppercase;" placeholder="Codigo" value="{{ $search_key }}">
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
