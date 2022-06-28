@@ -5,7 +5,6 @@ namespace App\Observers\Samu;
 use App\Models\Samu\Event;
 use App\Models\Samu\EventCounter;
 use App\Models\Samu\EventUser;
-use App\Models\Samu\MobileCrew;
 use App\Models\Samu\MobileInService;
 use App\Models\Samu\Shift;
 
@@ -32,9 +31,7 @@ class EventObserver
         $isMobileInService = $shift->MobilesInService->where('mobile_id', $event->mobile_id)->first();
 
         if($isMobileInService)
-        {
             $event->mobileInService()->associate($isMobileInService);
-        }
 
         // Order the mobiles
         if($shift && $event->mobileInService)
