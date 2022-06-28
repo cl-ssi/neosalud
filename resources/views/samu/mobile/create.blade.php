@@ -14,9 +14,10 @@
         'mobile' => null,
     ])
 
-    <button type="submit" class="btn btn-primary">Crear</button>
+    <br>
 
-    <a href="{{ route('samu.mobile.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-   
+    <a href="{{ route('samu.mobile.index') }}" class="btn btn-outline-secondary float-end ms-1">Cancelar</a>
+    <button type="submit" class="btn btn-primary float-end">Crear</button>
+
 </form>
 @endsection

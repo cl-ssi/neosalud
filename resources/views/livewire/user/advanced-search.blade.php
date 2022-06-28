@@ -1,21 +1,21 @@
 <div>
     <form wire:submit.prevent="search">
-        <div class="form-row pb-2">
-            <div class="col-6 col-md-6">
+        <div class="row g-2">
+            <div class="col-sm-6">
                 <input type="text" class="form-control" placeholder="Autenticación sin digito verificador" wire:model.lazy="searchByIdentifier" autocomplete="off">
             </div>
-            <div class="col-6 col-md-6 mb-2">
+            <div class="col-sm-6 mb-2">
                 <input type="text" class="form-control" placeholder="Nombre y/o apellido" wire:model.lazy="searchByHumanName" autocomplete="off">
             </div>
-            <div class="col-6 col-md-6">
+            <div class="col-sm-6">
                 <input type="text" class="form-control" placeholder="Domicilio" wire:model.lazy="searchByAddress" autocomplete="off">
             </div>
-            <div class="col-6 col-md-6 mb-2">
+            <div class="col-sm-6 mb-2">
                 <input type="text" class="form-control" placeholder="Teléfono, celular o e-mail" wire:model.lazy="searchByContactPoint" autocomplete="off">
             </div>
-            <div class="col-12 col-md-12">
-                <button type="button" class="btn btn-secondary mb-2 float-left" wire:click="clean">Limpiar</button>
-                <button type="submit" class="btn btn-primary mb-2 float-right"><i class="fa fa-search"></i> Buscar</button>
+            <div class="col-sm">
+                <button type="button" class="btn btn-secondary mb-2 float-start" wire:click="clean">Limpiar</button>
+                <button type="submit" class="btn btn-primary mb-2 float-end"><i class="fa fa-search"></i> Buscar</button>
             </div>
         </div>
     </form>
@@ -46,16 +46,16 @@
                         <td>{{($patient) ? $patient->officialPhone : ''}}</td>
                         <td>{{($patient && $patient->officialEmail) ? $patient->officialEmail : ''}}</td>
                         <td nowrap>
-                            <a class="btn-primary btn-sm mr-1" title="Editar" href="{{ route('user.edit',$patient->id)}}"><span class="fas fa-edit" aria-hidden="true"></span></a>
+                            <a class="btn btn-primary btn-sm mr-1" title="Editar" href="{{ route('user.edit',$patient->id)}}"><span class="fas fa-edit" aria-hidden="true"></span></a>
                             @can('be god')
-                                <a class="btn-warning btn-sm" title="Cambiar a usuario" href="{{ route('user.switch', $patient->id)}}"><span class="fas fa-redo" aria-hidden="true"></span></a>
+                                <a class="btn btn-warning btn-sm" title="Cambiar a usuario" href="{{ route('user.switch', $patient->id)}}"><span class="fas fa-redo" aria-hidden="true"></span></a>
                             @endcan
                         </td>
                     </tr>
                     @empty
                         <tr><th scope="row" colspan="8" class="text-center">No hay coincidencias con la búsqueda <a class="btn-primary btn-sm" href="{{ route('user.create')}}"><i class="fas fa-user-plus"></i> Ingresar nuevo usuario</a></td></th>
                     @endforelse
-                    @if($patients->count() > 0) <tr><th scope="row" colspan="8" class="text-center">Si ninguno en la búsqueda corresponde al usuario que estas buscando <a class="btn-primary btn-sm" href="{{ route('user.create')}}"> <i class="fas fa-user-plus"></i> Ingresar nuevo usuario</a></td></th> @endif
+                    @if($patients->count() > 0) <tr><th scope="row" colspan="8" class="text-center">Si ninguno en la búsqueda corresponde al usuario que estas buscando <a class="btn btn-primary btn-sm" href="{{ route('user.create')}}"> <i class="fas fa-user-plus"></i> Ingresar nuevo usuario</a></td></th> @endif
                 @endif
             </tbody>
         </table>

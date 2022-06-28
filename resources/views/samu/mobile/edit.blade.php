@@ -14,12 +14,11 @@
         'mobile' => $mobile,
     ])
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-
-    <a href="{{ route('samu.mobile.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+    <a href="{{ route('samu.mobile.index') }}" class="btn btn-outline-secondary float-end ms-1">Cancelar</a>
+    <button type="submit" class="btn btn-primary float-end">Guardar</button>
 
 </form>
-    
+
 
 
 

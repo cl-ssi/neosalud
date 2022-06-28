@@ -6,9 +6,9 @@
 
 @include('samu.nav')
 
-<h3 class="mb-3">Comunas</h3>
+<h3 class="mb-3"><i class="fa-solid fa-map-pin"></i> Comunas</h3>
 
-<form method="POST" class="row g-3" action="{{ route('samu.commune.store') }}">
+<form method="POST" class="row g-2" action="{{ route('samu.commune.store') }}">
     @csrf
     @method('POST')
 
@@ -16,22 +16,22 @@
         <label for="communes" class="form-label">
             {{ __('Comunas') }}
         </label>
-        
-        <select class="form-control" name="samuCommunes[]" id="" multiple size="30">
+
+        <select class="form-select" name="samuCommunes[]" id="" multiple size="30">
             @foreach($communes as $name => $id)
                 <option value="{{ $id }}" {{ isset($samuCommunes) && in_array($id, $samuCommunes) ? 'selected' : '' }}>{{ $name }}</option>
             @endforeach
         </select>
-        
-        @error('establishments') 
-            <span class="invalid-feedback" role="alert"> 
-                <strong>{{ $message }}</strong> 
-            </span> 
-        @enderror 
+
+        @error('establishments')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
     </fieldset>
-    
+
     <div class="col-12">
-        <button  class="btn btn-primary" type="submit">{{ __('Guardar') }}</button>
+        <button  class="btn btn-primary float-end" type="submit">{{ __('Guardar') }}</button>
     </div>
 
 </form>
