@@ -89,13 +89,9 @@
 
 <br>
 
-<<<<<<< HEAD
 <div class="row g-2">
-=======
-<div class="row">
     <!-- Is used for the rule -->
     <input type="hidden" name="timestampFormat" value="{{ $timestampFormat }}">
->>>>>>> a6da12f14b609b17c9e0a1ef58e64d3901596389
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
         <label for="for-departure-at">Aviso salida</label>
