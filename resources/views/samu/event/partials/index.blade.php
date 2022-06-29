@@ -53,20 +53,24 @@
                 </td>
             </tr>
             <tr class="table-{{ $event->color }}">
-                <td class="text-center"><i class="fas fa-phone"></i><br><small>{{ $event->date }}</small></td>
+                <td class="text-center">
+                    <i class="fas fa-phone"></i>
+                    <br>
+                    <small>{{ $event->date->format('Y-m-d') }}</small>
+                </td>
                 <td colspan="9">
                     @if($event->call)
                         <li>
-                            <a href="{{ route('samu.call.edit', $event->call) }}">{{ $event->call->id }}</a> - 
-                            {{ $event->call->sex_abbr }} 
-                            {{ $event->call->age_format }} 
+                            <a href="{{ route('samu.call.edit', $event->call) }}">{{ $event->call->id }}</a> -
+                            {{ $event->call->sex_abbr }}
+                            {{ $event->call->age_format }}
                             {{ $event->call->information }}
                         </li>
                         @foreach($event->call->associatedCalls as $associatedCall)
                             <li>
-                                <a href="{{ route('samu.call.edit', $associatedCall) }}">{{ $associatedCall->id }}</a> - 
-                                {{ $associatedCall->sex_abbr }} 
-                                {{ $associatedCall->age_format }} 
+                                <a href="{{ route('samu.call.edit', $associatedCall) }}">{{ $associatedCall->id }}</a> -
+                                {{ $associatedCall->sex_abbr }}
+                                {{ $associatedCall->age_format }}
                                 {{ $associatedCall->information }}
                             </li>
                         @endforeach

@@ -31,14 +31,12 @@
     <fieldset class="form-group col-sm-4">
         <label for="for-address">Dirección</label>
         <div class="input-group">
-            <input type="text" class="form-control form-control @error('address') is-invalid @enderror"
+            <input type="text" class="form-control @error('address') is-invalid @enderror"
                 name="address" id="for-address"
                 value="{{ old('address', optional($call)->address) }}">
-            <div class="input-group-append">
-                <button class="btn btn btn-primary" type="button" id="btn-search">
-                    <i class="fas fa-map-marker"></i>
-                </button>
-            </div>
+            <button class="btn btn btn-primary" type="button" id="btn-search">
+                <i class="fas fa-map-marker"></i>
+            </button>
         </div>
         @error('address')
             <div class="text-danger">

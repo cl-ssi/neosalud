@@ -14,7 +14,7 @@
 
         <div class="titulo">INFORME DE COMETIDO {{ $event->id }}</div>
 
-        <b>Fecha:</b> {{ $event->date }}
+        <b>Fecha:</b> {{ $event->date->format('Y-m-d') }}
 
         <h4>Registro de la(s) llamadas:</h4>
 
@@ -92,14 +92,46 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="center">{{ optional($event->departure_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->mobile_departure_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->mobile_arrival_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->route_to_healtcenter_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->healthcenter_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->patient_reception_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->return_base_at)->format('H:i') }}</td>
-                    <td class="center">{{ optional($event->on_base_at)->format('H:i') }}</td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->departure_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->mobile_departure_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->mobile_arrival_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->route_to_healtcenter_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->healthcenter_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->patient_reception_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->return_base_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
+                    <td class="center">
+                        <small class="seis nowrap">
+                            {{ optional($event->on_base_at)->format('Y-m-d H:i') }}
+                        </small>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -242,7 +274,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($event->mobileInService->crew as $user)
+            @foreach($event->crew as $user)
             <tr>
                 <td>{{ optional($user->pivot)->JobType->name }}</td>
                 <td>{{ optional($user)->officialFullName }}</td>
