@@ -94,7 +94,7 @@
     <input type="hidden" name="timestampFormat" value="{{ $timestampFormat }}">
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-departure-at">Aviso salida</label>
+        <label for="for-departure-at">Aviso <br> salida</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('departure_at') is-invalid @enderror"
@@ -111,7 +111,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-mobile-departure-at">Salida móvil</label>
+        <label for="for-mobile-departure-at">Salida <br> móvil</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('mobile_departure_at') is-invalid @enderror"
@@ -127,7 +127,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-mobile-arrival-at">Llegada al lugar</label>
+        <label for="for-mobile-arrival-at">Llegada <br> al lugar</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('mobile_arrival_at') is-invalid @enderror"
@@ -143,7 +143,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-route-to-healtcenter-at">Ruta c.asistencial</label>
+        <label for="for-route-to-healtcenter-at">Ruta <br> c.asistencial</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('route_to_healtcenter_at') is-invalid @enderror"
@@ -165,7 +165,7 @@
     @endif
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-healthcenter-at">Centro asistencial</label>
+        <label for="for-healthcenter-at">Centro <br> asistencial</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('healthcenter_at') is-invalid @enderror"
@@ -181,7 +181,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-patient-reception-at">Recepción de pcte</label>
+        <label for="for-patient-reception-at">Recepción <br> de pcte</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('patient_reception_at') is-invalid @enderror"
@@ -197,7 +197,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-return-base-at">Retorno base</label>
+        <label for="for-return-base-at">Retorno <br> base</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('return_base_at') is-invalid @enderror"
@@ -213,7 +213,7 @@
     </fieldset>
 
     <fieldset class="form-group {{ $inputType == 'time' ? 'col-md-1' : 'col-md-3' }}">
-        <label for="for-on-base-at">Móvil en base</label>
+        <label for="for-on-base-at">Móvil <br> en base</label>
         <input
             type="{{ $inputType }}"
             class="form-control @error('on_base_at') is-invalid @enderror"
