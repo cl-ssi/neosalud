@@ -68,7 +68,7 @@
                                     <li>
                                         {{ optional($mis->mobile)->code }}
                                         {{ optional($mis->mobile)->name }}
-                                        - Tipo {{ $mis->type }}
+                                        - Tipo {{ $mis->type->name }}
                                         <br>
                                         <span class="pl-4">Tripulación:</span>
                                         <br>

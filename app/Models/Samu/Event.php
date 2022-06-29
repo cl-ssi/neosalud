@@ -21,7 +21,7 @@ class Event extends Model implements Auditable
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="samu_events";
+    protected $table = "samu_events";
 
     protected $fillable = [
         'counter',
@@ -90,6 +90,7 @@ class Event extends Model implements Auditable
     * @var array
     */
     protected $dates = [
+        'date',
         'departure_at',
         'mobile_departure_at',
         'mobile_arrival_at',
@@ -97,11 +98,11 @@ class Event extends Model implements Auditable
         'healthcenter_at',
         'patient_reception_at',
         'return_base_at',
-        'on_base_at'
+        'on_base_at',
     ];
 
     protected $appends = [
-        'color'
+        'color',
     ];
 
     public function shift()
@@ -177,6 +178,20 @@ class Event extends Model implements Auditable
         return $this->hasOne(VitalSign::class);
     }
 
+    public function getCrewAttribute()
+    {
+        $crew = null;
+
+        if($this->mobileInService)
+        {
+            if($this->mobileInService->crew && $this->departure_at)
+            {
+                $crew = $this->mobileInService->crew->where('pivot.assumes_at', '<=', $this->departure_at);
+            }
+        }
+        return $crew;
+    }
+
     public function getMobileTypeAttribute()
     {
         if($this->mobileInService)
@@ -184,7 +199,6 @@ class Event extends Model implements Auditable
         else
             return optional(optional($this->mobile)->type)->name;
     }
-
 
     public function getFullAddressAttribute()
     {

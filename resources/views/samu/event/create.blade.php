@@ -33,10 +33,12 @@
     @method('POST')
 
     @include('samu.event.form', [
-        'event' => $event,
-        'call'  => $call,
-        'keys'  => $keys,
-        'shift' => $shift,
+        'event'             => $event,
+        'call'              => $call,
+        'keys'              => $keys,
+        'shift'             => $shift,
+        'inputType'         => $inputType,
+        'timestampFormat'   => $timestampFormat,
     ])
 
     <button type="submit" class="btn btn-primary">

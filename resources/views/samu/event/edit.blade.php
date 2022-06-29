@@ -15,7 +15,7 @@
             @endif
         </h3>
     </div>
-    <div class="col-12 col-md-2 text-right">
+    <div class="col-12 col-md-2 text-end">
         @can('SAMU administrador','SAMU regulador')
             @if($event->status AND !$event->trashed())
             <form method="POST" action="{{ route('samu.event.destroy', $event) }}">
@@ -40,10 +40,12 @@
     @method('PUT')
 
     @include('samu.event.form', [
-        'call'  => null,
-        'event' => $event,
-        'keys'  => $keys,
-        'shift' => $shift,
+        'call'              => null,
+        'event'             => $event,
+        'keys'              => $keys,
+        'shift'             => $shift,
+        'inputType'         => $inputType,
+        'timestampFormat'   => $timestampFormat,
     ])
 
     <br>

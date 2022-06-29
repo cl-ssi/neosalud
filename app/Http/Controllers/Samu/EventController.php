@@ -83,6 +83,9 @@ class EventController extends Controller
         ? Event::select('id', 'observation', 'address', 'address_reference', 'commune_id', 'key_id', 'call_id')->find($event->id)
         : null;
 
+        $inputType = $this->getInputType(null);
+        $timestampFormat = $this->getTimestampFormat($inputType);
+
         return view('samu.event.create', compact(
             'call',
             'event',
@@ -94,7 +97,9 @@ class EventController extends Controller
             'mobilesInService',
             'receptionPlaces',
             'identifierTypes',
-            'communes'
+            'communes',
+            'inputType',
+            'timestampFormat',
         ));
     }
 
@@ -102,6 +107,8 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Event\EventStoreRequest  $request
+     * @param  \App\Models\Samu\Call  $call|null
+     * @param  \App\Models\Samu\Event  $event|null
      * @return \Illuminate\Http\Response
      */
     public function store(EventStoreRequest $request, Call $call = null, Event $event = null)
@@ -143,7 +150,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Samu\event  $follow
+     * @param  \App\Models\Samu\Event  $event
      * @return \Illuminate\Http\Response
      */
     public function edit(Event $event)
@@ -164,6 +171,8 @@ class EventController extends Controller
 
         /* TODO: Parametrizar */
         $communes = Commune::whereHas('samu')->pluck('id','name')->sort();
+        $inputType = $this->getInputType($event);
+        $timestampFormat = $this->getTimestampFormat($inputType);
 
         return view('samu.event.edit', compact(
             'shift',
@@ -174,7 +183,9 @@ class EventController extends Controller
             'mobilesInService',
             'receptionPlaces',
             'identifierTypes',
-            'communes'
+            'communes',
+            'inputType',
+            'timestampFormat',
         ));
     }
 
@@ -219,6 +230,12 @@ class EventController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Reopen event
+     *
+     * @param  \App\Models\Samu\Event  $event
+     * @return \Illuminate\Http\Response
+     */
     public function reopen(Event $event)
     {
         Gate::allowIf( auth()->user()->cannot('SAMU auditor')
@@ -241,6 +258,12 @@ class EventController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Filter event
+     *
+     * @param  \Iluminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function filter(Request $request)
     {
         /* Obtener los filtros */
@@ -275,8 +298,50 @@ class EventController extends Controller
         return view ('samu.event.filter', compact('events','keys','communes'));
     }
 
+    /**
+     * Report event
+     *
+     * @param  \App\Models\Samu\Event  $event
+     * @return \Illuminate\Http\Response
+     */
     public function report(Event $event)
     {
         return view('samu.event.report',compact('event'));
+    }
+
+    /**
+     * Get input type for the view
+     *
+     * @param  \App\Models\Samu\Event  $event|null
+     * @return string|null
+     */
+    public function getInputType(Event $event = null)
+    {
+        if($event == null)
+            $inputType = "time";
+        else
+        {
+            if($event->date->toDateString() == now()->toDateString())
+                $inputType = "time";
+            else
+                $inputType = "datetime-local";
+        }
+
+        return $inputType;
+    }
+
+    /**
+     * Get timestamp format for the view
+     *
+     * @param  string  $inputType
+     * @return string
+     */
+    public function getTimestampFormat($inputType)
+    {
+        $format = "Y-m-d\TH:i";
+        if($inputType == "time")
+            $format = "H:i";
+
+        return $format;
     }
 }
