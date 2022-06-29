@@ -4,7 +4,7 @@
 
 @include('samu.nav')
 
-<div class="row">
+<div class="row g-2">
     <div class="col-12 col-md-10">
         <h3 class="mb-3">
             <i class="fas fa-car-crash"></i> Editar cometido {{ $event->id }}

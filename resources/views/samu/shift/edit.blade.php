@@ -9,7 +9,7 @@
 <form action="{{route('samu.shift.update', $shift)}}" method="POST" autocomplete="off">
     @csrf
     @method('PUT')
-        <div class="row">
+        <div class="row g-2">
             <fieldset class="form-group col-sm-3">
                 <label for="for_type"><b>Tipo de Turno*</b> </label>
                 <select class="form-select" name="type" id="for_type" required>
@@ -42,7 +42,7 @@
 
         </br>
 
-        <div class="row">
+        <div class="row g-2">
             <fieldset class="form-group col-sm">
                 <label for="for_observation"><b> Observación</b> </label>
                 <textarea class="form-control" name="observation" id="for_observation" rows="6">{{ $shift->observation }}</textarea>

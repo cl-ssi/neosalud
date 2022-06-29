@@ -1,5 +1,5 @@
 <div>
-    <div class="row">
+    <div class="row g-2">
         <div class="form-group col-sm-2">
             <label for="telephone">Teléfono</label>
             <input type="text"
@@ -12,8 +12,8 @@
     </div>
 
     <br>
-    
-    <div class="form-row">
+
+    <div class="row g-2">
         <fieldset class="form-group col-sm">
             <label for="for_detail">Detalle</label>
             <textarea class="form-control"

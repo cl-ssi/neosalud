@@ -1,5 +1,5 @@
 <h4>Asignación de seguimiento y horarios</h4>
-<div class="row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-3">
         <label for="for-key">Clave*</label>
@@ -51,7 +51,7 @@
 
 <br>
 
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-sm-3">
         <label for="for-mobile">Móvil*</label>
         <select class="form-select @error('mobile_id') is-invalid @enderror" name="mobile_id" id="for-mobile" required>
@@ -89,7 +89,7 @@
 
 <br>
 
-<div class="row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-1">
         <label for="for-departure-at">Aviso salida</label>
@@ -175,7 +175,7 @@
 
 <br>
 
-<div class="row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-2">
         <label for="for-commune">Comuna</label>
@@ -225,7 +225,7 @@
 <hr>
 
 <h4>Datos del paciente</h4>
-<div class="row">
+<div class="row g-2">
 
     <fieldset class="form-check form-check-inline col-sm-1">
         <input class="form-check-input @error('patient_unknown') is-invalid @enderror" type="checkbox" name="patient_unknown"
@@ -283,7 +283,7 @@
 
 <h4>Evaluación</h4>
 
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-sm">
         <label for="for-reception-detail">Detalle de recepción</label>
         <textarea class="form-control @error('reception_detail') is-invalid @enderror" rows="6" name="reception_detail" id="for-reception-detail">{{ old('reception_detail', optional($event)->reception_detail) }}</textarea>
@@ -295,8 +295,9 @@
     </fieldset>
 </div>
 
+<br>
 
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-sm-3">
         <label for="for-establishment">Establecimiento recepción pcte.</label>
         <select class="form-select @error('establishment_id') is-invalid @enderror" name="establishment_id" id="for-establishment">
@@ -369,7 +370,7 @@
 
 <br>
 
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-12 col-md-4">
         <label for="for-treatment">Tratamiento</label>
         <textarea class="form-control @error('treatment') is-invalid @enderror" rows="6" name="treatment" id="for-treatment">{{ old('treatment', optional($event)->treatment) }}</textarea>

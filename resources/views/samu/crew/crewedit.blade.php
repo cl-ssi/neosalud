@@ -10,7 +10,7 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="row g-2">
 
         <fieldset class="form-group col-sm-6">
 			      <label for="user_id">Nombre</label>
@@ -24,12 +24,13 @@
 
     </div>
 
-    <div class="row">
+    <div class="row g-2">
 
         <fieldset class="form-group col-sm-6">
-			<label>Asume:</label>
+  			    <label>Asume:</label>
             <input type="datetime-local" class="form-control" name="assumes_at" value="{{ $mobileCrew->assumes_at->format('Y-m-d\TH:i:s') }}" >
         </fieldset>
+
         <fieldset class="form-group col-sm-6">
             <label>Se retira:</label>
             <input type="datetime-local" class="form-control" name="leaves_at"  value="{{ optional($mobileCrew->leaves_at)->format('Y-m-d\TH:i:s') }}">

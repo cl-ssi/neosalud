@@ -42,7 +42,7 @@
     </div>
     <div class="col-sm-4">
         @if($mobileInService->shift->status == true)
-        <div class="row">
+        <div class="row g-2">
             <fieldset class="form-group col-sm-12 mb-1">
                 <label for="for-user-id">Funcionario</label>
                 <select class="form-select" wire:model='user_id' required="required">

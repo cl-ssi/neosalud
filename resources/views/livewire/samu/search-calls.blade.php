@@ -28,7 +28,7 @@
             </select>
         </fieldset>
 
-        <div class="form-group col-sm-1">
+        <div class="form-group col-sm-2">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary" wire:click="search">
                 <i class="fas fa-search"></i> Buscar </button>

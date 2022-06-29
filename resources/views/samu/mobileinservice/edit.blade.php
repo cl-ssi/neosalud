@@ -10,7 +10,7 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="row g-2">
 
         <fieldset class="form-group col-sm-1">
             <label for="for-position">Posición</label>
@@ -48,7 +48,7 @@
 
     <br>
 
-    <div class="form-row">
+    <div class="row g-2">
 
         <fieldset class="form-group col-sm">
             <label for="for-observation">Observación</label>

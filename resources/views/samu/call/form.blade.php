@@ -1,4 +1,4 @@
-<div class="row g-3">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-3">
         <label for="for-applicant">Solicitante</label>
@@ -144,7 +144,7 @@
 
 <br>
 
-<div class="form-row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-12">
         <label for="for-information">Información telefónica *</label>
@@ -161,7 +161,7 @@
 
 @if(request()->routeIs('samu.call.edit'))
 <br>
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-sm-3">
         <label for="for-classification">Clasificación</label>
         @if($call->classification != 'OT')
@@ -210,7 +210,7 @@
     </fieldset>
 
 </div>
-<div class="form-row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm">
         <label for="for-regulation">Regulación</label>
@@ -249,7 +249,7 @@
     <div id="map"></div>
 </div>
 
-<div class="row">
+<div class="row g-2">
 
     <fieldset class="form-group col-sm-3">
         <label for="latitude">Latitud </label>

@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div class="form-row">
+    <div class="row">
         @livewire('samu.stadistic')
     </div>
 </div>

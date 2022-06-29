@@ -13,7 +13,7 @@ use Livewire\Component;
 class DashboardIndex extends Component
 {
     public $month;
-    
+
     public function render()
     {
         $eventLastMonth = new EventLastMonth;

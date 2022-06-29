@@ -44,7 +44,7 @@
             <button class="btn btn-primary" wire:click="search">Buscar</button>
         </div> -->
 
-        <div class="form-group col-sm-1">
+        <div class="form-group col-sm-2">
             <label for="">&nbsp;</label>
             <button class="form-control btn btn-primary" wire:click="search">
                 <i class="fas fa-search"></i> Buscar </button>
@@ -68,7 +68,7 @@
     <br>
 
     <h4 class="text-center">Total de eventos {{ $total }}</h4>
-    
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <div id="piechart" style="width: 900px; height: 500px;"></div>
 

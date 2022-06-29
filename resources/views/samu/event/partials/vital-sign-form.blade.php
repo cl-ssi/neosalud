@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row g-2">
     <fieldset class="form-group col-sm-1">
         <label for="for-registered-at">Hora<br>&nbsp;</label>
 

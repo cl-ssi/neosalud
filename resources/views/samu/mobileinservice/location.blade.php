@@ -19,20 +19,28 @@
     <i class="fas fa-map-marked"></i> Ubicación del móvil
 </h3>
 
-<div class="form-row mb-3">
-    
-    <div class="col-3">
-        <label for="latitude" class="form-label">Latitud</label>
+<div class="row g-2">
+
+    <fieldset class="form-group col-sm-3">
+        <label for="latitude">Latitud</label>
         <input type="text" class="form-control" id="latitude">
-    </div>
-    
-    <div class="col-3">
-        <label for="longitude" class="form-label">Longitud</label>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-3">
+        <label for="longitude">Longitud</label>
         <input type="text" class="form-control" id="longitude">
+    </fieldset>
+
+    <div class="form-group col-sm-2">
+        <label for="">&nbsp;</label>
+        <button class="form-control btn btn-primary" onclick="getLocation()">
+            Obtener ubicación
+        </button>
     </div>
 
-    <button class="btn btn-primary" onclick="getLocation()">Obtener ubicación</button>
 </div>
+
+<br>
 
 <div id="map"></div>
 
@@ -40,23 +48,23 @@
 
 @section('custom_js')
 <script>
-    
+
     var lat = document.getElementById("latitude");
     var lon = document.getElementById("longitude");
-    
+
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
-        } else { 
+        } else {
             x.innerHTML = "Geolocation is not supported by this browser.";
         }
     }
-    
+
     function showPosition(position) {
         lat.value = position.coords.latitude;
         lon.value = position.coords.longitude;
     }
-    
+
     function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 14,
