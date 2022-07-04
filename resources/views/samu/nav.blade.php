@@ -94,27 +94,42 @@
     </li> -->
 
     <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ active(['samu.event.filter','samu.calls.search']) }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-search"></i>
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                  <a class="dropdown-item {{ active('samu.event.filter') }}" href=" {{ route('samu.event.filter') }}"><i class="fas fa-car-crash"></i> Eventos </a>
-              </li>
-              <li>
-                  <a class="dropdown-item {{ active('samu.calls.search') }}" href=" {{ route('samu.call.search') }}"><i class="fas fa-phone"></i> Llamadas</a>
-              </li>
-              <li>
-                  <a class="dropdown-item {{ active('samu.shift.searcher') }}" href=" {{ route('samu.shift.searcher') }}"><i class="fas fa-blender-phone"></i> Buscador Turnos</a>
-              </li>
-              <li>
-                  <a class="dropdown-item {{ active('samu.coordinate.index') }}" href=" {{ route('samu.coordinate.index') }}"><i class="fas fa-globe"></i> Coordenadas Pacientes</a>
-              </li>
-              <li>
-                  <a class="dropdown-item {{ active('samu.dashboard') }}" href=" {{ route('samu.dashboard') }}"><i class="fas fa-chart-line"></i> Panel Estadísticas</a>
-              </li>
-          </ul>
-        </li>
+        <a class="nav-link dropdown-toggle {{ active(['samu.event.filter','samu.calls.search']) }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-search"></i>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+                <a class="dropdown-item {{ active('samu.event.filter') }}" href="{{ route('samu.event.filter') }}">
+                    <i class="fas fa-car-crash"></i> Eventos
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.calls.search') }}" href="{{ route('samu.call.search') }}">
+                    <i class="fas fa-phone"></i> Llamadas
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.shift.searcher') }}" href="{{ route('samu.shift.searcher') }}">
+                    <i class="fas fa-blender-phone"></i> Buscador Turnos
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.coordinate.index') }}" href="{{ route('samu.coordinate.index') }}">
+                    <i class="fas fa-globe"></i> Coordenadas Pacientes
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.dashboard') }}" href="{{ route('samu.dashboard') }}">
+                    <i class="fas fa-chart-line"></i> Panel Estadísticas
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.pre-hospital') }}" href="{{ route('samu.pre-hospital') }}">
+                    <i class="fas fa-book-medical"></i> Hoja PreHospitalaria
+                </a>
+            </li>
+        </ul>
+    </li>
     @endcan
 
     @can('SAMU administrador')
