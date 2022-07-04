@@ -648,7 +648,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::post('/', [CoordinateController::class, 'store'])->name('store');
 	});
 
-    Route::get('/pre-hospital', PreHospital::class);
+    Route::get('/pre-hospital', PreHospital::class)->name('pre-hospital');
 });
 
 Route::get('/miubicacion', [CoordinateController::class, 'create'])->name('coordinate.create');
