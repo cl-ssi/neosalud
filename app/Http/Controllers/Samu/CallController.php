@@ -29,11 +29,11 @@ class CallController extends Controller
     {
         /*  */
         $openShift = Shift::where('status',true)
-                    ->with(['calls','calls.events','calls.receptor'])
+                    ->with(['calls','calls.events','calls.referenceCall','calls.receptor','calls.commune'])
                     ->first();
         $lastShift = Shift::latest()
                     ->skip(1)
-                    ->with(['calls','calls.events','calls.receptor'])
+                    ->with(['calls','calls.events','calls.referenceCall','calls.receptor','calls.commune'])
                     ->first();
 
         return view ('samu.call.index' , compact('openShift','lastShift'));
@@ -42,11 +42,11 @@ class CallController extends Controller
     public function ots()
     {
         $openShift = Shift::where('status',true)
-                    ->with(['calls','calls.events','calls.receptor'])
+                    ->with(['calls','calls.events','calls.receptor','calls.commune'])
                     ->first();
         $lastShift = Shift::latest()
                     ->skip(1)
-                    ->with(['calls','calls.events','calls.receptor'])
+                    ->with(['calls','calls.events','calls.receptor','calls.commune'])
                     ->first();
 
         return view ('samu.call.ots' , compact('openShift','lastShift'));
