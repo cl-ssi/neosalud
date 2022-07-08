@@ -24,7 +24,9 @@ class MobileInServiceController extends Controller
      */
     public function index()
     {
-        $openShift = Shift::whereStatus(true)->first();
+        $openShift = Shift::whereStatus(true)
+            ->with('mobilesInService','mobilesInService.crew','mobilesInService.mobile','mobilesInService.type','mobilesInService.shift')
+            ->first();
 
         if(!$openShift) 
         {
@@ -32,7 +34,8 @@ class MobileInServiceController extends Controller
             return redirect()->route('samu.welcome');
         }
 
-        $lastShift = Shift::find($openShift->id - 1);
+        $lastShift = Shift::with('mobilesInService','mobilesInService.crew','mobilesInService.mobile','mobilesInService.type','mobilesInService.shift')
+            ->find($openShift->id - 1);
 
         return view('samu.mobileinservice.index', compact('openShift','lastShift'));
     }
