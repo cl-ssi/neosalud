@@ -1,10 +1,11 @@
 @if($errors->any())
-    <div class="alert alert-danger alert-dismissable mt-2 float-right" role="alert">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Revise los siguientes errores</strong>
         <ul>
         @foreach($errors->all() as $error)
-            <li>{{$error}}</li>
+            <li>{{ $error }}</li>
         @endforeach
         </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif

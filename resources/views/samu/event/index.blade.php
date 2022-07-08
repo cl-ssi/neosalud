@@ -5,7 +5,7 @@
 @include('samu.nav')
 
 <div class="row">
-    <div class="col-sm-10">
+    <div class="col-12 col-md-11">
         <table class="table table-sm">
             <thead class="table-light">
                 <tr>
@@ -14,7 +14,8 @@
                     <th>Tipo</th>
                     <th>Estado</th>
                     <th>Tripulación</th>
-                    <th>O2 central</th>
+                    <th>O2</th>
+                    <th>Observación</th>
                     <th>Colación</th>
                 </tr>
             </thead>
@@ -38,6 +39,7 @@
                         <br>
                     </td>
                     <td>{{ $mis->o2 }}</td>
+                    <td>{{ $mis->observation }}</td>
                     <td nowrap>
                         @if($mis->lunch_start_at AND !$mis->lunch_end_at)
                             {{ $mis->lunch_start_at->format('H:i')}} -
@@ -52,14 +54,14 @@
             @endforeach
         </table>
     </div>
-    <div class="col-sm-2">
-        <table class="table table-sm">
-            <tr><th>Codificación colores</th></tr>
+    <div class="col-12 col-md-1">
+        <table class="table table-sm small">
+            <tr><th>Colores</th></tr>
             <tr><td class="table-danger">Aviso de salida</td></tr>
             <tr><td class="table-warning">Rumbo a destino</td></tr>
             <tr><td class="table-primary">En destino</td></tr>
             <tr><td class="table-info">Ruta AP</td></tr>
-            <tr><td class="table-success">Retornando a base</td></tr>
+            <tr><td class="table-success">Retorna a base</td></tr>
             <tr><td class="table-success">En base</td></tr>
         </table>
     </div>
