@@ -36,9 +36,16 @@ return [
     */
 
     'channels' => [
-        'cloudlogging' => [
+        'google_cloud_logging' => [
             'driver' => 'custom',
-            'via' => CloudLogging::class,
+            'labels' => [
+                'application' => env('APP_NAME'),
+                'environment' => env('APP_ENV'),
+                'project' => 'neosalud'
+            ],
+            'projectId'=> env('GOOGLE_PROJECT_ID'),
+            'handler' => App\Logging\GoogleCloudHandler::class,
+            'via' => App\Logging\GoogleCloudLogging::class,
             'level' => 'debug',
         ],
 
