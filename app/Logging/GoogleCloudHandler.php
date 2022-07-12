@@ -21,7 +21,7 @@ class GoogleCloudHandler extends AbstractProcessingHandler {
     {
         $httpRequest = [
             'requestMethod' => $_SERVER['REQUEST_METHOD'] ?? '',
-            'requestUrl'    => env('APP_URL').$_SERVER['REQUEST_URI'],
+            'requestUrl'    => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
             'status'        => $record['level'] ?? '',
             'userAgent'     => $_SERVER['HTTP_USER_AGENT'] ?? '',
             'remoteIp'      => $_SERVER['REMOTE_ADDR'] ?? '',
@@ -46,7 +46,7 @@ class GoogleCloudHandler extends AbstractProcessingHandler {
         $data = array(
             'user_id'       => auth()->user()->id ?? '',
             'message'       => $record['message'],
-            'uri'           => env('APP_URL').$_SERVER['REQUEST_URI'],
+            'uri'           => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
             'formatted'     => $record['formatted'],
             'context'       => json_encode($record['context']),
             'extra'         => json_encode($record['extra']),
