@@ -82,6 +82,15 @@ use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 // $disk = \Storage::disk('gcs');
 // $url = $disk->put('FILE.txt',"hola");
 
+Route::get('/log/{message}', function ($message) {
+    Log::error("Hello my log, message: $message");
+    return view('welcome');
+});
+
+Route::get('/exception/{message}', function ($message) {
+    throw new Exception("Intentional exception, message: $message");
+});
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
