@@ -621,7 +621,6 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::put('/{key}',		[KeyController::class, 'update'])->name('update');
 		Route::get('/edit/{key}',	[KeyController::class, 'edit'])->name('edit');
 		Route::delete('/{key}',		[KeyController::class, 'destroy'])->name('destroy');
-		Route::get('/{key}',		[KeyController::class, 'show'])->name('show'); // para pruebas
 	});
 
 	Route::prefix('mobiles')->name('mobile.')

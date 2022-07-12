@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Samu\Key;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Log; //borrar
-
 class KeyController extends Controller
 {
     /**
@@ -60,9 +58,7 @@ class KeyController extends Controller
      */
     public function show(Key $key)
     {
-        // para pruebas
-        //Log::error('Test de ERROR en ruta samu.key.show neosalud');
-        echo $inexistente;
+
     }
 
 
