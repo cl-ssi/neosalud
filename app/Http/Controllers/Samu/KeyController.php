@@ -60,7 +60,8 @@ class KeyController extends Controller
      */
     public function show(Key $key)
     {
-
+        // para pruebas
+        Log::error('Test de ERROR en ruta samu.key.show neosalud');
     }
 
 
@@ -72,7 +73,6 @@ class KeyController extends Controller
      */
     public function edit(Key $key)
     {
-        Log::info('Editando una Clave de SAMU en neosalud'); //borrar
         return view ('samu.key.edit' , compact('key'));
     }
 
