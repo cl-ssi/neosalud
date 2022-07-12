@@ -34,7 +34,6 @@ class GoogleCloudHandler extends AbstractProcessingHandler {
 
         $options = [
             'httpRequest'   => $httpRequest,
-            'resource'      => $resource,
             'severity'      => $record['level_name'],
             'labels'        => $this->labels,
         ];
