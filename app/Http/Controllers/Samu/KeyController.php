@@ -61,7 +61,8 @@ class KeyController extends Controller
     public function show(Key $key)
     {
         // para pruebas
-        Log::error('Test de ERROR en ruta samu.key.show neosalud');
+        //Log::error('Test de ERROR en ruta samu.key.show neosalud');
+        echo $inexistente;
     }
 
 
