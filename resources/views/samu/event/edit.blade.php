@@ -100,4 +100,55 @@
             }
         });
     </script>
+
+    <script>
+        function showContent() {
+            element = document.getElementById("content");
+            check = document.getElementById("patient-unknown");
+            if (check.checked) {
+                element.style.display='none';
+            }
+            else {
+                element.style.display='block';
+            }
+        }
+    </script>
+
+    <script>
+        // document.getElementById("for_run").disabled = true;
+        // document.getElementById("for_fonasa_button").disabled = true;
+        // document.getElementById("for_patient_identification").disabled = true;
+        // document.getElementById("for-patient-full-name").disabled = true;
+
+        function showIdentifierField() {
+            // var selected = document.getElementById("for-identifier-type").value;
+            //
+            // if (selected == 1) {
+            //     document.getElementById("for_run").disabled = false;
+            //     document.getElementById("for_fonasa_button").disabled = false;
+            //
+            //     document.getElementById("for_patient_identification").disabled = true;
+            //     document.getElementById("for_patient_identification").value = '';
+            //
+            //     document.getElementById("for-patient-full-name").disabled = true;
+            //     document.getElementById("for-patient-full-name").value = '';
+            // }
+            // else if (selected == "") {
+            //     document.getElementById("for_run").disabled = true;
+            //     document.getElementById("for_fonasa_button").disabled = true;
+            //     document.getElementById("for_patient_identification").disabled = true;
+            //     document.getElementById("for-patient-full-name").disabled = true;
+            // }
+            // else {
+            //     document.getElementById("for_run").disabled = true;
+            //     document.getElementById("for_fonasa_button").disabled = true;
+            //
+            //     document.getElementById("for_patient_identification").disabled = false;
+            //     document.getElementById("for_patient_identification").value = '';
+            //
+            //     document.getElementById("for-patient-full-name").disabled = false;
+            //     document.getElementById("for-patient-full-name").value = '';
+            // }
+        }
+    </script>
 @endsection
