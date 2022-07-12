@@ -67,6 +67,9 @@ use App\Http\Controllers\Epi\SuspectCaseController;
 use App\Http\Controllers\CoordinateController;
 use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 
+
+use Illuminate\Support\Facades\Log; //borrar
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -83,8 +86,8 @@ use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 // $url = $disk->put('FILE.txt',"hola");
 
 Route::get('/log/{message}', function ($message) {
-    Log::error("Hello my log, message: $message");
-    return view('welcome');
+    logger()->error('You are not allowed here.');
+    echo $message;
 });
 
 Route::get('/exception/{message}', function ($message) {
