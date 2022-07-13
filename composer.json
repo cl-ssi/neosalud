@@ -17,6 +17,7 @@
         "econea/nusoap": "^0.9.11",
         "firebase/php-jwt": "^6.2",
         "fruitcake/laravel-cors": "^2.0",
+        "google/cloud-error-reporting": "^0.19.3",
         "google/cloud-logging": "^1.24",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",
