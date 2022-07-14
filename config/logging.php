@@ -3,7 +3,6 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use App\Logging\CloudLogging;
 
 return [
 
@@ -35,10 +34,20 @@ return [
     |
     */
 
+
     'channels' => [
-        'cloudlogging' => [
+        'google_cloud_logging' => [
             'driver' => 'custom',
-            'via' => CloudLogging::class,
+            'projectId'=> env('GOOGLE_PROJECT_ID'),
+            'logName' => 'neosalud',
+            'labels' => [
+                'APP_NAME' => json_encode(env('APP_NAME')),
+                'APP_ENV' => env('APP_ENV'),
+                'APP_DEBUG' => json_encode(env('APP_DEBUG')),
+                'APP_URL' => env('APP_URL'),
+            ],
+            'handler' => App\Logging\GoogleCloudHandler::class,
+            'via' => App\Logging\GoogleCloudLogging::class,
             'level' => 'debug',
         ],
 

@@ -67,6 +67,9 @@ use App\Http\Controllers\Epi\SuspectCaseController;
 use App\Http\Controllers\CoordinateController;
 use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 
+
+use Illuminate\Support\Facades\Log; //borrar
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,6 +84,15 @@ use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 /* Grabar en Google storage  */
 // $disk = \Storage::disk('gcs');
 // $url = $disk->put('FILE.txt',"hola");
+
+Route::get('/log/{message}', function ($message) {
+    logger()->error('You are not allowed here.');
+    echo $message;
+});
+
+Route::get('/exception/{message}', function ($message) {
+    throw new Exception("Intentional exception, message: $message");
+});
 
 Route::get('/', function () {
     return view('welcome');
