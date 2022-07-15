@@ -298,7 +298,7 @@
 
 <div id="content">
     <br>
-    @livewire('show-fonasa-data')
+    @livewire('show-fonasa-data', ['event' => $event])
 
     {{--
     <fieldset class="form-group col-sm-3">

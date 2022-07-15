@@ -14,8 +14,8 @@ trait FonasaTrait
         if (!$run || !$dv) {
             return json_encode("Debe incluir run y dv");
         }
+        $urlWs = env('WSSSI_URL').'/fonasa';
 
-        $urlWs = env('FONASA_WS_URL');
         $response = Http::get($urlWs, ['run' => $this->run, 'dv' => $this->dv]);
 
         if ($response->failed()) {
