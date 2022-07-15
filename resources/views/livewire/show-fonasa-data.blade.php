@@ -21,33 +21,27 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-3">
-            <label for="profiles">Run / Dígito Verificador</label>
+            <label for="profiles">Run</label>
             <div class="input-group">
                 <input type="number" class="form-control" name="run" id="for_run"
-                    wire:model.debounce.700ms="run"
-                    placeholder="Run sin dígito verificador"
+                    wire:model.debounce.400ms="run"
+                    placeholder="Sin dígito verificador"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     maxlength = "8"
                     required
                     {{ $runInput }}>
-                <div class="input-group-append">
+
                     <span class="input-group-text">{{ $dv }}</span>
-                    <input type="hidden" name="dv" value="{{ $dv }}">
-                    <!-- <button class="btn btn-outline-secondary" type="submit"
-                        id="buscar">Buscar</button> -->
+                    <button type="button" class="btn btn-success" id="for_fonasa_button" wire:click="fonasa_search" {{ $runInput }}>
+                        <i class="fas fa-search"></i> FONASA
+                    </button>
                 </div>
-            </div>
+                <input type="hidden" name="dv" value="{{ $dv }}">
         </fieldset>
 
-        <fieldset class="form-group col-sm-2">
-            <label for="">&nbsp;</label>
-            <button type="button" class="form-control btn btn-success" id="for_fonasa_button" wire:click="fonasa_search" {{ $runInput }}>
-                <i class="fas fa-search"></i> FONASA
-            </button>
-        </fieldset>
 
         <fieldset class="form-group col-sm-3">
-            <label for="for-patient-identification" {{ $patientIdentificationInputVisible }}>Otra Identificación</label>
+            <label for="for-patient-identification">Otra Identificación</label>
             <input type="text" class="form-control {{-- @error('patient_identification') is-invalid @enderror --}}"
                 id="for_patient_identification"
                 name="patient_identification" id="for-patient-identification"
@@ -62,23 +56,19 @@
                 </div>
             @enderror
         </fieldset>
-    </div>
 
-    <br>
-
-    <div class="row g-2">
-        <fieldset class="form-group col-sm-10">
+        <fieldset class="form-group col-sm-4">
             <label for="for-patient-name">Nombre del paciente</label>
             <input type="text" class="form-control {{-- @error('patient_name') is-invalid @enderror --}}"
                 wire:model="fullName"
                 name="patient_name"
                 id="for-patient-full-name"
-                {{ $fullNameInput }}
-                @error('patient_name')
-            <div class="text-danger">
-                <small>{{ $message }}</small>
-                  </div>
-              @enderror
+                {{ $fullNameInput }}>
+            @error('patient_name')
+                <div class="text-danger">
+                    <small>{{ $message }}</small>
+                </div>
+            @enderror
         </fieldset>
     </div>
 </div>
