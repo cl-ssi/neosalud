@@ -1,6 +1,6 @@
 <div>
     <div class="row g-2">
-        <fieldset class="form-group col-sm-3">
+        <fieldset class="form-group col-sm-2">
             <label for="for-identifier-type">Tipo de identificación</label>
             <select class="form-select {{-- @error('patient_identifier_type_id') is-invalid @enderror --}}"
               wire:model="identifierType"
@@ -46,7 +46,7 @@
             </button>
         </fieldset>
 
-        <fieldset class="form-group col-sm-2">
+        <fieldset class="form-group col-sm-3">
             <label for="for-patient-identification" {{ $patientIdentificationInputVisible }}>Otra Identificación</label>
             <input type="text" class="form-control {{-- @error('patient_identification') is-invalid @enderror --}}"
                 id="for_patient_identification"
