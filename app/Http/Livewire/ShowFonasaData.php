@@ -12,34 +12,37 @@ class ShowFonasaData extends Component
 {
     use FonasaTrait;
 
+    /* Variables del formulario */
     public $patient_identifier_type_id = null;
-    public $run = null;
-    public $dv = null;
-    public $run_dv = null;
     public $patient_identification = null;
-    public $patient_other_identification = null;
     public $patient_name = null;
 
-    /* Para cargar los tipos de identificadores */
+    /* Variables generadas para el algoritmo */
+    public $run = null;
+    public $dv = null;
+    public $patient_other_identification = null;
+
+    /* Cargar los tipos de identificadores */
     public $identifierType;
 
-    /* Variables para el Json de intregración */
-    public $url;
-
-    /* Variables mostrar y ocultar los inputs */
+    /* Variables para mostrar y ocultar los inputs */
     public $runInput;
     public $otherIdentificationInput;
+
+    /* Muestra si hay algún error del ws de fonasa */
     public $error_fonasa = null;
 
-    /* Objeto */
+    /* Objeto $event */
     public $event;
 
     public function mount()
     {
+        /* Carga los tipos de identificador */
         $this->identifierTypes = CodConIdentifierType::pluck('id','text')->sort();
 
         if($this->event)
         {
+            /* Setea todas las variables menos $this->patient_identification que lo hace el render() */
             $this->patient_identifier_type_id = $this->event->patient_identifier_type_id;
             $this->patient_name = $this->event->patient_name;
             $this->patient_other_identification = $this->event->patient_identification;
@@ -56,18 +59,18 @@ class ShowFonasaData extends Component
     public function fonasa_search()
     {
         $user = $this->fonasa($this->run, $this->dv);
-        
+        /* Si el json contiene la palabra error */
         if(str_contains($user, 'Error'))
         {
             $this->error_fonasa = $user;
         }
         else if($user) 
         {
-            $this->error_fonasa = null;
             $this->patient_name = 
                 json_decode($user)->name . " " .
                 json_decode($user)->fathers_family . " " .
                 json_decode($user)->mothers_family;
+            $this->error_fonasa = null;
         }
     }
 
@@ -76,13 +79,13 @@ class ShowFonasaData extends Component
         switch($this->patient_identifier_type_id)
         {
             case 1:
-                /** Calculo del dv */
+                /* Calculo del dv */
                 if($this->run)
                 {
                     $run = intval($this->run);
                     $s = 1;
                     for($m=0;$run!=0;$run/=10)
-                        $s=($s+$run%10*(9-$m++%6))%11;
+                        $s=(int)($s+(int)$run%10*(9-$m++%6))%11;
                     $this->dv = chr($s?$s+47:75);
                     $this->patient_identification = $this->run.'-'.$this->dv;
                 }
