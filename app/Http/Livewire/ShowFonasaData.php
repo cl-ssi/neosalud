@@ -12,124 +12,98 @@ class ShowFonasaData extends Component
 {
     use FonasaTrait;
 
-    public $run;
-    public $dv;
+    public $patient_identifier_type_id = null;
+    public $run = null;
+    public $dv = null;
+    public $run_dv = null;
+    public $patient_identification = null;
+    public $patient_other_identification = null;
+    public $patient_name = null;
 
+    /* Para cargar los tipos de identificadores */
     public $identifierType;
-    public $patientIdentification;
-    public $fullName;
-
-    /* Para editar y precargar los select */
-    public $identifierTypeSelected = null;
-    public $runSelected = null;
-    public $dvSelected = null;
 
     /* Variables para el Json de intregración */
     public $url;
 
-    /* Variables para el manejo del Form. */
-    public $runInput = 'disabled';
-    public $patientIdentificationInput = 'readonly';
-    public $patientIdentificationInputVisible = '';
-    public $fullNameInput = 'readonly';
+    /* Variables mostrar y ocultar los inputs */
+    public $runInput;
+    public $otherIdentificationInput;
+    public $error_fonasa = null;
 
     /* Objeto */
-
     public $event;
 
-    public function fonasa_search()
+    public function mount()
     {
-        $url = $this->fonasa($this->run, $this->dv);
-        if ($this->run != NULL) {
-            $this->fullName = json_decode($url)->name." ".json_decode($url)->fathers_family." ".json_decode($url)->mothers_family;
-            $this->patientIdentification = $this->run."-".$this->dv;
-            $this->patientIdentificationInputVisible = 'hidden';
+        $this->identifierTypes = CodConIdentifierType::pluck('id','text')->sort();
+
+        if($this->event)
+        {
+            $this->patient_identifier_type_id = $this->event->patient_identifier_type_id;
+            $this->patient_name = $this->event->patient_name;
+            $this->patient_other_identification = $this->event->patient_identification;
+
+            if($this->patient_identifier_type_id == 1)
+            {
+                $patient_identification = str_replace(array('.','-',' ',','), '',$this->event->patient_identification);
+                $this->run = substr($patient_identification, 0, -1) ?? null;
+                $this->dv = substr($patient_identification, -1, 1) ?? null;
+            }
         }
     }
 
-    public function mount(){
-        // dd($this->event);
-        if($this->event){
-            $this->identifierType = $this->event->patient_identifier_type_id;
-            if($this->identifierType == 1){
-                $this->runInput = '';
-                $this->run = substr($this->event->patient_identification, 0, -2);
-                $this->dv = substr($this->event->patient_identification, -1, 1);
-                $this->fullName = $this->event->patient_name;
-
-                $this->patientIdentification = $this->run."-".$this->dv;
-                $this->patientIdentificationInputVisible = 'hidden';
-            }
-            else if($this->identifierType == ""){
-                $this->runInput = 'disabled';
-                $this->run = NULL;
-
-                $this->patientIdentification = NULL;
-                $this->patientIdentificationInput = 'readonly';
-                $this->patientIdentificationInputVisible = '';
-
-                $this->fullName = NULL;
-                $this->fullNameInput = 'readonly';
-            }
-            else{
-                $this->runInput = 'disabled';
-                $this->run = NULL;
-
-                $this->patientIdentificationInput = '';
-                $this->patientIdentificationInputVisible = '';
-                $this->patientIdentification = $this->event->patient_identification;
-
-                $this->fullNameInput = '';
-                $this->fullName = $this->event->patient_name;
-            }
+    public function fonasa_search()
+    {
+        $user = $this->fonasa($this->run, $this->dv);
+        
+        if(str_contains($user, 'Error'))
+        {
+            $this->error_fonasa = $user;
+        }
+        else if($user) 
+        {
+            $this->error_fonasa = null;
+            $this->patient_name = 
+                json_decode($user)->name . " " .
+                json_decode($user)->fathers_family . " " .
+                json_decode($user)->mothers_family;
         }
     }
 
     public function render()
     {
-        $run = intval($this->run);
-        $s=1;
-        for($m=0;$run!=0;$run/=10)
-            $s=($s+$run%10*(9-$m++%6))%11;
-        $this->dv = chr($s?$s+47:75);
-
-        return view('livewire.show-fonasa-data', [
-          'identifierTypes' => CodConIdentifierType::pluck('id','text')->sort(),
-          'fullName' => $this->fullName
-        ]);
-    }
-
-    public function updatedidentifierType($identifier_type_id){
-        if ($identifier_type_id == 1){
-            $this->runInput = '';
-
-            $this->patientIdentification = NULL;
-            $this->patientIdentificationInput = 'readonly';
-
-            $this->fullName = NULL;
-            $this->fullNameInput = 'readonly';
+        switch($this->patient_identifier_type_id)
+        {
+            case 1:
+                /** Calculo del dv */
+                if($this->run)
+                {
+                    $run = intval($this->run);
+                    $s = 1;
+                    for($m=0;$run!=0;$run/=10)
+                        $s=($s+$run%10*(9-$m++%6))%11;
+                    $this->dv = chr($s?$s+47:75);
+                    $this->patient_identification = $this->run.'-'.$this->dv;
+                }
+                else
+                {
+                    $this->dv = null;
+                    $this->patient_identification = null;
+                }
+                $this->patient_other_identification = $this->run.$this->dv;
+                $this->runInput = true;
+                $this->otherIdentificationInput = null;
+                break;
+            default:
+                $this->patient_identification = $this->patient_other_identification;
+                $this->run = substr($this->patient_other_identification, 0, -1) ?? null;
+                $this->dv = substr($this->patient_other_identification, -1, 1) ?? null;
+                $this->otherIdentificationInput = true;
+                $this->runInput = null;
+                break;
         }
-        else if($identifier_type_id == ""){
-            $this->runInput = 'disabled';
-            $this->run = NULL;
 
-            $this->patientIdentification = NULL;
-            $this->patientIdentificationInput = 'readonly';
-            $this->patientIdentificationInputVisible = '';
-
-            $this->fullName = NULL;
-            $this->fullNameInput = 'readonly';
-        }
-        else{
-            $this->runInput = 'disabled';
-            $this->run = NULL;
-
-            $this->patientIdentificationInput = '';
-            $this->patientIdentificationInputVisible = '';
-            $this->patientIdentification = NULL;
-
-            $this->fullNameInput = '';
-            $this->fullName = NULL;
-        }
+        return view('livewire.show-fonasa-data');
     }
 }

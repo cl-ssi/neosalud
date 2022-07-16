@@ -11,15 +11,15 @@ trait FonasaTrait
         /* Antes: Si se le envió el run y el dv por GET
           Ahora: Envío el componente RUN de Livewire */
 
-        if (!$run || !$dv) {
-            return json_encode("Debe incluir run y dv");
+        if (is_null($run) OR is_null($dv)) {
+            return json_encode("Error: Debe incluir run y dv");
         }
         $urlWs = env('WSSSI_URL').'/fonasa';
 
         $response = Http::get($urlWs, ['run' => $this->run, 'dv' => $this->dv]);
 
         if ($response->failed()) {
-            return json_encode("No se pudo conectar a FONASA: " . $response->reason());
+            return json_encode("Error: No se pudo conectar a FONASA: " . $response->reason());
         }
 
         return $response->body();
