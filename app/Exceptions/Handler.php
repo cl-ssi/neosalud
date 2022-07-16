@@ -37,20 +37,24 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            $projectId = 'saludiquique';
-            $service = 'neosalud';
-            $version = '1';
+            if(env('APP_ENV') == 'production') 
+            {
+                $projectId = 'saludiquique';
+                $service = 'neosalud';
+                $version = '1';
+    
+                $metadata = new SimpleMetadataProvider([], $projectId, $service, $version);
+    
+                $logging = new LoggingClient(['projectId' => $projectId]);
+    
+                $logger = $logging->psrLogger('error-log', [
+                    'metadataProvider' => $metadata
+                ]);
+    
+                Bootstrap::init($logger);
+                Bootstrap::exceptionHandler($e);
+            }
 
-            $metadata = new SimpleMetadataProvider([], $projectId, $service, $version);
-
-            $logging = new LoggingClient(['projectId' => $projectId]);
-
-            $logger = $logging->psrLogger('error-log', [
-                'metadataProvider' => $metadata
-            ]);
-
-            Bootstrap::init($logger);
-            Bootstrap::exceptionHandler($e);
         });
     }
 }
