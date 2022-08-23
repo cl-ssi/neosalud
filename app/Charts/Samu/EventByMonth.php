@@ -4,56 +4,62 @@ namespace App\Charts\Samu;
 
 use App\Models\Samu\Event;
 use Carbon\CarbonPeriod;
-use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 use Illuminate\Support\Carbon;
 
-class EventByMonth extends Chart
+class EventByMonth
 {
-    public $myLabel;
     public $myDataset;
+    public $year;
+    public $month;
 
     /**
      * Initializes the chart.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($year = null, $month = null)
     {
-        parent::__construct();
+        $this->year = $year ? $year : now()->year;
+        $this->month = $month ? $month : now()->month;
         $this->getData();
     }
 
+    /**
+     * Get the statistics data
+     *
+     * @return void
+     */
     public function getData()
     {
-        $end = Carbon::now();
+        $end = Carbon::parse("$this->year/$this->month/01");
         $start = $end->copy()->subMonths(5);
         $rangeMonths = CarbonPeriod::create($start->startOfMonth(), '1 month', $end->startOfMonth());
-        
-        $this->myLabel = collect([]);
-        $this->myDataset = collect([]);
+
+        $this->myDataset = array([
+            'Mes',
+            '# de Eventos del mes',
+            ["role" => 'style' ],
+            ["role" => 'annotation' ],
+        ]);
 
         foreach($rangeMonths as $month)
         {
-            $nameMonth = translateMonth($month->format('F'));
-            $year = $month->format('Y');
-            
             $totalEvents = Event::query()
                 ->whereMonth('date', '=', $month)
                 ->whereYear('date', '=', $month)
                 ->count();
 
-            $this->myLabel->push("$nameMonth-$year");
-            $this->myDataset->push($totalEvents);
+            $this->myDataset[] = ["$month->monthName-$month->year", $totalEvents, 'color: #006cb7', $totalEvents];
         }
     }
 
-    public function getLabel()
-    {
-        return $this->myLabel->toArray();
-    }
-
+    /**
+     * Get the dataset
+     *
+     * @return void
+     */
     public function getDataset()
     {
-        return $this->myDataset->toArray();
+        return $this->myDataset;
     }
 }
