@@ -3,12 +3,9 @@
 namespace App\Charts\Samu;
 
 use App\Models\Samu\Event;
-use ConsoleTVs\Charts\Classes\Chartjs\Chart;
-use Illuminate\Support\Carbon;
 
-class EventBySex extends Chart
+class EventBySex
 {
-    public $myLabel;
     public $myDataset;
 
     /**
@@ -16,40 +13,48 @@ class EventBySex extends Chart
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($year = null, $month = null)
     {
-        parent::__construct();
+        $this->year = $year ? $year : now()->year;
+        $this->month = $month ? $month : now()->month;
         $this->getData();
     }
 
+    /**
+     * Get the statistics data
+     *
+     * @return void
+     */
     public function getData()
     {
-        $now = Carbon::now();
         $sexs = ['MALE', 'FEMALE', 'UNKNOWN', 'OTHER', null];
-        
-        $this->myLabel = collect([]);
-        $this->myDataset = collect([]);
+
+        $this->myDataset = array([
+            'Género',
+            '# de Eventos por sexo',
+            ["role" => 'style' ]
+        ]);
 
         foreach($sexs as $sex)
         {
             $totalBySex = Event::query()
                 ->join('samu_calls', 'samu_calls.id', '=', 'samu_events.call_id')
                 ->where('samu_calls.sex', '=', $sex)
-                ->whereRaw('MONTH(samu_events.date) = ?', [$now->month])
+                ->whereMonth('samu_events.date', $this->month)
+                ->whereYear('samu_events.date', $this->year)
                 ->count();
-            
-            $this->myLabel->push(translateSex($sex));
-            $this->myDataset->push($totalBySex);
+
+            $this->myDataset[] = [translateSex($sex), $totalBySex, 'color: #006cb7'];
         }
     }
 
-    public function getLabel()
-    {
-        return $this->myLabel->toArray();
-    }
-
+    /**
+     * Get the dataset
+     *
+     * @return void
+     */
     public function getDataset()
     {
-        return $this->myDataset->toArray();
+        return $this->myDataset;
     }
 }

@@ -3,54 +3,60 @@
 namespace App\Charts\Samu;
 
 use App\Models\Samu\Event;
-use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class EventLastMonth extends Chart
+class EventLastMonth
 {
-    public $myLabel;
     public $myDataset;
+    public $start;
+    public $end;
 
     /**
      * Initializes the chart.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($end = null)
     {
-        parent::__construct();
+        $this->end = $end ? Carbon::parse($end) : now();
+        $this->start = $this->end->copy()->subDays(29);
         $this->getData();
     }
 
+    /**
+     * Get the statistics data
+     *
+     * @return void
+     */
     public function getData()
     {
-        $end = Carbon::now();
-        $start = $end->copy()->subDays(29);
-        $rangeDates = $start->range($end);
-        
-        $this->myLabel = collect([]);
-        $this->myDataset = collect([]);
+        $rangeDates = $this->start->range($this->end);
+        $this->myDataset = array([
+            'fecha',
+            'eventos',
+            ["role" => 'style' ],
+            ["role" => 'annotation' ],
+        ]);
 
         foreach($rangeDates as $date)
         {
             $totalEvents = Event::query()
                 ->select('date', DB::raw('count(date) as total'))
-                ->whereDate('date', '=', $date->format('Y-m-d'))
+                ->whereDate('date', $date->format('Y-m-d'))
                 ->count();
 
-            $this->myLabel->push($date->format('d/m/Y'));
-            $this->myDataset->push($totalEvents);
+            $this->myDataset[] = [$date->format('d/m/Y'), $totalEvents, 'color: #006cb7', $totalEvents];
         }
     }
 
-    public function getLabel()
-    {
-        return $this->myLabel->toArray();
-    }
-
+    /**
+     * Get the dataset
+     *
+     * @return void
+     */
     public function getDataset()
     {
-        return $this->myDataset->toArray();
+        return $this->myDataset;
     }
 }
