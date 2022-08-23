@@ -41,11 +41,22 @@ class EventController extends Controller
         $today = now();
         $yesterday = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $today) ) ));
 
-        $open_events = Event::where('status',true)->latest()->get();
-        $events_today = Event::whereDate('date',$today)->where('status',false)->latest()->get();
-        $events_yesterday = Event::whereDate('date',$yesterday)->latest()->get();
+        $open_events = Event::where('status',true)
+                        ->with('commune','call','call.associatedCalls','call.referenceCall','calls','calls.referenceCall','key','returnKey','mobile','mobileInService')
+                        ->latest()
+                        ->get();
+        $events_today = Event::whereDate('date',$today)
+                        ->with('commune','call','call.associatedCalls','call.referenceCall','calls','calls.referenceCall','key','returnKey','mobile','mobileInService')
+                        ->where('status',false)
+                        ->latest()
+                        ->get();
+        $events_yesterday = Event::whereDate('date',$yesterday)
+                        ->with('commune','call','call.associatedCalls','call.referenceCall','calls','calls.referenceCall','key','returnKey','mobile','mobileInService')
+                        ->latest()
+                        ->get();
 
         $calls = Call::doesnthave('events')
+                    ->with('commune','referenceCall')
                     ->where('classification','<>','OT')
                     ->latest()
                     ->get();

@@ -284,9 +284,9 @@
 <h4>Datos del paciente</h4>
 <div class="row g-2">
 
-    <fieldset class="form-check form-check-inline col-sm-1">
+    <fieldset class="form-check form-check-inline col-sm-2">
         <input class="form-check-input @error('patient_unknown') is-invalid @enderror" type="checkbox" name="patient_unknown"
-            id="patient-unknown" value="1" {{ ( $event &&  $event->patient_unknown)? 'checked' : '' }}>
+            id="patient-unknown" onchange="javascript:showContent()" value="1" {{ ( $event &&  $event->patient_unknown)? 'checked' : '' }}>
         <label class="form-check-label" for="patient-unknown">No identificado</label>
         @error('patient_unknown')
             <div class="text-danger">
@@ -294,7 +294,13 @@
             </div>
         @enderror
     </fieldset>
+</div>
 
+<div id="content">
+    <br>
+    @livewire('show-fonasa-data', ['event' => $event])
+
+    {{--
     <fieldset class="form-group col-sm-3">
         <label for="for-patient-name">Nombre del paciente</label>
         <input type="text" class="form-control @error('patient_name') is-invalid @enderror" name="patient_name" id="for-patient-name"
@@ -332,7 +338,7 @@
             </div>
         @enderror
     </fieldset>
-
+    --}}
 </div>
 
 <br>

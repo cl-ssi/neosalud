@@ -1,5 +1,9 @@
 <h4 class="d-none d-print-block">SAMU</h4>
 
+@php
+    $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
+@endphp
+
 <ul class="nav nav-tabs mb-3 d-print-none">
     <li class="nav-item" >
         <a class="nav-link {{ active('samu.welcome') }}"
@@ -15,42 +19,42 @@
 
     @canany(['SAMU administrador','SAMU regulador','SAMU despachador'])
     <li class="nav-item">
-        <a class="nav-link {{ active('samu.mobileinservice.*') }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active('samu.mobileinservice.*') }} {{ $disabled }}"
         href=" {{ route('samu.mobileinservice.index') }}"><i class="fas fa-ambulance"></i> Moviles en servicio</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador','SAMU operador','SAMU despachador'])
     <li class="nav-item">
-        <a class="nav-link {{ active('samu.noveltie.*') }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active('samu.noveltie.*') }} {{ $disabled }}"
         href=" {{ route('samu.noveltie.index') }}"><i class="fas fa-book"></i> Novedades</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU operador','SAMU regulador'])
     <li class="nav-item">
-        <a class="nav-link {{ active('samu.call.create') }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active('samu.call.create') }} {{ $disabled }}"
         href=" {{ route('samu.call.create') }}"><i class="fas fa-headset"></i> Llamadas</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador'])
     <li class="nav-item">
-        <a class="nav-link {{ active(['samu.call.index','samu.call.edit']) }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active(['samu.call.index','samu.call.edit']) }} {{ $disabled }}"
         href=" {{ route('samu.call.index') }}"><i class="fas fa-clipboard-check"></i> Regulación</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador','SAMU operador','SAMU despachador'])
     <li class="nav-item">
-        <a class="nav-link {{ active('samu.call.ots') }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active('samu.call.ots') }} {{ $disabled }}"
         href=" {{ route('samu.call.ots') }}"><i class="fas fa-phone"></i> OT</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU despachador'])
     <li class="nav-item">
-        <a class="nav-link {{ active('samu.event.index') }} @if(!App\Models\Samu\Shift::todayShiftVerify()) disabled @endif"
+        <a class="nav-link {{ active('samu.event.index') }} {{ $disabled }}"
         href=" {{ route('samu.event.index') }}"><i class="fas fa-car-crash"></i> Despacho</a>
     </li>
     @endcan

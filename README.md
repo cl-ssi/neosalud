@@ -16,9 +16,9 @@
 - ```cd neosalud```
 - ```cp .env.example .env```
 - Configurar los datos de conexión a tu base de datos "unisalud" de tu local en el .env
-- ```docker build -t php8.1-ssi docker/php8.1```
-- ```docker run --rm -it -v $(pwd):/var/www/html -p 8000:8000 -d --name php8.1-ssi php8.1-ssi```
-- ```docker exec -it php8.1-ssi /bin/bash```
+- ```docker build -t neosalud docker/dev```
+- ```docker run --rm -it -v $(pwd):/var/www/html -p 8000:8000 -d --name neosalud neosalud```
+- ```docker exec -it neosalud /bin/bash```
 - Esto abrirá un contenedor con nuestra aplicación
 - ```composer install```
 - ```php artisan key:generate```
@@ -26,9 +26,14 @@
 - Pudese usar el alias ```$ serve``` para este último comando, ver todos los alias: ```$ alias```
 
 ## Para detener el contenedor
-- ```docker stop php8.1-ssi```
+- ```docker stop neosalud```
 ## Abrir el navegador
 - Ir a http://localhost:8000
+
+## Alias para los comandos en bash
+- ```alias dbuild='docker build -t `basename "$PWD"` docker/dev'```
+- ```alias drun='docker run --rm -it -v $(pwd):/var/www/html -p 8000:8000 -d --name `basename "$PWD"` `basename "$PWD"`'```
+- ```alias dexec='docker exec -it `basename "$PWD"` /bin/bash'```
 
 ## License
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
