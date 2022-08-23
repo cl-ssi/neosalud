@@ -119,51 +119,6 @@ function generateAge($year, $month) { // TODO: Eliminar a futuro
     return $age;
 }
 
-function translateMonth($month) {
-    switch ($month) {
-        case 'January':
-            $translate = 'Enero';
-            break;
-        case 'February':
-            $translate = 'Febrero';
-            break;
-        case 'March':
-            $translate = 'Marzo';
-            break;
-        case 'April':
-            $translate = 'Abril';
-            break;
-        case 'May':
-            $translate = 'Mayo';
-            break;
-        case 'June':
-            $translate = 'Junio';
-            break;
-        case 'July':
-            $translate = 'Julio';
-            break;
-        case 'August':
-            $translate = 'Agosto';
-            break;
-        case 'September':
-            $translate = 'Enero';
-            break;
-        case 'October':
-            $translate = 'Octubre';
-            break;
-        case 'November':
-            $translate = 'Noviembre';
-            break;
-        case 'December':
-            $translate = 'Diciembre';
-            break;
-        default:
-            $translate = '';
-            break;
-    }
-    return $translate;
-}
-
 function translateSex($sex) {
     switch ($sex) {
         case 'MALE':
