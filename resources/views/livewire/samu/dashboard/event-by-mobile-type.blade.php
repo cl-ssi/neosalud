@@ -8,7 +8,7 @@
                             <td>
                                 @if($j == 0)
                                     <b>
-                                        {{ $data }}
+                                        {{ $data['id'] }}
                                     </b>
                                 @else
                                     @if($i == 0)

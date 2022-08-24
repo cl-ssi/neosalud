@@ -20,7 +20,7 @@ class EventLastMonth
     public function __construct($end = null)
     {
         $this->end = $end ? Carbon::parse($end) : now();
-        $this->start = $this->end->copy()->subDays(29);
+        $this->start = $this->end->copy()->subDays(30);
         $this->getData();
     }
 
