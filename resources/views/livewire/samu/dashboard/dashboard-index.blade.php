@@ -9,9 +9,9 @@
     <div class="row">
         <div class="col-sm">
             <div class="card">
-                <div class="card-header">
+                <h6 class="card-header">
                     # de Eventos atendidos en los últimos 30 días
-                </div>
+                </h6>
                 <div class="card-body">
                     <div id="event-last-month" style="width: auto; height: 400px;"></div>
                 </div>
