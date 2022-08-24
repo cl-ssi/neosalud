@@ -4,6 +4,10 @@
 
 @section('content')
 
+@canany(['Mp: user'])
+    @include('medical_programmer.nav')
+@endcanany
+
 <h3 class="mb-3">Editar Organizaciones</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameter.organization.update', $organization) }}">

@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
 <h3 class="mb-3">Editar Contrato</h3>

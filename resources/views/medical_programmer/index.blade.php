@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Listado de Actividades</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.activities.create') }}">

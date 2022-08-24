@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Editar PropuestasEditar Propuestas</h3>
 
 <div class="row">

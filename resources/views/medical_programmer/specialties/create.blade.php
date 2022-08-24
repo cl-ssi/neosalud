@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <script src="{{ asset('js/colorpicker/jscolor.js') }}"></script>
 
 <h3 class="mb-3">Nueva Especialidad</h3>

@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Crear RRHH</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('medical_programmer.rrhh.store') }}">

@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h2 class="mb-3">Listado de Actividades Madre</h2>
 <a class="btn btn-primary mb-2" href="{{ route('medical_programmer.mother_activities.create') }}">
     <i class="fas fa-plus"></i> Agregar nueva

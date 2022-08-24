@@ -256,6 +256,8 @@ Route::prefix('surveys')->as('surveys.')->middleware('auth')->group(function(){
 
 Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('auth')->group(function(){
 
+	Route::view('/', 'medical_programmer.welcome')->name('welcome');
+
 	Route::prefix('operating_room_programming')->name('operating_room_programming.')->group(function(){
 		Route::post('saveMyEvent', [OperatingRoomProgrammingController::class, 'saveMyEvent'])->name('saveMyEvent');
 		Route::post('updateMyEvent', [OperatingRoomProgrammingController::class, 'updateMyEvent'])->name('updateMyEvent');

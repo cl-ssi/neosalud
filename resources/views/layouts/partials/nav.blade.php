@@ -91,6 +91,14 @@
             </li>
             @endcanany
 
+            @canany(['Mp: user'])
+            <li class="nav-item">
+                <a class="nav-link {{ active('medical_programmer.*') }}" href="{{ route('medical_programmer.welcome') }}">
+                    <i class="fa fa-user-md"></i> PROGRAMADOR MÉDICO
+                </a>
+            </li>
+            @endcanany
+
         </ul>
 
         <ul class="nav flex-column">

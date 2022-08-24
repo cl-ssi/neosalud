@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Listado de Subactividades</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('medical_programmer.subactivities.index') }}">
