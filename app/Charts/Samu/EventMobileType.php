@@ -21,7 +21,6 @@ class EventMobileType
     {
         $this->end = $end ? Carbon::parse($end) : now();
         $this->start = $this->end->copy()->subDays(30);
-
         $this->getData();
     }
 
