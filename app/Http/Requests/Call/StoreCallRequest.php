@@ -35,8 +35,8 @@ class StoreCallRequest extends FormRequest
             'commune_id'        => 'nullable|exists:communes,id',
             'address'           => 'nullable|string|min:0|max:255',
             'address_reference' => 'nullable|string|min:0|max:255',
-            'latitude'          => 'nullable|numeric',
-            'longitude'         => 'nullable|numeric',
+            'latitude'          => 'nullable|numeric|min:-90.00000000|max:90.00000000',
+            'longitude'         => 'nullable|numeric|min:-180.00000000|max:180.00000000',
             'sex' => [
                 'nullable',
                 Rule::in(['MALE', 'FEMALE', 'UNKNOWN', 'OTHER']),
