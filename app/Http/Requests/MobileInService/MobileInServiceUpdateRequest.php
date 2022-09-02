@@ -13,7 +13,7 @@ class MobileInServiceUpdateRequest extends FormRequest
     {
         $this->shift = Shift::whereStatus(true)->first();
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,8 +34,10 @@ class MobileInServiceUpdateRequest extends FormRequest
         return [
             'position'      => [
                 'required',
+                'min:1',
+                'max:255',
                 Rule::unique('samu_mobiles_in_service', 'position')
-                    ->where('shift_id',$this->shift->id)
+                    ->where('shift_id', $this->shift->id)
                     ->ignore($this->route('mobileInService')->id)
             ],
             'mobile_id'     => 'required|exists:samu_mobiles,id',
