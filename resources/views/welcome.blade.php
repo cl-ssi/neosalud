@@ -87,7 +87,7 @@
 				<div class="card-header">
 					<h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
 				</div>
-				<div class="card-body">
+				<div class="card-body text-center">
 					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
 					<a class="btn-cu btn-m btn-color-estandar m-auto" 
 						href="https://www.saludiquique.app/claveunica/redirect/neosalud"
