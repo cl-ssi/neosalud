@@ -83,11 +83,11 @@
     <div class="container">
         <div class="card-deck mb-3">
 
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
-                </div>
-                <div class="card-body">
+			<div class="card shadow-sm">
+				<div class="card-header">
+					<h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
+				</div>
+				<div class="card-body">
 					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
 					<a class="btn-cu btn-m btn-color-estandar m-auto" 
 						href="https://www.saludiquique.app/claveunica/redirect/neosalud"
@@ -128,17 +128,17 @@
 					</div>
 
 					<div class="form-group row">
-						<div class="col-md-10 offset-md-4">
-						<div class="form-check">
-						<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
-							<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
-						</div>
+						<div class="col-md-4 offset-md-4">
+							<div class="form-check">
+							<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
+								<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
+							</div>
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<div class="col-md-8 m-auto">
-							<button type="submit" class="btn btn-primary form-control">
+						<div class="col-md-12 m-auto">
+							<button type="submit" class="btn btn-secondary pr-4 pl-4">
 								{{ __('Iniciar sesión') }}
 							</button>
 						</div>
@@ -146,8 +146,8 @@
 				</form>
 
 
-                </div>
-            </div>
+				</div>
+			</div>
 
             <div class="card shadow-sm text-center">
 
