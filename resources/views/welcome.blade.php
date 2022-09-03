@@ -87,9 +87,9 @@
 				<div class="card-header">
 					<h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
 				</div>
-				<div class="card-body text-center">
+				<div class="card-body">
 
-                    <h6 class="mb-3">Utilizando tu Clave Única</h6>
+                    <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
 					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
 					<a class="btn-cu btn-m btn-color-estandar m-auto" 
@@ -103,13 +103,13 @@
 				
 				<hr>
 				
-                <h6 class="mb-3">O con tu cuenta del sistema</h6>
+                <h6 class="mb-3 text-center">O con tu cuenta del sistema</h6>
 
 				<form method="POST" action="{{ route('authenticate') }}">
 					@csrf
 					<div class="form-group row">
-						<label for="run" class="col-4 col-md-4 form-label">{{ __('RUN') }}</label>
-						<div class="col-8 col-md-8">
+						<label for="run" class="col-4 col-md-4 form-label text-right">{{ __('RUN') }}</label>
+						<div class="col-8 col-md-6">
 							<input id="run" type="text" class="form-control @error('run') is-invalid @enderror"
 								name="run" value="{{ old('run') }}" required autocomplete="run" autofocus>
 							@error('run')
@@ -120,8 +120,8 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="password" class="col-4 col-md-4 form-label">{{ __('Clave') }}</label>
-						<div class="col-8 col-md-8">
+						<label for="password" class="col-4 col-md-4 form-label text-right">{{ __('Clave') }}</label>
+						<div class="col-8 col-md-6">
 						<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
 								name="password" required autocomplete="current-password">
 							@error('password')
@@ -133,7 +133,7 @@
 					</div>
 
 					<div class="form-group row">
-						<div class="col-md-6 offset-md-4">
+						<div class="col-8 col-md-6 offset-4">
 							<div class="form-check">
 							<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
 								<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
@@ -142,8 +142,8 @@
 					</div>
 
 					<div class="form-group row">
-						<div class="col-md-12 m-auto">
-							<button type="submit" class="btn btn-secondary pr-4 pl-4">
+						<div class="col-8 col-md-6 offset-4">
+							<button type="submit" class="btn btn-secondary btn-block">
 								{{ __('Iniciar sesión') }}
 							</button>
 						</div>
