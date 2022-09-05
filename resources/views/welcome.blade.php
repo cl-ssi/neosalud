@@ -155,7 +155,14 @@
 			</div>
 
             <div class="card shadow-sm text-center">
-
+                <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+                <a class="btn-cu btn-m btn-color-estandar m-auto bg-light" 
+                    href="{{ route('claveunica.login') }}"
+                    title="Este es el botón Iniciar sesión de ClaveÚnica">
+                    <span class="cl-claveunica"></span>
+                    <span class="texto">Pruebas</span>
+                </a>
+                <!--./ fin botón-->
             </div>
 
 
