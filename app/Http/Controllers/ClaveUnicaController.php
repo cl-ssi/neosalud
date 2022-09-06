@@ -169,6 +169,7 @@ class ClaveUnicaController extends Controller
     }
 
 
+    /** Luego de integrar CU ya no es necesario esta función */
 	public function getUserInfo($access_token, $redirect = null) {
         /* Tercer Paso, obtener los datos de usuario  */
         $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
