@@ -45,41 +45,70 @@
         <div class="row g-2">
             <fieldset class="form-group col-sm-12 mb-1">
                 <label for="for-user-id">Funcionario</label>
-                <select class="form-select" wire:model='user_id' required="required">
+                <select
+                    class="form-select @error('user_id') is-invalid @enderror"
+                    wire:model='user_id'
+                    id="for-user-id"
+                    required="required"
+                >
                     <option value=""></option>
                     @foreach($users as $user => $id)
-                    <option value="{{ $id }}">{{ strtoupper($user) }}</option>
+                        <option value="{{ $id }}">{{ strtoupper($user) }}</option>
                     @endforeach
                 </select>
-                @error('user_id') <span class="error">{{ $message }}</span> @enderror
+                @error('user_id')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </fieldset>
 
             <fieldset class="form-group col-sm-12">
                 <label for="for-job-type-id">Función</label>
-                <select class="form-select" wire:model="job_type_id">
+                <select
+                    class="form-select @error('job_type_id') is-invalid @enderror"
+                    wire:model="job_type_id"
+                    id="for-job-type-id"
+                >
                     <option value=""></option>
                     @foreach($job_types as $jt)
-                    <option value="{{ $jt->id }}">{{ $jt->name }}</option>
+                        <option value="{{ $jt->id }}">{{ $jt->name }}</option>
                     @endforeach
                 </select>
-                @error('job_type_id') <span class="error">{{ $message }}</span> @enderror
+                @error('job_type_id')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </fieldset>
 
             <fieldset class="form-group col-sm-6">
                 <label for="for-assumes-at">Asume</label>
-                <input type="datetime-local" class="form-control" wire:model="assumes_at">
-                @error('assumes_at') <span class="error">{{ $message }}</span> @enderror
+                <input
+                    type="datetime-local"
+                    class="form-control @error('assumes_at') is-invalid @enderror"
+                    wire:model="assumes_at"
+                    id="for-assumes-at"
+                >
+                @error('assumes_at')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </fieldset>
 
             <fieldset class="form-group col-sm-6 mb-3">
                 <label for="for-leaves-at">Se retira</label>
-                <input type="datetime-local" class="form-control" wire:model="leaves_at">
-                @error('leaves_at') <span class="error">{{ $message }}</span> @enderror
+                <input
+                    type="datetime-local"
+                    class="form-control @error('leaves_at') is-invalid @enderror"
+                    wire:model="leaves_at"
+                    id="for-leaves-at"
+                >
+                @error('leaves_at')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </fieldset>
 
             <fieldset class="col-12">
                 @if($mobileInService->shift->status == true)
-                <button wire:click="store()" class="form-control btn btn-success"><i class="fas fa-plus"></i> Agregar tripulación</button>
+                    <button wire:click="store()" class="form-control btn btn-success">
+                        <i class="fas fa-plus"></i> Agregar tripulación
+                    </button>
                 @endif
             </fieldset>
         </div>
