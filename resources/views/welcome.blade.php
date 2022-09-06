@@ -155,14 +155,7 @@
 			</div>
 
             <div class="card shadow-sm text-center">
-                <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-                <a class="btn-cu btn-m btn-color-estandar m-auto bg-light" 
-                    href="{{ route('claveunica.login') }}"
-                    title="Este es el botón Iniciar sesión de ClaveÚnica">
-                    <span class="cl-claveunica"></span>
-                    <span class="texto">Pruebas</span>
-                </a>
-                <!--./ fin botón-->
+
             </div>
 
 
@@ -206,6 +199,16 @@
 					<img class="mb-2" src="{{ asset('images/logo_ssi_100px.png') }}" alt="Logo Servicio de Salud Iquique">
 				</div>
 				<div class="col-1 col-md-6">
+
+                <p>Exclusivo para la certificación de CU</p>
+                <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+                <a class="btn-cu btn-m btn-color-estandar bg-secondary" 
+                    href="{{ route('claveunica.login') }}"
+                    title="Este es el botón Iniciar sesión de ClaveÚnica">
+                    <span class="cl-claveunica"></span>
+                    <span class="texto">Certificacion</span>
+                </a>
+                <!--./ fin botón-->
 
 				</div>
 				<div class="col-7 col-md-3">
