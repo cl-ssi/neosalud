@@ -108,9 +108,6 @@ Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::get('/logout', [LoginController::class,'logout'])->name('logout');
 
-// Eliminar una vez que se integre CU
-Route::get('/login/claveunica/{token}/{redirect?}', [ClaveUnicaController::class, 'getUserInfo']);
-
 
 /** Ejempo con livewire */
 //Route::get('/home', Home::class)->middleware('auth')->name('home');

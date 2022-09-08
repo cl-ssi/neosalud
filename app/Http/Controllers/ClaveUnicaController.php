@@ -12,26 +12,31 @@ use App\Models\User;
 
 class ClaveUnicaController extends Controller
 {
-    public function autenticar(Request $request, $redirect = null){
-        /* Primer paso, redireccionar al login de clave única */
-        $url_base       = "https://accounts.claveunica.gob.cl/openid/authorize/";
-        $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
+	public function autenticar(Request $request, $redirect = null){
+		/* Primer paso, redireccionar al login de clave única */
+		$url_base       = "https://accounts.claveunica.gob.cl/openid/authorize/";
+		$client_id      = env("CLAVEUNICA_CLIENT_ID");
+		$redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
 
-        $state = csrf_token();
-        $scope      = 'openid run name';
+		$state = csrf_token();
+		$scope      = 'openid run name';
 
-        $params     = '?client_id='.$client_id.
-                      '&redirect_uri='.$redirect_uri.
-                      '&scope='.$scope.
-                      '&response_type=code'.
-                      '&state='.$state;
+		$params     = '?client_id='.$client_id.
+						'&redirect_uri='.$redirect_uri.
+						'&scope='.$scope.
+						'&response_type=code'.
+						'&state='.$state;
 
-        return redirect()->to($url_base.$params)->send();
-    }
+		return redirect()->to($url_base.$params)->send();
+	}
 
     public function callback(Request $request) {
         /* Segundo paso, el usuario ya se autentificó correctamente en CU y retornó a nuestro sistema */
+
+        /* Nos aseguramos que vengan los parámetros desde CU */
+		if ($request->missing(['code','name'])) {
+			return redirect()->route('welcome');
+		}
 
         /* Recepcionamos los siguientes parametros desde CU */
         $code   = $request->input('code');
