@@ -107,11 +107,16 @@
 
 				<form method="POST" action="{{ route('authenticate') }}">
 					@csrf
+
 					<div class="form-group row">
-						<label for="run" class="col-4 col-md-4 form-label text-right">{{ __('RUN') }}</label>
+						<label for="run" class="col-4 col-md-4 form-label text-right">
+							{{ __('RUN') }}
+						</label>
+
 						<div class="col-8 col-md-6">
 							<input id="run" type="text" class="form-control @error('run') is-invalid @enderror"
 								name="run" value="{{ old('run') }}" required autocomplete="run" autofocus>
+							
 							@error('run')
 							<span class="invalid-feedback" role="alert">
 								<strong>{{ $message }}</strong>
@@ -119,11 +124,16 @@
 							@enderror
 						</div>
 					</div>
+
 					<div class="form-group row">
-						<label for="password" class="col-4 col-md-4 form-label text-right">{{ __('Clave') }}</label>
+						<label for="password" class="col-4 col-md-4 form-label text-right">
+							{{ __('Clave') }}
+						</label>
+						
 						<div class="col-8 col-md-6">
-						<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+							<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
 								name="password" required autocomplete="current-password">
+							
 							@error('password')
 								<span class="invalid-feedback" role="alert">
 									<strong>{{ $message }}</strong>
@@ -136,7 +146,9 @@
 						<div class="col-8 col-md-6 offset-4">
 							<div class="form-check">
 							<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
-								<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
+								<label class="form-check-label" for="remember">
+									{{ __('Recuerdame') }}
+								</label>
 							</div>
 						</div>
 					</div>
