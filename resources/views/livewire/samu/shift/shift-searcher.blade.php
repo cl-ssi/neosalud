@@ -74,6 +74,9 @@
                                         <br>
                                         @foreach($mis->crew as $tripulant)
                                         <li class="pl-4" style="list-style-type: circle;">
+                                            <span class="badge bg-secondary text-white">
+                                                {{ $tripulant->pivot->jobType->short_name }}
+                                            </span>
                                             {{ $tripulant->officialFullName }}
                                         </li>
                                         @endforeach

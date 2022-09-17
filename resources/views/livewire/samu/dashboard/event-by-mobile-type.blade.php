@@ -16,7 +16,12 @@
                                             <b>{{ $data }}</b>
                                         </small>
                                     @else
-                                        {{ $data }}
+                                        @if(isset($data['strong']) && $data['strong'] == true)
+                                            <strong>
+                                                {{ $data['total'] }}
+                                        @else
+                                            {{ $data }}
+                                        @endif
                                     @endif
                                 @endif
                             </td>
