@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 class EventByMonth
 {
-    public $myDataset;
+    public $dataset;
     public $year;
     public $month;
 
@@ -21,21 +21,21 @@ class EventByMonth
     {
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
-        $this->getData();
+        $this->setDataset();
     }
 
     /**
-     * Get the statistics data
+     * Set the statistics
      *
      * @return void
      */
-    public function getData()
+    public function setDataset()
     {
         $end = Carbon::parse("$this->year/$this->month/01");
         $start = $end->copy()->subMonths(5);
         $rangeMonths = CarbonPeriod::create($start->startOfMonth(), '1 month', $end->startOfMonth());
 
-        $this->myDataset = array([
+        $this->dataset = array([
             'Mes',
             '# de Eventos del mes',
             ["role" => 'style' ],
@@ -49,17 +49,17 @@ class EventByMonth
                 ->whereYear('date', '=', $month)
                 ->count();
 
-            $this->myDataset[] = ["$month->monthName-$month->year", $totalEvents, 'color: #006cb7', $totalEvents];
+            $this->dataset[] = ["$month->monthName-$month->year", $totalEvents, 'color: #006cb7', $totalEvents];
         }
     }
 
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {
-        return $this->myDataset;
+        return $this->dataset;
     }
 }
