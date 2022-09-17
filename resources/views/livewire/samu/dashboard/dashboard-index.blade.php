@@ -80,6 +80,39 @@
         </div>
     </div>
 
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Promedio de Tipo de Móvil las últimas 4 semanas
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.avg-type-mobile')
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Cantidad de horas por tipo de móvil y por tipo de funcionario
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.mobile-type-by-job-type')
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Promedio en minutos de Retención de Ambulancia en AP
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.average-ambulance-retention')
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         @livewire('samu.stadistic')
     </div>
