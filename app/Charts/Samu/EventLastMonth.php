@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class EventLastMonth
 {
-    public $myDataset;
+    public $dataset;
     public $start;
     public $end;
 
@@ -21,18 +21,18 @@ class EventLastMonth
     {
         $this->end = $end ? Carbon::parse($end) : now();
         $this->start = $this->end->copy()->subDays(30);
-        $this->getData();
+        $this->setDataset();
     }
 
     /**
-     * Get the statistics data
+     * Set the statistics
      *
      * @return void
      */
-    public function getData()
+    public function setDataset()
     {
         $rangeDates = $this->start->range($this->end);
-        $this->myDataset = array([
+        $this->dataset = array([
             'fecha',
             'eventos',
             ["role" => 'style' ],
@@ -46,17 +46,17 @@ class EventLastMonth
                 ->whereDate('date', $date->format('Y-m-d'))
                 ->count();
 
-            $this->myDataset[] = [$date->format('d/m/Y'), $totalEvents, 'color: #006cb7', $totalEvents];
+            $this->dataset[] = [$date->format('d/m/Y'), $totalEvents, 'color: #006cb7', $totalEvents];
         }
     }
 
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {
-        return $this->myDataset;
+        return $this->dataset;
     }
 }

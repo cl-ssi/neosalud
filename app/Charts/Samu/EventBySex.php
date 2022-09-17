@@ -6,7 +6,7 @@ use App\Models\Samu\Event;
 
 class EventBySex
 {
-    public $myDataset;
+    public $dataset;
 
     /**
      * Initializes the chart.
@@ -17,19 +17,19 @@ class EventBySex
     {
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
-        $this->getData();
+        $this->setDataset();
     }
 
     /**
-     * Get the statistics data
+     * Set the statistics
      *
      * @return void
      */
-    public function getData()
+    public function setDataset()
     {
         $sexs = ['MALE', 'FEMALE', 'UNKNOWN', 'OTHER', null];
 
-        $this->myDataset = array([
+        $this->dataset = array([
             'Género',
             '# de Eventos por sexo',
             ["role" => 'style' ]
@@ -44,7 +44,7 @@ class EventBySex
                 ->whereYear('samu_events.date', $this->year)
                 ->count();
 
-            $this->myDataset[] = [translateSex($sex), $totalBySex, 'color: #006cb7'];
+            $this->dataset[] = [translateSex($sex), $totalBySex, 'color: #006cb7'];
         }
     }
 
@@ -55,6 +55,6 @@ class EventBySex
      */
     public function getDataset()
     {
-        return $this->myDataset;
+        return $this->dataset;
     }
 }
