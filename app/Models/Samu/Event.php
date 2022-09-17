@@ -103,6 +103,7 @@ class Event extends Model implements Auditable
 
     protected $appends = [
         'color',
+        'date_format'
     ];
 
     public function shift()
@@ -216,6 +217,11 @@ class Event extends Model implements Auditable
     public function getEventStatusAttribute()
     {
         return $this->status(1);
+    }
+
+    public function getDateFormatAttribute()
+    {
+        return $this->date->format('Y-m-d');
     }
 
     public function status($option)
