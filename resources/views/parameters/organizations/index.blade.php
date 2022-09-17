@@ -4,6 +4,10 @@
 
 @section('content')
 
+@canany(['Mp: user'])
+    @include('medical_programmer.nav')
+@endcanany
+
 <h2 class="mb-3">{{$type}}</h2>
 <a class="btn btn-primary btn-sm mb-1" href="#">Crear</a>
 

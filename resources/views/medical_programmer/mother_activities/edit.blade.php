@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Editar Actividad Madre</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('medical_programmer.mother_activities.update', $motherActivity) }}">

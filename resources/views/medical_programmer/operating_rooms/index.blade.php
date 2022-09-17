@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Listado de pabellones</h3>
 <a class="btn btn-primary mb-2" href="{{ route('medical_programmer.operating_rooms.create') }}">
     <i class="fas fa-plus"></i> Agregar nuevo

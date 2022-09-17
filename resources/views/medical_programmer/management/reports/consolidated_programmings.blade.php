@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('medical_programmer.nav')
+
 <h3 class="mb-3">Consolidado de programaciones</h3>
 
 <form method="GET" id="form" class="form-horizontal" action="{{ route('medical_programmer.programming_proposal.consolidated_programmings') }}">

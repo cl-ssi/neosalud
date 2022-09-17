@@ -51,7 +51,7 @@
 
         </br>
 
-        <button class="btn btn-outline-secondary float-end ms-1" href="{{ route('samu.shift.index') }}">Cancelar</button>
+        <a class="btn btn-outline-secondary float-end ms-1" href="{{ route('samu.shift.index') }}">Cancelar</a>
         <button type="submit" class="btn btn-primary float-end">Guardar</button>
 </form>
 

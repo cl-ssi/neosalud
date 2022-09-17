@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="{{ asset('css/cu.min.css') }}" rel="stylesheet">
+
 <div class="container row justify-content-md-center">
     <div class="col-12 col-md-6">
         <div class="card">
@@ -10,7 +12,22 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="{{ route('authenticate') }}">
+
+                <h4>Sólo para la certificacion de CU</h4>
+                <p>Una vez certificado, este botón reemplazará al que está en {{ env('APP_URL') }}</p>
+
+                <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+                <a class="btn-cu btn-m btn-color-estandar m-auto" 
+                    href="{{ route('claveunica.login') }}"
+                    title="Este es el botón Iniciar sesión de ClaveÚnica">
+                    <span class="cl-claveunica"></span>
+                    <span class="texto">Iniciar sesión</span>
+                </a>
+                <!--./ fin botón-->
+
+
+
+                <!-- <form method="POST" action="{{ route('authenticate') }}">
                     @csrf
 
                     <div class="mb-3">
@@ -47,7 +64,7 @@
                             {{ __('Forgot Your Password?') }}
                         </a>
                     @endif
-                </form>
+                </form> -->
             </div>
         </div>
     </div>

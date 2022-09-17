@@ -100,18 +100,13 @@ Route::get('/', function () {
 
 //Auth::routes();
 
-Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica');
-Route::get('/claveunica/redirect/{redirect}', [ClaveUnicaController::class,'autenticar'])->name('claveunica.redirect');
+Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica.login');
 Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback']);
-Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
 Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('claveunica.logout');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::get('/logout', [LoginController::class,'logout'])->name('logout');
-
-Route::get('/login/claveunica/{token}/{redirect?}', [ClaveUnicaController::class, 'getUserInfo']);
-
 
 
 /** Ejempo con livewire */
@@ -255,6 +250,8 @@ Route::prefix('surveys')->as('surveys.')->middleware('auth')->group(function(){
 });
 
 Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('auth')->group(function(){
+
+	Route::view('/', 'medical_programmer.welcome')->name('welcome');
 
 	Route::prefix('operating_room_programming')->name('operating_room_programming.')->group(function(){
 		Route::post('saveMyEvent', [OperatingRoomProgrammingController::class, 'saveMyEvent'])->name('saveMyEvent');

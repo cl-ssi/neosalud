@@ -16,8 +16,10 @@
 
     <div class="col-12">
 		<button type="submit" class="btn btn-primary">Guardar</button>
-		
-		<button class="btn btn-outline-secondary m-2" href="{{ route('samu.mobileinservice.index') }}">Cancelar</button>
+
+		<button class="btn btn-outline-secondary m-2" href="{{ route('samu.mobileinservice.index') }}">
+            Cancelar
+        </button>
 	</div>
 
 </form>
