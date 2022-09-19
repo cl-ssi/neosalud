@@ -14,7 +14,9 @@
                             {{ $week['start'] }} AL {{ $week['end'] }}
                         </td>
                         <td class="text-center">
-                            {{ $week['avg'] }}'
+                            <span data-toggle="tooltip" data-placement="bottom" title="{{ $week['sum'] . ' / ' . $week['quantity'] }}">
+                                {{ $week['avg'] }}'
+                            </span>
                         </td>
                     </tr>
                 @endforeach
