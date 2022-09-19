@@ -11,7 +11,7 @@ class AvgTypeMobile
 {
     public $collectionsWeeks;
     public $dataset;
-    public $types;
+    public $mobilesType;
 
     /**
      * Initializes the chart.
@@ -21,7 +21,7 @@ class AvgTypeMobile
     public function __construct()
     {
         $this->collectionWeeks = Date::getWeeks(null, 3);
-        $this->setTypes();
+        $this->setMobilesType();
         $this->setDataset();
     }
 
@@ -30,9 +30,9 @@ class AvgTypeMobile
      *
      * @return void
      */
-    public function setTypes()
+    public function setMobilesType()
     {
-        $this->types = MobileType::whereIn('id', [1, 2, 3, 4])->get();
+        $this->mobilesType = MobileType::whereIn('id', [1, 2, 3, 4])->get();
     }
 
     /**
@@ -49,7 +49,7 @@ class AvgTypeMobile
             $data['start'] = $week['start']->format('d/m');
             $data['end'] = $week['end']->format('d/m');
 
-            foreach($this->types as $type)
+            foreach($this->mobilesType as $type)
             {
                 $mobiles = MobileInService::query()
                     ->whereHas('shift', function($query) use($week) {
