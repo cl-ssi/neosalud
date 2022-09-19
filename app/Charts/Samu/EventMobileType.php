@@ -4,6 +4,7 @@ namespace App\Charts\Samu;
 
 use App\Helpers\Date;
 use App\Models\Samu\Event;
+use App\Models\Samu\MobileType;
 use Illuminate\Support\Carbon;
 
 class EventMobileType
@@ -12,7 +13,7 @@ class EventMobileType
     public $end;
     public $start;
     public $rangeDates;
-    public $types;
+    public $mobilesType;
     public $results;
 
     /**
@@ -25,25 +26,18 @@ class EventMobileType
         $this->end = $end ? Carbon::parse($end) : now();
         $this->start = $this->end->copy()->subDays(15);
         $this->rangeDates = $this->start->range($this->end);
-        $this->setTypes();
+        $this->setMobilesType();
         $this->setDataset();
     }
 
     /**
-     * Assign the types of mobiles
+     * Assign the mobiles type
      *
      * @return void
      */
-    public function setTypes()
+    public function setMobilesType()
     {
-        $this->types = [
-            ['id' => 'M1', 'type' => 'interna'],
-            ['id' => 'M2', 'type' => 'interna'],
-            ['id' => 'M3', 'type' => 'interna'],
-            ['id' => 'Hibrido', 'type' => 'interna'],
-            ['id' => 'RU1', 'type' => 'externa'],
-            ['id' => 'RU2', 'type' => 'externa'],
-        ];
+        $this->mobilesType = MobileType::get();
     }
 
     /**
@@ -75,23 +69,24 @@ class EventMobileType
         $position = 0;
         $last = count($this->results);
 
-        foreach($this->types as $type)
+        foreach($this->mobilesType as $type)
         {
             $data = [];
             $data[] = $type;
 
             $eventByDay = Event::query()
                 ->with('mobileInService')
-                ->when($type['type'] == 'interna', function($query) use($type) {
+                /* Mobile Type: Internal */
+                ->when($type->name == 'M1' || $type->name == 'M2' || $type->name == 'M3' || $type->name == 'Hibrido', function($query) use($type) {
                     $query->whereHas('mobileInService', function ($query) use($type) {
                         $query->whereHas('type', function($query) use($type) {
-                            $query->whereName($type['id']);
+                            $query->whereId($type->id);
                         });
                     });
-                }, function ($query) use($type) {
+                }, function ($query) use($type) { /* Mobile Type: External */
                     $query->whereHas('mobile', function ($query) use($type) {
                         $query->whereHas('type', function($query) use($type) {
-                            $query->whereName($type['id']);
+                            $query->whereId($type->id);
                         });
                     });
                 });
