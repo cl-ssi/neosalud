@@ -3,14 +3,15 @@
 namespace App\Charts\Samu;
 
 use App\Helpers\Date;
-use App\Models\Samu\Event;
 use App\Models\Samu\MobileInService;
+use App\Models\Samu\MobileType;
 use Illuminate\Support\Facades\DB;
 
 class AvgTypeMobile
 {
     public $collectionsWeeks;
     public $dataset;
+    public $types;
 
     /**
      * Initializes the chart.
@@ -31,14 +32,7 @@ class AvgTypeMobile
      */
     public function setTypes()
     {
-        $this->types = [
-            ['name' => 'M2', 'id' => 2, 'type' => 'interna'],
-            ['name' => 'M1', 'id' => 1, 'type' => 'interna'],
-            ['name' => 'M3', 'id' => 3, 'type' => 'interna'],
-            ['name' => 'Hibrido', 'id' => 4,'type' => 'interna'],
-            ['name' => 'RU2',  'id' => 6, 'type' => 'externa'],
-            ['name' => 'RU1',  'id' => 5,'type' => 'externa'],
-        ];
+        $this->types = MobileType::whereIn('id', [1, 2, 3, 4])->get();
     }
 
     /**
@@ -48,6 +42,8 @@ class AvgTypeMobile
      */
     public function setDataset()
     {
+        $this->names = collect([]);
+
         foreach($this->collectionWeeks as $week)
         {
             $data['start'] = $week['start']->format('d/m');
@@ -62,7 +58,7 @@ class AvgTypeMobile
                             ->whereDate('opening_at', '>=', $week['start'])
                             ->whereDate('closing_at', '<=', $week['end']);
                     })
-                    ->whereTypeId($type['id'])
+                    ->whereTypeId($type->id)
                     ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(type_id) as total'), 'type_id')
                     ->groupBy('date', 'type_id')
                     ->get();
@@ -71,9 +67,10 @@ class AvgTypeMobile
                 $sum = $mobiles->sum('total');
                 $avg = ($qty != 0) ? $sum / $qty : 0;
 
-                // $data['quantity_' . $type['name']] = $qty;
-                // $data['sum_' . $type['name']] = $sum;
-                $data['avg_' . $type['name']] = round($avg, 0);
+                $data['quantity_' . $type->name] = $qty;
+                $data['sum_' . $type->name] = $sum;
+                $data['name'] = $type->name;
+                $data['avg_' . $type->name] = round($avg, 0);
             }
 
             $this->dataset[] = $data;
