@@ -50,7 +50,7 @@ class AverageAmbulanceRetention
 
             $quantity = $events->count();
             $sum = $events->sum('difference');
-            $avg = $sum / $quantity;
+            $avg = $quantity > 0 ? $sum / $quantity : 0;
 
             $data['start'] = $week['start']->format('d/m');
             $data['end'] = $week['end']->format('d/m');
