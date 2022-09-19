@@ -3,6 +3,8 @@
 namespace App\Charts\Samu;
 
 use App\Helpers\Date;
+use App\Models\Samu\JobType;
+use App\Models\Samu\MobileType;
 use App\Models\Samu\Shift;
 use Illuminate\Support\Facades\DB;
 
@@ -35,11 +37,7 @@ class MobileTypeByJobType
      */
     public function setJobsType()
     {
-        $this->jobsType = [
-            [ 'id' => 8, 'name' => 'Reanimador' ],
-            [ 'id' => 7, 'name' => 'Paramédico' ],
-            [ 'id' => 6, 'name' => 'Conductor' ],
-        ];
+        $this->jobsType = JobType::whereTripulant(1)->get();
     }
 
     /**
@@ -49,14 +47,7 @@ class MobileTypeByJobType
      */
     public function setMobilesType()
     {
-        $this->mobilesType = [
-            [ 'name' => 'M2', 'id' => 2, 'type' => 'interna' ],
-            [ 'name' => 'M1', 'id' => 1, 'type' => 'interna' ],
-            [ 'name' => 'M3', 'id' => 3, 'type' => 'interna' ],
-            [ 'name' => 'Hibrido', 'id' => 4,'type' => 'interna' ],
-            [ 'name' => 'RU2',  'id' => 6, 'type' => 'externa' ],
-            [ 'name' => 'RU1',  'id' => 5,'type' => 'externa' ],
-        ];
+        $this->mobilesType = MobileType::all();
     }
 
     /**
@@ -99,15 +90,15 @@ class MobileTypeByJobType
         foreach($this->jobsType as $jobType)
         {
             $data = [];
-            $data['job_type_name'] = $jobType['name'];
+            $data['job_type_name'] = $jobType->name;
             foreach($this->mobilesType as $mobileType)
             {
-                $data['total_' . $jobType['name'] . '_' . $mobileType['name']] = $this->shifts->where('mobile_crew_job_type_id', $jobType['id'])
-                    ->where('mobile_in_service_type_id', $mobileType['id'])
+                $data['total_' . $jobType->name . '_' . $mobileType->name] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)
+                    ->where('mobile_in_service_type_id', $mobileType->id)
                     ->sum('difference');
             }
 
-            $data['total_'  . $jobType['name'] ] = $this->shifts->where('mobile_crew_job_type_id', $jobType['id'])->sum('difference');
+            $data['total_'  . $jobType->name ] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)->sum('difference');
 
             $this->dataset->push($data);
         }
