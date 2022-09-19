@@ -5,7 +5,6 @@ namespace App\Charts\Samu;
 use App\Helpers\Date;
 use App\Models\Samu\Event;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class EventMobileType
 {
