@@ -2,6 +2,7 @@
 
 namespace App\Charts\Samu;
 
+use App\Enums\MobileType as EnumMobileType;
 use App\Helpers\Date;
 use App\Models\Samu\Event;
 use App\Models\Samu\MobileType;
@@ -48,7 +49,7 @@ class EventMobileType
     public function setDataset()
     {
         $dateTemp = [];
-        $dateTemp[] = ['id' => 'Tipo/Día', 'type' => 'Tipo/Dia'];
+        $dateTemp[] = ['name' => 'Tipo/Día'];
         $this->getWeekCollection();
         $position = 0;
         $i =  $this->results[$position]['total'];
@@ -72,18 +73,20 @@ class EventMobileType
         foreach($this->mobilesType as $type)
         {
             $data = [];
-            $data[] = $type;
+            $data[] = ['name' => $type->name];
 
             $eventByDay = Event::query()
                 ->with('mobileInService')
-                /* Mobile Type: Internal */
-                ->when($type->name == 'M1' || $type->name == 'M2' || $type->name == 'M3' || $type->name == 'Hibrido', function($query) use($type) {
-                    $query->whereHas('mobileInService', function ($query) use($type) {
-                        $query->whereHas('type', function($query) use($type) {
-                            $query->whereId($type->id);
-                        });
+                ->when($type->name == EnumMobileType::M1
+                    || $type->name == EnumMobileType::M2
+                    || $type->name == EnumMobileType::M3
+                    || $type->name == EnumMobileType::HIBRID, function($query) use($type) {
+                        $query->whereHas('mobileInService', function ($query) use($type) {
+                            $query->whereHas('type', function($query) use($type) {
+                                $query->whereId($type->id);
+                            });
                     });
-                }, function ($query) use($type) { /* Mobile Type: External */
+                }, function ($query) use($type) {
                     $query->whereHas('mobile', function ($query) use($type) {
                         $query->whereHas('type', function($query) use($type) {
                             $query->whereId($type->id);
