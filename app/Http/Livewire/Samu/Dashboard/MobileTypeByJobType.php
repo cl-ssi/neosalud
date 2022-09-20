@@ -9,12 +9,15 @@ use Livewire\Component;
 class MobileTypeByJobType extends Component
 {
     public $week;
-    public $results;
+    public $rows;
+    public $mobilesType;
 
     public function mount()
     {
-        $this->week = Date::getWeek();
-        $this->results = (new SamuMobileTypeByJobType())->getDataset();
+        $samuMobileTypeByJobType = new SamuMobileTypeByJobType();
+        $this->week = $samuMobileTypeByJobType->getWeek();
+        $this->mobilesType = $samuMobileTypeByJobType->getMobilesType();
+        $this->rows = $samuMobileTypeByJobType->getDataset();
     }
 
     public function render()
