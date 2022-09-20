@@ -6,6 +6,11 @@ use Illuminate\Support\Carbon;
 
 class Date
 {
+    /**
+     * Gets an epidemiological week
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public static function getWeek(Carbon $date = null)
     {
         $week = collect([]);
@@ -30,6 +35,11 @@ class Date
         return $week;
     }
 
+    /**
+     * O btains the N epidemiological weeks
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public static function getWeeks(Carbon $date = null, int $numberWeeks = 0)
     {
         $collectionWeeks = collect([]);
