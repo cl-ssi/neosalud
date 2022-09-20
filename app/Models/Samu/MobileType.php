@@ -4,6 +4,7 @@ namespace App\Models\Samu;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class MobileType extends Model
 {
@@ -43,5 +44,9 @@ class MobileType extends Model
     {
         return $this->hasMany(Mobile::class);
     }
-    
+
+    public function getShortNameAttribute()
+    {
+        return Str::substr($this->name, 0, 3);
+    }
 }
