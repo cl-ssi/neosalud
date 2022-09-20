@@ -4,6 +4,7 @@ namespace App\Charts\Samu;
 
 use App\Helpers\Date;
 use App\Models\Samu\JobType;
+use App\Models\Samu\MobileInService;
 use App\Models\Samu\MobileType;
 use App\Models\Samu\Shift;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +48,31 @@ class MobileTypeByJobType
      */
     public function setMobilesType()
     {
-        $this->mobilesType = MobileType::all();
+        $mobilesTypeId = MobileInService::query()
+            ->groupBy('type_id')
+            ->pluck('type_id');
+
+        $this->mobilesType = MobileType::whereIn('id', $mobilesTypeId)->get();
+    }
+
+     /**
+     * Get mobiles type
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMobilesType()
+    {
+        return $this->mobilesType;
+    }
+
+    /**
+     * Get week
+     *
+     * @return array
+     */
+    public function getWeek()
+    {
+        return $this->collectionWeek;
     }
 
     /**
@@ -91,14 +116,16 @@ class MobileTypeByJobType
         {
             $data = [];
             $data['job_type_name'] = $jobType->name;
+            $data['values'] = [];
+
             foreach($this->mobilesType as $mobileType)
             {
-                $data['total_' . $jobType->name . '_' . $mobileType->name] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)
+                $data['values'][] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)
                     ->where('mobile_in_service_type_id', $mobileType->id)
                     ->sum('difference');
             }
 
-            $data['total_'  . $jobType->name ] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)->sum('difference');
+            $data['total'] = $this->shifts->where('mobile_crew_job_type_id', $jobType->id)->sum('difference');
 
             $this->dataset->push($data);
         }
