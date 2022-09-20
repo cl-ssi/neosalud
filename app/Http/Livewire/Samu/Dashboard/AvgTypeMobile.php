@@ -8,10 +8,13 @@ use Livewire\Component;
 class AvgTypeMobile extends Component
 {
     public $rows;
+    public $mobilesType;
 
     public function mount()
     {
-        $this->rows = ((new SamuAvgTypeMobile())->getDataset());
+        $samuAvgTypeMobile = new SamuAvgTypeMobile();
+        $this->mobilesType = $samuAvgTypeMobile->getMobilesType();
+        $this->rows = $samuAvgTypeMobile->getDataset();
     }
 
     public function render()
