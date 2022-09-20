@@ -32,7 +32,21 @@ class AvgTypeMobile
      */
     public function setMobilesType()
     {
-        $this->mobilesType = MobileType::whereIn('id', [1, 2, 3, 4])->get();
+        $mobilesTypeId = MobileInService::query()
+            ->groupBy('type_id')
+            ->pluck('type_id');
+
+        $this->mobilesType = MobileType::whereIn('id', $mobilesTypeId)->get();
+    }
+
+    /**
+     * Get mobiles type
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMobilesType()
+    {
+        return $this->mobilesType;
     }
 
     /**
@@ -48,6 +62,7 @@ class AvgTypeMobile
         {
             $data['start'] = $week['start']->format('d/m');
             $data['end'] = $week['end']->format('d/m');
+            $data['values'] = [];
 
             foreach($this->mobilesType as $type)
             {
@@ -63,14 +78,12 @@ class AvgTypeMobile
                     ->groupBy('date', 'type_id')
                     ->get();
 
-                $qty = $mobiles->count();
                 $sum = $mobiles->sum('total');
-                $avg = ($qty != 0) ? $sum / $qty : 0;
+                $qty = $mobiles->count();
+                $avg = ($qty != 0) ? round($sum / $qty, 0) : 0;
 
-                $data['quantity_' . $type->name] = $qty;
-                $data['sum_' . $type->name] = $sum;
-                $data['name'] = $type->name;
-                $data['avg_' . $type->name] = round($avg, 0);
+                /* 0: $sum, 1: $qty, 3: $avg */
+                $data['values'][] = [$sum, $qty, $avg];
             }
 
             $this->dataset[] = $data;
