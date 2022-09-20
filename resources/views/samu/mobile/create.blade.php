@@ -20,4 +20,5 @@
     <button type="submit" class="btn btn-primary float-end">Crear</button>
 
 </form>
+
 @endsection
