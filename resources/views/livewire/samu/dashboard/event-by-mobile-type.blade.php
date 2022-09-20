@@ -7,9 +7,11 @@
                         @foreach($row as $j => $data)
                             <td>
                                 @if($j == 0)
+                                    @if(isset($data['name']))
                                     <b>
-                                        {{ $data['id'] }}
+                                        {{ $data['name'] }}
                                     </b>
+                                    @endif
                                 @else
                                     @if($i == 0)
                                         <small>
