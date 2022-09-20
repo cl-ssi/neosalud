@@ -35,9 +35,9 @@
         <thead>
             <tr class="table-primary">
                 <th></th>
-                <th>Codigo</th>
+                <th>Código</th>
                 <th>Nombre</th>
-                <th>Tipo</th>
+                <th>Gestionada por</th>
                 <th>Estado</th>
                 <th>Patente</th>
                 <th>Descripción</th>
@@ -48,11 +48,13 @@
             @foreach($mobiles as $mobile)
             <tr>
                 <td>
-                    <a href="{{ route('samu.mobile.edit', $mobile) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ route('samu.mobile.edit', $mobile) }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </td>
                 <td>{{ $mobile->code }}</td>
                 <td>{{ $mobile->name }}</td>
-                <td>{{ optional($mobile->type)->name }}</td>
+                <td>{{ $mobile->managed_in_letters }}</td>
                 <td>{{ $mobile->status ? 'Activo':'Inactivo' }}</td>
                 <td>{{ $mobile->plate }}</td>
                 <td>{{ $mobile->description }}</td>
@@ -67,6 +69,9 @@
             @endforeach
         </tbody>
     </table>
+
+    {{ $mobiles->links() }}
+
 </div>
 
 @endsection
