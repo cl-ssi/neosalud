@@ -38,7 +38,7 @@ class Mobile extends Model implements Auditable
     {
         return $this->hasOne(Gps::class, 'mobile_id')->latest();
     }
-    
+
     public function mobileInServices()
     {
         return $this->hasMany(MobileInService::class);
@@ -48,7 +48,7 @@ class Mobile extends Model implements Auditable
     {
         return $this->belongsTo(MobileType::class,'type_id');
     }
-    
+
     public function getLastLocationAttribute()
     {
         if($this->locations())
@@ -56,5 +56,12 @@ class Mobile extends Model implements Auditable
             return $this->locations;
         }
         return null;
+    }
+
+    public function getManagedInLettersAttribute()
+    {
+        if($this->managed)
+            return "SAMU";
+        return "Externa";
     }
 }
