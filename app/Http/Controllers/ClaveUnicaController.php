@@ -18,10 +18,10 @@ class ClaveUnicaController extends Controller
 		$client_id      = env("CLAVEUNICA_CLIENT_ID");
 		$redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
 
-		$state = csrf_token();
-		$scope      = 'openid run name';
+		$state 			= csrf_token();
+		$scope      	= 'openid run name';
 
-		$params     = '?client_id='.$client_id.
+		$params     	= '?client_id='.$client_id.
 						'&redirect_uri='.$redirect_uri.
 						'&scope='.$scope.
 						'&response_type=code'.
