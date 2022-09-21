@@ -221,7 +221,9 @@ class Event extends Model implements Auditable
 
     public function getDateFormatAttribute()
     {
-        return $this->date->format('Y-m-d');
+        if($this->date != null)
+            return $this->date->format('Y-m-d');
+        return null;
     }
 
     public function status($option)
