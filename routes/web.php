@@ -540,7 +540,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
 	->group(function () {
 		Route::get('/',				[ShiftController::class, 'index'])->name('index');
-		Route::get('/create',		[ShiftController::class, 'create'])->name('create');
+		Route::get('/create',		[ShiftController::class, 'create'])->name('create')->middleware('ensure.shift');
 		Route::post('/store',		[ShiftController::class, 'store'])->name('store');
 		Route::get('/searcher',		ShiftSearcher::class)->name('searcher');
 		Route::get('/edit/{shift}',	[ShiftController::class, 'edit'])->name('edit');
