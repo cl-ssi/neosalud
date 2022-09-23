@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Samu;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Auth\Access\Response;
 use App\Models\Samu\Shift;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Shift\StoreShiftRequest;
+use App\Http\Requests\Shift\UpdateShiftRequest;
 
 class ShiftController extends Controller
 {
@@ -38,41 +38,32 @@ class ShiftController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Shift\StoreShiftRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreShiftRequest $request)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor') 
+        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
             ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".') 
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
-    
+
         $shift = Shift::where('status', true)->first();
 
-        if(!$shift) {
-            $shift = new Shift($request->all());
+        if(!$shift)
+        {
+            $shift = new Shift($request->validated());
             $shift->save();
 
             session()->flash('success', 'Se ha creado el turno exitosamente');
             return redirect()->route('samu.shift.index');
         }
-        else {
-            $request->session()->flash('danger', 'No se pudo crear el turno, 
+        else
+        {
+            $request->session()->flash('danger', 'No se pudo crear el turno,
                 ya existe un turno abierto, verifique cerrar todos los turnos antes de crear uno nuevo.');
             return redirect()->back()->withInput();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Samu\Shift  $shift
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Shift $shift)
-    {
-        //
     }
 
     /**
@@ -92,18 +83,18 @@ class ShiftController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Shift\UpdateShiftRequest  $request
      * @param  \App\Models\Samu\Shift  $shift
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shift $shift)
+    public function update(UpdateShiftRequest $request, Shift $shift)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor') 
+        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
             ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".') 
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
-        $shift->fill($request->all());
+        $shift->fill($request->validated());
         $shift->save();
 
         session()->flash('info', 'El turno ha sido editado.');
@@ -118,9 +109,9 @@ class ShiftController extends Controller
      */
     public function destroy(Shift $shift)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor') 
+        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
             ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".') 
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         $shift->delete();

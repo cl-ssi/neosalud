@@ -36,7 +36,7 @@ class Date
     }
 
     /**
-     * O btains the N epidemiological weeks
+     * Obtains the N epidemiological weeks
      *
      * @return \Illuminate\Support\Collection
      */
