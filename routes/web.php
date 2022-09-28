@@ -525,6 +525,7 @@ use App\Http\Livewire\Samu\Procedures;
 use App\Http\Livewire\Samu\Supplies;
 use App\Http\Livewire\Samu\Stadistic;
 use App\Http\Livewire\Samu\Shift\ShiftSearcher;
+use App\Http\Livewire\Samu\ShiftUserEdit;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 
@@ -546,6 +547,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::get('/edit/{shift}',	[ShiftController::class, 'edit'])->name('edit');
 		Route::put('/{shift}',		[ShiftController::class, 'update'])->name('update');
 		Route::delete('/{shift}', 	[ShiftController::class, 'destroy'])->name('destroy');
+        Route::get('/shift-user/{shiftUser}/edit', ShiftUserEdit::class)->name('user.edit');
     });
 
 	Route::prefix('mobiles-in-service')->name('mobileinservice.')
