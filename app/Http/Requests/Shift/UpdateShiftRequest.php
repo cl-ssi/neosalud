@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Shift;
 
-use App\Models\Samu\Shift;
 use App\Rules\NextShift;
 use App\Rules\PreviousShift;
 use Illuminate\Foundation\Http\FormRequest;
