@@ -134,8 +134,6 @@ class User extends Authenticatable implements Auditable
             ->withTimestamps();
     }
 
-
-
     // public function manager_shifts(): HasMany
     // {
     //     return $this->hasMany(Shift::class, 'manager_shift');
@@ -161,7 +159,6 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(MedicalProgrammer\ProgrammingProposal::class, 'user_id');
     }
-
 
     //HumanNames
     public function officialHumanNames()
@@ -311,7 +308,8 @@ class User extends Authenticatable implements Auditable
 
     }
 
-    function getSexEspAttribute(){
+    function getSexEspAttribute()
+    {
         switch($this->sex) {
             case 'male': return 'Masculino'; break;
             case 'female': return 'Femenino'; break;
@@ -320,7 +318,8 @@ class User extends Authenticatable implements Auditable
         }
     }
 
-    function getAgeStringAttribute(){
+    function getAgeStringAttribute()
+    {
         if($this->birthday){
             $age = $this->birthday->age;
             if($age > 0){
@@ -408,14 +407,12 @@ class User extends Authenticatable implements Auditable
 
     }
 
-
     public function scopeGetByContactPoint($query, $value)
     {
         $query->orWhereHas('contactPoints', function ($query) use ($value) {
             return $query->where('value', $value);
         });
     }
-
 
     //Programador (relaciones)
     public function userSpecialties()
@@ -528,7 +525,6 @@ class User extends Authenticatable implements Auditable
         }
         return $array;
     }
-
 
     public function usersPatients()
     {
