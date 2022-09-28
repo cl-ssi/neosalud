@@ -32,7 +32,6 @@ class ShiftController extends Controller
     public function create()
     {
         return view('samu.shift.create');
-
     }
 
     /**
@@ -97,7 +96,23 @@ class ShiftController extends Controller
         $shift->fill($request->validated());
         $shift->save();
 
-        session()->flash('info', 'El turno ha sido editado.');
+        $message = '';
+        if($shift->status == false && $shift->closing_at != null)
+        {
+            $message = "Los funcionarios que no tienen hora de salida se les asignó la hora de cierre del turno.";
+
+            foreach($shift->users as $user)
+            {
+                if ($user->pivot->leaves_at == null)
+                {
+                    $user->pivot->update([
+                        'leaves_at' => $shift->closing_at
+                    ]);
+                }
+            }
+        }
+
+        session()->flash('info', "El turno ha sido editado. $message");
         return redirect()->route('samu.shift.index');
     }
 
