@@ -183,14 +183,23 @@ class Event extends Model implements Auditable
     {
         $crew = null;
 
-        if($this->mobileInService)
-        {
-            if($this->mobileInService->crew && $this->departure_at)
-            {
-                $crew = $this->mobileInService->crew->where('pivot.assumes_at', '<=', $this->departure_at);
-            }
-        }
+        if($this->mobileInService && $this->mobileInService->crew && $this->departure_at)
+            $crew = $this->mobileInService->crew->where('pivot.assumes_at', '<=', $this->departure_at);
+
         return $crew;
+    }
+
+    public function getJobsAttribute()
+    {
+        $jobs = null;
+        
+        if($this->shift && $this->shift->users && $this->departure_at)
+        {
+            $jobs = $this->shift->users->where('pivot.assumes_at', '<=', $this->departure_at)
+                ->where('pivot.leaves_at', '>=', $this->departure_at);
+        }
+
+        return $jobs;
     }
 
     public function getMobileTypeAttribute()
