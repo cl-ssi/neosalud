@@ -296,11 +296,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($event->shift->users as $user)
-            <tr>
-                <td>{{ optional($user->pivot)->JobType->name }}</td>
-                <td>{{ optional($user)->officialFullName }}</td>
-            </tr>
+            @foreach($event->jobs as $job)
+                <tr>
+                    <td>{{ optional($job->pivot)->JobType->name }}</td>
+                    <td>{{ optional($job)->officialFullName }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
