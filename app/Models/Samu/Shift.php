@@ -18,7 +18,7 @@ class Shift extends Model implements Auditable
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="samu_shifts";
+    protected $table = "samu_shifts";
 
     protected $fillable = [
         'id',
@@ -44,12 +44,12 @@ class Shift extends Model implements Auditable
      */
     public function users()
     {
-        return $this->belongsToMany(User::class,'samu_shift_user','shift_id')
+        return $this->belongsToMany(User::class, 'samu_shift_user', 'shift_id')
                     ->using(ShiftUser::class)
-                    ->withPivot('id','shift_id','job_type_id')
+                    ->withPivot('id', 'shift_id', 'job_type_id', 'assumes_at', 'leaves_at')
                     ->withTimestamps();
     }
-    
+
     public function novelties()
     {
         return $this->hasMany(Noveltie::class);
@@ -77,7 +77,7 @@ class Shift extends Model implements Auditable
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'creator_id');
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     /* Obtiene el estado en palabra */
@@ -104,7 +104,7 @@ class Shift extends Model implements Auditable
 
     public static function todayShiftVerify()
     {
-        return Shift::where('status',true)->exists() ?? false;
+        return Shift::where('status', true)->exists() ?? false;
     }
 
     /**
