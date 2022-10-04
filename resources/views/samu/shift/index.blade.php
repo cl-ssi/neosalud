@@ -69,7 +69,9 @@
         </h5>
 
         <div class="mb-2">
-            @if($shift->status == false)
+            @if($shift->isOpening() AND auth()->user()->cannot('SAMU auditor') )
+                @livewire('samu.shift-user', ['shift' => $shift])
+            @else
                 <div class="table-responsive">
                     <table class="table table-sm">
                         <thead>
@@ -100,8 +102,6 @@
                         </tbody>
                     </table>
                 </div>
-            @elseif($shift->status AND auth()->user()->cannot('SAMU auditor') )
-                @livewire('samu.shift-user', ['shift' => $shift])
             @endif
         </div>
 
