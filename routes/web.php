@@ -70,6 +70,12 @@ use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 
 use Illuminate\Support\Facades\Log; //borrar
 
+use App\Http\Livewire\Samu\MorbidHistory;
+use App\Http\Livewire\Samu\Alterations;
+use App\Http\Livewire\Samu\Medicines;
+use App\Http\Livewire\Samu\GlasgowScale;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -532,6 +538,11 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	Route::get('/procedures', Procedures::class)->name('procedures');
 	Route::get('/supplies', Supplies::class)->name('supplies');
 	//Route::get('/stadistic', Stadistic::class)->name('stadistic');
+
+	Route::get('/morbid_history', MorbidHistory::class)->name('morbid_history');
+	Route::get('/alterations', Alterations::class)->name('alterations');
+	Route::get('/medicines', Medicines::class)->name('medicines');
+	Route::get('/glasgow_scale', GlasgowScale::class)->name('glasgow_scale');
 
     Route::view('/', 'samu.welcome')->name('welcome');
 	Route::get('/map', [CallController::class, 'maps'])->name('map');

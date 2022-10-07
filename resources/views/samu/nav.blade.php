@@ -179,6 +179,21 @@
               <li>
                 <a class="dropdown-item {{ active('user.*') }}" href=" {{ route('user.index') }}"><i class="fas fa-user"></i> Usuarios</a>
               </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.procedures') }}" href=" {{ route('samu.procedures') }}"> Procedimientos</a>
+              </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.morbid_history') }}" href=" {{ route('samu.morbid_history') }}"> Historiales mórbidos</a>
+              </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.alterations') }}" href=" {{ route('samu.alterations') }}"> Alteraciones</a>
+              </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.medicines') }}" href=" {{ route('samu.medicines') }}"> Medicamentos</a>
+              </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.glasgow_scale') }}" href=" {{ route('samu.glasgow_scale') }}"> Escala Glasgow</a>
+              </li>
           </ul>
     </li>
     @endcan
