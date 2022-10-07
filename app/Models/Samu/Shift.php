@@ -80,6 +80,16 @@ class Shift extends Model implements Auditable
         return $this->belongsTo(User::class, 'creator_id');
     }
 
+    public function isOpening()
+    {
+        return $this->status == 1;
+    }
+
+    public function isClosing()
+    {
+        return $this->status == 0;
+    }
+
     /* Obtiene el estado en palabra */
     public function getStatusInWordAttribute()
     {
