@@ -622,7 +622,7 @@
             <ul class="list-group list-group-flush">
                 @foreach($alterations as $alteration)
                     @if($alteration->type == $key)
-                        <li class="list-group-item">
+                        <li>
                             <input type="checkbox" name="alterations" id="alterations_{{$alteration->id}}" value="{{$alteration->id}}"> <label for="alterations_{{$alteration->id}}">{{$alteration->name}}</label>
                         </li>
                     @endif
@@ -734,7 +734,7 @@
                                 @foreach($glasgow_scales as $glasgow_scale)
                                     
                                     @if($glasgow_scale->age_range == $key1 && $glasgow_scale->type == $key2)
-                                        <li class="list-group-item">
+                                        <li>
                                             <input type="checkbox" name="glasgow_scales" id="glasgow_scales_{{$glasgow_scale->id}}" value="{{$glasgow_scale->id}}"> <label for="glasgow_scales_{{$glasgow_scale->id}}">{{$glasgow_scale->name}} - [{{$glasgow_scale->value}}]</label>
                                         </li>
                                     @endif
