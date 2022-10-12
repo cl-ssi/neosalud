@@ -35,6 +35,20 @@
         <div class="col-12 col-md-6">
             <div class="card">
                 <h6 class="card-header">
+                    # de Eventos atendidos agrupados por sexo durante el mes de {{ now()->monthName }}
+                </h6>
+                <div class="card-body pt-2">
+                    <div id="event-by-gender" style="width: auto; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
                     # de Eventos atendidos por móviles durante el mes de {{ now()->monthName }}
                 </h6>
                 <div class="card-body pt-2">
@@ -45,17 +59,7 @@
     </div>
 
     <div class="row mb-2">
-        <div class="col-12 col-md-6">
-            <div class="card">
-                <h6 class="card-header">
-                    # de Eventos atendidos agrupados por sexo durante el mes de {{ now()->monthName }}
-                </h6>
-                <div class="card-body pt-2">
-                    <div id="event-by-gender" style="width: auto; height: 300px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
+        <div class="col">
             <div class="card">
                 <h6 class="card-header">
                     # de Eventos atendidos en los últimos 12 meses
