@@ -58,7 +58,7 @@
         <div class="col-12 col-md-6">
             <div class="card">
                 <h6 class="card-header">
-                    # de Eventos atendidos en los últimos 6 meses
+                    # de Eventos atendidos en los últimos 12 meses
                 </h6>
                 <div class="card-body pt-2">
                     <div id="event-by-month" style="width: auto; height: 300px;"></div>
