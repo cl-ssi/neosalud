@@ -9,6 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\Samu\Shift;
 use App\Models\Samu\Mobile;
 use App\Models\Samu\MobileCrew;
+use App\Models\Samu\MobileInServiceInventory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\User;
 
@@ -166,5 +167,10 @@ class MobileInService extends Model implements Auditable
                 'position' => $index + 1
             ]);
         }
+    }
+
+    public function inventory()
+    {
+        return $this->hasOne(MobileInServiceInventory::class);
     }
 }

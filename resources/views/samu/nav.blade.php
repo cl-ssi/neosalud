@@ -24,6 +24,13 @@
     </li>
     @endcan
 
+    @canany(['SAMU administrador','SAMU creador inventarios ambulancia','SAMU aprobador inventarios ambulancia'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('samu.mobileinserviceinventory.*') }} {{ $disabled }}"
+        href=" {{ route('samu.mobileinserviceinventory.index') }}"><i class="fa-solid fa-list"></i> Inventarios en Móviles</a>
+    </li>
+    @endcan
+
     @canany(['SAMU administrador','SAMU regulador','SAMU operador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.noveltie.*') }} {{ $disabled }}"
@@ -190,6 +197,9 @@
               </li>
               <li>
                 <a class="dropdown-item {{ active('samu.medicines') }}" href=" {{ route('samu.medicines') }}"> Medicamentos</a>
+              </li>
+              <li>
+                <a class="dropdown-item {{ active('samu.supplies') }}" href=" {{ route('samu.supplies') }}"> Suministros</a>
               </li>
               <li>
                 <a class="dropdown-item {{ active('samu.glasgow_scale') }}" href=" {{ route('samu.glasgow_scale') }}"> Escala Glasgow</a>

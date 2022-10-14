@@ -511,6 +511,8 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 /* Rutas SAMU */
 use App\Http\Controllers\Samu\ShiftController;
 use App\Http\Controllers\Samu\MobileInServiceController;
+use App\Http\Controllers\Samu\MobileInServiceInventoryController;
+use App\Http\Controllers\Samu\MobileInServiceInventoryDetailController;
 use App\Http\Controllers\Samu\ShiftMobileController;
 use App\Http\Controllers\Samu\KeyController;
 use App\Http\Controllers\Samu\MobileController;
@@ -573,6 +575,18 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::put('/crewupdate/{mobileCrew}',	[MobileInServiceController::class, 'crewupdate'])->name('crewupdate');
 		Route::delete('/{mobileInService}', 	[MobileInServiceController::class, 'destroy'])->name('destroy');
 		Route::get('/{mobileInService}/location',[MobileInServiceController::class, 'location'])->name('location');
+    });
+
+	Route::prefix('mobiles-in-service-inventory')->name('mobileinserviceinventory.')->group(function () {
+		Route::get('/',						   [MobileInServiceInventoryController::class, 'index'])->name('index');
+
+		Route::prefix('mobiles-in-service-inventory-details')->name('details.')->group(function () {
+			Route::get('/{mobileInService}/create',[MobileInServiceInventoryDetailController::class, 'create'])->name('create');
+			Route::post('/store',				   [MobileInServiceInventoryDetailController::class, 'store'])->name('store');
+			Route::get('/{mobileInService}/edit',  [MobileInServiceInventoryDetailController::class, 'edit'])->name('edit');
+			Route::put('/{mobileInService}',	   [MobileInServiceInventoryDetailController::class, 'update'])->name('update');
+			Route::get('/{mobileInService}/confirm_inventory',  [MobileInServiceInventoryDetailController::class, 'confirm_inventory'])->name('confirm_inventory');
+		});
     });
 
     Route::prefix('crews')->name('crew.')

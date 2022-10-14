@@ -15,25 +15,38 @@
     </div>
 </div>
 
+<div class="card-body">
+<div class="table-responsive">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr class="table-secondary">
+                <th>Turno</th>
+                <th>Movil</th>
+                <th>Posición</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>O2 central</th>
+                <th>Observación</th>
+                <!-- <th>Almuerzo</th> -->
+            </tr>
+
+            <tr>
+                <td>Turno 2022-08-31 08:00:00 Largo (Abierto)</td>
+                <td><b>2 SAMU</b></td>
+                <td>5</td>
+                <td>M2</td>
+                <td>Activo</td>
+                <td></td>
+                <td></td>
+                <!-- <td>14:46 - 15:46 - 0"</td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
 <h4>1. Antecedentes generales</h4>
-<div class="row g-2">
-    <!-- <fieldset class="form-group col-sm-2">
-
-        <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-        <label class="form-check-label" for="exampleRadios1">
-            Avanzada
-        </label>
-        </div>
-        <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-        <label class="form-check-label" for="exampleRadios2">
-            Básica
-        </label>
-        </div>
-
-    </fieldset> -->
-
+<!-- <div class="row g-2">
     <fieldset class="form-group col-sm-1">
         <label for="for_type">Tipo de móvil*</label>
         <select class="form-control" name="mobile_type_id" required>
@@ -43,7 +56,7 @@
             @endforeach
         </select>
     </fieldset>
-</div>
+</div> -->
 
 
 <div class="row g-2 mb-2">
