@@ -2,6 +2,7 @@
 
 namespace App\Models\Samu;
 
+use App\Enums\Key as EnumsKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -192,7 +193,7 @@ class Event extends Model implements Auditable
     public function getJobsAttribute()
     {
         $jobs = null;
-        
+
         if($this->shift && $this->shift->users && $this->departure_at)
         {
             $jobs = $this->shift->users->where('pivot.assumes_at', '<=', $this->departure_at)
@@ -265,5 +266,12 @@ class Event extends Model implements Auditable
             $color = 'danger';
         }
         return $option ? $status : $color;
+    }
+
+    public function scopeOnlyValid($query)
+    {
+        $except = [EnumsKey::KEY_605, EnumsKey::KEY_606];
+
+        return $query->whereNotIn('key_id', $except);
     }
 }
