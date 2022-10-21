@@ -5,7 +5,6 @@
         <i class="fas fa-chart-line"></i> Panel de Estadísticas
     </h3>
 
-
     <div class="row">
         <div class="col-sm">
             <div class="card">
