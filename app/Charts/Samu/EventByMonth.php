@@ -46,6 +46,7 @@ class EventByMonth
         foreach($rangeMonths as $month)
         {
             $totalEvents = Event::query()
+                ->onlyValid()
                 ->whereMonth('date', '=', $month)
                 ->whereYear('date', '=', $month)
                 ->count();
