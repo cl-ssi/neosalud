@@ -42,6 +42,7 @@ class EventByCommune
         ]);
 
         $events = Event::query()
+            ->onlyValid()
             ->with('commune')
             ->select('commune_id', DB::raw('count(*) as total'))
             ->whereMonth('date', $this->date->month)

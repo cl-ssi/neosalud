@@ -33,6 +33,7 @@ class AverageAmbulanceRetention
         foreach($this->collectionWeeks as $week)
         {
             $events = Event::query()
+                ->onlyValid()
                 ->whereNotNull('healthcenter_at')
                 ->whereNotNull('return_base_at')
                 ->whereHas('shift', function($query) use($week) {

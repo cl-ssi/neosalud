@@ -41,6 +41,7 @@ class EventByMobile
         ]);
 
         $events = Event::query()
+            ->onlyValid()
             ->with('mobile')
             ->whereHas('mobile', function ($query) {
                 $query->whereName('SAMU');
