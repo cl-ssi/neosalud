@@ -2,7 +2,6 @@
 
 namespace App\Models\Samu;
 
-use App\Enums\Key as EnumsKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -270,8 +269,9 @@ class Event extends Model implements Auditable
 
     public function scopeOnlyValid($query)
     {
-        $except = [EnumsKey::KEY_605, EnumsKey::KEY_606];
-
-        return $query->whereNotIn('key_id', $except);
+        $exceptKey = ['605', '606'];
+        return $query->whereHas('key', function($query) use($exceptKey) {
+            $query->whereNotIn('key', $exceptKey);
+        });
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Charts\Samu;
 
-use App\Enums\Key as EnumsKey;
 use App\Models\Samu\Event;
 
 class EventBySex
@@ -28,7 +27,7 @@ class EventBySex
      */
     public function setDataset()
     {
-        $exceptKey = [EnumsKey::KEY_605, EnumsKey::KEY_606];
+        $exceptKey = ['605', '606'];
         $sexs = ['MALE', 'FEMALE', 'UNKNOWN', 'OTHER', null];
 
         $this->dataset = array([
@@ -44,7 +43,9 @@ class EventBySex
                 ->where('samu_calls.sex', '=', $sex)
                 ->whereMonth('samu_events.date', $this->month)
                 ->whereYear('samu_events.date', $this->year)
-                ->whereNotIn('samu_events.key_id', $exceptKey)
+                ->whereHas('key', function($query) use($exceptKey) {
+                    $query->whereNotIn('key', $exceptKey);
+                })
                 ->count();
 
             $this->dataset[] = [translateSex($sex), $totalBySex, 'color: #006cb7'];
