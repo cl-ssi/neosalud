@@ -41,17 +41,19 @@
         'timestampFormat'   => $timestampFormat,
     ])
 
-    <button type="submit" class="btn btn-primary">
-        @if(request()->routeIs('samu.event.create'))
-            <i class="fas fa-save"></i> Guardar
-        @else
-            <i class="fas fa-copy"></i> Duplicar
-        @endif
-    </button>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">
+            @if(request()->routeIs('samu.event.create'))
+                <i class="fas fa-save"></i> Guardar
+            @else
+                <i class="fas fa-copy"></i> Duplicar
+            @endif
+        </button>
 
-    <a href="{{ route('samu.event.index') }}" class="btn btn-outline-secondary">
-        Cancelar
-    </a>
+        <a href="{{ route('samu.event.index') }}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+    </div>
 
 </form>
 
