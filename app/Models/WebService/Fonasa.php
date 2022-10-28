@@ -10,12 +10,13 @@ class Fonasa extends Model
 {
     use HasFactory;
 
-    public static function find($rut) {
+    public static function find($rut)
+    {
         $run = intval($rut);
         $s=1;
         for($m=0;$run!=0;$run/=10)
             $s=($s+$run%10*(9-$m++%6))%11;
-        $dv = chr($s?$s+47:75); 
+        $dv = chr($s?$s+47:75);
 
         if($rut AND $dv) {
             $wsdl = asset('ws/fonasa/CertificadorPrevisionalSoap.wsdl');
