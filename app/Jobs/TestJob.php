@@ -35,6 +35,6 @@ class TestJob implements ShouldQueue
         $user = User::find(1);
         $user->sex = 'female';
         $user->save();
-        Log::error('Prueba de cola: ', $user->sex);
+        Log::error('Prueba de cola: ', [$user->sex]);
     }
 }
