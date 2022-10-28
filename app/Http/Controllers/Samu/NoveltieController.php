@@ -9,7 +9,6 @@ use App\Models\Samu\Noveltie;
 use App\Models\Samu\Shift;
 use Illuminate\Http\Request;
 
-
 class NoveltieController extends Controller
 {
     /**
@@ -60,11 +59,11 @@ class NoveltieController extends Controller
 
         if($shift)
         {
-            $noveltie = new Noveltie($request->All());
+            $noveltie = new Noveltie($request->all());
             $noveltie->shift()->associate($shift);
             $noveltie->save();
 
-            $request->session()->flash('success', 'Novedad Creada.');
+            session()->flash('success', 'La novedad fue creada.');
 
             return redirect()->route('samu.noveltie.index');
         }
