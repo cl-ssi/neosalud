@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\TestJob;
 
 class TestController extends Controller
 {
@@ -39,5 +40,10 @@ class TestController extends Controller
     public function getProjectId()
     {
         echo env('GOOGLE_PROJECT_ID');
+    }
+
+    public function cola()
+    {
+        TestJob::dispatch();
     }
 }

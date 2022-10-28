@@ -743,6 +743,7 @@ Route::get('/test/rayen' ,[RayenController::class, 'getUrgencyStatus'])->name('g
 Route::get('/test/sendip',[TestController::class,'sendIp']);
 Route::get('/test/error/{option?}',[TestController::class,'error']);
 Route::get('/test/projectid',[TestController::class,'getProjectId']);
+Route::get('/test/cola',[TestController::class,'cola']);
 
 Route::prefix('developer')->name('developer.')->middleware('can:Developer')->group(function(){
 	Route::view('/artisan', 'developer.artisan')->name('artisan');
