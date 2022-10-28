@@ -74,7 +74,7 @@ return [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => env('APP_NAME'),
-            'emoji' => ':boom:',
+            'emoji' => ':heart:',
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
