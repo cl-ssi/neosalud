@@ -66,9 +66,10 @@ return [
             'retry_after' => 90,
             'block_for' => null,
         ],
+
         'cloudtasks' => [
             'driver' => 'cloudtasks',
-            'project' => env('STACKKIT_CLOUD_TASKS_PROJECT', ''),
+            'project' => env('GOOGLE_PROJECT_ID', ''),
             'location' => env('STACKKIT_CLOUD_TASKS_LOCATION', ''),
             'handler' => env('STACKKIT_CLOUD_TASKS_HANDLER', ''),
             'queue' => env('STACKKIT_CLOUD_TASKS_QUEUE', 'default'),
