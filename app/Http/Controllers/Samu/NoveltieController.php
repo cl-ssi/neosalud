@@ -9,7 +9,6 @@ use App\Models\Samu\Noveltie;
 use App\Models\Samu\Shift;
 use Illuminate\Http\Request;
 
-
 class NoveltieController extends Controller
 {
     /**
@@ -32,6 +31,15 @@ class NoveltieController extends Controller
         return view ('samu.noveltie.index', compact('openShift','lastShift'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('samu.noveltie.create');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -41,31 +49,32 @@ class NoveltieController extends Controller
      */
     public function store(Request $request)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor') 
+        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
             ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".') 
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
-        
+
         /* Obtener el turno actual */
         $shift = Shift::whereStatus(true)->first();
 
-        if($shift) {
-            $noveltie = new Noveltie($request->All());
+        if($shift)
+        {
+            $noveltie = new Noveltie($request->all());
             $noveltie->shift()->associate($shift);
             $noveltie->save();
-    
-            $request->session()->flash('success', 'Novedad Creada.');
+
+            session()->flash('success', 'La novedad fue creada.');
 
             return redirect()->route('samu.noveltie.index');
         }
-        else {
-            $request->session()->flash('danger', 'No se pudo registrar la novedad, 
+        else
+        {
+            session()->flash('danger', 'No se pudo registrar la novedad,
                 el turno se ha cerrado, solicite que abran un turno y luego intente guardar nuevamente.');
-            
+
             return redirect()->back()->withInput();
         }
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -87,15 +96,16 @@ class NoveltieController extends Controller
      */
     public function update(Request $request, Noveltie $noveltie)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor') 
+        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
             ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".') 
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         /* Obtener el turno actual */
         $shift = Shift::whereStatus(true)->first();
 
-        if($shift) {
+        if($shift)
+        {
             $noveltie->fill($request->all());
             $noveltie->save();
 
@@ -103,13 +113,13 @@ class NoveltieController extends Controller
 
             return redirect()->route('samu.noveltie.index');
         }
-        else {
-            $request->session()->flash('danger', 'No se pudo cambiar la novedad, 
+        else
+        {
+            session()->flash('danger', 'No se pudo cambiar la novedad,
                 el turno se ha cerrado, solicite que abran un turno y luego intente guardar nuevamente.');
-            
+
             return redirect()->back()->withInput();
         }
-
     }
 
     /**

@@ -6,9 +6,10 @@ use App\Models\Samu\Event;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 class EventByCommune
 {
-    public $myDataset;
+    public $dataset;
     public $date;
     public $month;
     public $year;
@@ -23,18 +24,17 @@ class EventByCommune
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
         $this->date = Carbon::parse("$this->year/$this->month/01");
-
-        $this->getData();
+        $this->setDataset();
     }
 
     /**
-     * Get the statistics data
+     * Set the statistics
      *
      * @return void
      */
-    public function getData()
+    public function setDataset()
     {
-        $this->myDataset = array([
+        $this->dataset = array([
             'Comuna',
             '# de Eventos del mes ' .  $this->date->monthName . ' del año ' . $this->date->year,
             ["role" => 'style' ],
@@ -42,6 +42,7 @@ class EventByCommune
         ]);
 
         $events = Event::query()
+            ->onlyValid()
             ->with('commune')
             ->select('commune_id', DB::raw('count(*) as total'))
             ->whereMonth('date', $this->date->month)
@@ -52,17 +53,17 @@ class EventByCommune
         foreach($events as $event)
         {
             $nameCommune = $event->commune ? $event->commune->name : 'NO INFORMADO';
-            $this->myDataset[] = [Str::upper($nameCommune), $event->total, 'color: #c90076', $event->total];
+            $this->dataset[] = [Str::upper($nameCommune), $event->total, 'color: #c90076', $event->total];
         }
     }
 
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {
-        return $this->myDataset;
+        return $this->dataset;
     }
 }

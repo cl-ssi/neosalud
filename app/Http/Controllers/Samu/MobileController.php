@@ -16,12 +16,12 @@ class MobileController extends Controller
      */
     public function index(Request $request)
     {
-           //busqueda de codigos de clave
-           $search_mobile=$request->get('search_mobile');  
-           $mobiles= mobile::when($search_mobile!=null, function ($query) use ($search_mobile){
-               $query->where('name','like','%'.$search_mobile.'%');
-           })->paginate(30);
-           return view ('samu.mobile.index' , compact('mobiles','search_mobile')); 
+        //busqueda de codigos de clave
+        $search_mobile=$request->get('search_mobile');
+        $mobiles=  Mobile::when($search_mobile!=null, function ($query) use ($search_mobile) {
+            $query->where('name', 'like', '%'.$search_mobile.'%');
+        })->paginate(30);
+        return view ('samu.mobile.index' , compact('mobiles','search_mobile'));
     }
 
     /**
@@ -72,7 +72,7 @@ class MobileController extends Controller
      */
     public function edit(Mobile $mobile)
     {
-        $types = MobileType::pluck('name','id');
+        $types = MobileType::pluck('name', 'id');
         return view('samu.mobile.edit', compact('mobile','types'));
     }
 

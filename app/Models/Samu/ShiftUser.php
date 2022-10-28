@@ -19,28 +19,39 @@ class ShiftUser extends pivot
     use HasFactory;
     // use SoftDeletes;
 
-    protected $table="samu_shift_user";
+    protected $table = "samu_shift_user";
 
     protected $fillable = [
         'id',
         'shift_id',
         'user_id',
-        'job_type_id'
+        'job_type_id',
+        'assumes_at',
+        'leaves_at',
+    ];
+
+    /**
+    * The attributes that should be mutated to dates.
+    *
+    * @var array
+    */
+    protected $dates = [
+        'assumes_at',
+        'leaves_at'
     ];
 
     public function shift()
     {
-        return $this->BelongsTo(Shift::class);
+        return $this->belongsTo(Shift::class);
     }
 
     public function user()
     {
-        return $this->BelongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function jobType()
     {
-        return $this->BelongsTo(JobType::class);
+        return $this->belongsTo(JobType::class);
     }
-
 }

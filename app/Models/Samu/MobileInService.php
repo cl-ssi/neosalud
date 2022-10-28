@@ -9,6 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\Samu\Shift;
 use App\Models\Samu\Mobile;
 use App\Models\Samu\MobileCrew;
+use App\Models\Samu\MobileInServiceInventory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\User;
 
@@ -62,7 +63,7 @@ class MobileInService extends Model implements Auditable
 
     public function type()
     {
-        return $this->belongsTo(MobileType::class,'type_id');
+        return $this->belongsTo(MobileType::class, 'type_id');
     }
 
     public function crew()
@@ -75,18 +76,18 @@ class MobileInService extends Model implements Auditable
         //     $users->add($mc->user);
         // }
         // return $users;
-        return $this->belongsToMany(User::class,'samu_mobile_crew','mobiles_in_service_id')
+        return $this->belongsToMany(User::class, 'samu_mobile_crew', 'mobiles_in_service_id')
                     //->join('amenity_master','amenity_icon_url','=','image_url')
                     ->using(MobileCrew::class)
-                    ->withPivot('id','job_type_id','assumes_at','leaves_at')
+                    ->withPivot('id', 'job_type_id', 'assumes_at', 'leaves_at')
                     ->withTimestamps();
     }
 
     public function currentCrew()
     {
-        return $this->belongsToMany(User::class,'samu_mobile_crew','mobiles_in_service_id')
+        return $this->belongsToMany(User::class, 'samu_mobile_crew', 'mobiles_in_service_id')
             ->using(MobileCrew::class)
-            ->withPivot('id','job_type_id','assumes_at','leaves_at')
+            ->withPivot('id', 'job_type_id', 'assumes_at', 'leaves_at')
             ->where(function($query) {
                 $query->where('mobiles_in_service_id', $this->id)
                     ->where('assumes_at', '<', now())
@@ -102,7 +103,7 @@ class MobileInService extends Model implements Auditable
 
     public function follows()
     {
-        return $this->belongsToMany(Follow::class,'samu_follow_mis');
+        return $this->belongsToMany(Follow::class, 'samu_follow_mis');
     }
 
     public function events()
@@ -166,5 +167,10 @@ class MobileInService extends Model implements Auditable
                 'position' => $index + 1
             ]);
         }
+    }
+
+    public function inventory()
+    {
+        return $this->hasOne(MobileInServiceInventory::class);
     }
 }

@@ -5,7 +5,6 @@
         <i class="fas fa-chart-line"></i> Panel de Estadísticas
     </h3>
 
-
     <div class="row">
         <div class="col-sm">
             <div class="card">
@@ -35,6 +34,20 @@
         <div class="col-12 col-md-6">
             <div class="card">
                 <h6 class="card-header">
+                    # de Eventos atendidos agrupados por sexo durante el mes de {{ now()->monthName }}
+                </h6>
+                <div class="card-body pt-2">
+                    <div id="event-by-gender" style="width: auto; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
                     # de Eventos atendidos por móviles durante el mes de {{ now()->monthName }}
                 </h6>
                 <div class="card-body pt-2">
@@ -45,20 +58,10 @@
     </div>
 
     <div class="row mb-2">
-        <div class="col-12 col-md-6">
+        <div class="col">
             <div class="card">
                 <h6 class="card-header">
-                    # de Eventos atendidos agrupados por sexo durante el mes de {{ now()->monthName }}
-                </h6>
-                <div class="card-body pt-2">
-                    <div id="event-by-gender" style="width: auto; height: 300px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="card">
-                <h6 class="card-header">
-                    # de Eventos atendidos en los últimos 6 meses
+                    # de Eventos atendidos en los últimos 12 meses
                 </h6>
                 <div class="card-body pt-2">
                     <div id="event-by-month" style="width: auto; height: 300px;"></div>
@@ -75,6 +78,39 @@
                 </h6>
                 <div class="card-body pt-2">
                     @livewire('samu.dashboard.event-by-mobile-type')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Promedio de Tipo de Móvil las últimas 4 semanas
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.avg-type-mobile')
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Cantidad de horas por tipo de móvil y por tipo de funcionario
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.mobile-type-by-job-type')
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    Promedio en minutos de Retención de Ambulancia en AP
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.average-ambulance-retention')
                 </div>
             </div>
         </div>

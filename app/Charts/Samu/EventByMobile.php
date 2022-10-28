@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class EventByMobile
 {
-    public $myDataset;
+    public $dataset;
+    public $year;
+    public $month;
+    public $date;
 
     /**
      * Initializes the chart.
@@ -20,17 +23,17 @@ class EventByMobile
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
         $this->date = Carbon::parse("$this->year/$this->month/01");
-        $this->getData();
+        $this->setDataset();
     }
 
     /**
-     * Get the statistics data
+     * Set the statistics
      *
      * @return void
      */
-    public function getData()
+    public function setDataset()
     {
-        $this->myDataset = array([
+        $this->dataset = array([
             'Comuna',
             '# de Eventos del mes ' .  $this->date->monthName . ' del año ' . $this->date->year,
             ["role" => 'style' ],
@@ -38,6 +41,7 @@ class EventByMobile
         ]);
 
         $events = Event::query()
+            ->onlyValid()
             ->with('mobile')
             ->whereHas('mobile', function ($query) {
                 $query->whereName('SAMU');
@@ -54,7 +58,7 @@ class EventByMobile
                 ? ($event->mobile->code . ' - ' . $event->mobile->name )
                 : 'SIN MOVIL';
 
-            $this->myDataset[] = [$nameMobile, $event->total, 'color: #c90076', $event->total];
+            $this->dataset[] = [$nameMobile, $event->total, 'color: #c90076', $event->total];
         }
     }
 
@@ -65,6 +69,6 @@ class EventByMobile
      */
     public function getDataset()
     {
-        return $this->myDataset;
+        return $this->dataset;
     }
 }

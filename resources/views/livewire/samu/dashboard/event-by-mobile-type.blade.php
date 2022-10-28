@@ -7,16 +7,23 @@
                         @foreach($row as $j => $data)
                             <td>
                                 @if($j == 0)
+                                    @if(isset($data['name']))
                                     <b>
-                                        {{ $data['id'] }}
+                                        {{ $data['name'] }}
                                     </b>
+                                    @endif
                                 @else
                                     @if($i == 0)
                                         <small>
                                             <b>{{ $data }}</b>
                                         </small>
                                     @else
-                                        {{ $data }}
+                                        @if(isset($data['strong']) && $data['strong'] == true)
+                                            <strong>
+                                                {{ $data['total'] }}
+                                        @else
+                                            {{ $data }}
+                                        @endif
                                     @endif
                                 @endif
                             </td>

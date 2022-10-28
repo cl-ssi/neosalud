@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Samu\EnsureShift;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
@@ -65,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'client' => CheckClientCredentials::class,
+        'ensure.shift' => EnsureShift::class,
     ];
 }
