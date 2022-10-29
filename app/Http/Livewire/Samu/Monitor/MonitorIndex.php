@@ -36,6 +36,6 @@ class MonitorIndex extends Component
     {
         Artisan::call('patient:fix');
         $this->getStadistic();
-        session()->flash("success", "Fueron enviados 100 pacientes para procesar");
+        session()->flash("success", "Fueron encolados 100 pacientes para procesar");
     }
 }
