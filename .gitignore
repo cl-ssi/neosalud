@@ -16,8 +16,10 @@ yarn-error.log
 artisan
 .idea
 .tic-ssi.json
+.queue-ssi.json
 .DS_Store
-
+*.save
+*.swp
 /config-git-crypt.key
 docker-compose.yml
 .vscode/settings.json
