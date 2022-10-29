@@ -15,7 +15,7 @@ class FixPatient extends Command
      *
      * @var string
      */
-    protected $signature = 'patient:fix {year} {month}';
+    protected $signature = 'patient:fix';
 
     /**
      * The console command description.
@@ -31,18 +31,12 @@ class FixPatient extends Command
      */
     public function handle()
     {
-        $year = $this->argument('year');
-        $month = $this->argument('month');
-
         $events = Event::query()
             ->whereNull('run_fixed')
             ->whereNull('verified_fonasa_at')
             ->whereNotNull('patient_identification')
             ->wherePatientIdentifierTypeId(1)
-            ->when($year && $month, function($query) use($year, $month) {
-                $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month);
-            })
+            ->limit(100)
             ->get();
 
 
