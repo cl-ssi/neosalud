@@ -528,6 +528,7 @@ use App\Http\Livewire\Samu\FindEvent;
 use App\Http\Livewire\Samu\MobileSelector;
 use App\Http\Livewire\Samu\TimestampsAndLocation;
 use App\Http\Livewire\Samu\GetLocation;
+use App\Http\Livewire\Samu\Monitor\MonitorIndex;
 use App\Http\Livewire\Samu\SearchCalls;
 use App\Http\Livewire\Samu\Procedures;
 use App\Http\Livewire\Samu\Supplies;
@@ -536,6 +537,7 @@ use App\Http\Livewire\Samu\Shift\ShiftSearcher;
 use App\Http\Livewire\Samu\ShiftUserEdit;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
+    Route::get('/monitor', MonitorIndex::class)->name('monitor');
 
 	Route::get('/procedures', Procedures::class)->name('procedures');
 	Route::get('/supplies', Supplies::class)->name('supplies');
