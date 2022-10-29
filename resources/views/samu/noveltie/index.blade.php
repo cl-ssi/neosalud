@@ -4,6 +4,7 @@
 
 @include('samu.nav')
 
+@if($openShift)
 <h4 class="mb-3 mt-3">
     <div class="row">
         <div class="col">
@@ -21,6 +22,7 @@
 </h4>
 
 @include('samu.noveltie.partials.list', ['novelties' => $openShift->novelties ])
+@endif
 
 <h4 class="mb-3"><i class="fas fa-book"></i> Novedades del turno
     {{ optional(optional($lastShift)->opening_at)->format('Y-m-d H:i') }}
