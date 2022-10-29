@@ -88,6 +88,7 @@
                             <i class="fas fa-exclamation-triangle text-danger"></i>
                             Total Pacientes con RUN Erroneos
                         </h6>
+                        <small>Con error el RUN y el Digito Verificador</small>
                     </td>
                     <td class="text-center">
                         {{ $patientsWithRunNoFixed }}
