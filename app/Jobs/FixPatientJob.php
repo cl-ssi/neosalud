@@ -41,32 +41,36 @@ class FixPatientJob implements ShouldQueue
         $run = $content[0];
         $dv = $content[1];
 
-        $response = Http::get($urlWs, ['run' => $run, 'dv' => $dv]);
-
-        if($response->status() == 200)
+        /** Solo si está en null */
+        if(is_null($event->verified_fonasa_at))
         {
-            $patient = $response->object();
+            $response = Http::get($urlWs, ['run' => $run, 'dv' => $dv]);
 
-            if($this->validData($patient))
+            if($response->status() == 200)
             {
-                $event->update([
-                    'patient_name' => "$patient->name $patient->fathers_family $patient->mothers_family",
-                    'birthday' => $patient->birthday,
-                    'gender_id' => ($patient->gender == "Masculino") ? 1 : 2,
-                    'prevision' => $patient->prevision,
-                    'verified_fonasa_at' => now()
-                ]);
+                $patient = $response->object();
 
-                $events_similar = Event::where('patient_identification','=',$event->patient_identification)->get();
-                foreach($events_similar as $similar)
+                if($this->validData($patient))
                 {
-                    $similar->update([
+                    $event->update([
                         'patient_name' => "$patient->name $patient->fathers_family $patient->mothers_family",
                         'birthday' => $patient->birthday,
                         'gender_id' => ($patient->gender == "Masculino") ? 1 : 2,
                         'prevision' => $patient->prevision,
                         'verified_fonasa_at' => now()
                     ]);
+
+                    $events_similar = Event::where('patient_identification','=',$event->patient_identification)->get();
+                    foreach($events_similar as $similar)
+                    {
+                        $similar->update([
+                            'patient_name' => "$patient->name $patient->fathers_family $patient->mothers_family",
+                            'birthday' => $patient->birthday,
+                            'gender_id' => ($patient->gender == "Masculino") ? 1 : 2,
+                            'prevision' => $patient->prevision,
+                            'verified_fonasa_at' => now()
+                        ]);
+                    }
                 }
             }
         }
