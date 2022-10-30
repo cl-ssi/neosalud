@@ -68,7 +68,8 @@ class FixPatientJob implements ShouldQueue
                             'birthday' => $patient->birthday,
                             'gender_id' => ($patient->gender == "Masculino") ? 1 : 2,
                             'prevision' => $patient->prevision,
-                            'verified_fonasa_at' => now()
+                            'verified_fonasa_at' => now(),
+                            'run_fixed' => true,
                         ]);
                     }
                 }
