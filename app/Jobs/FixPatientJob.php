@@ -56,6 +56,18 @@ class FixPatientJob implements ShouldQueue
                     'prevision' => $patient->prevision,
                     'verified_fonasa_at' => now()
                 ]);
+
+                $events_similar = Event::where('patient_identification','=',$event->patient_identification)->get();
+                foreach($events_similar as $similar)
+                {
+                    $similar->update([
+                        'patient_name' => "$patient->name $patient->fathers_family $patient->mothers_family",
+                        'birthday' => $patient->birthday,
+                        'gender_id' => ($patient->gender == "Masculino") ? 1 : 2,
+                        'prevision' => $patient->prevision,
+                        'verified_fonasa_at' => now()
+                    ]);
+                }
             }
         }
     }
