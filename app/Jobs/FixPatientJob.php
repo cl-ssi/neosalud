@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Samu\Event;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +18,7 @@ class FixPatientJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $event;
-    
+
     /**
      * Create a new job instance.
      *
@@ -74,6 +75,13 @@ class FixPatientJob implements ShouldQueue
                     }
                 }
             }
+            else
+            {
+                $msg = 'La solicitud http a fonasa arrojo un estatus ' . $response->status();
+                $e = new Exception($msg);
+                Log::error($msg, ['id_event' => $event->id, 'run' => $event->patient_identification]);
+                $this->fail($e);
+            }
         }
     }
 
@@ -81,9 +89,7 @@ class FixPatientJob implements ShouldQueue
     {
         $validBirthday = false;
         $validGender = false;
-        $validPrevision = false;
         $genders = ["Masculino", "Femenino"];
-        $previsions = ["FONASA A", "FONASA B", "FONASA C", "FONASA D", "FONASA E", "ISAPRE"];
 
         if(preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $patient->birthday))
             $validBirthday = true;
@@ -95,14 +101,9 @@ class FixPatientJob implements ShouldQueue
         else
             $msg = 'El paciente tiene un género errado';
 
-        if (in_array($patient->prevision, $previsions))
-            $validPrevision = true;
-        else
-            $msg = 'El paciente tiene una previsión errada';
-
-        if(!$validBirthday || !$validGender || !$validPrevision)
+        if(!$validBirthday || !$validGender)
             Log::error($msg, (array)$patient);
 
-        return $validBirthday && $validGender && $validPrevision;
+        return $validBirthday && $validGender;
     }
 }
