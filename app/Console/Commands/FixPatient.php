@@ -37,6 +37,7 @@ class FixPatient extends Command
             ->whereNotNull('patient_identification')
             ->wherePatientIdentifierTypeId(1)
             ->limit(100)
+            ->latest()
             ->get();
 
 
