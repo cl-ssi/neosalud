@@ -117,6 +117,19 @@
     </div>
 
     <div class="row">
+        <div class="mb-2">
+            <div class="card">
+                <h6 class="card-header">
+                    # Eventos por género y grupo etarios
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.event-by-gender-and-age')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         @livewire('samu.stadistic')
     </div>
 </div>
