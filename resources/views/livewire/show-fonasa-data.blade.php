@@ -159,13 +159,23 @@
                     @endif
                     readonly
                 >
-                <span class="input-group-text" id="basic-addon2">
-                    <span
-                        wire:loading.remove
-                        wire:target="birthday, fonasa_search"
-                    >
-                        <i class="fas fa-check"></i>
-                    </span>
+                <span class="input-group-text" id="for-age">
+                    @if($age_year != null || $age_month)
+                        <span
+                            wire:loading.remove
+                            wire:target="birthday, fonasa_search"
+                        >
+                            <i class="fas fa-check"></i>
+                        </span>
+                    @else
+                        <span
+                            wire:loading.remove
+                            wire:target="birthday, fonasa_search"
+                        >
+                            <i class="fas fa-times"></i>
+                        </span>
+                    @endif
+
                     <span
                         class="spinner-border spinner-border-sm"
                         role="status"
