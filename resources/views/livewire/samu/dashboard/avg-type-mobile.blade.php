@@ -18,7 +18,11 @@
 
                         @foreach($row['values'] as $value)
                             <td class="text-center">
-                                <span data-toggle="tooltip" data-placement="bottom" title="{{ $value[0] . ' / ' . $value[1] }}">
+                                <span
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="{{ $value[0] . ' / ' . $value[1] }}"
+                                >
                                     {{ $value[2] }}
                                 </span>
                             </td>
