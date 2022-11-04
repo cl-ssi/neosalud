@@ -5,9 +5,10 @@ namespace App\Http\Livewire;
 use App\Helpers\Run;
 use App\Models\CodConIdentifierType;
 use App\Models\Gender;
+use App\Models\Samu\Event;
 use App\Traits\FonasaTrait;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class ShowFonasaData extends Component
@@ -21,6 +22,8 @@ class ShowFonasaData extends Component
     public $gender_id;
     public $prevision;
     public $birthday;
+    public $age_year;
+    public $age_month;
     public $run_fixed;
     public $verified_fonasa_at;
 
@@ -43,10 +46,12 @@ class ShowFonasaData extends Component
     /* Objeto $event */
     public $event;
     public $genders;
+    public $previsions;
 
     public function mount()
     {
         /* Carga los tipos de identificador */
+        $this->getPrevisions();
         $this->identifierTypes = CodConIdentifierType::pluck('id','text')->sort();
         $this->getGenders();
 
@@ -58,7 +63,9 @@ class ShowFonasaData extends Component
             $this->patient_other_identification = $this->event->patient_identification;
             $this->prevision = $this->event->prevision;
             $this->gender_id = $this->event->gender_id;
-            $this->birthday = $this->event->birthday;
+            $this->birthday = $this->event->birthday ? $this->event->birthday->format('Y-m-d') : null;
+            $this->age_year = $this->event->age_year ? $this->event->age_year : null;
+            $this->age_month = $this->event->age_month ? $this->event->age_month : null;
             $this->verified_fonasa_at = $this->event->verified_fonasa_at;
 
             if($this->patient_identifier_type_id == 1)
@@ -84,8 +91,10 @@ class ShowFonasaData extends Component
             $patient = json_decode($user);
             $this->run_fixed = true;
             $this->verified_fonasa_at = now();
-            $this->prevision = $patient->prevision;
+            $this->prevision = $this->addPrevision($patient->prevision);
             $this->birthday = $patient->birthday;
+            $this->age_year = $this->getYearOfAge();
+            $this->age_month = $this->getMonthOfAge();
             $this->patient_name = "$patient->name $patient->fathers_family $patient->mothers_family";
             $this->gender_id = $this->getGender($patient->gender);
             $this->disabled = true;
@@ -134,7 +143,21 @@ class ShowFonasaData extends Component
             $this->gender_id = null;
             $this->prevision = null;
             $this->birthday = null;
+            $this->age_year = null;
+            $this->age_month = null;
             $this->patient_name = null;
+        }
+    }
+
+    public function updatedBirthday($birthday)
+    {
+        $this->age_year = null;
+        $this->age_month = null;
+
+        if(preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $birthday))
+        {
+            $this->age_year = $this->getYearOfAge();
+            $this->age_month = $this->getMonthOfAge();
         }
     }
 
@@ -158,5 +181,34 @@ class ShowFonasaData extends Component
     public function getGenders()
     {
         $this->genders = Gender::all();
+    }
+
+    public function getPrevisions()
+    {
+        $this->previsions = Event::query()
+            ->whereNotNull('prevision')
+            ->groupBy('prevision')
+            ->orderBy('prevision')
+            ->get('prevision')
+            ->pluck('prevision');
+    }
+
+    public function getYearOfAge()
+    {
+        $birthday = Carbon::parse($this->birthday);
+        return $birthday->diff(now())->format('%y');
+    }
+
+    public function getMonthOfAge()
+    {
+        $birthday = Carbon::parse($this->birthday);
+        return $birthday->diff(now())->format('%m');
+    }
+
+    public function addPrevision($prevision)
+    {
+        if($this->previsions->doesntContain($prevision))
+            $this->previsions->push($prevision)->sort();
+        return $prevision;
     }
 }
