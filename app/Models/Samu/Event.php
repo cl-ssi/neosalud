@@ -59,6 +59,8 @@ class Event extends Model implements Auditable
         'patient_name',
         'gender_id',
         'birthday',
+        'age_year',
+        'age_month',
         'prevision',
         'run_fixed',
         'verified_fonasa_at',
@@ -105,6 +107,7 @@ class Event extends Model implements Auditable
         'patient_reception_at',
         'return_base_at',
         'on_base_at',
+        'birthday',
     ];
 
     protected $appends = [
