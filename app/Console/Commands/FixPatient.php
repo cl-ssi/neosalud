@@ -22,7 +22,7 @@ class FixPatient extends Command
      *
      * @var string
      */
-    protected $description = 'Select patients and add them to the work queue';
+    protected $description = 'Select patients them to the work queue';
 
     /**
      * Execute the console command.
@@ -36,10 +36,9 @@ class FixPatient extends Command
             ->whereNull('verified_fonasa_at')
             ->whereNotNull('patient_identification')
             ->wherePatientIdentifierTypeId(1)
-            ->limit(100)
+            ->limit(10)
             ->latest()
             ->get();
-
 
         foreach($events as $event)
         {
