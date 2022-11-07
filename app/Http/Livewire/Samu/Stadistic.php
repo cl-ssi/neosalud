@@ -106,7 +106,7 @@ class Stadistic extends Component
                 $totalEvents->where('key_id', $this->key_id);
 
             if($this->return_key_id)
-                $totalEvents->where('return_key_id', $this->key_id);
+                $totalEvents->where('return_key_id', $this->return_key_id);
 
             $totalEvents->whereBetween('date', [$this->from, $this->to]);
 

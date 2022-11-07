@@ -32,6 +32,9 @@
             </tbody>
             <caption>
                 <small>
+                    <span class="badge bg-danger">
+                        Pendiente de validar el cálculo
+                    </span>
                     Según los turnos de semana epidemiológica. Quedan excluidas las RU1 y RU2.
                 </small>
             </caption>

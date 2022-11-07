@@ -31,13 +31,9 @@ class EventLastMonth
      */
     public function setDataset()
     {
+        $this->dataset = [];
+
         $rangeDates = $this->start->range($this->end);
-        $this->dataset = array([
-            'fecha',
-            'eventos',
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
-        ]);
 
         foreach($rangeDates as $date)
         {

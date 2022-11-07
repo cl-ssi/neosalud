@@ -36,12 +36,7 @@ class EventByMonth
         $start = $end->copy()->subMonths(11);
         $rangeMonths = CarbonPeriod::create($start->startOfMonth(), '1 month', $end->startOfMonth());
 
-        $this->dataset = array([
-            'Mes',
-            '# de Eventos del mes',
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
-        ]);
+        $this->dataset = [];
 
         foreach($rangeMonths as $month)
         {
