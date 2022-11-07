@@ -30,9 +30,7 @@ class EventByPrevision extends Component
 
         $options = [
             'Prevision',
-            '# de Eventos del mes ' . $date->monthName . ' del año ' . $this->year,
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
+            '# de Eventos del mes ' . $date->monthName . ' del año ' . $this->year
         ];
 
         $chartData = (new ChartsEventByPrevision($this->year, $this->month))->getDataset();

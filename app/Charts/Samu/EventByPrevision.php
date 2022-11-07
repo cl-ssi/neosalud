@@ -47,8 +47,6 @@ class EventByPrevision
 
             $this->dataset[] = [
                 $prevision,
-                $total,
-                'color: #c90076',
                 $total
             ];
         }
