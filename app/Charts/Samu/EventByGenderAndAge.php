@@ -8,8 +8,8 @@ use Illuminate\Support\Carbon;
 
 class EventByGenderAndAge
 {
-    public $start;
-    public $end;
+    public $year;
+    public $month;
     public $genders;
     public $ages;
     public $dataset;
@@ -19,10 +19,10 @@ class EventByGenderAndAge
      *
      * @return void
      */
-    public function __construct($start = null, $end = null)
+    public function __construct($year = null, $month = null)
     {
-        $this->start = $start ? Carbon::parse($start) : now()->startOfMonth();
-        $this->end = $end ? Carbon::parse($end) : now()->endOfMonth();
+        $this->year = $year ? $year : now()->year;
+        $this->month = $month ? $month : now()->month;
         $this->setGenders();
         $this->setAgeGroup();
         $this->setDataset();
@@ -87,6 +87,7 @@ class EventByGenderAndAge
     public function setDataset()
     {
         $this->dataset = collect([]);
+
         foreach($this->ages as $age)
         {
             $rows = [];
@@ -94,12 +95,13 @@ class EventByGenderAndAge
             {
                 $query = Event::query()
                     ->onlyValid()
-                    ->whereBetween('created_at', [$this->start, $this->end]);
+                    ->whereMonth('created_at', $this->month)
+                    ->whereYear('created_at', $this->year);
 
                 if($age['start'] === null && $age['end'] === null)
                     $query->whereNull('age_year');
                 else
-                    $query->whereBetween('age_year', [$age['start'],$age['end']]);
+                    $query->whereBetween('age_year', [$age['start'], $age['end']]);
 
                 $subquery = clone $query;
                 if($gender['id'] != null)
@@ -120,7 +122,8 @@ class EventByGenderAndAge
         {
             $query = Event::query()
                     ->onlyValid()
-                    ->whereBetween('created_at', [$this->start, $this->end]);
+                    ->whereMonth('created_at', $this->month)
+                    ->whereYear('created_at', $this->year);
 
             $subquery = clone $query;
 
@@ -131,7 +134,7 @@ class EventByGenderAndAge
         }
 
         // total per selected month
-        $rows[] = $subquery->whereBetween('created_at', [$this->start, $this->end])->count();
+        $rows[] = $subquery->whereMonth('created_at', $this->month)->whereYear('created_at', $this->year)->count();
 
         $this->dataset->push($rows);
     }
@@ -164,25 +167,5 @@ class EventByGenderAndAge
     public function getAgeGroup()
     {
         return $this->ages;
-    }
-
-    /**
-     * Get the start
-     *
-     * @return array
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Get the end
-     *
-     * @return array
-     */
-    public function getEnd()
-    {
-        return $this->end;
     }
 }

@@ -8,21 +8,19 @@ use Livewire\Component;
 
 class EventByGenderAndAge extends Component
 {
-    public $start;
-    public $end;
     public $ages;
     public $genders;
     public $years;
     public $rows;
     public $month;
     public $year;
+    public $year_month;
 
     public function mount()
     {
-        $this->month = now()->month;
-        $this->year = now()->year;
-        $this->getYears();
-        $this->getDate();
+        $this->year = $this->year ? $this->year : now()->year;
+        $this->month = $this->month ? $this->month : now()->month;
+        $this->year_month = $this->year . "-" . $this->month;
         $this->getStadistic();
     }
 
@@ -33,35 +31,17 @@ class EventByGenderAndAge extends Component
 
     public function getStadistic()
     {
-        $eventByGenderAndAge = new SamuEventByGenderAndAge($this->start, $this->end);
+        $eventByGenderAndAge = new SamuEventByGenderAndAge($this->year, $this->month);
         $this->ages = $eventByGenderAndAge->getAgeGroup();
         $this->genders = $eventByGenderAndAge->getGenders();
-        $this->start = $eventByGenderAndAge->getStart();
-        $this->end = $eventByGenderAndAge->getEnd();
         $this->rows = $eventByGenderAndAge->getDataset();
     }
 
-    public function getDate()
+    public function updatedYearMonth($yearMonth)
     {
-        $this->start = $this->year . "-" . $this->month . "-01";
-        $end = Carbon::parse($this->start);
-        $this->end = $end->endOfMonth()->format('Y-m-d');
-
-    }
-
-    public function getYears()
-    {
-        $this->years = collect([
-            $this->year - 1,
-            $this->year,
-            $this->year + 1
-        ]);
-    }
-
-    public function updatedMonth($value)
-    {
-        $this->month = $value;
-        $this->getDate();
+        $yearMonth = explode("-", $yearMonth);
+        $this->year = $yearMonth[0];
+        $this->month = $yearMonth[1];
         $this->getStadistic();
     }
 }

@@ -20,6 +20,7 @@ class EventByMobile
      */
     public function __construct($year = null, $month = null)
     {
+        $this->dataset = [];
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
         $this->date = Carbon::parse("$this->year/$this->month/01");
@@ -33,13 +34,6 @@ class EventByMobile
      */
     public function setDataset()
     {
-        $this->dataset = array([
-            'Comuna',
-            '# de Eventos del mes ' .  $this->date->monthName . ' del año ' . $this->date->year,
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
-        ]);
-
         $events = Event::query()
             ->onlyValid()
             ->with('mobile')
@@ -65,7 +59,7 @@ class EventByMobile
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {

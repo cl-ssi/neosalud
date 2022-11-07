@@ -15,6 +15,7 @@ class EventBySex
      */
     public function __construct($year = null, $month = null)
     {
+        $this->dataset = [];
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
         $this->setDataset();
@@ -29,12 +30,6 @@ class EventBySex
     {
         $exceptKey = ['605', '606'];
         $sexs = ['MALE', 'FEMALE', 'UNKNOWN', 'OTHER', null];
-
-        $this->dataset = array([
-            'Género',
-            '# de Eventos por sexo',
-            ["role" => 'style' ]
-        ]);
 
         foreach($sexs as $sex)
         {
@@ -55,7 +50,7 @@ class EventBySex
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {

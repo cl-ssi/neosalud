@@ -34,13 +34,6 @@ class EventByCommune
      */
     public function setDataset()
     {
-        $this->dataset = array([
-            'Comuna',
-            '# de Eventos del mes ' .  $this->date->monthName . ' del año ' . $this->date->year,
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
-        ]);
-
         $events = Event::query()
             ->onlyValid()
             ->with('commune')
