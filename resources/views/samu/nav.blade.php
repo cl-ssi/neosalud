@@ -139,6 +139,11 @@
                     <i class="fas fa-book-medical"></i> Hoja PreHospitalaria
                 </a>
             </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.monitor') }}" href="{{ route('samu.monitor') }}">
+                    <i class="fas fa-user-injured"></i> Monitor de Pacientes
+                </a>
+            </li>
         </ul>
     </li>
     @endcan

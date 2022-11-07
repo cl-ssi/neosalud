@@ -33,6 +33,7 @@
         "spatie/laravel-google-cloud-storage": "^2.0",
         "spatie/laravel-ignition": "^1.2",
         "spatie/laravel-permission": "^5.5",
+        "stackkit/laravel-google-cloud-tasks-queue": "^3.3",
         "twilio/sdk": "^6.24"
     },
     "require-dev": {

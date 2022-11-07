@@ -13,6 +13,7 @@ use App\Models\Samu\ReceptionPlace;
 use App\Models\User;
 use App\Models\Commune;
 use App\Models\CodConIdentifierType;
+use App\Models\Gender;
 use App\Models\Organization;
 
 class Event extends Model implements Auditable
@@ -56,6 +57,13 @@ class Event extends Model implements Auditable
         'patient_identifier_type_id',
         'patient_identification',
         'patient_name',
+        'gender_id',
+        'birthday',
+        'age_year',
+        'age_month',
+        'prevision',
+        'run_fixed',
+        'verified_fonasa_at',
 
         /* Recepción en centro asistencial */
         'reception_detail',
@@ -99,6 +107,7 @@ class Event extends Model implements Auditable
         'patient_reception_at',
         'return_base_at',
         'on_base_at',
+        'birthday',
     ];
 
     protected $appends = [
@@ -113,7 +122,7 @@ class Event extends Model implements Auditable
 
     public function calls()
     {
-        return $this->belongsToMany(Call::class,'samu_call_event');
+        return $this->belongsToMany(Call::class, 'samu_call_event');
     }
 
     public function call()
@@ -128,7 +137,7 @@ class Event extends Model implements Auditable
 
     public function returnKey()
     {
-       return $this->belongsTo(Key::class,'return_key_id');
+       return $this->belongsTo(Key::class, 'return_key_id');
     }
 
     public function mobileInService()
@@ -143,22 +152,22 @@ class Event extends Model implements Auditable
 
     public function establishment()
     {
-       return $this->belongsTo(Organization::class,'establishment_id');
+       return $this->belongsTo(Organization::class, 'establishment_id');
     }
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'creator_id');
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     public function identifierType()
     {
-        return $this->belongsTo(CodConIdentifierType::class,'patient_identifier_type_id');
+        return $this->belongsTo(CodConIdentifierType::class, 'patient_identifier_type_id');
     }
 
     public function receptionPlace()
     {
-        return $this->belongsTo(receptionPlace::class,'reception_place_id');
+        return $this->belongsTo(receptionPlace::class, 'reception_place_id');
     }
 
     public function commune()
@@ -168,15 +177,20 @@ class Event extends Model implements Auditable
 
     public function users()
     {
-        return $this->belongsToMany(User::class,'samu_event_user','event_id')
+        return $this->belongsToMany(User::class, 'samu_event_user', 'event_id')
                     ->using(EventUser::class)
-                    ->withPivot('id','job_type_id')
+                    ->withPivot('id', 'job_type_id')
                     ->withTimestamps();
     }
 
     public function vitalSign()
     {
         return $this->hasOne(VitalSign::class);
+    }
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class);
     }
 
     public function getCrewAttribute()
@@ -192,7 +206,7 @@ class Event extends Model implements Auditable
     public function getJobsAttribute()
     {
         $jobs = null;
-        
+
         if($this->shift && $this->shift->users && $this->departure_at)
         {
             $jobs = $this->shift->users->where('pivot.assumes_at', '<=', $this->departure_at)
@@ -265,5 +279,13 @@ class Event extends Model implements Auditable
             $color = 'danger';
         }
         return $option ? $status : $color;
+    }
+
+    public function scopeOnlyValid($query)
+    {
+        $exceptKey = ['605', '606'];
+        return $query->whereHas('key', function($query) use($exceptKey) {
+            $query->whereNotIn('key', $exceptKey);
+        });
     }
 }

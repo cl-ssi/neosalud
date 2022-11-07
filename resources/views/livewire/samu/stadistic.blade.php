@@ -20,7 +20,7 @@
                 <option value="">Selecciona una Clave</option>
                 @foreach($keys as $key)
                 <option value="{{ $key->id }}">
-                    {{ $key->key }}  - {{ $key->name }}
+                    {{ $key->key }} - {{ $key->name }}
                 </option>
                 @endforeach
             </select>
@@ -47,7 +47,8 @@
         <div class="form-group col-sm-2">
             <label for="">&nbsp;</label>
             <button class="form-control btn btn-primary" wire:click="search">
-                <i class="fas fa-search"></i> Buscar </button>
+                <i class="fas fa-search"></i> Buscar
+            </button>
         </div>
 
         {{--
@@ -70,7 +71,15 @@
     <h4 class="text-center">Total de eventos {{ $total }}</h4>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+    <div class="row">
+        <div class="col">
+            <div id="piechart" style="width: auto; height: 500px;"></div>
+        </div>
+        <div class="col">
+            <div id="mobile-type" style="width: auto; height: 500px;"></div>
+        </div>
+    </div>
 
     <script>
         google.charts.load('current', {'packages':['corechart']});
@@ -81,6 +90,15 @@
                 title: 'Eventos'
             };
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        })
+
+        window.livewire.on('re-render-2', data => {
+            var data = google.visualization.arrayToDataTable(data);
+            var options = {
+                title: 'Eventos'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('mobile-type'));
             chart.draw(data, options);
         })
     </script>

@@ -49,6 +49,13 @@ class EventUpdateRequest extends FormRequest
             'patient_identifier_type_id'    => 'nullable|exists:cod_con_identifier_types,id',
             'patient_identification'        => 'nullable|string|min:0|max:255',
             'patient_name'                  => 'nullable|string|min:0|max:255',
+            'birthday'                      => 'nullable|date_format:Y-m-d',
+            'age_year'                      => 'nullable|integer',
+            'age_month'                     => 'nullable|integer',
+            'prevision'                     => 'nullable|string|min:0|max:255',
+            'gender_id'                     => 'nullable|exists:genders,id',
+            'verified_fonasa_at'            => 'nullable|date_format:Y-m-d H:i:s',
+            'run_fixed'                     => 'nullable|boolean',
 
             'reception_detail'      => 'nullable|string|min:0|max:5000',
             'establishment_id'      => 'nullable|exists:organizations,id',

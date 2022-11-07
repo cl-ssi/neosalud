@@ -37,7 +37,6 @@
         @enderror
     </fieldset>
 
-
     <fieldset class="form-group col-sm-6">
         <label for="for-observation">Observación</label>
         <input type="text" class="form-control @error('observation') is-invalid @enderror" name="observation" id="for-observation" value="{{ old('observation', optional($event)->observation) }}">
@@ -453,4 +452,4 @@
         @enderror
     </fieldset>
 </div>
-<!-- fin de seguimeinto-->
+<!-- fin de seguimiento-->

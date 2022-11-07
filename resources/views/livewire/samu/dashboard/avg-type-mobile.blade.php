@@ -18,7 +18,11 @@
 
                         @foreach($row['values'] as $value)
                             <td class="text-center">
-                                <span data-toggle="tooltip" data-placement="bottom" title="{{ $value[0] . ' / ' . $value[1] }}">
+                                <span
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    title="{{ $value[0] . ' / ' . $value[1] }}"
+                                >
                                     {{ $value[2] }}
                                 </span>
                             </td>
@@ -28,6 +32,9 @@
             </tbody>
             <caption>
                 <small>
+                    <span class="badge bg-danger">
+                        Pendiente de validar el cálculo
+                    </span>
                     Según los turnos de semana epidemiológica. Quedan excluidas las RU1 y RU2.
                 </small>
             </caption>

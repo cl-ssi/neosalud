@@ -31,17 +31,14 @@ class EventLastMonth
      */
     public function setDataset()
     {
+        $this->dataset = [];
+
         $rangeDates = $this->start->range($this->end);
-        $this->dataset = array([
-            'fecha',
-            'eventos',
-            ["role" => 'style' ],
-            ["role" => 'annotation' ],
-        ]);
 
         foreach($rangeDates as $date)
         {
             $totalEvents = Event::query()
+                ->onlyValid()
                 ->select('date', DB::raw('count(date) as total'))
                 ->whereDate('date', $date->format('Y-m-d'))
                 ->count();

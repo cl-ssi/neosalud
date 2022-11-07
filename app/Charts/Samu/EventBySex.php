@@ -15,6 +15,7 @@ class EventBySex
      */
     public function __construct($year = null, $month = null)
     {
+        $this->dataset = [];
         $this->year = $year ? $year : now()->year;
         $this->month = $month ? $month : now()->month;
         $this->setDataset();
@@ -27,13 +28,8 @@ class EventBySex
      */
     public function setDataset()
     {
+        $exceptKey = ['605', '606'];
         $sexs = ['MALE', 'FEMALE', 'UNKNOWN', 'OTHER', null];
-
-        $this->dataset = array([
-            'Género',
-            '# de Eventos por sexo',
-            ["role" => 'style' ]
-        ]);
 
         foreach($sexs as $sex)
         {
@@ -42,6 +38,9 @@ class EventBySex
                 ->where('samu_calls.sex', '=', $sex)
                 ->whereMonth('samu_events.date', $this->month)
                 ->whereYear('samu_events.date', $this->year)
+                ->whereHas('key', function($query) use($exceptKey) {
+                    $query->whereNotIn('key', $exceptKey);
+                })
                 ->count();
 
             $this->dataset[] = [translateSex($sex), $totalBySex, 'color: #006cb7'];
@@ -51,7 +50,7 @@ class EventBySex
     /**
      * Get the dataset
      *
-     * @return void
+     * @return array
      */
     public function getDataset()
     {

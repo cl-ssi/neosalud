@@ -67,6 +67,18 @@ return [
             'block_for' => null,
         ],
 
+        'cloudtasks' => [
+            'driver' => 'cloudtasks',
+            'project' => env('GOOGLE_PROJECT_ID', ''),
+            'location' => env('STACKKIT_CLOUD_TASKS_LOCATION', ''),
+            'handler' => env('STACKKIT_CLOUD_TASKS_HANDLER', ''),
+            'queue' => env('STACKKIT_CLOUD_TASKS_QUEUE', 'default'),
+            'service_account_email' => env('STACKKIT_CLOUD_TASKS_SERVICE_EMAIL', ''),
+            // Optional: The deadline in seconds for requests sent to the worker. If the worker
+            // does not respond by this deadline then the request is cancelled and the attempt
+            // is marked as a DEADLINE_EXCEEDED failure.
+            'dispatch_deadline' => null,
+        ],
     ],
 
     /*

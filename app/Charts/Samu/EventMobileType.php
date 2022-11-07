@@ -76,6 +76,7 @@ class EventMobileType
             $data[] = ['name' => $type->name];
 
             $eventByDay = Event::query()
+                ->onlyValid()
                 ->with('mobileInService')
                 ->when($type->name == EnumMobileType::M1
                     || $type->name == EnumMobileType::M2
@@ -85,7 +86,7 @@ class EventMobileType
                             $query->whereHas('type', function($query) use($type) {
                                 $query->whereId($type->id);
                             });
-                    });
+                        });
                 }, function ($query) use($type) {
                     $query->whereHas('mobile', function ($query) use($type) {
                         $query->whereHas('type', function($query) use($type) {
@@ -93,7 +94,6 @@ class EventMobileType
                         });
                     });
                 });
-
 
             $position = 0;
             $i =  $this->results[$position]['total'];

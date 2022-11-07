@@ -529,6 +529,7 @@ use App\Http\Livewire\Samu\FindEvent;
 use App\Http\Livewire\Samu\MobileSelector;
 use App\Http\Livewire\Samu\TimestampsAndLocation;
 use App\Http\Livewire\Samu\GetLocation;
+use App\Http\Livewire\Samu\Monitor\MonitorIndex;
 use App\Http\Livewire\Samu\SearchCalls;
 use App\Http\Livewire\Samu\Procedures;
 use App\Http\Livewire\Samu\Supplies;
@@ -537,6 +538,7 @@ use App\Http\Livewire\Samu\Shift\ShiftSearcher;
 use App\Http\Livewire\Samu\ShiftUserEdit;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
+    Route::get('/monitor', MonitorIndex::class)->name('monitor');
 
 	Route::get('/procedures', Procedures::class)->name('procedures');
 	Route::get('/supplies', Supplies::class)->name('supplies');
@@ -575,7 +577,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::get('/crewedit/{mobileCrew}',	[MobileInServiceController::class, 'crewedit'])->name('crewedit');
 		Route::put('/crewupdate/{mobileCrew}',	[MobileInServiceController::class, 'crewupdate'])->name('crewupdate');
 		Route::delete('/{mobileInService}', 	[MobileInServiceController::class, 'destroy'])->name('destroy');
-		Route::get('/{mobileInService}/location',[MobileInServiceController::class, 'location'])->name('location');
+		Route::get('/{mobileInService}/location', [MobileInServiceController::class, 'location'])->name('location');
     });
 
 	Route::prefix('mobiles-in-service-inventory')->name('mobileinserviceinventory.')->group(function () {
@@ -612,11 +614,11 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
 	->group(function () {
 		Route::get('/', 			[NoveltieController::class, 'index'])->name('index');
+        Route::get('/create', 	    [NoveltieController::class, 'create'])->name('create');
 		Route::post('/store', 		[NoveltieController::class, 'store'])->name('store');
 		Route::get('/edit/{noveltie}', [NoveltieController::class, 'edit'])->name('edit');
-		Route::put('/update/{noveltie}',[NoveltieController::class, 'update'])->name('update');
+		Route::put('/update/{noveltie}', [NoveltieController::class, 'update'])->name('update');
 	});
-
 
     Route::prefix('calls')->name('call.')
 	->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
@@ -628,8 +630,8 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::post('/store',		[CallController::class, 'store'])->name('store');
 		Route::delete('/{call}', 	[CallController::class, 'destroy'])->name('destroy');
 		Route::put('/update/{call}',[CallController::class, 'update'])->name('update');
-		Route::post('/sync-events/{call}',[CallController::class, 'syncEvents'])->name('syncEvents');
-		Route::get('/search',SearchCalls::class)->name('search');
+		Route::post('/sync-events/{call}', [CallController::class, 'syncEvents'])->name('syncEvents');
+		Route::get('/search', SearchCalls::class)->name('search');
     });
 
     Route::prefix('events')->name('event.')
@@ -643,10 +645,10 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::get('/edit/{event}', [EventController::class, 'edit'])->name('edit');
 		Route::put('/update/{event}',[EventController::class, 'update'])->name('update');
 		Route::delete('/{event}', 	[EventController::class, 'destroy'])->name('destroy');
-		Route::get('/{event}/reopen',[EventController::class, 'reopen'])
+		Route::get('/{event}/reopen', [EventController::class, 'reopen'])
 			->middleware('permission:SAMU administrador')->name('reopen');
 		Route::match(['get','post'], '/filter',	[EventController::class, 'filter'])->name('filter');
-		Route::get('/{event}/report',[EventController::class, 'report'])
+		Route::get('/{event}/report', [EventController::class, 'report'])
 			->middleware('permission:SAMU administrador')->name('report');
 		Route::get('/find', FindEvent::class);
     });
@@ -707,7 +709,6 @@ Route::post('/miubicacion', [CoordinateController::class, 'store'])->name('coord
 
 //fin rutas samu
 
-
 // Route::resource('absences', AbsenceController::class)->only([
 //   'create', 'store'
 // ]);
@@ -721,7 +722,6 @@ Route::prefix('absences')->name('absences.')->group(function () {
 	Route::delete('/{absence}', [AbsenceController::class, 'destroy'])->name('destroy');
 });
 
-
 //Rutas Epi
 Route::prefix('epi')->name('epi.')->group(function () {
 	Route::prefix('chagas')->name('chagas.')->group(function () {
@@ -732,13 +732,8 @@ Route::prefix('epi')->name('epi.')->group(function () {
 		Route::post('/', [SuspectCaseController::class, 'store'])->name('store');
 
 	});
-
-
-
-
 });
 //fin rutas EPI
-
 
 //Rutas control-attention
 Route::prefix('vista')->name('vista.')->group(function () {
@@ -747,7 +742,6 @@ Route::prefix('vista')->name('vista.')->group(function () {
 	Route::view('/relevant', 'vista.relevant')->name('relevant');
 	Route::view('/control', 'vista.control')->name('control');
 });
-
 
 //Rutas control-attention
 Route::prefix('vista')->name('vista.')->group(function () {
@@ -761,7 +755,7 @@ Route::get('/test/rayen' ,[RayenController::class, 'getUrgencyStatus'])->name('g
 Route::get('/test/sendip',[TestController::class,'sendIp']);
 Route::get('/test/error/{option?}',[TestController::class,'error']);
 Route::get('/test/projectid',[TestController::class,'getProjectId']);
-
+Route::get('/test/cola',[TestController::class,'cola']);
 
 Route::prefix('developer')->name('developer.')->middleware('can:Developer')->group(function(){
 	Route::view('/artisan', 'developer.artisan')->name('artisan');
