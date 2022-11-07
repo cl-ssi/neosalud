@@ -23,10 +23,12 @@ class MobileInServiceInventoryDetailController extends Controller
      */
     public function create(MobileInService $mobileInService)
     {
-        $medicines = Medicine::all();
-        $supplies = Supply::all();
+        // $medicines = Medicine::all();
+        // $supplies = Supply::all();
+        // dd($mobileInService->type->serviceInventoryTemplates->first()->medicine);
+        // supply
         $mis = $mobileInService;
-        return view('samu.mobileinserviceinventories.create', compact('mis','medicines','supplies'));
+        return view('samu.mobileinserviceinventories.create', compact('mis'));
     }
 
     /**
@@ -47,49 +49,27 @@ class MobileInServiceInventoryDetailController extends Controller
         $cont = 0;
         if(count($request->medicines_values) > 0){
             foreach($request->medicines_values as $key => $medicines_value){
-                if($medicines_value){
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
-                    $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
-                    $mobileInServiceInventoryDetail->value = $medicines_value;
-                    $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
+                $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
+                $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
+                $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
+                $mobileInServiceInventoryDetail->status = $medicines_value;
+                $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
+                $mobileInServiceInventoryDetail->save();
 
-                    $cont = $cont + 1;
-                }else{
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
-                    $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
-                    $mobileInServiceInventoryDetail->value = 0;
-                    $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
-
-                    $cont = $cont + 1;
-                }
+                $cont = $cont + 1;
             }
         }
 
         if(count($request->supplies_values) > 0){
             foreach($request->supplies_values as $key => $supply_value){
-                if($supply_value){
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
-                    $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
-                    $mobileInServiceInventoryDetail->value = $supply_value;
-                    $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
+                $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
+                $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
+                $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
+                $mobileInServiceInventoryDetail->status = $supply_value;
+                $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
+                $mobileInServiceInventoryDetail->save();
 
-                    $cont = $cont + 1;
-                }else{
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInServiceInventory->id;
-                    $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
-                    $mobileInServiceInventoryDetail->value = 0;
-                    $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
-
-                    $cont = $cont + 1;
-                }
+                $cont = $cont + 1;
             }
         }
 
@@ -138,55 +118,33 @@ class MobileInServiceInventoryDetailController extends Controller
         $cont = 0;
         if(count($request->medicines_values) > 0){
             foreach($request->medicines_values as $key => $medicines_value){
-                if($medicines_value){
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
-                    $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
-                    $mobileInServiceInventoryDetail->value = $medicines_value;
-                    $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
+                $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
+                $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
+                $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
+                $mobileInServiceInventoryDetail->status = $medicines_value;
+                $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
+                $mobileInServiceInventoryDetail->save();
 
-                    $cont = $cont + 1;
-                }else{
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
-                    $mobileInServiceInventoryDetail->medicine_id = $request->medicines_id[$key];
-                    $mobileInServiceInventoryDetail->value = 0;
-                    $mobileInServiceInventoryDetail->observation = $request->medicine_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
-
-                    $cont = $cont + 1;
-                }
+                $cont = $cont + 1;
             }
         }
 
         if(count($request->supplies_values) > 0){
             foreach($request->supplies_values as $key => $supply_value){
-                if($supply_value){
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
-                    $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
-                    $mobileInServiceInventoryDetail->value = $supply_value;
-                    $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
+                $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
+                $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
+                $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
+                $mobileInServiceInventoryDetail->status = $supply_value;
+                $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
+                $mobileInServiceInventoryDetail->save();
 
-                    $cont = $cont + 1;
-                }else{
-                    $mobileInServiceInventoryDetail = new MobileInServiceInventoryDetail($request->All());
-                    $mobileInServiceInventoryDetail->inventory_id = $mobileInService->inventory->id;
-                    $mobileInServiceInventoryDetail->supply_id = $request->supplies_id[$key];
-                    $mobileInServiceInventoryDetail->value = 0;
-                    $mobileInServiceInventoryDetail->observation = $request->supplies_observations[$key];
-                    $mobileInServiceInventoryDetail->save();
-
-                    $cont = $cont + 1;
-                }
+                $cont = $cont + 1;
             }
         }
 
         if($cont > 0)
         {
-            session()->flash('success', 'Se creó el inventario correctmanete');
+            session()->flash('success', 'Se modificó el inventario correctmanete');
             return redirect()->route('samu.mobileinserviceinventory.index');
         }
         else

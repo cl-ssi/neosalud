@@ -1,3 +1,8 @@
+<button type="button" class="btn btn-sm btn-warning"><i class="fa-solid fa-list"></i></button> Pendiente
+<button type="button" class="btn btn-sm btn-danger"><i class="fa-solid fa-list"></i></button> Inventariado
+<button type="button" class="btn btn-sm btn-success"><i class="fa-solid fa-list"></i></button> Aprobado
+<hr>
+
 @foreach($mobilesInService->reverse() as $mis)
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
@@ -23,14 +28,18 @@
                     @if($mis->shift->status)
                         @if(!$mis->inventory)
                             <form method="GET" action="{{ route('samu.mobileinserviceinventory.details.create' , $mis) }}">
-                                @csrf
                                 <button type="submit" class="btn btn-sm btn-warning"><i class="fa-solid fa-list"></i></button>
                             </form>
                         @else
-                            <form method="GET" action="{{ route('samu.mobileinserviceinventory.details.edit' , $mis) }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-warning"><i class="fa-solid fa-list"></i></button>
-                            </form>
+                            @if($mis->inventory->approbation_date)
+                                <form method="GET" action="{{ route('samu.mobileinserviceinventory.details.edit' , $mis) }}">
+                                    <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-list"></i></button>
+                                </form>
+                            @else
+                                <form method="GET" action="{{ route('samu.mobileinserviceinventory.details.edit' , $mis) }}">
+                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-list"></i></button>
+                                </form>
+                            @endif
                         @endif
                     @endif
                 </td>

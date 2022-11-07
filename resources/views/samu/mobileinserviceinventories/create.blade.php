@@ -38,6 +38,7 @@
 
 <form method="POST" action="{{ route('samu.mobileinserviceinventory.details.store' , $mis) }}">
     @csrf
+    @method('POST')
 
     <!-- <fieldset class="border p-2">
         <label for="">Fecha de recepción</label>
@@ -48,33 +49,49 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr class="table-secondary">
-                    <th>Tipo</th>
-                    <th>Nombre</th>
-                    <th width="20%">Cantidad</th>
-                    <th>Observación</th>
+                    <th >Tipo</th>
+                    <th >Nombre</th>
+                    <th >Cantidad</th>
+                    <th width="10%">Existencia</th>
+                    <th >Observación</th>
                 </tr>
             </thead>
             <tbody>
                 <input type="hidden" name="mobile_in_service_id" value="{{$mis->id}}">
-                @foreach($medicines as $medicine)
+                @foreach($mis->type->serviceInventoryTemplates->whereNotNull('medicine_id') as $key1 => $template)
                     <tr>
                         <td>MEDICINA</td>
-                        <td>{{$medicine->name}}</td>
-                        <td><input class="form-control" type="text" name="medicines_values[]">
-                            <input class="form-control" type="hidden" name="medicines_id[]" value="{{$medicine->id}}">
+                        <td>{{$template->medicine->name}}</td>
+                        <td>{{$template->value}}</td>
+                        <!-- <td><input class="form-control" type="text" name="medicines_values[]"> -->
+                        <td><input type='hidden' value='0' name='medicines_values[{{$key1}}]'>
+                            @if($template->value > 0)
+                                <input class="form-check-input" type="checkbox" value="1" name="medicines_values[{{$key1}}]">
+                            @else
+                                <input class="form-check-input" type="checkbox" disabled>
+                            @endif
+                            <input class="form-control" type="hidden" name="medicines_id[{{$key1}}]" value="{{$template->medicine->id}}">
                         </td>
-                        <td><input class="form-control" type="text" name="medicine_observations[]"></td>
+                        <td><input class="form-control" type="text" name="medicine_observations[{{$key1}}]"></td>
                     </tr>
                 @endforeach
 
-                @foreach($supplies as $supply)
+                @foreach($mis->type->serviceInventoryTemplates->whereNotNull('supply_id') as $key2 => $template)
                     <tr>
                         <td>SUMINISTRO</td>
-                        <td>{{$supply->name}}</td>
-                        <td><input class="form-control" type="text" name="supplies_values[]">
-                            <input class="form-control" type="hidden" name="supplies_id[]" value="{{$supply->id}}">
+                        <td>{{$template->supply->name}}</td>
+                        <td>{{$template->value}}</td>
+                        <!-- <td><input class="form-control" type="text" name="supplies_values[]"> -->
+                        <td><input type='hidden' value='0' name='supplies_values[{{$key2}}]'>
+                            @if($template->value > 0)
+                                <input class="form-check-input" type="checkbox" value="1" name="supplies_values[{{$key2}}]">
+                            @else
+                                <input class="form-check-input" type="checkbox" disabled>
+                            @endif
+                            
+                            <input class="form-control" type="hidden" name="supplies_id[{{$key2}}]" value="{{$template->supply->id}}">
                         </td>
-                        <td><input class="form-control" type="text" name="supplies_observations[]"></td>
+                        <td><input class="form-control" type="text" name="supplies_observations[{{$key2}}]"></td>
                     </tr>
                 @endforeach
             </tbody>

@@ -4,33 +4,34 @@ namespace App\Models\Samu;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 use App\Models\Samu\MobileInServiceInventory;
 use App\Models\Samu\Medicine;
 use App\Models\Samu\Supply;
+use App\Models\Samu\MobileType;
 
-class MobileInServiceInventoryDetail extends Model implements Auditable
+class MobileInServiceInventoryTemplate extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="samu_mobiles_in_serv_inventories_details";
+    protected $table="samu_mobiles_in_serv_inventories_templates";
 
     protected $fillable = [
         'id',
-        'inventory_id',
+        'type_id',
         'supply_id',
         'medicine_id',
-        'status',
-        'observation',
+        'value',
     ];
 
-    public function inventory()
+    public function mobileType()
     {
-        return $this->belongsTo(MobileInServiceInventory::class);
+        return $this->belongsTo(MobileType::class);
     }
 
     public function medicine()

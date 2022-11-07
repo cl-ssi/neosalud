@@ -513,6 +513,7 @@ use App\Http\Controllers\Samu\ShiftController;
 use App\Http\Controllers\Samu\MobileInServiceController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryDetailController;
+use App\Http\Controllers\Samu\MobileInServiceInventoryTemplateController;
 use App\Http\Controllers\Samu\ShiftMobileController;
 use App\Http\Controllers\Samu\KeyController;
 use App\Http\Controllers\Samu\MobileController;
@@ -586,6 +587,15 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 			Route::get('/{mobileInService}/edit',  [MobileInServiceInventoryDetailController::class, 'edit'])->name('edit');
 			Route::put('/{mobileInService}',	   [MobileInServiceInventoryDetailController::class, 'update'])->name('update');
 			Route::get('/{mobileInService}/confirm_inventory',  [MobileInServiceInventoryDetailController::class, 'confirm_inventory'])->name('confirm_inventory');
+		});
+
+		Route::prefix('mobiles-in-service-inventory-templates')->name('templates.')->group(function () {
+			Route::get('/',					  [MobileInServiceInventoryTemplateController::class, 'index'])->name('index');
+			Route::get('/{mobileType}/create',[MobileInServiceInventoryTemplateController::class, 'create'])->name('create');
+			Route::post('/store',			  [MobileInServiceInventoryTemplateController::class, 'store'])->name('store');
+			Route::get('/{mobileType}/edit',  [MobileInServiceInventoryTemplateController::class, 'edit'])->name('edit');
+			Route::put('/{mobileType}',	  	  [MobileInServiceInventoryTemplateController::class, 'update'])->name('update');
+			
 		});
     });
 

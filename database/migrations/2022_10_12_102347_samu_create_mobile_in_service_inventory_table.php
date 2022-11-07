@@ -13,6 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::create('samu_mobiles_in_serv_inventories_templates', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('type_id')->nullable()->constrained('samu_mobile_types');
+            $table->foreignId('supply_id')->nullable()->constrained('samu_supplies');
+            $table->foreignId('medicine_id')->nullable()->constrained('samu_medicines');
+            $table->decimal('value', 8, 2);
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('samu_mobiles_in_serv_inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('mobile_in_service_id')->constrained('samu_mobiles_in_service');
@@ -30,7 +41,7 @@ return new class extends Migration
             $table->foreignId('inventory_id')->constrained('samu_mobiles_in_serv_inventories');
             $table->foreignId('supply_id')->nullable()->constrained('samu_supplies');
             $table->foreignId('medicine_id')->nullable()->constrained('samu_medicines');
-            $table->decimal('value', 8, 2);
+            $table->boolean('status');
             $table->text('observation')->nullable();
 
             $table->timestamps();
@@ -47,5 +58,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('samu_mobiles_in_serv_inventories_details');
         Schema::dropIfExists('samu_mobiles_in_serv_inventories');
+        Schema::dropIfExists('samu_mobiles_in_serv_templates');
     }
 };

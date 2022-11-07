@@ -10,6 +10,11 @@
     <div class="col">
         <h3 class="mb-3"><i class="fas fa-ambulance"></i> Móviles en servicio</h3>
     </div>
+    <div class="form-row">
+        <a class="btn btn-primary mb-2" href="{{ route('samu.mobileinserviceinventory.templates.index') }}">
+            <i class="fas fa-plus"></i> Plantillas
+        </a>
+    </div>
 </div>
 
 <br>

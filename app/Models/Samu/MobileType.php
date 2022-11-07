@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+use App\Models\Samu\MobileInServiceInventoryTemplate;
+
 class MobileType extends Model
 {
     use HasFactory;
@@ -48,5 +50,10 @@ class MobileType extends Model
     public function getShortNameAttribute()
     {
         return Str::substr($this->name, 0, 3);
+    }
+
+    public function serviceInventoryTemplates()
+    {
+        return $this->hasMany(MobileInServiceInventoryTemplate::class,'type_id');
     }
 }

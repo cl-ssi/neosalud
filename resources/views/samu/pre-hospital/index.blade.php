@@ -24,6 +24,9 @@
                 <th>Movil</th>
                 <th>Posición</th>
                 <th>Tipo</th>
+                <th>Qtc</th>
+                <th>Clave</th>
+                <th>Móvil</th>
                 <th>Estado</th>
                 <th>O2 central</th>
                 <th>Observación</th>
@@ -35,6 +38,9 @@
                 <td><b>2 SAMU</b></td>
                 <td>5</td>
                 <td>M2</td>
+                <td>1</td>
+                <td>2</td>
+                <td>962161425</td>
                 <td>Activo</td>
                 <td></td>
                 <td></td>
@@ -58,63 +64,10 @@
     </fieldset>
 </div> -->
 
-
-<div class="row g-2 mb-2">
-    <fieldset class="form-group col-sm-1">
-        <label for="rut">Previsión</label>
-        <select class="form-select" aria-label="" id="">
-            <option selected>Seleccione</option>
-            <option value="F">F</option>
-            <option value="I">I</option>
-            <option value="P">P</option>
-            <option value="Otro">Otro</option>
-        </select>
-    </fieldset>
-
-    <fieldset class="form-group col-sm-2">
-        <label for="patient">Otro</label>
-        <input type="text" class="form-control" id="previsión_otro" value="" placeholder="">
-    </fieldset>
-
-    <fieldset class="form-group col-sm-1">
-        <label for="address">Accidente</label>
-        <select class="form-select" aria-label="" id="">
-            <option selected>Seleccione</option>
-            <option value="Escolar">Escolar</option>
-            <option value="Trabajo">Trabajo</option>
-        </select>
-    </fieldset>
-
-    <fieldset class="form-group col-sm-1">
-        <label for="commune">Soap - Compañía</label>
-        <input type="text" class="form-control" id="commune" name="soap_company" value="" placeholder="">
-    </fieldset>
-
-    <fieldset class="form-group col-sm-1">
-        <label for="commune">Soap - N° póliza</label>
-        <input type="text" class="form-control" id="commune" name="soap_number" value="" placeholder="">
-    </fieldset>
-
-    <fieldset class="form-group col-sm-2">
-        <label for="birthday">Comisaria</label>
-        <input type="text" class="form-control" id="birthday" value="" placeholder="">
-    </fieldset>
-
-    <fieldset class="form-group col-sm-2">
-        <label for="birthday">Patente de vehículo</label>
-        <input type="text" class="form-control" id="birthday" value="" placeholder="">
-    </fieldset>
-
-    <fieldset class="form-group col-sm-2">
-        <label for="birthday">Patente de vehículo 2</label>
-        <input type="text" class="form-control" id="birthday" value="" placeholder="">
-    </fieldset>
-</div>
-
 <div class="row g-2 mb-2">
 
     <fieldset class="form-group col-sm-2">
-        <label for="birthday">Fecha</label>
+        <label for="birthday">Fecha de atención</label>
         <input type="date" class="form-control" id="birthday" value="" placeholder="">
     </fieldset>
 
@@ -123,12 +76,12 @@
         <input type="text" class="form-control" id="previsión_otro" value="" placeholder="">
     </fieldset>
 
-    <fieldset class="form-group col-sm-2">
+    <fieldset class="form-group col-sm-3">
         <label for="patient">Traslado a</label>
         <input type="text" class="form-control" id="previsión_otro" value="" placeholder="">
     </fieldset>
 
-    <fieldset class="form-group col-sm-1">
+    <!-- <fieldset class="form-group col-sm-1">
         <label for="birthday">Qtc</label>
         <input type="text" class="form-control" id="birthday" value="" placeholder="">
     </fieldset>
@@ -136,19 +89,19 @@
     <fieldset class="form-group col-sm-1">
         <label for="birthday">Clave</label>
         <input type="text" class="form-control" id="birthday" value="" placeholder="">
-    </fieldset>
+    </fieldset> -->
 
-    <fieldset class="form-group col-sm-1">
+    <fieldset class="form-group col-sm-2">
         <label for="birthday">Base</label>
         <input type="text" class="form-control" id="birthday" value="" placeholder="">
     </fieldset>
 
-    <fieldset class="form-group col-sm-1">
+    <!-- <fieldset class="form-group col-sm-1">
         <label for="birthday">Móvil</label>
         <input type="text" class="form-control" id="birthday" value="" placeholder="">
-    </fieldset>
+    </fieldset> -->
 
-    <fieldset class="form-group col-sm-2">
+    <fieldset class="form-group col-sm-3">
         <label for="birthday">S.Reanimación</label>
         <select class="form-select" aria-label="" id="">
             <option selected>Seleccione la opción</option>
@@ -196,6 +149,29 @@
     <fieldset class="form-group col-sm-1">
         <label for="for_age">Edad</label>
         <input type="number" class="form-control" id="age" name="age" value="" placeholder="">
+    </fieldset>
+</div>
+
+<div class="row g-2 mb-2">
+    <!-- <fieldset class="form-group col-sm-1">
+        <label for="rut">Previsión</label>
+        <select class="form-select" aria-label="" id="">
+            <option selected>Seleccione</option>
+            <option value="F">F</option>
+            <option value="I">I</option>
+            <option value="P">P</option>
+            <option value="Otro">Otro</option>
+        </select>
+    </fieldset> -->
+
+    <fieldset class="form-group col-sm-2">
+        <label for="patient">Previsión</label>
+        <input type="text" class="form-control" id="previsión" name="prevision" value="" placeholder="" disabled>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label for="patient">Otro</label>
+        <input type="text" class="form-control" id="previsión_otro" value="" placeholder="" disabled>
     </fieldset>
 </div>
 
@@ -269,214 +245,152 @@
 <h4>4. Causal de atención</h4>
 <div class="row g-2 mb-2">
     <fieldset class="form-group col-sm-2">
-        <label class="form-label">Accidente de Tránsito</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="car-accident-1" name="car-accident">
-            <label class="form-check-label" for="car-accident-1">
-                Colisión
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="car-accident-2" name="car-accident">
-            <label class="form-check-label" for="car-accident-2">
-                Choque
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="car-accident-3" name="car-accident">
-            <label class="form-check-label" for="car-accident-3">
-                Atropello
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="car-accident-4" name="car-accident">
-            <label class="form-check-label" for="car-accident-4">
-                Volcamiento
-            </label>
-        </div>
+        <label class="form-label">Accidente de Tránsito</label><br>
+        
+        <input type="checkbox" id="cbx_colision" name="work_accident[]" value="colision"> <label for="cbx_colision">Colisión</label><br>
+        <input type="checkbox" id="cbx_choque" name="work_accident[]" value="choque"> <label for="cbx_choque">Choque</label><br>
+        <input type="checkbox" id="cbx_atropello" name="work_accident[]" value="atropello"> <label for="cbx_atropello">Apropello</label><br>
+        <input type="checkbox" id="cbx_volcamiento" name="work_accident[]" value="volcamiento"> <label for="cbx_volcamiento">Volcamiento</label><br><br>
 
-        <label class="form-label">Vehículos involucrados</label>
-        <input type="text" class="form-control w-50" id="patient" value="" placeholder="">
-        <label class="form-label">N° de lesionados</label>
-        <input type="text" class="form-control w-50" id="patient" value="" placeholder="">
+    </fieldset>
 
-        <label for="patient">Caída desde vehículos</label>
-        <select class="form-select w-50" aria-label="" id="">
+    <fieldset class="form-group col-sm-2">
+        <label class="form-label">Intoxicación</label><br>
+
+        <input type="checkbox" id="cbx_drougs" name="poisoning[]" value="drogas"> <label for="cbx_drougs">Drogas</label><br>
+        <input type="checkbox" id="cbx_medicines" name="poisoning[]" value="medicamentos"> <label for="cbx_medicines">Medicamentos</label><br>
+        <input type="checkbox" id="cbx_alcohol" name="poisoning[]" value="alcohol"> <label for="cbx_alcohol">Alcohol</label><br>
+        <input type="checkbox" id="cbx_smoke" name="poisoning[]" value="humo"> <label for="cbx_smoke">Humo</label><br>
+        <input type="checkbox" id="cbx_gas" name="poisoning[]" value="gas"> <label for="cbx_gas">Gas</label><br>
+        <input type="checkbox" id="cbx_poisoning_others" name="poisoning[]" value="otros"> <label for="cbx_others">Otros</label><br>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label class="form-label">Lesión</label><br>
+
+        <input type="checkbox" id="cbx_sharp" name="injuries[]" value="cortopunzante"> <label for="cbx_sharp">Cortopuzante</label><br>
+        <input type="checkbox" id="cbx_firearm" name="injuries[]" value="arma de fuego"> <label for="cbx_firearm">Arma de fuego</label><br>
+        <input type="checkbox" id="cbx_bruised" name="injuries[]" value="contusas"> <label for="cbx_bruised">Contusas</label><br>
+        <input type="checkbox" id="cbx_flattening" name="injuries[]" value="aplastamiento"> <label for="cbx_flattening">Aplastamiento</label><br>
+        <input type="checkbox" id="cbx_injuries_others" name="injuries[]" value="otros"> <label for="cbx_injuries_others">Otros</label><br>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label class="form-label">Caidas</label><br>
+
+        <input type="checkbox" id="cbx_ground_level" name="falls[]" value="a nivel"> <label for="cbx_ground_level">A nivel</label><br>
+        <input type="checkbox" id="cbx_from_height" name="falls[]" value="de altura"> <label for="cbx_from_height">De altura</label><br>
+        <input type="checkbox" id="cbx_shot" name="falls[]" value="rodada"> <label for="cbx_shot">Rodada</label><br>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label class="form-label">Quemadas</label><br>
+        
+        <input type="checkbox" id="cbx_fire" name="burneds[]" value="fuego"> <label for="cbx_fire">Fuego</label><br>
+        <input type="checkbox" id="cbx_cold" name="burneds[]" value="frio"> <label for="cbx_cold">Frío</label><br>
+        <input type="checkbox" id="cbx_heat" name="burneds[]" value="calor"> <label for="cbx_heat">Calor</label><br>
+        <input type="checkbox" id="cbx_electricity" name="burneds[]" value="electricidad"> <label for="cbx_electricity">Electricidad</label><br>
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label class="form-label">Asfixia</label><br>
+
+        <input type="checkbox" id="cbx_immersion" name="suffocations[]" value="inmersión"> <label for="cbx_immersion">Inmersión</label><br>
+        <input type="checkbox" id="cbx_hanging" name="suffocations[]" value="ahorcamiento"> <label for="cbx_hanging">Ahorcamiento</label><br>
+        <input type="checkbox" id="cbx_strange_body" name="suffocations[]" value="cuerpo extraño"> <label for="cbx_strange_body">Cuerpo extraño</label><br>
+    </fieldset>
+</div>
+
+<h4>Antecedentes accidente</h4>
+
+<div class="row g-2 mb-2">
+    <fieldset class="form-group col-sm-3">
+        <label for="address">Vehículos involucrados</label>
+        <input type="text" class="form-control accident_history_class" id="patient" value="" placeholder="">
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label for="address">N° lesionados</label>
+        <input type="text" class="form-control accident_history_class" id="patient" value="" placeholder="">
+    </fieldset>
+
+    <fieldset class="form-group col-sm-2">
+        <label for="address">Caída desde vehículos</label>
+        <select class="form-select accident_history_class" aria-label="" name="vehicles_involved">
             <option selected>Seleccione</option>
             <option value="Detenido">Detenido</option>
             <option value="Movimiento">Movimiento</option>
         </select>
+    </fieldset>
 
-        <label for="patient">Uso de casco</label>
-        <select class="form-select w-50" aria-label="" id="">
-            <option selected>Seleccione</option>
-            <option value="Sí">Sí</option>
-            <option value="No">No</option>
-            <option value="Desconocido">Desconocido</option>
-        </select>
-
-        <label for="patient">Ocupante</label>
-        <select class="form-select w-50" aria-label="" id="">
+    <fieldset class="form-group col-sm-2">
+        <label for="address">Uso de casco</label>
+        <select class="form-select accident_history_class" aria-label="" id="" name="occupant">
             <option selected>Seleccione</option>
             <option value="Conductor">Conductor</option>
             <option value="Desconocido">Desconocido</option>
             <option value="Anterior">Anterior</option>
             <option value="Posterior">Posterior</option>
         </select>
+    </fieldset>
 
+    <fieldset class="form-group col-sm-3">
+        <label for="address">Ocupante</label>
+        <select class="form-select accident_history_class" aria-label="" id="" name="use_of_helmet">
+            <option selected>Seleccione</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+            <option value="Desconocido">Desconocido</option>
+        </select>
+    </fieldset>
+</div>
+
+<div class="row g-2 mb-2">
+    <fieldset class="form-group col-sm-3">
+        <label for="address">Accidente</label>
+        <select class="form-select accident_history_class" aria-label="" id="address">
+            <option selected>Seleccione</option>
+            <option value="Escolar">Escolar</option>
+            <option value="Trabajo">Trabajo</option>
+        </select>
     </fieldset>
 
     <fieldset class="form-group col-sm-2">
-        <label class="form-label">Intoxica</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-1" name="intoxication">
-            <label class="form-check-label" for="intoxication-1">
-                Drogas
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-2" name="intoxication">
-            <label class="form-check-label" for="intoxication-2">
-                Medicamentos
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-3" name="intoxication">
-            <label class="form-check-label" for="intoxication-3">
-                Alcohol
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-4" name="intoxication">
-            <label class="form-check-label" for="intoxication-4">
-                Humo
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-5" name="intoxication">
-            <label class="form-check-label" for="intoxication-5">
-                Gas
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="intoxication-6" name="intoxication">
-            <label class="form-check-label" for="intoxication-6">
-                Otros
-            </label>
-        </div>
+        <label for="commune">Soap - Compañía</label>
+        <input type="text" class="form-control accident_history_class" id="commune" name="soap_company" value="" placeholder="">
     </fieldset>
 
     <fieldset class="form-group col-sm-2">
-        <label class="form-label">Lesión</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="lesion-1">
-            <label class="form-check-label" for="lesion-1">
-                Cortopuzante
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="lesion-2">
-            <label class="form-check-label" for="lesion-2">
-                Arma de fuego
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="lesion-3">
-            <label class="form-check-label" for="lesion-3">
-                Contusas
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="lesion-4">
-            <label class="form-check-label" for="lesion-4">
-                Aplastamiento
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="lesion-4">
-            <label class="form-check-label" for="lesion-4">
-                Otros
-            </label>
-        </div>
+        <label for="commune">Soap - N° póliza</label>
+        <input type="text" class="form-control accident_history_class" id="commune" name="soap_number" value="" placeholder="">
     </fieldset>
 
     <fieldset class="form-group col-sm-2">
-        <label class="form-label">Caidas</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="falls-1">
-            <label class="form-check-label" for="falls-1">
-                A nivel
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="falls-2">
-            <label class="form-check-label" for="falls-2">
-                De altura
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="falls-3">
-            <label class="form-check-label" for="falls-3">
-                Rodada
-            </label>
-        </div>
+        <label for="birthday">Comisaria</label>
+        <input type="text" class="form-control accident_history_class" id="birthday" value="" placeholder="">
     </fieldset>
 
-    <fieldset class="form-group col-sm-2">
-        <label class="form-label">Quemadas</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="burned-1">
-            <label class="form-check-label" for="burned-1">
-                Por fuego
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="burned-2">
-            <label class="form-check-label" for="burned-2">
-                Frío
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="burned-3">
-            <label class="form-check-label" for="burned-3">
-                Calor
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="burned-4">
-            <label class="form-check-label" for="burned-4">
-                Electricidad
-            </label>
-        </div>
+    <fieldset class="form-group col-sm-3">
+        <label for="birthday">Patente de vehículo</label>
+        <input type="text" class="form-control accident_history_class" id="birthday" value="" placeholder="">
+    </fieldset>
+</div>
+
+<div class="row g-2 mb-2">
+
+    <fieldset class="form-group col-sm-9">
+    </fieldset>
+    <fieldset class="form-group col-sm-3">
+        <label for="birthday">Patente de vehículo 2</label>
+        <input type="text" class="form-control accident_history_class" id="birthday" value="" placeholder="">
     </fieldset>
 
-    <fieldset class="form-group col-sm-2">
-        <label class="form-label">Asfixia</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="suffocation-1">
-            <label class="form-check-label" for="suffocation-1">
-                Inmersión
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="suffocation-2">
-            <label class="form-check-label" for="suffocation-2">
-                Ahorcamiento
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="suffocation-3">
-            <label class="form-check-label" for="suffocation-3">
-                Cuerpo extraño
-            </label>
-        </div>
-    </fieldset>
 </div>
 
 <h4>5. Controles Parámetros vitales</h4>
 <div class="row g-2 mb-2">
     <fieldset class="form-group col-sm-2">
-        <label for="timestamp">Fecha <br> hora</label>
+        <label for="timestamp">Fecha<br> hora</label>
         <input type="datetime-local" class="form-control" id="timestamp" value="">
     </fieldset>
 
@@ -776,6 +690,26 @@
 $(document).ready(function() {
     $("#ADULTO").show();
     $("#LACTANTE").hide(); 
+    $("input.accident_history_class").attr("disabled",true);
+    $("select.accident_history_class").attr("disabled",true);
+
+    // desbloquea antecedentes accidente si se marca un accidente
+    $("input[name='work_accident[]").change(function() {
+        cont = 0;
+        jQuery("input[name='work_accident[]']").each(function() {
+            if(this.checked){
+                cont = cont + 1;
+            }
+        });
+
+        if(cont > 0){
+            $("input.accident_history_class").attr("disabled",false);
+            $("select.accident_history_class").attr("disabled",false);
+        }else{
+            $("input.accident_history_class").attr("disabled",true);
+            $("select.accident_history_class").attr("disabled",true);
+        }  
+    });
 });
 
 function toggleCheckbox(element)
@@ -788,6 +722,10 @@ function toggleCheckbox(element)
         $("#ADULTO").hide();
     }
 }
+
+
+
+
 
 </script>
 @endsection
