@@ -23,6 +23,9 @@
             </tbody>
             <caption>
                 <small>
+                    <span class="badge bg-danger">
+                        Pendiente de validar el cálculo
+                    </span>
                     Basados en los eventos con marcas de tiempo AP y Retorno a Base.
                 </small>
             </caption>

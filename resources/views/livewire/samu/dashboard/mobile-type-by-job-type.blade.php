@@ -30,6 +30,9 @@
                 @endforeach
             </tbody>
             <caption>
+                <span class="badge bg-danger">
+                    Pendiente de validar el cálculo
+                </span>
                 <small>
                     Según turnos de semana epidemiológica: aca {{ $week['start']->format('d/m') }} al
                     {{ $week['end']->format('d/m') }}. Excluidas las RU1 y RU2.

@@ -47,7 +47,8 @@
         <div class="form-group col-sm-2">
             <label for="">&nbsp;</label>
             <button class="form-control btn btn-primary" wire:click="search">
-                <i class="fas fa-search"></i> Buscar </button>
+                <i class="fas fa-search"></i> Buscar
+            </button>
         </div>
 
         {{--

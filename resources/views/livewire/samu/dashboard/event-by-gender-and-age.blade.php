@@ -1,41 +1,15 @@
 <div>
     <div class="row g-2 my-1">
         <fieldset class="form-group col-md-3">
-            <label for="for-month">Mes</label>
-            <select
-                name="type"
-                id="for-month"
-                class="form-select"
-                wire:model="month"
-            >
-                <option value="01">Enero</option>
-                <option value="02">Febrero</option>
-                <option value="03">Marzo</option>
-                <option value="04">Abril</option>
-                <option value="05">Mayo</option>
-                <option value="06">Junio</option>
-                <option value="07">Julio</option>
-                <option value="08">Agosto</option>
-                <option value="09">Septiembre</option>
-                <option value="10">Octubre</option>
-                <option value="11">Noviembre</option>
-                <option value="12">Diciembre</option>
-            </select>
-        </fieldset>
-        <fieldset class="form-group col-md-3">
-            <label for="for-year">Año</label>
-            <select
-                name="type"
-                id="for-year"
-                class="form-select"
-                wire:model="year"
-            >
-                @foreach($years as $itemYear)
-                    <option value="{{ $itemYear }}">
-                        {{ $itemYear }}
-                    </option>
-                @endforeach
-            </select>
+            <div class="input-group">
+                <span class="input-group-text" id="for-month">Mes y Año</span>
+                <input
+                    type="month"
+                    id="for-month"
+                    class="form-control form-control-sm"
+                    wire:model.debounce.1000ms="year_month"
+                >
+            </div>
         </fieldset>
     </div>
 
