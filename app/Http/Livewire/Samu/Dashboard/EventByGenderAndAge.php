@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Samu\Dashboard;
 
 use App\Charts\Samu\EventByGenderAndAge as SamuEventByGenderAndAge;
-use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class EventByGenderAndAge extends Component
