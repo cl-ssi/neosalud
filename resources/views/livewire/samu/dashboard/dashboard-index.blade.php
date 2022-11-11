@@ -73,7 +73,7 @@
         <div class="col">
             <div class="card">
                 <h6 class="card-header">
-                    # Mensual de Eventos por Tipo de Móvil  (NUEVO)
+                    # Mensual de Eventos por Tipo de Móvil
                 </h6>
                 <div class="card-body pt-2">
                     @livewire('samu.dashboard.event-by-mobile-type-monthly')
