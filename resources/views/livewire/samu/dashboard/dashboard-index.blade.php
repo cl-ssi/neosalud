@@ -27,7 +27,7 @@
                     # de Eventos atendidos por comuna
                 </h6>
                 <div class="card-body pt-2">
-                    @livewire('samu.dashboard.event-by-commune')
+                    {{-- @livewire('samu.dashboard.event-by-commune') --}}
                 </div>
             </div>
         </div>
@@ -64,6 +64,19 @@
                 </h6>
                 <div class="card-body pt-2">
                     @livewire('samu.dashboard.event-by-month')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="card">
+                <h6 class="card-header">
+                    # Mensual de Eventos por Tipo de Móvil  (NUEVO)
+                </h6>
+                <div class="card-body pt-2">
+                    @livewire('samu.dashboard.event-by-mobile-type-monthly')
                 </div>
             </div>
         </div>
