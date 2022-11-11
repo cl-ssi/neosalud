@@ -18,12 +18,6 @@
     <div wire:init="getData">
         <div id="event-by-mobile-type-monthly" style="width: auto; height: 300px;"></div> 
     </div>
-
-    <caption>
-                <span class="badge bg-danger">
-                    Pendiente de validar el cálculo
-                </span>
-            </caption>
     
     <script>
         google.charts.load('current', {'packages' : ['corechart']});

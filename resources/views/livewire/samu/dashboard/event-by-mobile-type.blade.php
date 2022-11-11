@@ -33,4 +33,10 @@
             </tbody>
         </table>
     </div>
+
+    <caption>
+        <span class="badge bg-danger">
+            Pendiente de validar el cálculo
+        </span>
+    </caption>
 </div>

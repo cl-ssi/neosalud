@@ -54,6 +54,7 @@ class EventMobileTypeMonthly
             ->whereMonth('date', $this->month)
             ->whereYear('date', $this->year)
             ->groupBy('type_id')
+            ->orderBy('type_id', 'ASC')
             ->get();
         
         foreach($eventByMonth as $event){    
