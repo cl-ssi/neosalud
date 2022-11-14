@@ -756,20 +756,3 @@ Route::get('/test/sendip',[TestController::class,'sendIp']);
 Route::get('/test/error/{option?}',[TestController::class,'error']);
 Route::get('/test/projectid',[TestController::class,'getProjectId']);
 Route::get('/test/cola',[TestController::class,'cola']);
-
-Route::prefix('developer')->name('developer.')->middleware('can:Developer')->group(function(){
-	Route::view('/artisan', 'developer.artisan')->name('artisan');
-
-	Route::prefix('artisan')->name('artisan.')->group(function () {
-		Route::get('/down', function()
-		{
-			Artisan::call('down --secret='. env('MAINTENANCE_TOKEN'));
-			echo 'En modo mantención.';
-		})->name('down');
-		Route::get('/up', function()
-		{
-			Artisan::call('up');
-			return redirect()->route('developer.artisan') ;
-		})->name('up');
-	});
-});
