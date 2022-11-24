@@ -12,6 +12,7 @@ use App\Models\MedicalProgrammer\Profession;
 use App\Models\MedicalProgrammer\OperatingRoom;
 use App\Models\MedicalProgrammer\UserSpecialty;
 use App\Models\MedicalProgrammer\UserProfession;
+use App\Models\MedicalProgrammer\UserAditional;
 use App\Models\MedicalProgrammer\UserOperatingRoom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,11 +30,30 @@ class RrhhController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $rut = $request->get('rut');
+        $name = $request->get('name');
+
         // $rrhh = Rrhh::orderBy('name','ASC')->get();
-        $rrhh = User::permission('Mp: user')->orderBy('id','ASC')->paginate(50);
-        return view('medical_programmer.rrhh.index', compact('rrhh'));
+        $rrhh = User::permission('Mp: user')
+                ->when($rut != null, function ($q) use ($rut) {
+                  return $q->whereHas('identifiers', function ($q) use ($rut) {
+                    return $q->where('value', $rut)->where('cod_con_identifier_type_id', 1);
+                  });
+                })
+                ->when($name != null, function ($query) use ($name) {
+                  // return $q->whereHas('user', function ($query) use ($name) {
+                      return $query->whereHas('humanNames', function ($query) use ($name) {
+                          return $query->where('text', 'LIKE', '%' . $name . '%')
+                                      ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                      ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                        });
+                    // });
+                  })
+                  ->orderBy('id','ASC')
+                  ->paginate(50);
+        return view('medical_programmer.rrhh.index', compact('rrhh','request'));
     }
 
     /**
@@ -98,7 +118,9 @@ class RrhhController extends Controller
           $newIdentifier->cod_con_identifier_type_id = 1;
           $newIdentifier->save();
 
-
+          $userAditional = new UserAditional($request->all());
+          $userAditional->user_id = $newPatient->id;
+          $userAditional->save();
 
           $newPatient->syncPermissions(
               is_array($request->input('permissions')) ? $request->input('permissions') : array()

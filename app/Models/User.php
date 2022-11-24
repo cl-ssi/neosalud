@@ -14,6 +14,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\MedicalProgrammer\UserAditional;
+
 class User extends Authenticatable implements Auditable
 {
     use HasFactory, Notifiable, HasRoles;
@@ -132,6 +134,11 @@ class User extends Authenticatable implements Auditable
         return $this->belongsToMany(Gender::class)
             ->withPivot('valid_from', 'valid_to')
             ->withTimestamps();
+    }
+
+    public function mpAditionals()
+    {
+        return $this->HasOne(UserAditional::class, 'user_id');
     }
 
     // public function manager_shifts(): HasMany

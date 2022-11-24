@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Organization;
 
 class ContractController extends Controller
 {
@@ -20,16 +21,19 @@ class ContractController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->get('year')) {
-          $year = $request->get('year');
-        }else{
-          $year = Carbon::now()->format('Y');
-        }
+        // if ($request->get('year')) {
+        //   $year = $request->get('year');
+        // }else{
+        //   $year = Carbon::now()->format('Y');
+        // }
 
+        $year = $request->get('year');
         $rut = $request->get('rut');
         $name = $request->get('name');
 
-        $contracts = Contract::where('year',$year)
+        $contracts = Contract::when($year != null, function ($q) use ($year) {
+                                return $q->where('year',$year);
+                              })
                              ->when($rut != null, function ($q) use ($rut) {
                                return $q->whereHas('user', function ($query) use ($rut) {
                                    return $query->whereHas('identifiers', function ($query) use ($rut) {
@@ -59,8 +63,9 @@ class ContractController extends Controller
     {
       // $rrhh = Rrhh::orderBy('name','ASC')->get();
       // $users = User::all();
+      $organizations = Organization::where('service',3)->get();
       $services = Service::orderBy('service_name','ASC')->get();
-      return view('medical_programmer.contracts.create', compact('services','request'));
+      return view('medical_programmer.contracts.create', compact('services','request','organizations'));
     }
 
     /**
@@ -100,7 +105,8 @@ class ContractController extends Controller
     {
       $users = User::where('id',$contract->user_id)->get();
       $services = Service::orderBy('service_name','ASC')->get();
-      return view('medical_programmer.contracts.edit', compact('contract', 'users', 'services'));
+      $organizations = Organization::where('service',3)->get();
+      return view('medical_programmer.contracts.edit', compact('contract', 'users', 'services','organizations'));
     }
 
     /**

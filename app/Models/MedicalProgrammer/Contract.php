@@ -5,6 +5,7 @@ namespace App\Models\MedicalProgrammer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Organization;
 
 class Contract extends Model implements Auditable
 {
@@ -20,8 +21,9 @@ class Contract extends Model implements Auditable
         'user_id', 'year', 'law', 'contract_id',  'weekly_hours', 'shift_system',
         'obs', 'legal_holidays', 'compensatory_rest', 'administrative_permit',
         'training_days', 'breastfeeding_time', 'weekly_collation',
-        'contract_start_date', 'contract_end_date', 'unit', 'unit_code','service_id'
+        'contract_start_date', 'contract_end_date', 'unit', 'unit_code','service_id',
         //, 'user_id'
+        'establishment_id','effective_hours','covid_permit','weekly_union_permit','departure_date'
     ];
 
     // public function rrhh() {
@@ -50,6 +52,11 @@ class Contract extends Model implements Auditable
 
     public function service() {
         return $this->belongsTo('App\Models\MedicalProgrammer\Service');
+    }
+
+    public function establishment()
+    {
+       return $this->belongsTo(Organization::class, 'establishment_id');
     }
 
     use SoftDeletes;
