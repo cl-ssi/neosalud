@@ -6,9 +6,30 @@
 
 <h3 class="mb-3">Listado de RRHH</h3>
 
-<!-- <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.rrhh.create') }}">
+<a class="btn btn-primary mb-3" href="{{ route('medical_programmer.rrhh.create') }}">
     <i class="fas fa-plus"></i> Agregar nuevo
-</a> -->
+</a>
+
+<form>
+    <div class="row">
+        <div class="form-group col-3">
+            <label>Nombre</label>
+            <input type="text" class="form-control" name="name" value="{{$request->get('name')}}">
+        </div>
+        <div class="form-group col-3">
+            <label>Rut</label>
+            <input type="number" class="form-control" name="rut" value="{{$request->get('rut')}}">
+        </div>
+        <div class="form-group col-2">
+            <label>&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary" id="button">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+<hr>
 
 <table class="table table-sm table-borderer table-responsive-xl">
     <thead>
@@ -18,7 +39,7 @@
             <th>Nombre</th>
             <!-- <th>Apellido Paterno</th>
             <th>Apellido Materno</th> -->
-            <th>Función</th>
+            <!-- <th>Función</th> -->
             <th>Prof/Espec</th>
             <th></th>
         </tr>
@@ -31,7 +52,7 @@
             <td>{{ $user->OfficialFullName }}</td>
             <!-- <td>{{ $user->fathers_family }}</td>
             <td>{{ $user->mothers_family }}</td> -->
-            <td>{{ $user->job_title }}</td>
+            <!-- <td>{{ $user->job_title }}</td> -->
             <td nowrap>
                 @foreach ($user->specialties as $key => $specialty)
                     {{$specialty->specialty_name}},

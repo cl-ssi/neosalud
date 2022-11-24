@@ -10,18 +10,19 @@
 </a>
 
 <form>
-    <div class="form-row">
-        <div class="form-group col-md-4 col-6">
+    <div class="row">
+        <div class="form-group col-3">
             <label>Nombre</label>
             <input type="text" class="form-control" name="name" value="{{$request->get('name')}}">
         </div>
-        <div class="form-group col-md-3 col-6">
+        <div class="form-group col-2">
             <label>Rut</label>
             <input type="number" class="form-control" name="rut" value="{{$request->get('rut')}}">
         </div>
-        <div class="form-group col-md-3 col-6">
+        <div class="form-group col-2">
             <label>Año contrato</label>
             <select name="year" id="for_year" class="form-control">
+                <option value=""></option>
                 <option value="2020" {{ $request->get('year') == "2020" ? 'selected' : '' }}>2020</option>
                 <option value="2021" {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
                 <option value="2022" {{ $request->get('year') == "2022" ? 'selected' : '' }}>2022</option>
@@ -30,7 +31,7 @@
                 <option value="2025" {{ $request->get('year') == "2025" ? 'selected' : '' }}>2025</option>
             </select>
         </div>
-        <div class="form-group col-md-2 col-6">
+        <div class="form-group col-2">
             <label>&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary" id="button">
                 <i class="fas fa-search"></i> Buscar
@@ -38,6 +39,8 @@
         </div>
     </div>
 </form>
+
+<hr>
 
 <table class="table table-sm table-borderer table-responsive-xl">
     <thead>
@@ -48,6 +51,8 @@
             <th>Contrato Correlativo</th>
             <th>Horas Semanales</th>
             <th>Servicio</th>
+            <th>Año contrato</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -59,6 +64,7 @@
             <td>{{ $contract->contract_id }}</td>
             <td>{{ $contract->weekly_hours }}</td>
             <td>{{ $contract->service->service_name }}</td>
+            <td>{{ $contract->year }}</td>
             <td>
       				<a href="{{ route('medical_programmer.contracts.edit', $contract) }}"
       					class="btn btn-sm btn-outline-secondary">
