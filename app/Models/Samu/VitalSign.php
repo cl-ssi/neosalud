@@ -37,9 +37,4 @@ class VitalSign extends Model
         'updated_at',
         'registered_at',
     ];
-
-    public function getRegisteredAtFormatAttribute()
-    {
-        return $this->registered_at->format('Y-m-d H:i ');
-    }
 }
