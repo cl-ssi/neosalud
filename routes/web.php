@@ -122,11 +122,14 @@ Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name(
 Route::prefix('parameter')->as('parameter.')->middleware('auth')->group(function () {
     Route::resource('permission', PermissionController::class);
 	Route::prefix('organization')->as('organization.')->middleware('auth')->group(function () {
+		Route::get('/create', [OrganizationController::class, 'create'])->name('create');
+		Route::post('/', [OrganizationController::class, 'store'])->name('store');
 		Route::get('/{type}', [OrganizationController::class, 'index'])->name('index');
-		Route::get('/edit', [OrganizationController::class, 'edit'])->name('edit');
+		Route::get('/{organization}/edit', [OrganizationController::class, 'edit'])->name('edit');
+		Route::put('/{organization}', [OrganizationController::class, 'update'])->name('update');
+		Route::delete('/{organization}', [OrganizationController::class, 'destroy'])->name('destroy');
+		
 	});
-	//Route::get('organization/index/{type?}', [OrganizationController::class, 'index'])->name('index');
-	//Route::resource('organization', OrganizationController::class);
 });
 
 Route::prefix('profile')->name('profile.')->middleware('auth')->group(function(){

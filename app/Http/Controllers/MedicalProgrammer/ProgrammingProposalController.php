@@ -28,7 +28,8 @@ class ProgrammingProposalController extends Controller
       $type = $request->get('type');
       $specialty_id = $request->get('specialty_id');
       $profesion_id = $request->get('profesion_id');
-      $user_id = $request->get('user_id');
+      // $user_id = $request->get('user_id');
+      $name = $request->get('name');
 
       if (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
           Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
@@ -46,8 +47,17 @@ class ProgrammingProposalController extends Controller
                                                    ->when($profesion_id != null, function ($q) use ($profesion_id) {
                                                       return $q->where('profesion_id',$profesion_id);
                                                    })
-                                                   ->when($user_id != null, function ($q) use ($user_id) {
-                                                      return $q->where('user_id',$user_id);
+                                                  //  ->when($user_id != null, function ($q) use ($user_id) {
+                                                  //     return $q->where('user_id',$user_id);
+                                                  //  })
+                                                  ->when($name != null, function ($q) use ($name) {
+                                                    return $q->whereHas('user', function ($query) use ($name) {
+                                                        return $query->whereHas('humanNames', function ($query) use ($name) {
+                                                            return $query->where('text', 'LIKE', '%' . $name . '%')
+                                                                         ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                                                         ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                                                          });
+                                                      });
                                                    })
                                                    ->orderBy('id','DESC')
                                                    ->get();

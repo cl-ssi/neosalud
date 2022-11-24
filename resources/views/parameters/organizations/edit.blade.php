@@ -14,24 +14,31 @@
     @csrf
     @method('PUT')
 
-    <div class="form-row">
-        <fieldset class="form-group col">
+    <div class="row">
+        <fieldset class="col">
             <label for="for_name">Nombre</label>
             <input type="text" class="form-control" id="for_name" name="name" value="{{ $organization->name }}" required>
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="col">
             <label for="for_description">Alias</label>
             <input type="text" class="form-control" id="for_alias" name="alias" value="{{ $organization->alias }}" required>
         </fieldset>
     </div>
 
-    <div class="form-row">
-        <fieldset class="form-group col">
+    <div class="row">
+        <fieldset class="col">
+            <label for="for_code_deis">Código DEIS</label>
+            <input type="integer" class="form-control" id="for_code_deis" name="code_deis" value="{{ $organization->code_deis }}">
+        </fieldset>
+
+        <fieldset class="col">
             <label for="for_name">Código SIRH</label>
             <input type="integer" class="form-control" id="for_sirh_code" name="sirh_code" value="{{ $organization->sirh_code }}">
         </fieldset>
     </div>
+
+    <br>
 
     <button type="submit" class="btn btn-primary float-left">Guardar</button>
 </form>

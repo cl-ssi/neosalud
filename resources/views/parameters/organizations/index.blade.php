@@ -9,7 +9,9 @@
 @endcanany
 
 <h2 class="mb-3">{{$type}}</h2>
-<a class="btn btn-primary btn-sm mb-1" href="#">Crear</a>
+<a class="btn btn-primary mb-2" href="{{ route('parameter.organization.create') }}">
+    <i class="fas fa-plus"></i> Agregar nueva
+</a>
 
 <table class="table table-sm">
     <thead>
@@ -17,6 +19,8 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Alias</th>
+            <th>Código DEIS</th>
+            <th>Código SIRH</th>
             <th></th>
         </tr>
     </thead>
@@ -26,6 +30,8 @@
             <td>{{ $organization->id ?? '' }}</td>
             <td>{{ $organization->name ?? '' }}</td>
             <td>{{ $organization->alias ?? '' }}</td>
+            <td>{{ $organization->code_deis ?? '' }}</td>
+            <td>{{ $organization->sirh_code ?? '' }}</td>
             <td>
                 <a href="{{ route('parameter.organization.edit', $organization )}}"><span data-feather="edit"></span></a>
             </td>
@@ -33,6 +39,8 @@
         @endforeach
     </tbody>
 </table>
+
+{{ $organizations->links('pagination::bootstrap-4') }}
 
 @endsection
 

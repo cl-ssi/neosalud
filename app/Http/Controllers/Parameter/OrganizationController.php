@@ -16,15 +16,13 @@ class OrganizationController extends Controller
      */
     public function index($type)
     {
-        //
-        //dd($type);
         if ($type == 'Laboratorios') {
             //10 es tipo laboratorio
-            $organizations = Organization::where('type', 10)->get();
+            $organizations = Organization::where('type', 10)->paginate(50);
         } 
         else 
         {
-            $organizations = Organization::OrderBy('name')->get();
+            $organizations = Organization::OrderBy('id')->paginate(50);
         }
         return view('parameters.organizations.index', compact('organizations','type'));
     }
@@ -36,7 +34,6 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        //
         $organizationtypes = OrganizationType::OrderBy('name')->get();
         return view('parameters.organizations.create', compact('organizationtypes'));
     }
@@ -94,7 +91,7 @@ class OrganizationController extends Controller
         $organization->save();
         session()->flash('success', 'Organización: ' . $organization->name . ' ha sido actualizado.');
 
-        return redirect()->route('parameter.organization.index');
+        return redirect()->route('parameter.organization.index','Todas las organizaciones');
     }
 
     /**

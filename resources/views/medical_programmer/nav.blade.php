@@ -48,7 +48,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-                <a class="dropdown-item" href="{{ route('parameter.organization.index','Todas las Organizaciones' ) }}">
+                <a class="dropdown-item" href="{{ route('parameter.organization.index','Todas las organizaciones' ) }}">
                     <span data-feather="chevrons-right"></span>
                     Organizaciones
                 </a>
