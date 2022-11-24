@@ -214,27 +214,33 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse($event->vitalSigns as $vitalSign)
                 <tr>
                     <td class="center">
                         <small class="seis nowrap">
-                            @if($event->vitalSign && $event->vitalSign->registered_at)
-                                {{ $event->vitalSign->registered_at_format }}
-                            @else
-                            -
-                            @endif
+                            {{ optional($vitalSign->registered_at)->format('Y-m-d H:i') }}
                         </small>
                     </td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->fc : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->fr : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->pa : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->pam : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->gl : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->soam : '-'}}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->soap : '-'}}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->hgt : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->fill_capillary : '-' }}</td>
-                    <td class="center">{{ $event->vitalSign ? $event->vitalSign->t : '-' }}</td>
+                    <td class="center">{{ $vitalSign->fc ? $vitalSign->fc : '-' }}</td>
+                    <td class="center">{{ $vitalSign->fr ? $vitalSign->fr : '-' }}</td>
+                    <td class="center">{{ $vitalSign->pa ? $vitalSign->pa : '-' }}</td>
+                    <td class="center">{{ $vitalSign->pam ? $vitalSign->pam : '-' }}</td>
+                    <td class="center">{{ $vitalSign->gl ? $vitalSign->gl : '-' }}</td>
+                    <td class="center">{{ $vitalSign->soam ? $vitalSign->soam : '-'}}</td>
+                    <td class="center">{{ $vitalSign->soap ? $vitalSign->soap : '-'}}</td>
+                    <td class="center">{{ $vitalSign->hgt ? $vitalSign->hgt : '-' }}</td>
+                    <td class="center">{{ $vitalSign->fill_capillary ? $vitalSign->fill_capillary : '-' }}</td>
+                    <td class="center">{{ $vitalSign->t ? $vitalSign->t : '-' }}</td>
                 </tr>
+                @empty
+                <tr>
+                    <td class="center" colspan="11">
+                        <em>
+                            No hay signos vitales
+                        </em>
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 
