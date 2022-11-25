@@ -9,7 +9,7 @@
 
     <div class="row g-2">
         <fieldset class="form-group col-sm-1">
-            <label for="for-registered-at">Hora<br>&nbsp;</label>
+            <label for="for-registered-at">Fecha<br>Hora</label>
 
             <input
                 @if($type_input == null)
@@ -212,6 +212,7 @@
                     wire:click.prevent="addVitalSign"
                     wire:loading.attr="disabled"
                     wire:target="addVitalSign"
+                    @if($event && $event->status == false) disabled @endif
                 >
                     <i class="fas fa-plus"></i>
                 </button>
@@ -225,7 +226,7 @@
                     wire:loading.attr="disabled"
                     wire:target="updateVitalSign"
                 >
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-save"></i>
                 </button>
             @endif
 
@@ -233,6 +234,7 @@
                     class="btn btn-md btn-secondary"
                     title="Cancelar"
                     wire:click.prevent="cancel"
+                    @if($event && $event->status == false) disabled @endif
                 >
                     <i class="fas fa-times"></i>
                 </button>
