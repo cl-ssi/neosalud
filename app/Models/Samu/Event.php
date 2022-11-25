@@ -183,9 +183,9 @@ class Event extends Model implements Auditable
                     ->withTimestamps();
     }
 
-    public function vitalSign()
+    public function vitalSigns()
     {
-        return $this->hasOne(VitalSign::class);
+        return $this->hasMany(VitalSign::class);
     }
 
     public function gender()
