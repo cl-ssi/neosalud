@@ -22,7 +22,7 @@
                 @forelse($vitalSigns as $index => $vitalSign)
                 <tr class="text-center">
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ $vitalSign['registered_at_format'] ? $vitalSign['registered_at_format'] : '-' }}</td>
+                    <td nowrap>{{ $vitalSign['registered_at_format'] ? $vitalSign['registered_at_format'] : '-' }}</td>
                     <td>{{ $vitalSign['fc'] ? $vitalSign['fc'] : '-' }}</td>
                     <td>{{ $vitalSign['fr'] ? $vitalSign['fr'] : '-' }}</td>
                     <td>{{ $vitalSign['pa'] ? $vitalSign['pa'] : '-' }}</td>
@@ -39,6 +39,7 @@
                             class="btn btn-sm btn-primary"
                             title="Editar Signo Vital"
                             wire:click="editVitalSign({{ $index }})"
+                            @if($event && $event->status == false) disabled @endif
                         >
                             <i class="fas fa-edit"></i>
                         </button>
@@ -47,6 +48,7 @@
                             class="btn btn-sm btn-danger"
                             title="Elimina Signo Vital"
                             wire:click="deleteVitalSign({{ $index }})"
+                            @if($event && $event->status == false) disabled @endif
                         >
                             <i class="fas fa-trash"></i>
                         </button>
