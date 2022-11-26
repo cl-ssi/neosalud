@@ -212,7 +212,8 @@
                     wire:click.prevent="addVitalSign"
                     wire:loading.attr="disabled"
                     wire:target="addVitalSign"
-                    @if($event && $event->status == false) disabled @endif
+
+                    @if($edit == true && $event && $event->status == false) disabled @endif
                 >
                     <i class="fas fa-plus"></i>
                 </button>
@@ -234,7 +235,7 @@
                     class="btn btn-md btn-secondary"
                     title="Cancelar"
                     wire:click.prevent="cancel"
-                    @if($event && $event->status == false) disabled @endif
+                    @if($edit == true && $event && $event->status == false) disabled @endif
                 >
                     <i class="fas fa-times"></i>
                 </button>
