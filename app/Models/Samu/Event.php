@@ -234,12 +234,12 @@ class Event extends Model implements Auditable
 
     public function getColorAttribute()
     {
-        return $this->status(0);
+        return $this->getStatus(0);
     }
 
     public function getEventStatusAttribute()
     {
-        return $this->status(1);
+        return $this->getStatus(1);
     }
 
     public function getDateFormatAttribute()
@@ -249,7 +249,7 @@ class Event extends Model implements Auditable
         return null;
     }
 
-    public function status($option)
+    public function getStatus($option)
     {
         $status = null;
         $color = 'secondary';
