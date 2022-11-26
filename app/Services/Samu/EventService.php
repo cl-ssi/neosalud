@@ -39,7 +39,7 @@ class EventService
                 $dataVitalSign['fr'] = $this->dataVitalSign['fr'][$index];
                 $dataVitalSign['pa'] = $this->dataVitalSign['pa'][$index];
                 $dataVitalSign['pam'] = $this->dataVitalSign['pam'][$index];
-                $dataVitalSign['gl'] = $this->dataVitalSign['fc'][$index];
+                $dataVitalSign['gl'] = $this->dataVitalSign['gl'][$index];
                 $dataVitalSign['soam'] = $this->dataVitalSign['soam'][$index];
                 $dataVitalSign['soap'] = $this->dataVitalSign['soap'][$index];
                 $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
@@ -79,7 +79,7 @@ class EventService
                 $dataVitalSign['fr'] = $this->dataVitalSign['fr'][$index];
                 $dataVitalSign['pa'] = $this->dataVitalSign['pa'][$index];
                 $dataVitalSign['pam'] = $this->dataVitalSign['pam'][$index];
-                $dataVitalSign['gl'] = $this->dataVitalSign['fc'][$index];
+                $dataVitalSign['gl'] = $this->dataVitalSign['gl'][$index];
                 $dataVitalSign['soam'] = $this->dataVitalSign['soam'][$index];
                 $dataVitalSign['soap'] = $this->dataVitalSign['soap'][$index];
                 $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
