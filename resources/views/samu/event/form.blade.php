@@ -464,4 +464,5 @@
         @enderror
     </fieldset>
 </div>
+
 <!-- fin de seguimiento-->
