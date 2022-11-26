@@ -431,7 +431,8 @@
 <h4>Asignación Signos Vitales</h4>
 
 @livewire('samu.vital-sign.form', [
-    'event' => $event
+    'event' => $event,
+    'edit' => request()->routeIs('samu.event.edit') ? true : false
 ])
 
 <br>

@@ -10,6 +10,7 @@ class Form extends Component
 {
     public $event;
 
+    public $edit;
     public $mode;
     public $type_input;
     public $id_vital_sign;
