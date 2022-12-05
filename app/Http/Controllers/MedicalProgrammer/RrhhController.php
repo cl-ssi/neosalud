@@ -406,6 +406,8 @@ class RrhhController extends Controller
         $request->validate(['file' => 'required'], [ 'file.required' => 'Archivo es requerido.']);
         $file = request()->file('file');
         $collection = Excel::toCollection(new SirhRrhhImport, $file);
+        $user_count = 0;
+        $contract_count = 0;
         foreach($collection as $row){
             foreach($row as $key => $column){ 
                 
@@ -481,6 +483,8 @@ class RrhhController extends Controller
                             $userAditional->sis_specialty = $column['especialidad_sis'];
                             $userAditional->user_id = $newPatient->id;
                             $userAditional->save();
+
+                            $user_count = $user_count + 1;
                         }
 
                         /********** INFO CONTRATOS ********/
@@ -500,7 +504,9 @@ class RrhhController extends Controller
                         //si existe un contrato para una persona en el mismo periodo (inicio a termino), se modifica. ¿?
                         //si no, se crea uno nuevo.
                         $contract = Contract::where('user_id',$user->id)
-                                            ->where('year',$fecha_inicio_contrato_ddmmaaaa->format('Y'))
+                                            // ->where('year',$fecha_inicio_contrato_ddmmaaaa->format('Y'))
+                                            ->where('contract_start_date',$fecha_inicio_contrato_ddmmaaaa)
+                                            ->where('contract_end_date',$fecha_termino_contrato_ddmmaaaa)
                                             ->get();
 
                         $establishment_id = Organization::where('code_deis',$column['id_deis'])->first()->id;
@@ -551,11 +557,16 @@ class RrhhController extends Controller
                             $contract->departure_date = $fecha_alejamiento_ddmmaaaa;
                             $contract->service_id = 50; //sin servicio
                             $contract->save();
+
+                            $contract_count = $contract_count + 1;
                         }
                     }
                 }
             }
             
         }
+
+        session()->flash('success', 'Se ha cargado correctamente el archivo (Se han creado ' . $user_count . ' usuarios y ' . $contract_count . ' contratos).');
+        return redirect()->back();
     }
 }
