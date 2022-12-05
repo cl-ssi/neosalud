@@ -68,12 +68,12 @@
                 </a>
             </li>
 
-            <li >
+            <!-- <li >
                 <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
                     <span data-feather="chevrons-right"></span>
                     Importar archivo SIRH
                 </a>
-            </li>
+            </li> -->
 
             <li>
                 <a class="dropdown-item {{ active('medical_programmer.operating_rooms.index') }}" href="{{ route('medical_programmer.operating_rooms.index') }}">
@@ -146,6 +146,23 @@
             Clonar
             </a>
             </li> -->
+          </ul>
+    </li>
+
+
+    <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-right-to-bracket"></i> Otros
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            <li >
+                <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
+                    <span data-feather="chevrons-right"></span>
+                    Importar archivo SIRH
+                </a>
+            </li>
+
           </ul>
     </li>
     @endcan
