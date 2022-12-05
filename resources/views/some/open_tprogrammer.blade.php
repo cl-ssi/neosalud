@@ -131,7 +131,7 @@
 
             events: [
 
-              // propuesta
+              // ficha
               @foreach($programmed_days as $programmed_day)
                 @if($programmed_day['data']->subactivity)
                   {

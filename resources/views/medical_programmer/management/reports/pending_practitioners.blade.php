@@ -24,9 +24,9 @@
     <thead>
         <tr>
             <th>Funcionario</th>
-            <th>Total propuestas</th>
-            <th>Propuestas confirmadas</th>
-            <th>Propuestas no confirmadas</th>
+            <th>Total fichas</th>
+            <th>Fichas confirmadas</th>
+            <th>Fichas no confirmadas</th>
         </tr>
     </thead>
     <tbody>

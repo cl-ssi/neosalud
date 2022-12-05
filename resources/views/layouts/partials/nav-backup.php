@@ -152,7 +152,7 @@
     <!-- <li class="nav-item">
         <a class="nav-link" href="{{ route('medical_programmer.theoretical_programming.proposal_programmer','tipo=1') }}">
         <span data-feather="chevrons-right"></span>
-        Propuestas de programación<span class="sr-only">(current)</span>
+        Fichas de programación<span class="sr-only">(current)</span>
         </a>
     </li> -->
 
@@ -162,7 +162,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('medical_programmer.programming_proposal.index') }}">
             <span data-feather="chevrons-right"></span>
-            Propuestas de programación<span class="sr-only">(current)</span>
+            Fichas de programación<span class="sr-only">(current)</span>
         </a>
     </li>
     @endcanany

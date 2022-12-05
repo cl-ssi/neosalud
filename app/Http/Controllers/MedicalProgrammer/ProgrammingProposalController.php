@@ -292,7 +292,7 @@ class ProgrammingProposalController extends Controller
          }
        }
 
-       //otras propuestas de la persona
+       //otras fichas de la persona
        $other_contracts_info = [];
        foreach ($programmingProposal->user->programmingProposals->where('status','!=','Rechazado')->where('id','!=',$programmingProposal->id) as $key => $programmingProposal_) {
          if ($programmingProposal_ != null) {

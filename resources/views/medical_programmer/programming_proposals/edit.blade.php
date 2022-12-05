@@ -4,7 +4,7 @@
 
 @include('medical_programmer.nav')
 
-<h3 class="mb-3">Editar PropuestasEditar Propuestas</h3>
+<h3 class="mb-3">Editar ficha de programación</h3>
 
 <div class="row">
   <fieldset class="form-group col col-md-4">
@@ -155,7 +155,7 @@
             locale: 'es',
             events: [
 
-              // última propuesta aceptada
+              // última ficha aceptada
               @foreach($last_programmed_days as $programmed_day)
                 @if($programmed_day['data']->subactivity)
                   {
@@ -174,7 +174,7 @@
                 @endif
               @endforeach
 
-              // propuesta
+              // ficha
               @foreach($programmed_days as $programmed_day)
                 @if($programmed_day['data']->subactivity)
                   {
@@ -191,7 +191,7 @@
                 @endif
               @endforeach
 
-              // otras propuestas de la persona
+              // otras ficha de la persona
               @foreach($other_contracts_info as $programmed_day)
                 @if($programmed_day['data']->subactivity)
                   {

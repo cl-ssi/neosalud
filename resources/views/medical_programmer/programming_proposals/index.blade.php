@@ -4,7 +4,7 @@
 
 @include('medical_programmer.nav')
 
-<h3 class="mb-3">Listado de Propuestas</h3>
+<h3 class="mb-3">Listado de fichas de programación</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.programming_proposal.create') }}">
     <i class="fas fa-plus"></i> Agregar nueva

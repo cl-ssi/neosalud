@@ -10,7 +10,7 @@
         <li class="nav-item">
             <a class="nav-link {{ active('medical_programmer.programming_proposal.index') }}" href="{{ route('medical_programmer.programming_proposal.index') }}">
                 <span data-feather="chevrons-right"></span>
-                Propuestas de programación<span class="sr-only">(current)</span>
+                Fichas de programación<span class="sr-only">(current)</span>
             </a>
         </li>
     @endcan
