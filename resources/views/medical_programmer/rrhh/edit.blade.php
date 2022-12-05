@@ -51,24 +51,15 @@
   <h5>Datos adicionales</h5>
 
   <div class="row">
-    <!-- <fieldset class="form-group col-8 col-md-2">
-        <label for="for_id_deis">Id Deis</label>
-        <input type="number" class="form-control" name="id_deis" id="for_id_deis" value="{{ $user->mpAditionals->id_deis }}">
-    </fieldset>
-
-    <fieldset class="form-group col-8 col-md-2">
-        <label for="for_cod_estab_sirh">Cod Estab SIRH</label>
-        <input type="number" class="form-control" name="cod_estab_sirh" id="for_cod_estab_sirh" value="{{ $user->mpAditionals->cod_estab_sirh }}">
-    </fieldset> -->
 
       <fieldset class="form-group col-4">
           <label for="for_job_title">Título profesional</label>
-          <input type="text" class="form-control" id="for_job_title" placeholder="" name="job_title" value="{{$user->mpAditionals->job_title}}">
+          <input type="text" class="form-control" id="for_job_title" placeholder="" name="job_title" @if($user->mpAditionals) value="{{$user->mpAditionals->job_title}} @endif">
       </fieldset>
 
       <fieldset class="form-group col-4">
         <label for="for_sis_specialty">Especialidad SIS</label>
-        <input type="text" class="form-control" id="for_sis_specialty" placeholder="" name="sis_specialty" value="{{$user->mpAditionals->sis_specialty}}">
+        <input type="text" class="form-control" id="for_sis_specialty" placeholder="" name="sis_specialty" @if($user->mpAditionals) value="{{$user->mpAditionals->sis_specialty}} @endif">
     </fieldset>
   </div>
 
@@ -77,22 +68,24 @@
     <fieldset class="form-group col">
         <label for="risk_group">Grupo de riesgo</label>
         <select name="risk_group" id="for_risk_group" class="form-control">
-          <option value="1" {{ $user->mpAditionals->risk_group == 1 ? 'selected' : '' }}>Sí</option>
-          <option value="0" {{ $user->mpAditionals->risk_group == 0 ? 'selected' : '' }}>No</option>
+            <option value=""></option>
+            <option value="1" @if($user->mpAditionals) {{ $user->mpAditionals->risk_group == 1 ? 'selected' : '' }} @endif>Sí</option>
+            <option value="0" @if($user->mpAditionals) {{ $user->mpAditionals->risk_group == 0 ? 'selected' : '' }} @endif>No</option>
         </select>
     </fieldset>
 
     <fieldset class="form-group col">
         <label for="for_missing_condition">Ausentismo</label>
         <select name="missing_condition" id="for_missing_condition" class="form-control">
-          <option value="1" {{ $user->mpAditionals->missing_condition == 1 ? 'selected' : '' }}>Sí</option>
-          <option value="0" {{ $user->mpAditionals->missing_condition == 0 ? 'selected' : '' }}>No</option>
+            <option value=""></option>
+            <option value="1" @if($user->mpAditionals) {{ $user->mpAditionals->missing_condition == 1 ? 'selected' : '' }} @endif>Sí</option>
+            <option value="0" @if($user->mpAditionals) {{ $user->mpAditionals->missing_condition == 0 ? 'selected' : '' }} @endif>No</option>
         </select>
     </fieldset>
 
     <fieldset class="form-group col">
         <label for="for_missing_reason">Motivo (maternales, PSGS, Comisiones de estudio)</label>
-        <input type="text" class="form-control" id="for_missing_reason" name="missing_reason" value="{{$user->mpAditionals->missing_reason}}">
+        <input type="text" class="form-control" id="for_missing_reason" name="missing_reason"@if($user->mpAditionals)  value="{{$user->mpAditionals->missing_reason}}" @endif>
     </fieldset>
 
   </div>

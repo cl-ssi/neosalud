@@ -278,6 +278,9 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 	});
 
 	Route::prefix('rrhh')->name('rrhh.')->group(function(){
+		Route::post('importSirhFile', [RrhhController::class, 'importSirhFile'])->name('importSirhFile');
+		Route::view('/importSirhFileView', 'medical_programmer.sirh_imports.index')->name('importSirhFileView');
+
 		Route::get('/', [RrhhController::class, 'index'])->name('index');
 		Route::post('/', [RrhhController::class, 'store'])->name('store');
 		Route::get('/create', [RrhhController::class, 'create'])->name('create');
@@ -285,6 +288,8 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		Route::put('/{user}', [RrhhController::class, 'update'])->name('update');
 		Route::delete('/{user}', [RrhhController::class, 'destroy'])->name('destroy');
 		Route::get('/{user}/edit', [RrhhController::class, 'edit'])->name('edit');
+
+		
 	});
 
 	Route::prefix('contracts')->name('contracts.')->group(function(){

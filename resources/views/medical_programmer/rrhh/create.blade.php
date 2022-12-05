@@ -83,16 +83,18 @@
         <fieldset class="form-group col">
             <label for="risk_group">Grupo de riesgo</label>
             <select name="risk_group" id="for_risk_group" class="form-control">
-              <option value="1">Sí</option>
-              <option value="0">No</option>
+                <option value=""></option>
+                <option value="1">Sí</option>
+                <option value="0">No</option>
             </select>
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_missing_condition">Ausentismo</label>
             <select name="missing_condition" id="for_missing_condition" class="form-control">
-              <option value="1">Sí</option>
-              <option value="0">No</option>
+                <option value=""></option>
+                <option value="1">Sí</option>
+                <option value="0">No</option>
             </select>
         </fieldset>
 

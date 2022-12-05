@@ -68,6 +68,13 @@
                 </a>
             </li>
 
+            <li >
+                <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
+                    <span data-feather="chevrons-right"></span>
+                    Importar archivo SIRH
+                </a>
+            </li>
+
             <li>
                 <a class="dropdown-item {{ active('medical_programmer.operating_rooms.index') }}" href="{{ route('medical_programmer.operating_rooms.index') }}">
                     <span data-feather="chevrons-right"></span>
