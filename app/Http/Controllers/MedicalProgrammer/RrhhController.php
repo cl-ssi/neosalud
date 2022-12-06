@@ -6,6 +6,7 @@ namespace App\Http\Controllers\MedicalProgrammer;
 use App\Models\User;
 use App\Models\HumanName;
 use App\Models\Identifier;
+use App\Models\Practitioner;
 use App\Models\MedicalProgrammer\Contract;
 use App\Models\MedicalProgrammer\Service;
 use App\Models\MedicalProgrammer\Specialty;
@@ -74,7 +75,9 @@ class RrhhController extends Controller
         $professions = Profession::OrderBy('profession_name')->get();
         $operating_rooms = OperatingRoom::OrderBy('id')->where('description','LIKE', 'Box%')->get();
         $services = Service::OrderBy('service_name')->get();
-        return view('medical_programmer.rrhh.create', compact('permissions','specialties','professions','operating_rooms','services'));
+        $organizations = Organization::all();
+
+        return view('medical_programmer.rrhh.create', compact('permissions','specialties','professions','operating_rooms','services','organizations'));
     }
 
     /**
@@ -106,89 +109,121 @@ class RrhhController extends Controller
       // $rrhh = new User($request->All());
       // $rrhh->save();
 
-      DB::beginTransaction();
-      try {
-          $newPatient = new User($request->all());
-          $newPatient->active = 1;
-          $newPatient->save();
-          $newHumanName = new HumanName($request->all());
-          $newHumanName->use = "official";
-          $newHumanName->user_id = $newPatient->id;
-          $newPatient->syncPermissions('Mp: user');
-          $newHumanName->save();
+    DB::beginTransaction();
+    try {
+        $newPatient = new User($request->all());
+        $newPatient->active = 1;
+        $newPatient->save();
+        $newHumanName = new HumanName($request->all());
+        $newHumanName->use = "official";
+        $newHumanName->user_id = $newPatient->id;
+        $newPatient->syncPermissions('Mp: user');
+        $newHumanName->save();
 
-          $newIdentifier = new Identifier($request->all());
-          $newIdentifier->user_id = $newPatient->id;
-          $newIdentifier->use = "official";
-          $newIdentifier->cod_con_identifier_type_id = 1;
-          $newIdentifier->save();
+        $newIdentifier = new Identifier($request->all());
+        $newIdentifier->user_id = $newPatient->id;
+        $newIdentifier->use = "official";
+        $newIdentifier->cod_con_identifier_type_id = 1;
+        $newIdentifier->save();
 
-          $userAditional = new UserAditional($request->all());
-          $userAditional->user_id = $newPatient->id;
-          $userAditional->save();
+        $userAditional = new UserAditional($request->all());
+        $userAditional->user_id = $newPatient->id;
+        $userAditional->save();
 
-          $newPatient->syncPermissions(
-              is_array($request->input('permissions')) ? $request->input('permissions') : array()
-          );
+        $newPatient->syncPermissions(
+            is_array($request->input('permissions')) ? $request->input('permissions') : array()
+        );
 
-          $newPatient->syncPermissions('Mp: user');
-          $newHumanName->save();
+        $newPatient->syncPermissions('Mp: user');
+        $newHumanName->save();
 
-          //asigna especialidades
-          if($request->input('specialties')!=null){
+        // //asigna especialidades
+        // if($request->input('specialties')!=null){
 
-              //agrega las nuevas especialidades
-              foreach ($request->input('specialties') as $key => $value) {
+        //     //agrega las nuevas especialidades
+        //     foreach ($request->input('specialties') as $key => $value) {
 
-                $userSpecialty = new UserSpecialty();
-                $userSpecialty->specialty_id = $value;
-                $userSpecialty->user_id = $newPatient->id;
-                if ($value == $request->principal_specialty) {
-                  $userSpecialty->principal = 1;
-                }else{
-                  $userSpecialty->principal = 0;
-                }
-                $userSpecialty->save();
-              }
-          }
+        //     $userSpecialty = new UserSpecialty();
+        //     $userSpecialty->specialty_id = $value;
+        //     $userSpecialty->user_id = $newPatient->id;
+        //     if ($value == $request->principal_specialty) {
+        //         $userSpecialty->principal = 1;
+        //     }else{
+        //         $userSpecialty->principal = 0;
+        //     }
+        //     $userSpecialty->save();
+        //     }
+        // }
 
           //asigna profesiones
-          if($request->input('professions')!=null){
+        //   if($request->input('professions')!=null){
 
-              //agrega las nuevas profesiones
-              foreach ($request->input('professions') as $key => $value) {
+        //       //agrega las nuevas profesiones
+        //       foreach ($request->input('professions') as $key => $value) {
 
-                $userProfession = new UserProfession();
-                $userProfession->profession_id = $value;
-                $userProfession->user_id = $user->id;
-                if ($value == $request->principal_profession) {
-                  $userProfession->principal = 1;
-                }else{
-                  $userProfession->principal = 0;
+        //         $userProfession = new UserProfession();
+        //         $userProfession->profession_id = $value;
+        //         $userProfession->user_id = $user->id;
+        //         if ($value == $request->principal_profession) {
+        //           $userProfession->principal = 1;
+        //         }else{
+        //           $userProfession->principal = 0;
+        //         }
+        //         $userProfession->save();
+        //       }
+        //   }
+
+        //   //asigna pabellones
+        //   if ($request->input('operating_rooms')!=null) {
+        //       foreach ($request->input('operating_rooms') as $key => $value) {
+        //           $userOperatingRoom = UserOperatingRoom::where('operating_room_id',$value)
+        //                                           ->where('user_id', $user->id)
+        //                                           ->get();
+        //           if ($userOperatingRoom->count() == 0) {
+        //               $userOperatingRoom = new UserOperatingRoom();
+        //               $userOperatingRoom->operating_room_id = $value;
+        //               $userOperatingRoom->user_id = $user->id;
+        //               $userOperatingRoom->save();
+        //           }
+        //       }
+        //   }
+
+        if ($request->has('organization_id')) {
+            foreach ($request->organization_id as $key => $organization_id) {
+                if ($organization_id != null) {
+                    $newPractitioner = new Practitioner();
+                    $newPractitioner->active = 1;
+                    $newPractitioner->user_id = $newPatient->id;
+                    $newPractitioner->organization_id = $request->organization_id[$key];
+                    $newPractitioner->profession_id = $request->profession_id[$key];
+                    $newPractitioner->specialty_id = $request->specialty_id[$key];
+                    $newPractitioner->save();
                 }
-                $userProfession->save();
-              }
-          }
 
-          //asigna pabellones
-          if ($request->input('operating_rooms')!=null) {
-              foreach ($request->input('operating_rooms') as $key => $value) {
-                  $userOperatingRoom = UserOperatingRoom::where('operating_room_id',$value)
-                                                  ->where('user_id', $user->id)
-                                                  ->get();
-                  if ($userOperatingRoom->count() == 0) {
-                      $userOperatingRoom = new UserOperatingRoom();
-                      $userOperatingRoom->operating_room_id = $value;
-                      $userOperatingRoom->user_id = $user->id;
-                      $userOperatingRoom->save();
-                  }
-              }
-          }
+                if($request->specialty_id[$key] != null){
+                    $userSpecialty = new UserSpecialty();
+                    $userSpecialty->specialty_id = $request->specialty_id[$key];
+                    $userSpecialty->user_id = $newPatient->id;
+                    // if ($key == 0) {$userSpecialty->principal = 1;}
+                    // else{$userSpecialty->principal = 0;}
+                    $userSpecialty->principal = 0;
+                    $userSpecialty->save();
+                }
 
+                if($request->profession_id[$key] != null){
+                    $userProfession = new UserProfession();
+                    $userProfession->profession_id = $request->profession_id[$key];
+                    $userProfession->user_id = $newPatient->id;
+                    // if ($key == 0) {$userProfession->principal = 1;}
+                    // else{$userProfession->principal = 0;}
+                    $userProfession->principal = 0;
+                    $userProfession->save();
+                }
+            }
+        }
 
-
-          DB::commit();
-          session()->flash('success', 'El usuario ha sido creado.');
+        DB::commit();
+        session()->flash('success', 'El usuario ha sido creado.');
 
       } catch (\Exception $e) {
           DB::rollBack();
@@ -224,8 +259,12 @@ class RrhhController extends Controller
         $professions = Profession::OrderBy('profession_name')->get();
         $operating_rooms = OperatingRoom::OrderBy('id')->where('description','LIKE', 'Box%')->get();
         $services = Service::OrderBy('service_name')->get();
+        $organizations = Organization::all();
+        $patient = $user;
+
         // dd($permissions, $roles, $specialties, $professions, $operating_rooms, $services);
-        return view('medical_programmer.rrhh.edit', compact('user','permissions','specialties','professions','operating_rooms', 'services'));
+        return view('medical_programmer.rrhh.edit', compact('user','permissions','specialties','professions','operating_rooms', 'services',
+                                                'organizations','patient'));
     }
 
     /**
@@ -290,70 +329,161 @@ class RrhhController extends Controller
             //     is_array($request->input('permissions')) ? $request->input('permissions') : array()
             // );
 
-            //asigna especialidades
-            if($request->input('specialties')!=null){
+            // //asigna especialidades
+            // if($request->input('specialties')!=null){
 
-                //elimina lo no seleccionado
-                $userSpecialties = UserSpecialty::where('user_id', $user->id)->whereNotIn('specialty_id',$request->input('specialties'))->delete();
+            //     //elimina lo no seleccionado
+            //     $userSpecialties = UserSpecialty::where('user_id', $user->id)->whereNotIn('specialty_id',$request->input('specialties'))->delete();
 
-                //agrega las nuevas especialidades
-                foreach ($request->input('specialties') as $key => $value) {
-                    $userSpecialty = UserSpecialty::where('specialty_id',$value)
-                                                  ->where('user_id', $user->id)
-                                                  ->first();
+            //     //agrega las nuevas especialidades
+            //     foreach ($request->input('specialties') as $key => $value) {
+            //         $userSpecialty = UserSpecialty::where('specialty_id',$value)
+            //                                       ->where('user_id', $user->id)
+            //                                       ->first();
 
-                    if ($userSpecialty == null) {
-                        $userSpecialty = new UserSpecialty();
-                        $userSpecialty->specialty_id = $value;
-                        $userSpecialty->user_id = $user->id;
-                        if ($value == $request->principal_specialty) {
-                          $userSpecialty->principal = 1;
-                        }else{
-                          $userSpecialty->principal = 0;
+            //         if ($userSpecialty == null) {
+            //             $userSpecialty = new UserSpecialty();
+            //             $userSpecialty->specialty_id = $value;
+            //             $userSpecialty->user_id = $user->id;
+            //             if ($value == $request->principal_specialty) {
+            //               $userSpecialty->principal = 1;
+            //             }else{
+            //               $userSpecialty->principal = 0;
+            //             }
+            //             $userSpecialty->save();
+            //         }else{
+            //           if ($value == $request->principal_specialty) {
+            //             // $userSpecialty->where('specialty_id',$value)->update(['principal' => 1]);
+            //             $userSpecialty->where('specialty_id',$value)->where('user_id', $user->id)->update(['principal' => 1]);
+            //           }else{
+            //             // $userSpecialty->where('specialty_id',$value)->update(['principal' => 0]);
+            //             $userSpecialty->where('specialty_id',$value)->where('user_id', $user->id)->update(['principal' => 0]);
+            //           }
+            //         }
+            //     }
+            // }
+
+            // //asigna profesiones
+            // if($request->input('professions')!=null){
+
+            //     //elimina lo no seleccionado
+            //     $UserProfessions = UserProfession::where('user_id', $user->id)->whereNotIn('profession_id',$request->input('professions'))->delete();
+
+            //     //agrega las nuevas profesiones
+            //     foreach ($request->input('professions') as $key => $value) {
+            //         $userProfession = UserProfession::where('profession_id',$value)
+            //                                         ->where('user_id', $user->id)
+            //                                         ->first();
+            //         if ($userProfession == null) {
+            //             $userProfession = new UserProfession();
+            //             $userProfession->profession_id = $value;
+            //             $userProfession->user_id = $user->id;
+            //             if ($value == $request->principal_profession) {
+            //               $userProfession->principal = 1;
+            //             }else{
+            //               $userProfession->principal = 0;
+            //             }
+            //             $userProfession->save();
+            //         }else{
+            //           if ($value == $request->principal_specialty) {
+            //             // $userProfession->where('profession_id',$value)->update(['principal' => 1]);
+            //             $userProfession->where('profession_id',$value)->where('user_id', $user->id)->update(['principal' => 1]);
+            //           }else{
+            //             // $userProfession->where('profession_id',$value)->update(['principal' => 0]);
+            //             $userProfession->where('profession_id',$value)->where('user_id', $user->id)->update(['principal' => 0]);
+            //           }
+            //         }
+            //     }
+            // }
+
+            //PRACTITIONER
+            $patient =  $user;
+            $storedPractitionerIds = $patient->practitioners->pluck('id')->toArray();
+            if ($request->has('organization_id')) {
+                //forearch para actualizar/agregar practitioners
+                foreach ($request->organization_id as $key => $organization_id) {
+                    if ($request->practitioner_id[$key] == null) {
+                        $newPractitioner = new Practitioner();
+                        $newPractitioner->active = 1;
+                        $newPractitioner->user_id = $patient->id;
+                        $newPractitioner->organization_id = $request->organization_id[$key];
+                        $newPractitioner->specialty_id = $request->specialty_id[$key];
+                        $newPractitioner->profession_id = $request->profession_id[$key];
+                        $newPractitioner->save(); 
+
+                        if($request->specialty_id[$key] != null){
+                            $userSpecialty = new UserSpecialty();
+                            $userSpecialty->specialty_id = $request->specialty_id[$key];
+                            $userSpecialty->user_id = $patient->id;
+                            $userSpecialty->principal = 0;
+                            $userSpecialty->save();
                         }
-                        $userSpecialty->save();
-                    }else{
-                      if ($value == $request->principal_specialty) {
-                        // $userSpecialty->where('specialty_id',$value)->update(['principal' => 1]);
-                        $userSpecialty->where('specialty_id',$value)->where('user_id', $user->id)->update(['principal' => 1]);
-                      }else{
-                        // $userSpecialty->where('specialty_id',$value)->update(['principal' => 0]);
-                        $userSpecialty->where('specialty_id',$value)->where('user_id', $user->id)->update(['principal' => 0]);
-                      }
+        
+                        if($request->profession_id[$key] != null){
+                            $userProfession = new UserProfession();
+                            $userProfession->profession_id = $request->profession_id[$key];
+                            $userProfession->user_id = $patient->id;
+                            $userProfession->principal = 0;
+                            $userProfession->save();
+                        }
+
+                    } elseif (in_array($request->practitioner_id[$key], $storedPractitionerIds)) {
+                        $practitioner = Practitioner::find($request->practitioner_id[$key]);
+                        $last_specialty_id = $practitioner->specialty_id;
+                        $last_profession_id = $practitioner->profession_id;
+                        $practitioner->active = 1;
+                        $practitioner->user_id = $patient->id;
+                        $practitioner->organization_id = $request->organization_id[$key];
+                        $practitioner->specialty_id = $request->specialty_id[$key];
+                        $practitioner->profession_id = $request->profession_id[$key];
+                        $practitioner->save();
+
+                        if($request->specialty_id[$key] != null){
+                            $userSpecialty = UserSpecialty::where('specialty_id',$last_specialty_id)
+                                                        ->where('user_id',$patient->id)
+                                                        ->update(['specialty_id'=>$request->specialty_id[$key]]);
+                        }
+        
+                        if($request->profession_id[$key] != null){
+                            $userProfession = UserProfession::where('profession_id',$last_profession_id)
+                                                            ->where('user_id',$patient->id)
+                                                            ->update(['profession_id'=>$request->profession_id[$key]]);
+                        }
+                    }
+                }
+                //foreach para eliminar practitioners
+                foreach ($storedPractitionerIds as $key => $storedPractitionerId) {
+                    if (!in_array($storedPractitionerId, $request->practitioner_id)) {
+                        $practitioner = Practitioner::find($storedPractitionerId);
+                        $last_specialty_id = $practitioner->specialty_id;
+                        $last_profession_id = $practitioner->profession_id;
+                        $practitioner->delete();
+
+                        $userSpecialty = UserSpecialty::where('specialty_id',$last_specialty_id)
+                                                        ->where('user_id',$patient->id)
+                                                        ->delete();
+
+                        $userProfession = UserProfession::where('profession_id',$last_profession_id)
+                                                            ->where('user_id',$patient->id)
+                                                            ->delete();
                     }
                 }
             }
+            else {
+                //Si no hay ninguno, elimina todo
+                foreach ($storedPractitionerIds as $key => $storedPractitionerId) {
+                        $practitioner = Practitioner::find($storedPractitionerId);
+                        $last_specialty_id = $practitioner->specialty_id;
+                        $last_profession_id = $practitioner->profession_id;
+                        $practitioner->delete();
 
-            //asigna profesiones
-            if($request->input('professions')!=null){
+                        $userSpecialty = UserSpecialty::where('specialty_id',$last_specialty_id)
+                                                        ->where('user_id',$patient->id)
+                                                        ->delete();
 
-                //elimina lo no seleccionado
-                $UserProfessions = UserProfession::where('user_id', $user->id)->whereNotIn('profession_id',$request->input('professions'))->delete();
-
-                //agrega las nuevas profesiones
-                foreach ($request->input('professions') as $key => $value) {
-                    $userProfession = UserProfession::where('profession_id',$value)
-                                                    ->where('user_id', $user->id)
-                                                    ->first();
-                    if ($userProfession == null) {
-                        $userProfession = new UserProfession();
-                        $userProfession->profession_id = $value;
-                        $userProfession->user_id = $user->id;
-                        if ($value == $request->principal_profession) {
-                          $userProfession->principal = 1;
-                        }else{
-                          $userProfession->principal = 0;
-                        }
-                        $userProfession->save();
-                    }else{
-                      if ($value == $request->principal_specialty) {
-                        // $userProfession->where('profession_id',$value)->update(['principal' => 1]);
-                        $userProfession->where('profession_id',$value)->where('user_id', $user->id)->update(['principal' => 1]);
-                      }else{
-                        // $userProfession->where('profession_id',$value)->update(['principal' => 0]);
-                        $userProfession->where('profession_id',$value)->where('user_id', $user->id)->update(['principal' => 0]);
-                      }
-                    }
+                        $userProfession = UserProfession::where('profession_id',$last_profession_id)
+                                                            ->where('user_id',$patient->id)
+                                                            ->delete();
                 }
             }
 

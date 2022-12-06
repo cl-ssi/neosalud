@@ -82,7 +82,7 @@
 
         <fieldset class="form-group col">
             <label for="risk_group">Grupo de riesgo</label>
-            <select name="risk_group" id="for_risk_group" class="form-control">
+            <select name="risk_group" id="for_risk_group" class="form-control" required>
                 <option value=""></option>
                 <option value="1">Sí</option>
                 <option value="0">No</option>
@@ -91,7 +91,7 @@
 
         <fieldset class="form-group col">
             <label for="for_missing_condition">Ausentismo</label>
-            <select name="missing_condition" id="for_missing_condition" class="form-control">
+            <select name="missing_condition" id="for_missing_condition" class="form-control" required>
                 <option value=""></option>
                 <option value="1">Sí</option>
                 <option value="0">No</option>
@@ -120,7 +120,9 @@
 
     <h5>Información médica</h5>
 
-    <div class="row">
+    @livewire('user.user-practitioners', compact('organizations', 'professions', 'specialties'))
+
+    <!-- <div class="row">
       <div class="form-group col-3">
           <h4>Especialidades</h4>
           <select id="specialties" class="selectpicker" name="specialties[]" multiple>
@@ -158,7 +160,7 @@
       </div>
     </div>
 
-    <br />
+    <br /> -->
 
     <!-- <div class="container">
       <div class="row">
@@ -175,6 +177,8 @@
         </div>
       </div>
     </div> -->
+
+    <br>
 
     <button type="submit" class="btn btn-primary">Crear</button>
 

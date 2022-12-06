@@ -54,7 +54,7 @@
             <td>{{ $user->mothers_family }}</td> -->
             <!-- <td>{{ $user->job_title }}</td> -->
             <td nowrap>
-                @foreach ($user->specialties as $key => $specialty)
+                <!-- @foreach ($user->specialties as $key => $specialty)
                     {{$specialty->specialty_name}},
                     @if ($key == 2)
                         @break
@@ -62,6 +62,18 @@
                 @endforeach
                 @foreach ($user->professions as $key => $profession)
                     {{$profession->profession_name}},
+                    @if ($key == 2)
+                        @break
+                    @endif
+                @endforeach
+                -->
+                @foreach($user->practitioners as $key => $practitioner)
+                    @if($practitioner->specialty)
+                        {{$practitioner->specialty->specialty_name}},
+                    @endif
+                    @if($practitioner->profession)
+                        {{$practitioner->profession->profession_name}},
+                    @endif
                     @if ($key == 2)
                         @break
                     @endif

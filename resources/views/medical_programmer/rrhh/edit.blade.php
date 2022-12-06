@@ -108,7 +108,7 @@
 
   <h5>Información médica</h5>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="form-group col-3">
         <h4>Especialidades</h4>
         <select id="specialties" class="selectpicker" name="specialties[]" multiple>
@@ -144,7 +144,11 @@
 
         </select>
     </div>
-  </div>
+  </div> -->
+
+  @livewire('user.user-practitioners', compact('organizations', 'professions', 'specialties', 'patient'))
+
+  <br>
 
   <!-- <br />
 
