@@ -6,16 +6,16 @@
         href=" {{ route('medical_programmer.welcome') }}"><i class="fas fa-home"></i> Home</a>
     </li>
 
-    @canany(['Mp: programador'])
-        <li class="nav-item">
-            <a class="nav-link {{ active('medical_programmer.programming_proposal.index') }}" href="{{ route('medical_programmer.programming_proposal.index') }}">
-                <span data-feather="chevrons-right"></span>
-                Fichas de programación<span class="sr-only">(current)</span>
-            </a>
-        </li>
-    @endcan
+    @canany(['Mp: administrador', 'Mp: programador'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('medical_programmer.programming_proposal.index') }}" href="{{ route('medical_programmer.programming_proposal.index') }}">
+            <span data-feather="chevrons-right"></span>
+            Fichas de programación<span class="sr-only">(current)</span>
+        </a>
+    </li>
+    @endcanany
 
-    @canany(['Mp: programador'])
+    @canany(['Mp: administrador', 'Mp: programador'])
 
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active(['samu.event.filter','samu.calls.search']) }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,9 +39,9 @@
             
         </ul>
     </li>
-    @endcan
+    @endcanany
 
-    @can('Mp: mantenedores')
+    @canany(['Mp: administrador', 'Mp: mantenedores'])
     <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {{ active(['samu.key.*','samu.mobile.*']) }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-cog"></i> Mantenedores
@@ -67,13 +67,6 @@
                     Contratos
                 </a>
             </li>
-
-            <!-- <li >
-                <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
-                    <span data-feather="chevrons-right"></span>
-                    Importar archivo SIRH
-                </a>
-            </li> -->
 
             <li>
                 <a class="dropdown-item {{ active('medical_programmer.operating_rooms.index') }}" href="{{ route('medical_programmer.operating_rooms.index') }}">
@@ -114,7 +107,6 @@
                 <a class="dropdown-item {{ active('medical_programmer.specialties.index') }}" href="{{ route('medical_programmer.specialties.index') }}">
                     <span data-feather="chevrons-right"></span>
                     Especialidades
-                    <!-- (Rdtos sugeridos) -->
                 </a>
             </li>
 
@@ -122,7 +114,6 @@
                 <a class="dropdown-item {{ active('medical_programmer.professions.index') }}" href="{{ route('medical_programmer.professions.index') }}">
                     <span data-feather="chevrons-right"></span>
                     Profesiones
-                    <!-- (Rdtos sugeridos) -->
                 </a>
             </li>
 
@@ -148,22 +139,45 @@
             </li> -->
           </ul>
     </li>
+    @endcanany
 
 
+    @canany(['Mp: administrador', 'Mp: importar archivo sirh','Mp: mantenedor jefes de unidad'])
     <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-right-to-bracket"></i> Otros
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-right-to-bracket"></i> Otros
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-            <li >
-                <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
-                    <span data-feather="chevrons-right"></span>
-                    Importar archivo SIRH
-                </a>
-            </li>
+        @canany(['Mp: administrador', 'Mp: importar archivo sirh'])
+        <li >
+            <a class="dropdown-item {{ active('medical_programmer.rrhh.importSirhFileView') }}" href="{{ route('medical_programmer.rrhh.importSirhFileView') }}">
+                <span data-feather="chevrons-right"></span>
+                Importar archivo SIRH
+            </a>
+        </li>
+        @endcanany
 
-          </ul>
+        @canany(['Mp: administrador', 'Mp: mantenedor jefes de unidad'])
+        <li >
+            <a class="dropdown-item {{ active('medical_programmer.unit_heads.index') }}" href="{{ route('medical_programmer.unit_heads.index') }}">
+                <span data-feather="chevrons-right"></span>
+                Jefes de unidad
+            </a>
+        </li>
+        @endcanany
+
+        @canany(['Mp: administrador', 'Mp: asigna tu equipo'])
+        <li >
+            <a class="dropdown-item {{ active('medical_programmer.rrhh.assign_your_team') }}" href="{{ route('medical_programmer.rrhh.assign_your_team') }}">
+                <span data-feather="chevrons-right"></span>
+                Asigna tu equipo
+            </a>
+        </li>
+        @endcanany
+
+        </ul>
     </li>
-    @endcan
+    @endcanany
+    
 </ul>

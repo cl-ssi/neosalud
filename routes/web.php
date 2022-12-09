@@ -25,6 +25,7 @@ use App\Http\Controllers\Surveys\TeleconsultationSurveyController;
 
 use App\Http\Controllers\MedicalProgrammer\OperatingRoomProgrammingController;
 use App\Http\Controllers\MedicalProgrammer\RrhhController;
+use App\Http\Controllers\MedicalProgrammer\UnitHeadController;
 use App\Http\Controllers\MedicalProgrammer\ContractController;
 use App\Http\Controllers\MedicalProgrammer\ActivityController;
 use App\Http\Controllers\MedicalProgrammer\SubActivityController;
@@ -280,6 +281,7 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 	Route::prefix('rrhh')->name('rrhh.')->group(function(){
 		Route::post('importSirhFile', [RrhhController::class, 'importSirhFile'])->name('importSirhFile');
 		Route::view('/importSirhFileView', 'medical_programmer.sirh_imports.index')->name('importSirhFileView');
+        Route::get('/assign_your_team', [RrhhController::class, 'assign_your_team'])->name('assign_your_team');
 
 		Route::get('/', [RrhhController::class, 'index'])->name('index');
 		Route::post('/', [RrhhController::class, 'store'])->name('store');
@@ -290,6 +292,16 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		Route::get('/{user}/edit', [RrhhController::class, 'edit'])->name('edit');
 
 		
+	});
+
+    Route::prefix('unit_heads')->name('unit_heads.')->group(function(){
+		Route::get('/', [UnitHeadController::class, 'index'])->name('index');
+		Route::post('/', [UnitHeadController::class, 'store'])->name('store');
+		// Route::get('/create', [UnitHeadController::class, 'create'])->name('create');
+		// Route::get('/{user}', [UnitHeadController::class, 'show'])->name('show');
+		// Route::put('/{user}', [UnitHeadController::class, 'update'])->name('update');
+		Route::delete('/{units_head}', [UnitHeadController::class, 'destroy'])->name('destroy');
+		// Route::get('/{user}/edit', [UnitHeadController::class, 'edit'])->name('edit');
 	});
 
 	Route::prefix('contracts')->name('contracts.')->group(function(){

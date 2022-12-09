@@ -699,4 +699,9 @@ class RrhhController extends Controller
         session()->flash('success', 'Se ha cargado correctamente el archivo (Se han creado ' . $user_count . ' usuarios y ' . $contract_count . ' contratos).');
         return redirect()->back();
     }
+
+    public function assign_your_team(){
+        dd("en mantención");
+        // return view('medical_programmer.rrhh.units_head',compact('users'));
+    }
 }
