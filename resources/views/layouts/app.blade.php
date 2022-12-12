@@ -69,8 +69,8 @@
 
                     @include('layouts.partials.errors')
                     @include('layouts.partials.flash_message')
-                    
-                    @yield('content') @if( isset($slot) ) {{ $slot }} @endif
+
+                    @yield('content', $slot ?? '')
                 </main>
             </div>
         </div>
