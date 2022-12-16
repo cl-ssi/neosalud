@@ -282,6 +282,9 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		Route::post('importSirhFile', [RrhhController::class, 'importSirhFile'])->name('importSirhFile');
 		Route::view('/importSirhFileView', 'medical_programmer.sirh_imports.index')->name('importSirhFileView');
         Route::get('/assign_your_team', [RrhhController::class, 'assign_your_team'])->name('assign_your_team');
+        Route::post('/store_assign_your_team', [RrhhController::class, 'store_assign_your_team'])->name('store_assign_your_team');
+        Route::delete('destroy_assign_your_team/{practitioner}', [RrhhController::class, 'destroy_assign_your_team'])->name('destroy_assign_your_team');
+        
 
 		Route::get('/', [RrhhController::class, 'index'])->name('index');
 		Route::post('/', [RrhhController::class, 'store'])->name('store');

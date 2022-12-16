@@ -28,6 +28,7 @@ use App\Imports\SirhRrhhImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Models\Organization;
+use App\Models\MedicalProgrammer\UnitHead;
 
 class RrhhController extends Controller
 {
@@ -701,7 +702,83 @@ class RrhhController extends Controller
     }
 
     public function assign_your_team(){
-        dd("en mantención");
-        // return view('medical_programmer.rrhh.units_head',compact('users'));
+        $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
+        $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
+
+        // dd($unitHeads_profession);
+
+        $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
+                                    ->whereHas('user')
+                                    ->get();
+
+        $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
+                                        ->whereHas('user')
+                                        ->get();
+                                        // dd($profession_users);
+
+        $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
+        $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
+        $organizations = Organization::all();
+        $users = User::permission('Mp: user')->get();
+        // dd($users);
+
+        return view('medical_programmer.rrhh.assign_your_team',compact('specialty_users','profession_users','specialties',
+                                                                        'professions','organizations','users'));
+    }
+
+    public function store_assign_your_team(Request $request){
+        $user = User::find($request->user_id);
+
+        if ($request->has('organization_id')) {
+            foreach ($request->organization_id as $key => $organization_id) {
+                if ($organization_id != null) {
+                    $newPractitioner = new Practitioner();
+                    $newPractitioner->active = 1;
+                    $newPractitioner->user_id = $user->id;
+                    $newPractitioner->organization_id = $request->organization_id[$key];
+                    $newPractitioner->profession_id = $request->profession_id[$key];
+                    $newPractitioner->specialty_id = $request->specialty_id[$key];
+                    $newPractitioner->save();
+                }
+
+                if($request->specialty_id[$key] != null){
+                    $userSpecialty = new UserSpecialty();
+                    $userSpecialty->specialty_id = $request->specialty_id[$key];
+                    $userSpecialty->user_id = $user->id;
+                    $userSpecialty->principal = 0;
+                    $userSpecialty->save();
+                }
+
+                if($request->profession_id[$key] != null){
+                    $userProfession = new UserProfession();
+                    $userProfession->profession_id = $request->profession_id[$key];
+                    $userProfession->user_id = $user->id;
+                    $userProfession->principal = 0;
+                    $userProfession->save();
+                }
+            }
+        }
+
+        session()->flash('success', 'Se ha agregado el usuario a tu equipo.');
+        return redirect()->back();
+    }
+
+    public function destroy_assign_your_team(Practitioner $practitioner){
+        if($practitioner->specialty_id){
+            $specialty = UserSpecialty::where('user_id',$practitioner->user_id)
+                                    ->where('specialty_id',$practitioner->specialty_id)
+                                    ->delete();
+        }
+
+        if($practitioner->profession_id){
+            $specialty = UserSpecialty::where('user_id',$practitioner->user_id)
+                                    ->where('profession_id',$practitioner->profession_id)
+                                    ->delete();
+        }
+
+        $practitioner->delete();
+
+        session()->flash('success', 'Se ha eliminado el usuario de tu equipo.');
+        return redirect()->back();
     }
 }
