@@ -176,6 +176,15 @@
         </li>
         @endcanany
 
+        @canany(['Mp: administrador', 'Mp: visadores'])
+        <li >
+            <a class="dropdown-item {{ active('medical_programmer.rrhh.visators') }}" href="{{ route('medical_programmer.rrhh.visators') }}">
+                <span data-feather="chevrons-right"></span>
+                Visadores
+            </a>
+        </li>
+        @endcanany
+
         </ul>
     </li>
     @endcanany

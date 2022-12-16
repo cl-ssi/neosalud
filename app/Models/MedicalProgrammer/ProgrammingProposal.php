@@ -58,7 +58,7 @@ class ProgrammingProposal extends Model implements Auditable
       {
         // si tiene permisos de supervición
         if (
-            Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de Servicio') ||
+            Auth::user()->hasPermissionTo('Mp: asigna tu equipo') ||
             Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
             Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
             Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') ||

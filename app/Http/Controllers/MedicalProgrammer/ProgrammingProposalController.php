@@ -182,10 +182,8 @@ class ProgrammingProposalController extends Controller
         $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
       }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
         $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de Servicio')){
-        $programmingProposalSignatureFlow->type = "Jefe de Servicio";
       }else{
-        $programmingProposalSignatureFlow->type = "Funcionario";
+        $programmingProposalSignatureFlow->type = "Jefe de Servicio";
       }
 
       $programmingProposalSignatureFlow->save();
@@ -237,8 +235,6 @@ class ProgrammingProposalController extends Controller
         $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
       }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
         $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de Servicio')){
-        $programmingProposalSignatureFlow->type = "Jefe de Servicio";
       }else{
         $programmingProposalSignatureFlow->type = "Funcionario";
       }

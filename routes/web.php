@@ -284,6 +284,10 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
         Route::get('/assign_your_team', [RrhhController::class, 'assign_your_team'])->name('assign_your_team');
         Route::post('/store_assign_your_team', [RrhhController::class, 'store_assign_your_team'])->name('store_assign_your_team');
         Route::delete('destroy_assign_your_team/{practitioner}', [RrhhController::class, 'destroy_assign_your_team'])->name('destroy_assign_your_team');
+        Route::get('/visators', [RrhhController::class, 'visators'])->name('visators');
+        Route::post('/add_visator', [RrhhController::class, 'add_visator'])->name('add_visator');
+        Route::delete('destroy_visator/{user}/{permission}', [RrhhController::class, 'destroy_visator'])->name('destroy_visator');
+        
         
 
 		Route::get('/', [RrhhController::class, 'index'])->name('index');
