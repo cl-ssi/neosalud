@@ -16,9 +16,10 @@
         <fieldset class="col-3">
             <label for="for_user_id">Funcionario</label>
             <select name="user_id" id="for_user_id" class="form-control selectpicker" required="" data-live-search="true" data-size="5">
-              @foreach($users as $user)
-                <option value="{{$user->id}}">{{$user->OfficialFullName}}</option>
-              @endforeach
+                <option value=""></option>
+                @foreach($users as $user)
+                    <option value="{{$user->id}}">{{$user->OfficialFullName}}</option>
+                @endforeach
             </select>
         </fieldset>
     </div><br>
