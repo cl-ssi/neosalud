@@ -771,7 +771,7 @@ class RrhhController extends Controller
         }
 
         if($practitioner->profession_id){
-            $specialty = UserSpecialty::where('user_id',$practitioner->user_id)
+            $specialty = UserProfession::where('user_id',$practitioner->user_id)
                                     ->where('profession_id',$practitioner->profession_id)
                                     ->delete();
         }
