@@ -8,6 +8,10 @@
 
 <h3 class="mb-3">Asigna a tu equipo</h3>
 
+<div class="alert alert-info" role="alert">
+  Si no te aparecen especialidades ni profesiones, debes contactar al administrador del sistema para que te asigne como jefe de unidad.
+</div>
+
 <form method="POST" class="form-horizontal" action="{{ route('medical_programmer.rrhh.store_assign_your_team') }}">
     @csrf
     @method('POST')

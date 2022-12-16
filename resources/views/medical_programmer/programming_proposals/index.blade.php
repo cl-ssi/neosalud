@@ -7,7 +7,7 @@
 <h3 class="mb-3">Listado de fichas de programación</h3>
 
 <div class="alert alert-info" role="alert">
-  Solo administradores del sistema y jefes de unidad podrán revisar información en esta opción.
+  Solo administradores del sistema y jefes de unidad podrán revisar información en esta opción. Si no te aparece información, contacta al administrador del sistema.
 </div>
 
 <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.programming_proposal.create') }}">
