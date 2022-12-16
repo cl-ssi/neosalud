@@ -12,6 +12,7 @@ use App\Models\MedicalProgrammer\ProgrammingProposal;
 use App\Models\MedicalProgrammer\ProgrammingProposalDetail;
 use App\Models\MedicalProgrammer\ProgrammingProposalSignatureFlow;
 // use App\Models\MedicalProgrammer\TheoreticalProgramming;
+use App\Models\MedicalProgrammer\UnitHead;
 
 use App\Models\User;
 
@@ -24,86 +25,122 @@ class ProgrammingProposalController extends Controller
      */
     public function index(Request $request)
     {
+        // $type = $request->get('type');
+        // $specialty_id = $request->get('specialty_id');
+        // $profesion_id = $request->get('profesion_id');
+        // $user_id = $request->get('user_id');
+        $name = $request->get('name');
 
-      $type = $request->get('type');
-      $specialty_id = $request->get('specialty_id');
-      $profesion_id = $request->get('profesion_id');
-      // $user_id = $request->get('user_id');
-      $name = $request->get('name');
+    //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
+    //       Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
+    //     $programmingProposals = ProgrammingProposal::whereNotNull('specialty_id')
+    //                                                ->when($type != null, function ($q) use ($type) {
+    //                                                   return $q->when($type == "Médico", function ($q) {
+    //                                                      return $q->whereNull('profession_id');
+    //                                                   })->when($type == "No médico", function ($q) {
+    //                                                      return $q->whereNull('specialty_id');
+    //                                                   });
+    //                                                })
+    //                                                ->when($specialty_id != null, function ($q) use ($specialty_id) {
+    //                                                   return $q->where('specialty_id',$specialty_id);
+    //                                                })
+    //                                                ->when($profesion_id != null, function ($q) use ($profesion_id) {
+    //                                                   return $q->where('profesion_id',$profesion_id);
+    //                                                })
+    //                                               //  ->when($user_id != null, function ($q) use ($user_id) {
+    //                                               //     return $q->where('user_id',$user_id);
+    //                                               //  })
+    //                                               ->when($name != null, function ($q) use ($name) {
+    //                                                 return $q->whereHas('user', function ($query) use ($name) {
+    //                                                     return $query->whereHas('humanNames', function ($query) use ($name) {
+    //                                                         return $query->where('text', 'LIKE', '%' . $name . '%')
+    //                                                                      ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+    //                                                                      ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+    //                                                       });
+    //                                                   });
+    //                                                })
+    //                                                ->orderBy('id','DESC')
+    //                                                ->paginate(50);
 
-      if (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
-          Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-        $programmingProposals = ProgrammingProposal::whereNotNull('specialty_id')
-                                                   ->when($type != null, function ($q) use ($type) {
-                                                      return $q->when($type == "Médico", function ($q) {
-                                                         return $q->whereNull('profession_id');
-                                                      })->when($type == "No médico", function ($q) {
-                                                         return $q->whereNull('specialty_id');
-                                                      });
-                                                   })
-                                                   ->when($specialty_id != null, function ($q) use ($specialty_id) {
-                                                      return $q->where('specialty_id',$specialty_id);
-                                                   })
-                                                   ->when($profesion_id != null, function ($q) use ($profesion_id) {
-                                                      return $q->where('profesion_id',$profesion_id);
-                                                   })
-                                                  //  ->when($user_id != null, function ($q) use ($user_id) {
-                                                  //     return $q->where('user_id',$user_id);
-                                                  //  })
-                                                  ->when($name != null, function ($q) use ($name) {
-                                                    return $q->whereHas('user', function ($query) use ($name) {
-                                                        return $query->whereHas('humanNames', function ($query) use ($name) {
-                                                            return $query->where('text', 'LIKE', '%' . $name . '%')
-                                                                         ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
-                                                                         ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
-                                                          });
-                                                      });
-                                                   })
-                                                   ->orderBy('id','DESC')
-                                                   ->get();
-      }elseif (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
-               Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
-        $programmingProposals = ProgrammingProposal::whereNotNull('profession_id')
-                                                    ->when($type != null, function ($q) use ($type) {
-                                                       return $q->when($type == "Médico", function ($q) {
-                                                          return $q->whereNull('profession_id');
-                                                       })->when($type == "No médico", function ($q) {
-                                                          return $q->whereNull('specialty_id');
-                                                       });
-                                                    })
-                                                    ->when($specialty_id != null, function ($q) use ($specialty_id) {
-                                                       return $q->where('specialty_id',$specialty_id);
-                                                    })
-                                                    ->when($profesion_id != null, function ($q) use ($profesion_id) {
-                                                       return $q->where('profesion_id',$profesion_id);
-                                                    })
-                                                    ->when($user_id != null, function ($q) use ($user_id) {
-                                                       return $q->where('user_id',$user_id);
-                                                    })
-                                                    ->orderBy('id','DESC')
-                                                    ->get();
-      }else{
-        $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
-                                                    ->when($type != null, function ($q) use ($type) {
-                                                       return $q->when($type == "Médico", function ($q) {
-                                                          return $q->whereNull('profession_id');
-                                                       })->when($type == "No médico", function ($q) {
-                                                          return $q->whereNull('specialty_id');
-                                                       });
-                                                    })
-                                                    ->when($specialty_id != null, function ($q) use ($specialty_id) {
-                                                       return $q->where('specialty_id',$specialty_id);
-                                                    })
-                                                    ->when($profesion_id != null, function ($q) use ($profesion_id) {
-                                                       return $q->where('profesion_id',$profesion_id);
-                                                    })
-                                                    ->when($user_id != null, function ($q) use ($user_id) {
-                                                       return $q->where('user_id',$user_id);
-                                                    })
-                                                    ->get();
-      }
+    //   }elseif (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
+    //            Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
+    //     $programmingProposals = ProgrammingProposal::whereNotNull('profession_id')
+    //                                                 ->when($type != null, function ($q) use ($type) {
+    //                                                    return $q->when($type == "Médico", function ($q) {
+    //                                                       return $q->whereNull('profession_id');
+    //                                                    })->when($type == "No médico", function ($q) {
+    //                                                       return $q->whereNull('specialty_id');
+    //                                                    });
+    //                                                 })
+    //                                                 ->when($specialty_id != null, function ($q) use ($specialty_id) {
+    //                                                    return $q->where('specialty_id',$specialty_id);
+    //                                                 })
+    //                                                 ->when($profesion_id != null, function ($q) use ($profesion_id) {
+    //                                                    return $q->where('profesion_id',$profesion_id);
+    //                                                 })
+    //                                                 ->when($user_id != null, function ($q) use ($user_id) {
+    //                                                    return $q->where('user_id',$user_id);
+    //                                                 })
+    //                                                 ->orderBy('id','DESC')
+    //                                                 ->paginate(50);
+    //   }else{
+    //     $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
+    //                                                 ->when($type != null, function ($q) use ($type) {
+    //                                                    return $q->when($type == "Médico", function ($q) {
+    //                                                       return $q->whereNull('profession_id');
+    //                                                    })->when($type == "No médico", function ($q) {
+    //                                                       return $q->whereNull('specialty_id');
+    //                                                    });
+    //                                                 })
+    //                                                 ->when($specialty_id != null, function ($q) use ($specialty_id) {
+    //                                                    return $q->where('specialty_id',$specialty_id);
+    //                                                 })
+    //                                                 ->when($profesion_id != null, function ($q) use ($profesion_id) {
+    //                                                    return $q->where('profesion_id',$profesion_id);
+    //                                                 })
+    //                                                 ->when($user_id != null, function ($q) use ($user_id) {
+    //                                                    return $q->where('user_id',$user_id);
+    //                                                 })
+    //                                                 ->paginate(50);
+    //   }
 
-      return view('medical_programmer.programming_proposals.index',compact('request','programmingProposals'));
+        $programmingProposals = array();
+        if(Auth::user()->hasPermissionTo('Mp: administrador')){
+            $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
+                                                        ->when($name != null, function ($q) use ($name) {
+                                                            return $q->whereHas('user', function ($query) use ($name) {
+                                                                return $query->whereHas('humanNames', function ($query) use ($name) {
+                                                                    return $query->where('text', 'LIKE', '%' . $name . '%')
+                                                                                    ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                                                                    ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                                                                    });
+                                                                });
+                                                            })
+                                                        ->paginate(50);
+        }else{
+            if(Auth::user()->hasPermissionTo('Mp: asigna tu equipo')){
+                $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
+                $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
+                
+                $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
+                                                            ->when($name != null, function ($q) use ($name) {
+                                                                return $q->whereHas('user', function ($query) use ($name) {
+                                                                    return $query->whereHas('humanNames', function ($query) use ($name) {
+                                                                        return $query->where('text', 'LIKE', '%' . $name . '%')
+                                                                                        ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                                                                        ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                                                                        });
+                                                                    });
+                                                                })
+                                                            ->whereIn('specialty_id',$unitHeads_specialty)
+                                                            ->OrwhereIn('profession_id',$unitHeads_profession)
+                                                            ->paginate(50);
+            }else{
+                $programmingProposals = ProgrammingProposal::where('id',0)->paginate(50);
+            }
+        }
+
+        return view('medical_programmer.programming_proposals.index',compact('request','programmingProposals'));
     }
 
     /**

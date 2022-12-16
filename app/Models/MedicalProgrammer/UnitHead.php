@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class UnitHead extends Model implements Auditable
+class UnitHead extends Model implements Auditable 
 {
+    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
     /**
      * The attributes that are mass assignable.
@@ -31,7 +32,6 @@ class UnitHead extends Model implements Auditable
         return $this->belongsTo('App\Models\MedicalProgrammer\Specialty');
     }
 
-    use SoftDeletes;
     /**
      * The attributes that should be mutated to dates.
      *

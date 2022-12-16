@@ -8,6 +8,8 @@ use App\Models\MedicalProgrammer\Profession;
 use App\Models\MedicalProgrammer\Contract;
 use App\Models\Practitioner;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\MedicalProgrammer\UnitHead;
 
 class SelectMedProgEmployee extends Component
 {
@@ -33,9 +35,20 @@ class SelectMedProgEmployee extends Component
 
         if ($this->type != null) {
           if ($this->type == "Médico") {
-            $this->specialties = Specialty::orderBy('specialty_name','ASC')->get();
+            if(Auth::user()->hasPermissionTo('Mp: administrador')){
+                $this->specialties = Specialty::orderBy('specialty_name','ASC')->get();
+            }else{
+                $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
+                $this->specialties = Specialty::whereIn('id',$unitHeads_specialty)->orderBy('specialty_name','ASC')->get();
+            }
+            
           }else{
-            $this->professions = Profession::orderBy('profession_name','ASC')->get();
+            if(Auth::user()->hasPermissionTo('Mp: administrador')){
+                $this->professions = Profession::orderBy('profession_name','ASC')->get();
+            }else{
+                $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
+                $this->professions = Profession::whereIn('id',$unitHeads_profession)->orderBy('profession_name','ASC')->get();
+            }
           }
         }
 

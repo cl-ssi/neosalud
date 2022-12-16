@@ -65,8 +65,10 @@ class UnitHeadController extends Controller
 
     public function destroy(UnitHead $units_head){
         $units_head->delete();
-        // $units_head->user->syncPermissions('Mp: asigna tu equipo');
-        $units_head->user->revokePermissionTo('Mp: asigna tu equipo');
+        // si no queda ningun usuario más, se elimina el permiso
+        if(UnitHead::where('user_id',$units_head->user_id)->count() == 0){
+            $units_head->user->revokePermissionTo('Mp: asigna tu equipo');
+        }
         session()->flash('success', 'Se ha eliminado el acceso.');
         return redirect()->back();   
     }

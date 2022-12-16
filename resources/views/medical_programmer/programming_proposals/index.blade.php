@@ -6,6 +6,10 @@
 
 <h3 class="mb-3">Listado de fichas de programación</h3>
 
+<div class="alert alert-info" role="alert">
+  Solo administradores del sistema y jefes de unidad podrán revisar información en esta opción.
+</div>
+
 <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.programming_proposal.create') }}">
     <i class="fas fa-plus"></i> Agregar nueva
 </a>
@@ -83,6 +87,8 @@
       @endforeach
     </tbody>
 </table>
+
+{{ $programmingProposals->links('pagination::bootstrap-4') }}
 
 
 @endsection

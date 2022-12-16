@@ -705,8 +705,6 @@ class RrhhController extends Controller
         $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
         $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
 
-        // dd($unitHeads_specialty);
-
         $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
                                     ->whereHas('user')
                                     ->get();
@@ -714,7 +712,8 @@ class RrhhController extends Controller
         $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
                                         ->whereHas('user')
                                         ->get();
-                                        // dd($profession_users);
+
+                                        // dd($specialty_users, $profession_users);
 
         $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
         $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
