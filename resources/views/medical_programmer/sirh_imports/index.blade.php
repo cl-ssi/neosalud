@@ -14,7 +14,7 @@
 
 
     <div class="form-row">
-        <fieldset class="form-group col-4 col-md-2">
+        <fieldset class="form-group col-6">
             <label>Archivo</label>
             <input type="file" class="form-control" name="file" required >
         </fieldset>

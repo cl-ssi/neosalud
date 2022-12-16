@@ -24,7 +24,7 @@ class ActivityController extends Controller
                                   return $q->where('activity_type_id',$type);
                               })
                               ->orderBy('id_activity','ASC')
-                              ->get();
+                              ->paginate(50);
 
       return view('medical_programmer.activities.index', compact('request','activities'));
     }

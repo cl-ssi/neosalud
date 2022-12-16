@@ -65,6 +65,8 @@
     </tbody>
 </table>
 
+{{ $subactivities->links('pagination::bootstrap-4') }}
+
 @endsection
 
 @section('custom_js')

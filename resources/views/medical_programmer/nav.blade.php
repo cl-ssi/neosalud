@@ -68,12 +68,12 @@
                 </a>
             </li>
 
-            <li>
+            <!-- <li>
                 <a class="dropdown-item {{ active('medical_programmer.operating_rooms.index') }}" href="{{ route('medical_programmer.operating_rooms.index') }}">
                     <span data-feather="chevrons-right"></span>
                     Pabellones
                 </a>
-            </li>
+            </li> -->
 
             <li>
                 <a class="dropdown-item {{ active('medical_programmer.mother_activities.index') }}" href="{{ route('medical_programmer.mother_activities.index') }}">

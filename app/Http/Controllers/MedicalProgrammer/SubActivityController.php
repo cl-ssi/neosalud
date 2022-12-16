@@ -32,7 +32,7 @@ class SubActivityController extends Controller
                                       ->when($profession_id != 0, function ($query) use ($profession_id) {
                                                                         $query->where('profession_id', $profession_id);
                                                                     })
-                                      ->get();
+                                    ->paginate(50);
 
         return view('medical_programmer.subactivities.index', compact('request','subactivities','specialties','professions'));
     }
