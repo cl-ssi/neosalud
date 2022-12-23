@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('samu.call.syncEvents', $call) }}">
+<form method="POST" action="{{ route('samu.call.syncEvents', $call) }}" class="d-print-none">
     @csrf
     @method('POST')
 
