@@ -563,6 +563,7 @@ use App\Http\Livewire\Samu\Supplies;
 use App\Http\Livewire\Samu\Stadistic;
 use App\Http\Livewire\Samu\Shift\ShiftSearcher;
 use App\Http\Livewire\Samu\ShiftUserEdit;
+use App\Http\Livewire\Samu\Novelties;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/monitor', MonitorIndex::class)->name('monitor');
@@ -640,7 +641,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	Route::prefix('novelties')->name('noveltie.')
 	->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
 	->group(function () {
-		Route::get('/', 			[NoveltieController::class, 'index'])->name('index');
+		Route::get('/', 			Novelties::class)->name('index');
         Route::get('/create', 	    [NoveltieController::class, 'create'])->name('create');
 		Route::post('/store', 		[NoveltieController::class, 'store'])->name('store');
 		Route::get('/edit/{noveltie}', [NoveltieController::class, 'edit'])->name('edit');

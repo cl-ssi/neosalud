@@ -18,17 +18,7 @@ class NoveltieController extends Controller
      */
     public function index()
     {
-        /* Obtener el turno actual */
-        $openShift = Shift::where('status',true)
-                    ->with(['novelties','novelties.creator'])
-                    ->first();
-
-        $lastShift = Shift::latest()
-                    ->skip(1)
-                    ->with(['novelties','novelties.creator'])
-                    ->first();
-
-        return view ('samu.noveltie.index', compact('openShift','lastShift'));
+        
     }
 
     /**
