@@ -11,12 +11,14 @@
                 <button class="btn btn-outline-secondary" wire:click='render' type="button">Buscar</button>
             </div>
         </div>
+        @if($openShift)
         <div class="col-3 text-end">
             <a href="{{ route('samu.noveltie.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i>
                 Crear Novedad
             </a>
         </div>
+        @endif
     </div>
 
     @include('samu.noveltie.partials.list', ['novelties' => $novelties ])

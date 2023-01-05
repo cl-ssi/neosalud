@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Samu;
 
 use Livewire\WithPagination;
 use Livewire\Component;
+use App\Models\Samu\Shift;
 use App\Models\Samu\Noveltie;
 
 class Novelties extends Component
@@ -13,6 +14,16 @@ class Novelties extends Component
 
     public $search;
     public $date;
+
+    public $openShift;
+
+    /**
+    * mount
+    */
+    public function mount()
+    {
+        $this->openShift = Shift::where('status',true)->first();
+    }
     
     public function render()
     {
