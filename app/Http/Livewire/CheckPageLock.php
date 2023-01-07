@@ -9,28 +9,27 @@ class CheckPageLock extends Component
 { 
     /**
      * Modo de uso:
-     * Path: es la url que se quiere bloquear, por defecto es la actual = path()
      * Time: tiempo de bloqueo, esto enviara peticiones cada x tiempo 
      *       para mantener bloqueada la página, evitar tiempos muy pequeños
      *       ya que bombardeará con trafico e inserts en la bd.
+     * Path: es la url que se quiere bloquear, por defecto es la actual = path()
      * 
      *  @livewire('check-page-lock', [
-     *    'path' => request()->path(),
-     *    'time' => 30
+     *    'time' => 30,
+     *    'path' => request()->path()
      *  ])
      */
     public $time;
 
-    public $model;
-    public $locked = true;
+    public $pageLock;
 
     /**
     * Mount
     */
-    public function mount($path, $time)
+    public function mount($time, $path)
     {
         $this->time = $time;
-        $this->model = PageLock::firstOrCreate(
+        $this->pageLock = PageLock::firstOrCreate(
             [
                 'path' => $path
             ],
@@ -39,10 +38,10 @@ class CheckPageLock extends Component
                 'user_id' => auth()->id()
             ]);
 
-        if($this->model->locked_to < now() AND $this->model->user_id != auth()->id()) {
-            $this->model->user_id = auth()->id();
-            $this->model->locked_to = now()->addSeconds($this->time + 5);
-            $this->model->save();
+        if($this->pageLock->locked_to < now() AND $this->pageLock->user_id != auth()->id()) {
+            $this->pageLock->user_id = auth()->id();
+            $this->pageLock->locked_to = now()->addSeconds($this->time + 5);
+            $this->pageLock->save();
         }
     }
 
@@ -51,13 +50,12 @@ class CheckPageLock extends Component
     */
     public function keepAlive()
     {
-        $this->model->locked_to = now()->addSeconds($this->time + 5);
-        $this->model->save();
+        $this->pageLock->locked_to = now()->addSeconds($this->time + 5);
+        $this->pageLock->save();
     }
 
     public function render()
     {
-        // app('debugbar')->info(now());
         return view('livewire.check-page-lock');
     }
 }

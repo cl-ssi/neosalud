@@ -1,5 +1,5 @@
 <div>
-    @if($model->locked_to > now() AND $model->user_id != auth()->id())
+    @if($pageLock->locked_to > now() AND $pageLock->user_id != auth()->id())
         <div class="modal fade" id="pageLock" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pageLockLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -13,7 +13,7 @@
 
                     <div class="modal-body">
                         <p class="fs-5">
-                            Ésta página la tiene abierta <b>{{ $model->user->text }}</b>. <br>
+                            Ésta página la tiene abierta <b>{{ $pageLock->user->text }}</b>. <br>
                             Si desea utilizarla, solicítele que la cierre.
                         </p>
                     </div>
