@@ -4,10 +4,6 @@
 
 @include('samu.nav')
 
-@livewire('check-page-lock', [
-    'time' => 30,
-    'path' => request()->path()
-])
 
 <div class="row g-2">
     <div class="col-12 col-md-10">
