@@ -13,7 +13,7 @@
     <div class="form-row">
         <fieldset class="col-6 col-md-3">
             <label for="for_establishment_id">Establecimiento</label>
-            <select name="establishment_id" id="for_establishment_id" class="form-control selectpicker" required="" data-live-search="true" data-size="5">
+            <select name="establishment_id" id="for_establishment_id" class="form-control selectpicker" required="" data-live-search="true" data-size="5" required>
                 @foreach($organizations as $organization)
                     <option value="{{$organization->id}}" {{ $organization->id == $subactivity->establishment_id ? 'selected' : '' }}>{{$organization->name}}</option>
                 @endforeach
