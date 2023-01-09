@@ -702,15 +702,20 @@ class RrhhController extends Controller
     }
 
     public function assign_your_team(){
-        $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
-        $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
+        
 
         // si admin, devuelve todos
         if(Auth::user()->hasPermissionTo('Mp: administrador')){
             $specialty_users = Practitioner::whereHas('user')->whereNotNull('specialty_id')->get();
             $profession_users = Practitioner::whereHas('user')->whereNotNull('profession_id')->get();
+
+            $specialties = Specialty::OrderBy('specialty_name')->get();
+            $professions = Profession::OrderBy('profession_name')->get();
         }
         else{
+            $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
+            $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
+
             // si no, devuelve segun asignación "asigna tu equipo"
             $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
                                             ->whereHas('user')
@@ -719,13 +724,11 @@ class RrhhController extends Controller
             $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
                                             ->whereHas('user')
                                             ->get();
+
+            $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
+            $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
         }
         
-
-                                        // dd($specialty_users, $profession_users);
-
-        $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
-        $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
         $organizations = Organization::all();
         $users = User::permission('Mp: user')->get();
         // dd($users);
