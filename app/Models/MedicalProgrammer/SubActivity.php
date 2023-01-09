@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Organization;
 
 class SubActivity extends Model implements Auditable
 {
@@ -16,7 +17,7 @@ class SubActivity extends Model implements Auditable
    * @var array
    */
   protected $fillable = [
-      'id', 'specialty_id', 'profession_id','activity_id', 'sub_activity_abbreviated', 'sub_activity_name', 'sub_activity_description', 'performance'
+      'id', 'establishment_id','specialty_id', 'profession_id','activity_id', 'sub_activity_abbreviated', 'sub_activity_name', 'sub_activity_description', 'performance'
   ];
 
   public function theoretialProgrammings()
@@ -38,6 +39,11 @@ class SubActivity extends Model implements Auditable
   {
       return $this->belongsTo('App\Models\MedicalProgrammer\Activity');
   }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Organization::class, 'establishment_id');
+    }
 
   // public function specialties()
   // {

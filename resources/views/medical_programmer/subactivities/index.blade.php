@@ -29,6 +29,7 @@
 <table class="table table-sm table-borderer table-responsive-xl">
     <thead>
         <tr>
+            <th>Establecimiento</th>
             <th>Especialidad/Profesión</th>
             <th>Actividad</th>
             <th>SubActividad Abrev.</th>
@@ -40,6 +41,7 @@
     <tbody>
         @foreach( $subactivities as $subactivity )
         <tr>
+            <td>@if($subactivity->establishment){{$subactivity->establishment->name}}@endif</td>
             <td>@if($subactivity->specialty){{ $subactivity->specialty->specialty_name }}@endif
                 @if($subactivity->profession){{ $subactivity->profession->profession_name }}@endif
             </td>

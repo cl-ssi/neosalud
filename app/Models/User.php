@@ -13,6 +13,8 @@ use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\MedicalProgrammer\VisatorUser;
+use App\Models\MedicalProgrammer\UnitHead;
 
 use App\Models\MedicalProgrammer\UserAditional;
 
@@ -80,12 +82,10 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Address::class, 'user_id');
     }
 
-
     public function contactPoints()
     {
         return $this->hasMany(ContactPoint::class, 'user_id');
     }
-
 
     public function identifiers()
     {
@@ -139,6 +139,16 @@ class User extends Authenticatable implements Auditable
     public function mpAditionals()
     {
         return $this->HasOne(UserAditional::class, 'user_id');
+    }
+
+    public function programmerVisator()
+    {
+        return $this->hasMany(VisatorUser::class, 'user_id');
+    }
+
+    public function unitHead()
+    {
+        return $this->hasMany(UnitHead::class, 'user_id');
     }
 
     // public function manager_shifts(): HasMany

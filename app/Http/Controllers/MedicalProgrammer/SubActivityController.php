@@ -11,6 +11,7 @@ use App\Models\MedicalProgrammer\SubActivity;
 use App\Models\MedicalProgrammer\Specialty;
 use App\Models\MedicalProgrammer\Profession;
 use App\Models\MedicalProgrammer\Activity;
+use App\Models\Organization;
 
 class SubActivityController extends Controller
 {
@@ -46,10 +47,10 @@ class SubActivityController extends Controller
     {
       $specialties = Specialty::orderBy('specialty_name','ASC')->get();
       $professions = Profession::orderBy('profession_name','ASC')->get();
-      // $activities = Activity::orderBy('activity_name','ASC')->get();
+      $organizations = Organization::where('service',3)->get();
       $activities = null;
 
-      return view('medical_programmer.subactivities.create',compact('specialties','professions','activities'));
+      return view('medical_programmer.subactivities.create',compact('specialties','professions','activities','organizations'));
     }
 
     /**
@@ -89,7 +90,8 @@ class SubActivityController extends Controller
       $specialties = Specialty::orderBy('specialty_name','ASC')->get();
       $professions = Profession::orderBy('profession_name','ASC')->get();
       $activities = Activity::orderBy('activity_name','ASC')->get();
-      return view('medical_programmer.subactivities.edit', compact('subactivity','specialties','professions','activities'));
+      $organizations = Organization::where('service',3)->get();
+      return view('medical_programmer.subactivities.edit', compact('subactivity','specialties','professions','activities','organizations'));
     }
 
     /**

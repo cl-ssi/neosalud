@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
+
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Editar paciente</h1>
@@ -20,7 +23,7 @@
             <div class="card-body">
                 <h5 class="card-title">Datos Personales</h5>
                 <input type="hidden" name='human_name_use' value='official'>
-                <div class="form-row">
+                <div class="row">
                     <fieldset class="form-group col-md-5">
                         <label for="for_name">Nombres *</label>
                         <input type="text" class="form-control" name="given"
@@ -51,7 +54,7 @@
                     @endif
 
                 </div>
-                <div class="form-row">
+                <div class="row">
                     <fieldset class="form-group col-md-4">
                         <label for="for_birthday">Fecha de nacimiento</label>
                         <input type="date" class="form-control" name="birthday"
@@ -95,7 +98,7 @@
                     </fieldset>
 
                 </div>
-                <div class="form-row">
+                <div class="row">
 
                     <fieldset class="form-group col-md-4">
                         <label for="for_nationality_id">Nacionalidad *</label>
@@ -128,7 +131,7 @@
                     </fieldset>
                 </div>
 
-                <div class="form-row">
+                <div class="row">
                     <fieldset class="form-group col-md-4">
                         <label for="for_cod_con_marital_id">Estado Civil *</label>
                         <select name="cod_con_marital_id" id="for_cod_con_marital_id" class="form-control" required>
@@ -158,7 +161,7 @@
             <div class="card-body">
                 <h5 class="card-title">Previsión</h5>
 
-                <div class="form-row">
+                <div class="row">
                     <fieldset class="form-group col-md-2">
                         <label for="">Rut Previsión</label>
                         <input type="text" class="form-control" name="identifier"
@@ -194,7 +197,7 @@
 
         <div class="card mb-3">
             <div class="card-body">
-                <div class="form-row">
+                <div class="row">
                     <fieldset class="form-group col-md">
                         <label for="for_name">Permisos</label>
                         <select class="form-control selectpicker" name="permissions[]" multiple>
@@ -222,7 +225,7 @@
 
 @endsection
 @section('custom_js')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-select.min.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
 
     <script src='{{asset("js/jquery.rut.chileno.js")}}'></script>
     <script type="text/javascript">
@@ -249,7 +252,7 @@
 
         });
     </script>
-    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+
     <script src="{{ asset('js/defaults-es_CL.min.js') }}"></script>
 
 @endsection

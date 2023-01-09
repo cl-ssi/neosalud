@@ -10,7 +10,15 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
+        <fieldset class="col-6 col-md-3">
+            <label for="for_establishment_id">Establecimiento</label>
+            <select name="establishment_id" id="for_establishment_id" class="form-control selectpicker" required="" data-live-search="true" data-size="5">
+                @foreach($organizations as $organization)
+                    <option value="{{$organization->id}}" {{ $organization->id == $subactivity->establishment_id ? 'selected' : '' }}>{{$organization->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
 
       @if($subactivity->specialty)
         <fieldset class="form-group col">

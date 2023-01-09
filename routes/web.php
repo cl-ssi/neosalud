@@ -26,6 +26,7 @@ use App\Http\Controllers\Surveys\TeleconsultationSurveyController;
 use App\Http\Controllers\MedicalProgrammer\OperatingRoomProgrammingController;
 use App\Http\Controllers\MedicalProgrammer\RrhhController;
 use App\Http\Controllers\MedicalProgrammer\UnitHeadController;
+use App\Http\Controllers\MedicalProgrammer\VisatorUserController;
 use App\Http\Controllers\MedicalProgrammer\ContractController;
 use App\Http\Controllers\MedicalProgrammer\ActivityController;
 use App\Http\Controllers\MedicalProgrammer\SubActivityController;
@@ -152,6 +153,7 @@ Route::prefix('user')->name('user.')->middleware('auth')->group(function(){
     Route::get('/search_by_name', [UserController::class, 'searchByName'])->name('search_by_name');
 	Route::get('{user}/switch', [UserController::class, 'switch'])->name('switch');
 });
+
 Route::prefix('patient')->name('patient.')->middleware('auth')->group(function(){
     Route::get('/', [PatientController::class, 'index'])->name('index');
     Route::post('/', [PatientController::class, 'store'])->name('store');
@@ -308,6 +310,16 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		// Route::get('/{user}', [UnitHeadController::class, 'show'])->name('show');
 		// Route::put('/{user}', [UnitHeadController::class, 'update'])->name('update');
 		Route::delete('/{units_head}', [UnitHeadController::class, 'destroy'])->name('destroy');
+		// Route::get('/{user}/edit', [UnitHeadController::class, 'edit'])->name('edit');
+	});
+
+    Route::prefix('visator_users')->name('visator_users.')->group(function(){
+		Route::get('/', [VisatorUserController::class, 'index'])->name('index');
+		Route::post('/', [VisatorUserController::class, 'store'])->name('store');
+		// Route::get('/create', [UnitHeadController::class, 'create'])->name('create');
+		// Route::get('/{user}', [UnitHeadController::class, 'show'])->name('show');
+		// Route::put('/{user}', [UnitHeadController::class, 'update'])->name('update');
+		Route::delete('/{visatorUser}', [VisatorUserController::class, 'destroy'])->name('destroy');
 		// Route::get('/{user}/edit', [UnitHeadController::class, 'edit'])->name('edit');
 	});
 

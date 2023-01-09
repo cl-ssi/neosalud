@@ -5,7 +5,7 @@
             <h5 class="card-title">Identificador {{$key + 1}}</h5>
 
             <input type="hidden" name='identifier_id[]' wire:model='identifiers.{{$key}}.id'>
-            <div class="form-row">
+            <div class="row">
                 <fieldset class="form-group col-md-2">
                     <label for="for_id_type">Tipo de identificación *</label>
                     <select name="id_type[]" class="form-control" wire:model='identifiers.{{$key}}.id_type'  required>
@@ -54,7 +54,7 @@
 
             </div>
 
-            <div class="form-row">
+            <div class="row">
                 @if($key != 0)
                 <fieldset class="form-group offset-5 col-1">
                     <label for=""></label>
@@ -68,7 +68,7 @@
     </div>
     @endforeach
 
-    <div class="form-row">
+    <div class="row">
         <div class="col">
             <button type="button" class="btn btn-primary" wire:click.prevent="add({{$i}})"> <i class="fa fa-plus" aria-hidden="true"></i> Agregar otro
                 identificador</button>

@@ -6,7 +6,7 @@
         href=" {{ route('medical_programmer.welcome') }}"><i class="fas fa-home"></i> Home</a>
     </li>
 
-    @canany(['Mp: administrador', 'Mp: programador'])
+    @canany(['Mp: administrador', 'Mp: fichas de programacion'])
     <li class="nav-item">
         <a class="nav-link {{ active('medical_programmer.programming_proposal.index') }}" href="{{ route('medical_programmer.programming_proposal.index') }}">
             <span data-feather="chevrons-right"></span>
@@ -15,7 +15,7 @@
     </li>
     @endcanany
 
-    @canany(['Mp: administrador', 'Mp: programador'])
+    @canany(['Mp: administrador', 'Mp: reportes'])
 
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active(['samu.event.filter','samu.calls.search']) }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -117,6 +117,15 @@
                 </a>
             </li>
 
+            @canany(['Mp: administrador'])
+                <li class="nav-item">
+                    <a class="nav-link {{ active('patient.index') }}" href="{{ route('patient.index') }}">
+                        <span data-feather="users"></span>
+                        Buscar paciente<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            @endcanany
+
             <!-- <li>
             <a class="dropdown-item {{ active('medical_programmer.cutoffdates.index') }}" href="{{ route('medical_programmer.cutoffdates.index') }}">
             <span data-feather="chevrons-right"></span>
@@ -142,7 +151,7 @@
     @endcanany
 
 
-    @canany(['Mp: administrador', 'Mp: importar archivo sirh','Mp: mantenedor jefes de unidad'])
+    @canany(['Mp: administrador', 'Mp: importar archivo sirh','Mp: mantenedor jefes de unidad', 'Mp: asigna tu equipo', 'Mp: visadores'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-right-to-bracket"></i> Otros
@@ -176,9 +185,18 @@
         </li>
         @endcanany
 
-        @canany(['Mp: administrador', 'Mp: visadores'])
+        <!-- @canany(['Mp: administrador', 'Mp: visadores'])
         <li >
             <a class="dropdown-item {{ active('medical_programmer.rrhh.visators') }}" href="{{ route('medical_programmer.rrhh.visators') }}">
+                <span data-feather="chevrons-right"></span>
+                Visadores
+            </a>
+        </li>
+        @endcanany -->
+
+        @canany(['Mp: administrador', 'Mp: visadores'])
+        <li >
+            <a class="dropdown-item {{ active('medical_programmer.visator_users.index') }}" href="{{ route('medical_programmer.visator_users.index') }}">
                 <span data-feather="chevrons-right"></span>
                 Visadores
             </a>

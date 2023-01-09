@@ -705,13 +705,22 @@ class RrhhController extends Controller
         $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
         $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
 
-        $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
-                                    ->whereHas('user')
-                                    ->get();
+        // si admin, devuelve todos
+        if(Auth::user()->hasPermissionTo('Mp: administrador')){
+            $specialty_users = Practitioner::whereHas('user')->whereNotNull('specialty_id')->get();
+            $profession_users = Practitioner::whereHas('user')->whereNotNull('profession_id')->get();
+        }
+        else{
+            // si no, devuelve segun asignación "asigna tu equipo"
+            $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
+                                            ->whereHas('user')
+                                            ->get();
 
-        $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
-                                        ->whereHas('user')
-                                        ->get();
+            $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
+                                            ->whereHas('user')
+                                            ->get();
+        }
+        
 
                                         // dd($specialty_users, $profession_users);
 

@@ -48,40 +48,97 @@ class ProgrammingProposal extends Model implements Auditable
     }
 
 
-    public function employeeCanModify()
+    public function employeeCanModify(ProgrammingProposal $programmingProposal)
     {
-      //si la solicitud ya fue confirmada, no se deja modificar a nadie
-      if ($this->status == "Confirmado") {
-        return 0;
-      }
-      else
-      {
-        // si tiene permisos de supervición
-        if (
-            Auth::user()->hasPermissionTo('Mp: asigna tu equipo') ||
-            Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
-            Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
-            Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') ||
-            Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')
-            ) {
-          // si solicitud solo está creada, no se deja confirmar a visadores
-          if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->type == "Funcionario") {
-          // if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->user_id == Auth::id()) {
+        
+        //si la solicitud ya fue confirmada, no se deja modificar a nadie
+        if ($this->status == "Confirmado") {
             return 0;
-          }else{
-            return 1;
-          }
         }
         else
         {
-          //si es que solicitud ya fue confirmada, no se deja modificar a funcionario
-          if ($this->signatureFlows->last()->status != "Solicitud creada") {
-            return 0;
-          }else{
-            return 1;
-          }
+            // Si es administrador, se deja modificar
+            if (Auth::user()->hasPermissionTo('Mp: administrador')) {
+                return 1;
+            }
+
+            //cuando esta asignado como visador, retonar 0
+            if(Auth::user()->programmerVisator->count() > 0){
+                return 0;
+            }
+
+            // //Se verifica que visador este autorizado para el establecimiento al cual fué asignado el contrato de la ficha.
+            // if(Auth::user()->programmerVisator->where('establishment_id',$programmingProposal->contract->establishment_id)->count() > 0){
+            //     return 1;
+            // }
+
+            //si no es visador, verificar si está asignado como jefe de unidad
+            // else{
+
+            // si es jefe de unidad    
+            if($programmingProposal->specialty_id!=null){
+                if(Auth::user()->unitHead->where('specialty_id',$programmingProposal->specialty_id)->count() > 0){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+            if($programmingProposal->profession_id!=null){
+                if(Auth::user()->unitHead->where('profession_id',$programmingProposal->profession_id)->count() > 0){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+            // }
         }
-      }
+
+
+    //   //si la solicitud ya fue confirmada, no se deja modificar a nadie
+    //   if ($this->status == "Confirmado") {
+    //     return 0;
+    //   }
+    //   else
+    //   {
+    //     // si tiene permisos de supervición
+    //     // if (
+    //     //     Auth::user()->hasPermissionTo('Mp: asigna tu equipo') ||
+    //     //     Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
+    //     //     Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
+    //     //     Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') ||
+    //     //     Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')
+    //     //     ) {
+    //     //   // si solicitud solo está creada, no se deja confirmar a visadores
+    //     //   if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->type == "Funcionario") {
+    //     //   // if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->user_id == Auth::id()) {
+    //     //     return 0;
+    //     //   }else{
+    //     //     return 1;
+    //     //   }
+    //     // }
+        
+    //     if (Auth::user()->programmerVisator->count() > 0) {
+    //       // si solicitud solo está creada, no se deja confirmar a visadores
+    //       if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->type == "Jefe de Servicio") {
+    //       // if ($this->signatureFlows->last()->status == "Solicitud creada" && $this->signatureFlows->last()->user_id == Auth::id()) {
+    //         return 0;
+    //       }else{
+    //         return 1;
+    //       }
+    //     }
+    //     else
+    //     {
+    //         if (Auth::user()->unitHead->count() > 0) {
+    //             // si solicitud esta creada, se puede modificar, si esta confirmada, no se deja modificar
+    //             if ($this->signatureFlows->last()->status == "Solicitud creada") {
+    //                 return 1;
+    //             }else{
+    //                 return 0;
+    //             }
+    //         } 
+    //     }
+        
+    //   }
     }
 
     // public function scopeHasUnopenedDetailsBetween($query, $from, $to){

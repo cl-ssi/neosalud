@@ -64,7 +64,7 @@
 
 <h4>Detalles</h4>
 
-@if($programmingProposal->employeeCanModify() == 1)
+@if($programmingProposal->employeeCanModify($programmingProposal) == 1)
   <a class="btn btn-primary mb-3" href="{{ route('medical_programmer.programming_proposal.details.create',$programmingProposal) }}">
       <i class="fas fa-plus"></i> Agregar detalle
   </a>
@@ -95,7 +95,7 @@
           <td>{{$detail->start_hour}}</td>
           <td>{{$detail->end_hour}}</td>
           <td>
-            @if($programmingProposal->employeeCanModify() == 1)
+            @if($programmingProposal->employeeCanModify($programmingProposal) == 1)
               <form method="POST" action="{{ route('medical_programmer.programming_proposal.details.destroy', $detail) }}" class="d-inline">
                 @csrf
                 @method('DELETE')
@@ -276,7 +276,7 @@
       </fieldset>
       <fieldset class="form-group col col-md-6">
         <div class="d-flex flex-row-reverse bd-highlight">
-          @if($programmingProposal->employeeCanModify() == 1)
+          @if($programmingProposal->employeeCanModify($programmingProposal) == 1)
             <button type="submit" id="accept_button" class="form-control btn btn-success" onclick="return confirm('Al confirmar, la información que usted envía deberá ser visada por la subdirección médica ¿Está seguro de confirmar la información?');">
               Confirmar
             </button>

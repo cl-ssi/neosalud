@@ -118,6 +118,7 @@ class ProgrammingProposalController extends Controller
                                                             })
                                                         ->paginate(50);
         }else{
+            // cuando el usuario está asignado como jefe de unidad
             if(Auth::user()->hasPermissionTo('Mp: asigna tu equipo')){
                 $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
                 $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
@@ -135,6 +136,10 @@ class ProgrammingProposalController extends Controller
                                                             ->whereIn('specialty_id',$unitHeads_specialty)
                                                             ->OrwhereIn('profession_id',$unitHeads_profession)
                                                             ->paginate(50);
+            }
+            // cuando el usuario está asignado como visador
+            elseif(1){
+
             }else{
                 $programmingProposals = ProgrammingProposal::where('id',0)->paginate(50);
             }
@@ -161,35 +166,42 @@ class ProgrammingProposalController extends Controller
      */
     public function store(Request $request)
     {
-      $programmingProposal = new ProgrammingProposal($request->All());
-      $programmingProposal->type = $request->proposal_type;
-      $programmingProposal->request_date = Carbon::now();
-      $programmingProposal->status = "Creado";
-      $programmingProposal->save();
+        $programmingProposal = new ProgrammingProposal($request->All());
+        $programmingProposal->type = $request->proposal_type;
+        $programmingProposal->request_date = Carbon::now();
+        $programmingProposal->status = "Creado";
+        $programmingProposal->save();
 
-      $programmingProposalSignatureFlow = new ProgrammingProposalSignatureFlow();
-      $programmingProposalSignatureFlow->programming_proposal_id = $programmingProposal->id;
-      $programmingProposalSignatureFlow->user_id = Auth::id();
-      $programmingProposalSignatureFlow->sign_position = 1;
-      $programmingProposalSignatureFlow->signature_date = Carbon::now();
-      $programmingProposalSignatureFlow->status = "Solicitud creada";
+        $programmingProposalSignatureFlow = new ProgrammingProposalSignatureFlow();
+        $programmingProposalSignatureFlow->programming_proposal_id = $programmingProposal->id;
+        $programmingProposalSignatureFlow->user_id = Auth::id();
+        $programmingProposalSignatureFlow->sign_position = 1;
+        $programmingProposalSignatureFlow->signature_date = Carbon::now();
+        $programmingProposalSignatureFlow->status = "Solicitud creada";
 
-      if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-        $programmingProposalSignatureFlow->type = "Subdirección Médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
-        $programmingProposalSignatureFlow->type = "Subdirección DGCP";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
-        $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
-        $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-      }else{
-        $programmingProposalSignatureFlow->type = "Jefe de Servicio";
-      }
+        //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
+        //     $programmingProposalSignatureFlow->type = "Subdirección Médica";
+        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
+        //     $programmingProposalSignatureFlow->type = "Subdirección DGCP";
+        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
+        //     $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
+        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
+        //     $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
+        //   }else{
+        //     $programmingProposalSignatureFlow->type = "Jefe de Servicio";
+        //   }
+        if(Auth::user()->unitHead->count() > 0){
+            $programmingProposalSignatureFlow->type = "Jefe de Servicio";
+        }
 
-      $programmingProposalSignatureFlow->save();
+        if(Auth::user()->programmerVisator->count() > 0){
+            $programmingProposalSignatureFlow->type = Auth::user()->programmerVisator->first()->permission;
+        }
 
-      session()->flash('success', 'Se ha registrado la información.');
-      return redirect()->route('medical_programmer.programming_proposal.index');
+        $programmingProposalSignatureFlow->save();
+
+        session()->flash('success', 'Se ha registrado la información.');
+        return redirect()->route('medical_programmer.programming_proposal.index');
     }
 
     /**
@@ -211,14 +223,22 @@ class ProgrammingProposalController extends Controller
       if ($request->buttonaction == "accept_button") {
         $programmingProposalSignatureFlow->status = "Solicitud confirmada";
 
-        if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') || Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
-          $programmingProposal->status = "Confirmado";
-          $programmingProposal->save();
-        }
-        else{
-          $programmingProposal->status = "En proceso";
-          $programmingProposal->save();
-        }
+        // if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') || Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
+        //   $programmingProposal->status = "Confirmado";
+        //   $programmingProposal->save();
+        // }
+        // else{
+        //   $programmingProposal->status = "En proceso";
+        //   $programmingProposal->save();
+        // }
+        if (Auth::user()->programmerVisator->count() > 0) {
+            $programmingProposal->status = "Confirmado";
+            $programmingProposal->save();
+          }
+          else{
+            $programmingProposal->status = "En proceso";
+            $programmingProposal->save();
+          }
       }
       else{
         $programmingProposalSignatureFlow->status = "Solicitud rechazada";
@@ -227,17 +247,25 @@ class ProgrammingProposalController extends Controller
         $programmingProposal->save();
       }
 
-      if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-        $programmingProposalSignatureFlow->type = "Subdirección Médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
-        $programmingProposalSignatureFlow->type = "Subdirección DGCP";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
-        $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
-      }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
-        $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-      }else{
-        $programmingProposalSignatureFlow->type = "Funcionario";
-      }
+    //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
+    //     $programmingProposalSignatureFlow->type = "Subdirección Médica";
+    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
+    //     $programmingProposalSignatureFlow->type = "Subdirección DGCP";
+    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
+    //     $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
+    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
+    //     $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
+    //   }else{
+    //     $programmingProposalSignatureFlow->type = "Funcionario";
+    //   }
+
+    if(Auth::user()->unitHead->count() > 0){
+        $programmingProposalSignatureFlow->type = "Jefe de Servicio";
+    }
+
+    if(Auth::user()->programmerVisator->count() > 0){
+        $programmingProposalSignatureFlow->type = Auth::user()->programmerVisator->first()->permission;
+    }
 
       $programmingProposalSignatureFlow->observation = $request->observation;
       $programmingProposalSignatureFlow->save();
