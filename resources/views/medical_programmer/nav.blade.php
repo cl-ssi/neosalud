@@ -6,7 +6,7 @@
         href=" {{ route('medical_programmer.welcome') }}"><i class="fas fa-home"></i> Home</a>
     </li>
 
-    @canany(['Mp: administrador', 'Mp: fichas de programacion'])
+    @canany(['Mp: administrador', 'Mp: fichas de programacion', 'Mp: mantenedor jefes de unidad'])
     <li class="nav-item">
         <a class="nav-link {{ active('medical_programmer.programming_proposal.index') }}" href="{{ route('medical_programmer.programming_proposal.index') }}">
             <span data-feather="chevrons-right"></span>
