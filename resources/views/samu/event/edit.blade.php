@@ -6,7 +6,7 @@
 
 @livewire('check-page-lock', [
     'time' => 30,
-    'path' => request()->path()
+    'backRoute' => 'samu.welcome'
 ])
 
 <div class="row g-2">
