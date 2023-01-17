@@ -5,7 +5,7 @@
 @include('samu.nav')
 
 @livewire('check-page-lock', [
-    'time' => 30,
+    'time' => 20,
     'backRoute' => 'samu.welcome'
 ])
 
