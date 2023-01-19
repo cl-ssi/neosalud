@@ -27,7 +27,7 @@
                     # de Eventos atendidos por comuna
                 </h6>
                 <div class="card-body pt-2">
-                    {{-- @livewire('samu.dashboard.event-by-commune') --}}
+                    @livewire('samu.dashboard.event-by-commune')
                 </div>
             </div>
         </div>
