@@ -62,6 +62,9 @@ class Call extends Model implements Auditable
         'hour','bls'
     ];
 
+    /**
+     * Una llamada tiene muchos eventos asociados
+     */
     public function events()
     {
         return $this->hasMany(Event::class);
@@ -91,7 +94,7 @@ class Call extends Model implements Auditable
     /* Una llamada puede hace referencia o tener relación con otra llamada  */
     public function referenceCall()
     {
-        return $this->belongsTo(Call::class,'call_id');
+        return $this->belongsTo(Call::class, 'call_id');
     }
 
     /* Una llamada puede tener muchas llamadas asociadas  */

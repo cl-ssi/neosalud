@@ -176,19 +176,6 @@ class CallController extends Controller
         }
     }
 
-    public function syncevents(Request $request, Call $call)
-    {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
-            ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".')
-        );
-
-        $call->events()->sync($request->input('events'));
-
-        $request->session()->flash('success', 'Se han asignado los cometidos a la llamada.');
-        return redirect()->route('samu.event.index');
-    }
-
     /**
      * Remove the specified resource from storage.
      *

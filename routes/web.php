@@ -130,7 +130,7 @@ Route::prefix('parameter')->as('parameter.')->middleware('auth')->group(function
 		Route::get('/{organization}/edit', [OrganizationController::class, 'edit'])->name('edit');
 		Route::put('/{organization}', [OrganizationController::class, 'update'])->name('update');
 		Route::delete('/{organization}', [OrganizationController::class, 'destroy'])->name('destroy');
-		
+
 	});
 });
 
@@ -289,8 +289,8 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
         Route::get('/visators', [RrhhController::class, 'visators'])->name('visators');
         Route::post('/add_visator', [RrhhController::class, 'add_visator'])->name('add_visator');
         Route::delete('destroy_visator/{user}/{permission}', [RrhhController::class, 'destroy_visator'])->name('destroy_visator');
-        
-        
+
+
 
 		Route::get('/', [RrhhController::class, 'index'])->name('index');
 		Route::post('/', [RrhhController::class, 'store'])->name('store');
@@ -300,7 +300,7 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		Route::delete('/{user}', [RrhhController::class, 'destroy'])->name('destroy');
 		Route::get('/{user}/edit', [RrhhController::class, 'edit'])->name('edit');
 
-		
+
 	});
 
     Route::prefix('unit_heads')->name('unit_heads.')->group(function(){
@@ -564,6 +564,7 @@ use App\Http\Controllers\Samu\GpsController;
 use App\Http\Controllers\Samu\CommuneController;
 use App\Http\Controllers\Samu\PreHospital;
 use App\Http\Livewire\Samu\Coordinate\CoordinateIndex;
+use App\Http\Livewire\Samu\EventByMonth;
 use App\Http\Livewire\Samu\FindEvent;
 use App\Http\Livewire\Samu\MobileSelector;
 use App\Http\Livewire\Samu\TimestampsAndLocation;
@@ -637,7 +638,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 			Route::post('/store',			  [MobileInServiceInventoryTemplateController::class, 'store'])->name('store');
 			Route::get('/{mobileType}/edit',  [MobileInServiceInventoryTemplateController::class, 'edit'])->name('edit');
 			Route::put('/{mobileType}',	  	  [MobileInServiceInventoryTemplateController::class, 'update'])->name('update');
-			
+
 		});
     });
 
@@ -670,7 +671,6 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::post('/store',		[CallController::class, 'store'])->name('store');
 		Route::delete('/{call}', 	[CallController::class, 'destroy'])->name('destroy');
 		Route::put('/update/{call}',[CallController::class, 'update'])->name('update');
-		Route::post('/sync-events/{call}', [CallController::class, 'syncEvents'])->name('syncEvents');
 		Route::get('/search', SearchCalls::class)->name('search');
     });
 
@@ -742,6 +742,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	});
 
     Route::get('/pre-hospital', PreHospital::class)->name('pre-hospital');
+    Route::get('/event-by-month', EventByMonth::class)->name('event-by-month');
 });
 
 Route::get('/miubicacion', [CoordinateController::class, 'create'])->name('coordinate.create');

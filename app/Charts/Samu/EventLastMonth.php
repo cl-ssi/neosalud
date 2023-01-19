@@ -15,6 +15,7 @@ class EventLastMonth
     /**
      * Initializes the chart.
      *
+     * @param  string $end
      * @return void
      */
     public function __construct($end = null)

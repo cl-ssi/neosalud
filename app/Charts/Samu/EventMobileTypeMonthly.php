@@ -18,6 +18,8 @@ class EventMobileTypeMonthly
     /**
      * Initializes the chart.
      *
+     * @param  string $year
+     * @param  string $month
      * @return void
      */
     public function __construct($year = null, $month = null)
@@ -46,7 +48,7 @@ class EventMobileTypeMonthly
      * @return void
      */
     public function setDataset()
-    {   
+    {
         $eventByMonth = Event::query()
             ->onlyValid()
             ->join('samu_mobiles_in_service', 'mobile_in_service_id', '=', 'samu_mobiles_in_service.id')
@@ -56,8 +58,8 @@ class EventMobileTypeMonthly
             ->groupBy('type_id')
             ->orderBy('type_id', 'ASC')
             ->get();
-        
-        foreach($eventByMonth as $event){    
+
+        foreach($eventByMonth as $event){
             $this->dataset[] = [$this->mobilesType->where('id', $event->type_id)->first()->name, $event->valor, 'color: #c90076', $event->valor];
         }
     }

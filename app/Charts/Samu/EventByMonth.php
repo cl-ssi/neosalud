@@ -16,6 +16,8 @@ class EventByMonth
     /**
      * Initializes the chart.
      *
+     * @param  string $year
+     * @param  string $month
      * @return void
      */
     public function __construct($year = null, $month = null)
