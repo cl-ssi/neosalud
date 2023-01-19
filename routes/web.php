@@ -670,7 +670,6 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::post('/store',		[CallController::class, 'store'])->name('store');
 		Route::delete('/{call}', 	[CallController::class, 'destroy'])->name('destroy');
 		Route::put('/update/{call}',[CallController::class, 'update'])->name('update');
-		Route::post('/sync-events/{call}', [CallController::class, 'syncEvents'])->name('syncEvents');
 		Route::get('/search', SearchCalls::class)->name('search');
     });
 
