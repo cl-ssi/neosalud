@@ -2,7 +2,13 @@
     <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr class="text-center table-primary">
-                <th>Asociar</th>
+                <th>
+                    @if($currentCall->id == null)
+                        Asociar
+                    @else
+                        ID
+                    @endif
+                </th>
                 <th>Clasificación</th>
                 <th nowrap>Hora</th>
                 <th>Solicitante</th>
@@ -21,13 +27,27 @@
                     as $call)
             <tr>
                 <td class="text-center" nowrap>
-                    @if(!$currentCall->call_id)
-                        <button class="btn btn-sm btn-success" wire:click="associate({{ $call->id }})">Asociar a {{ $call->id }}</button>
-                    @elseif($currentCall->call_id == $call->id)
-                        <button class="btn btn-sm btn-info" disabled>Asociado a {{ $call->id }}</button>
+                    @if(!$currentCall->call_id && $currentCall->classification == null)
+                        <button
+                            class="btn btn-sm btn-success"
+                            wire:click="associate({{ $call->id }})"
+                        >
+                            Asociar a {{ $call->id }}
+                        </button>
+                    @elseif($currentCall->call_id == $call->id && $currentCall->classification == null)
+                        <button
+                            class="btn btn-sm btn-info"
+                            disabled
+                        >
+                            Asociado a {{ $call->id }}
+                        </button>
                         @can('SAMU regulador')
-                            <button class="btn btn-sm btn-outline-danger" wire:click="disassociate()">
-                                Desasociar</button>
+                            <button
+                                class="btn btn-sm btn-outline-danger"
+                                wire:click="disassociate()"
+                            >
+                                Desasociar
+                            </button>
                         @endcan
                     @else
                         {{ $call->id }}
@@ -39,12 +59,20 @@
                         @if($call->classification != 'OT')
                             <br> Evento:
                             @foreach($call->events as $event)
-                                <a href="{{ route('samu.event.edit', $event) }}" class="link-primary"> {{ $event->id }}</a>,
+                                <a
+                                    href="{{ route('samu.event.edit', $event) }}"
+                                    class="link-primary"
+                                >
+                                    {{ $event->id }}
+                                </a>,
                             @endforeach
                         @endif
                     @endif
                     @if($call->referenceCall)
-                        Referencia: <a href="{{ route('samu.call.edit',$call->referenceCall) }}">{{ $call->referenceCall->id }}</a>
+                        Referencia:
+                        <a href="{{ route('samu.call.edit', $call->referenceCall) }}">
+                            {{ $call->referenceCall->id }}
+                        </a>
                     @endif
                 </td>
                 <td width="90">{{ $call->hour }}</td>
