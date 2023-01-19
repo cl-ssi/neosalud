@@ -20,7 +20,8 @@
                     
                     <div class="modal-footer text-center">
                         <p>Deberá esperar <b>{{ $time }}</b> segundos y luego recargar ésta página.</p>
-                        <a class="btn btn-sm btn-primary" href="{{ request()->url() }}">Recargar</a>
+                        <a class="btn btn-sm btn-primary" href="{{ request()->url() }}">Recargar</a> o 
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route($backRoute) }}">Volver</a>
                     </div>
                 </div>
             </div>

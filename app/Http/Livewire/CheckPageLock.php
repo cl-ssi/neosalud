@@ -12,26 +12,32 @@ class CheckPageLock extends Component
      * Time: tiempo de bloqueo, esto enviara peticiones cada x tiempo 
      *       para mantener bloqueada la página, evitar tiempos muy pequeños
      *       ya que bombardeará con trafico e inserts en la bd.
-     * Path: es la url que se quiere bloquear, por defecto es la actual = path()
+     * backRoute: es el nombre de la ruta a la que se irá al presionar el boton "Volver"
+     * 
+     * ejemplo:
      * 
      *  @livewire('check-page-lock', [
      *    'time' => 30,
-     *    'path' => request()->path()
+     *    'backRoute' => 'samu.welcome'
      *  ])
      */
+    
     public $time;
 
     public $pageLock;
+    public $backRoute;
 
     /**
     * Mount
     */
-    public function mount($time, $path)
+    public function mount($time, $backRoute)
     {
         $this->time = $time;
+        $this->backRoute = $backRoute;
+
         $this->pageLock = PageLock::firstOrCreate(
             [
-                'path' => $path
+                'path' => request()->path()
             ],
             [
                 'locked_to' => now()->addSeconds($this->time),

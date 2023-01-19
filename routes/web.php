@@ -543,9 +543,9 @@ Route::prefix('soap')->name('soap.')->group(function(){
 
 /* WEBSERVICE FONASA */
 
-Route::prefix('webservices')->name('webservices.')->group(function () {
-    Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
-});
+// Route::prefix('webservices')->name('webservices.')->group(function () {
+//     Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
+// });
 
 /* Rutas SAMU */
 use App\Http\Controllers\Samu\ShiftController;
