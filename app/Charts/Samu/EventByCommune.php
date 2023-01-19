@@ -16,7 +16,8 @@ class EventByCommune
 
     /**
      * Initializes the chart.
-     *
+     * @param  string  $year
+     * @param  string  $month
      * @return void
      */
     public function __construct($year = null, $month = null)
@@ -42,6 +43,8 @@ class EventByCommune
             ->whereYear('date', $this->date->year)
             ->groupBy('commune_id')
             ->get();
+
+        $this->dataset = [];
 
         foreach($events as $event)
         {

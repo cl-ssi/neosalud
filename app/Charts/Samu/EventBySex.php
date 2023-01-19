@@ -7,10 +7,14 @@ use App\Models\Samu\Event;
 class EventBySex
 {
     public $dataset;
-
+    public $year;
+    public $month;
+    
     /**
      * Initializes the chart.
      *
+     * @param  string $year
+     * @param  string $month
      * @return void
      */
     public function __construct($year = null, $month = null)
