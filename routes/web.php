@@ -564,6 +564,7 @@ use App\Http\Controllers\Samu\GpsController;
 use App\Http\Controllers\Samu\CommuneController;
 use App\Http\Controllers\Samu\PreHospital;
 use App\Http\Livewire\Samu\Coordinate\CoordinateIndex;
+use App\Http\Livewire\Samu\EventByMonth;
 use App\Http\Livewire\Samu\FindEvent;
 use App\Http\Livewire\Samu\MobileSelector;
 use App\Http\Livewire\Samu\TimestampsAndLocation;
@@ -741,6 +742,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 	});
 
     Route::get('/pre-hospital', PreHospital::class)->name('pre-hospital');
+    Route::get('/event-by-month', EventByMonth::class)->name('event-by-month');
 });
 
 Route::get('/miubicacion', [CoordinateController::class, 'create'])->name('coordinate.create');
