@@ -20,7 +20,7 @@
             <tr>
                 <td class="text-center" nowrap>
                     @if($edit)
-                        <a href="{{ route('samu.call.edit',$call) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ route('samu.call.edit', $call) }}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i> {{ $call->id }}
                         </a>
                     @else
@@ -36,12 +36,16 @@
                         @if($call->classification != 'OT')
                             <br> Evento:
                             @foreach($call->events as $event)
-                                <a href="{{ route('samu.event.edit', $event) }}" class="link-primary"> {{ $event->id }}</a>,
+                                <a href="{{ route('samu.event.edit', $event) }}" class="link-primary">
+                                    {{ $event->id }}
+                                </a>,
                             @endforeach
                         @endif
                     @endif
                     @if($call->referenceCall)
-                        Referencia: <a href="{{ route('samu.call.edit',$call->referenceCall) }}">{{ $call->referenceCall->id }}</a>
+                        Referencia: <a href="{{ route('samu.call.edit', $call->referenceCall) }}">
+                            {{ $call->referenceCall->id }}
+                        </a>
                     @endif
                 </td>
                 <td width="90">{{ $call->hour }}</td>
