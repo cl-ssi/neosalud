@@ -120,11 +120,17 @@ class Event extends Model implements Auditable
         return $this->belongsTo(Shift::class);
     }
 
+    /**
+     * Un evento tiene muchas llamadas secundarias
+     */
     public function calls()
     {
         return $this->belongsToMany(Call::class, 'samu_call_event');
     }
 
+    /**
+     * Llamada Principal
+     */
     public function call()
     {
         return $this->belongsTo(Call::class);
