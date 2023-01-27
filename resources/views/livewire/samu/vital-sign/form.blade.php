@@ -20,7 +20,7 @@
 
                 class="form-control @error('registered_at') is-invalid @enderror"
                 id="for-registered-at"
-                wire:model.debounce.1000ms="registered_at"
+                wire:model.defer="registered_at"
             >
 
             @error('registered_at')
@@ -38,7 +38,7 @@
                 class="form-control @error('fc') is-invalid @enderror"
                 maxlength="8"
                 id="for-fc"
-                wire:model.debounce.1000ms="fc"
+                wire:model.defer="fc"
             >
 
             @error('fc')
@@ -55,7 +55,7 @@
                 type="number"
                 class="form-control @error('fr') is-invalid @enderror"
                 id="for-fr"
-                wire:model.debounce.1000ms="fr"
+                wire:model.defer="fr"
             >
 
             @error('fr')
@@ -73,7 +73,7 @@
                 class="form-control @error('pa') is-invalid @enderror"
                 id="for-pa"
                 placeholder="xxx/xx"
-                wire:model.debounce.1000ms="pa"
+                wire:model.defer="pa"
             >
             @error('pa')
                 <div class="text-danger">
@@ -90,7 +90,7 @@
                 class="form-control @error('pam') is-invalid @enderror"
                 id="for-pam"
                 placeholder="xxx/xx"
-                wire:model.debounce.1000ms="pam"
+                wire:model.defer="pam"
             >
 
             @error('pam')
@@ -107,7 +107,7 @@
                 type="number"
                 class="form-control @error('gl') is-invalid @enderror"
                 id="for-gl"
-                wire:model.debounce.1000ms="gl"
+                wire:model.defer="gl"
             >
 
             @error('gl')
@@ -124,7 +124,7 @@
                 type="number"
                 class="form-control @error('soam') is-invalid @enderror"
                 id="for-soam"
-                wire:model.debounce.1000ms="soam"
+                wire:model.defer="soam"
             >
 
             @error('soam')
@@ -141,7 +141,7 @@
                 type="number"
                 class="form-control @error('soap') is-invalid @enderror"
                 id="for-soap"
-                wire:model.debounce.1000ms="soap"
+                wire:model.defer="soap"
             >
 
             @error('soap')
@@ -158,7 +158,7 @@
                 type="number"
                 class="form-control @error('hgt') is-invalid @enderror"
                 id="for-hgt"
-                wire:model.debounce.1000ms="hgt"
+                wire:model.defer="hgt"
             >
 
             @error('hgt')
@@ -175,7 +175,7 @@
                 type="number"
                 class="form-control @error('fill_capillary') is-invalid @enderror"
                 id="for-fill-capillary"
-                wire:model.debounce.1000ms="fill_capillary"
+                wire:model.defer="fill_capillary"
             >
 
             @error('fill_capillary')
@@ -193,7 +193,7 @@
                 class="form-control @error('t') is-invalid @enderror"
                 step=".01"
                 id="for-t"
-                wire:model.debounce.1000ms="t"
+                wire:model.defer="t"
             >
 
             @error('t')
