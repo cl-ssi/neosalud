@@ -54,7 +54,7 @@
                             {{ $event->id }}
                         </a>
                     </td>
-                    <td>{{ $event->call->created_at }}</td>
+                    <td>{{ $event->call ? $event->call->created_at : 'No posee llamada' }}</td>
                     <td>{{ $event->mobile_departure_at }}</td>
                     <td>{{ $event->mobile_arrival_at }}</td>
                     <td>{{ $event->return_base_at }}</td>
