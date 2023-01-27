@@ -564,6 +564,7 @@ use App\Http\Controllers\Samu\GpsController;
 use App\Http\Controllers\Samu\CommuneController;
 use App\Http\Controllers\Samu\PreHospital;
 use App\Http\Livewire\Samu\Coordinate\CoordinateIndex;
+use App\Http\Livewire\Samu\Event\EventFilter;
 use App\Http\Livewire\Samu\EventByMonth;
 use App\Http\Livewire\Samu\FindEvent;
 use App\Http\Livewire\Samu\MobileSelector;
@@ -687,7 +688,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
 		Route::delete('/{event}', 	[EventController::class, 'destroy'])->name('destroy');
 		Route::get('/{event}/reopen', [EventController::class, 'reopen'])
 			->middleware('permission:SAMU administrador')->name('reopen');
-		Route::match(['get','post'], '/filter',	[EventController::class, 'filter'])->name('filter');
+		Route::get('/filter', EventFilter::class)->name('filter');
 		Route::get('/{event}/report', [EventController::class, 'report'])
 			->middleware('permission:SAMU administrador')->name('report');
 		Route::get('/find', FindEvent::class);

@@ -5,10 +5,10 @@ namespace App\Http\Livewire\Samu;
 use App\Exports\Samu\EventsByMonth;
 use App\Models\Samu\Event;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
 
 class EventByMonth extends Component
 {
