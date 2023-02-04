@@ -137,6 +137,8 @@ class MobileInService extends Model implements Auditable
         $status = 'Disponible';
         if($this->last_event)
             $status = $this->last_event->event_status;
+        if(!$this->status)
+            $status = "Inactivo";
         return $status;
     }
 
