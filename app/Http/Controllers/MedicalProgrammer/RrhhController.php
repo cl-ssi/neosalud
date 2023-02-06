@@ -539,19 +539,22 @@ class RrhhController extends Controller
         $collection = Excel::toCollection(new SirhRrhhImport, $file);
         $user_count = 0;
         $contract_count = 0;
+
+        set_time_limit(7200);
+        ini_set('memory_limit', '2048M');
+
         foreach($collection as $row){
             foreach($row as $key => $column){ 
                 
                 // dd($column);
-                if(array_key_exists('rut_tit', $column->toArray()))
+                if(array_key_exists('rut_programable', $column->toArray()))
                 {
-                    if($column['rut_tit']!=null)
+                    if($column['rut_programable']!=null)
                     {
-
                         //********** INFO RRHH  ***********/
 
                         //si no existe usuario, se crea.
-                        if(!User::getUserByRun($column['rut_tit']))
+                        if(!User::getUserByRun($column['rut_programable']))
                         {
                             if (array_key_exists(3,explode(" ", $column['nombre']))) 
                             {
@@ -592,7 +595,7 @@ class RrhhController extends Controller
                             }
                 
                             $newIdentifier = new Identifier();
-                            $newIdentifier->value = $column['rut_tit'];
+                            $newIdentifier->value = $column['rut_programable'];
                             $newIdentifier->dv = $column['dv'];
                             $newIdentifier->user_id = $newPatient->id;
                             $newIdentifier->use = "official";
@@ -630,7 +633,7 @@ class RrhhController extends Controller
                         $UNIX_DATE = ($column['fecha_alejamiento_ddmmaaaa'] - 25569) * 86400;
                         $fecha_alejamiento_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
 
-                        $user = User::getUserByRun($column['rut_tit']);
+                        $user = User::getUserByRun($column['rut_programable']);
                         //se debe modificar esto, puede haber más de un contrato en el año,
                         //si existe un contrato para una persona en el mismo periodo (inicio a termino), se modifica. ¿?
                         //si no, se crea uno nuevo.
@@ -682,7 +685,7 @@ class RrhhController extends Controller
                             $contract->administrative_permit = $column['dias_de_permisos_administrativos'][0];
                             $contract->covid_permit = $column['descanso_reparatorio_covid'][0];
                             $contract->training_days = $column['dias_de_congreso_o_capacitacion'][0];
-                            // $contract->covid_permit = $column['rut_tit'];
+                            // $contract->covid_permit = $column['rut_programable'];
                             $contract->contract_start_date = $fecha_inicio_contrato_ddmmaaaa;
                             $contract->contract_end_date = $fecha_termino_contrato_ddmmaaaa;
                             $contract->departure_date = $fecha_alejamiento_ddmmaaaa;
