@@ -38,9 +38,12 @@ class CallRegulation implements Rule
             }
             elseif($this->classification == null)
             {
-                $pass = false;
+                /**
+                 * Se coloca $pass = true para poder desclasificar una llamada
+                 */
+                $pass = true;
                 $this->msg = 'Por favor clasifique la llamada';
-            } 
+            }
             else
             {
                 $pass = ($this->key != null) ? true : false;
