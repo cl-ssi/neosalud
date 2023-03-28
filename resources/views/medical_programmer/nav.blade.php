@@ -83,6 +83,13 @@
             </li>
 
             <li>
+                <a class="dropdown-item {{ active('medical_programmer.process.index') }}" href="{{ route('medical_programmer.process.index') }}">
+                    <span data-feather="chevrons-right"></span>
+                    Procesos
+                </a>
+            </li>
+
+            <li>
                 <a class="dropdown-item {{ active('medical_programmer.activities.index') }}" href="{{ route('medical_programmer.activities.index') }}">
                     <span data-feather="chevrons-right"></span>
                     Actividades

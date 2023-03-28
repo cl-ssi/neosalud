@@ -31,6 +31,7 @@
     <thead>
         <tr>
             <th>id_actividad</th>
+            <th>Proceso</th>
             <th>Actividad Madre</th>
             <th>Tipo de actividad</th>
             <th>Especialidad</th>
@@ -43,6 +44,7 @@
         @foreach( $activities as $activity )
         <tr>
             <td>{{ $activity->id_activity }}</td>
+            <td>@if($activity->process) {{ $activity->process->name }} @endif</td>
             <td>@if($activity->motherActivity){{ $activity->motherActivity->description }}@endif</td>
             <td>@if($activity->activityType){{ $activity->activityType->name }}@endif</td>
             <td>{{ $activity->activity_name }}</td>

@@ -15,7 +15,7 @@ class Activity extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'id_activity', 'mother_activity_id', 'activity_type_id', 'activity_name', 'description', 'performance', 'programmable'
+        'id', 'process_id', 'id_activity', 'mother_activity_id', 'activity_type_id', 'activity_name', 'description', 'performance', 'programmable'
         //, 'user_id'
     ];
 
@@ -27,6 +27,11 @@ class Activity extends Model implements Auditable
     public function theoretialProgrammings()
     {
         return $this->hasMany('App\Models\MedicalProgrammer\TheoreticalProgramming');
+    }
+
+    public function process()
+    {
+        return $this->belongsTo('App\Models\MedicalProgrammer\Process');
     }
 
     public function motherActivity()

@@ -35,6 +35,7 @@ use App\Http\Controllers\MedicalProgrammer\UnscheduledProgrammingController;
 use App\Http\Controllers\MedicalProgrammer\CalendarProgrammingController;
 use App\Http\Controllers\MedicalProgrammer\OperatingRoomController;
 use App\Http\Controllers\MedicalProgrammer\MotherActivityController;
+use App\Http\Controllers\MedicalProgrammer\ProcessController;
 use App\Http\Controllers\MedicalProgrammer\ServiceController;
 use App\Http\Controllers\MedicalProgrammer\SpecialtyController;
 use App\Http\Controllers\MedicalProgrammer\ProfessionController;
@@ -423,7 +424,15 @@ Route::prefix('medical_programmer')->name('medical_programmer.')->middleware('au
 		Route::get('/{motherActivity}/edit', [MotherActivityController::class, 'edit'])->name('edit');
 	});
 
-
+    Route::prefix('process')->name('process.')->group(function(){
+		Route::get('/', [ProcessController::class, 'index'])->name('index');
+		Route::post('/', [ProcessController::class, 'store'])->name('store');
+		Route::get('/create', [ProcessController::class, 'create'])->name('create');
+		Route::get('/{process}', [ProcessController::class, 'show'])->name('show');
+		Route::put('/{process}', [ProcessController::class, 'update'])->name('update');
+		Route::delete('/{process}', [ProcessController::class, 'destroy'])->name('destroy');
+		Route::get('/{process}/edit', [ProcessController::class, 'edit'])->name('edit');
+	});
 
 	Route::prefix('services')->name('services.')->group(function(){
 		Route::get('/', [ServiceController::class, 'index'])->name('index');

@@ -17,6 +17,16 @@
         </fieldset>
 
         <fieldset class="form-group col-8 col-md-4">
+            <label for="for_process_id">Proceso</label>
+            <select name="process_id" id="for_process_id" class="form-control">
+              <option value="">--</option>
+              @foreach ($processes as $key => $process)
+                <option value="{{$process->id}}" {{ $activity->process_id == $process->id ? 'selected' : '' }}>{{$process->name}}</option>
+              @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-8 col-md-4">
             <label for="for_activity_name">Actividad Madre</label>
             <select name="mother_activity_id" id="law" class="form-control">
               <option value="">--</option>

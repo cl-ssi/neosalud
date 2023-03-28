@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\MedicalProgrammer\Process;
+
 class ActivityController extends Controller
 {
     /**
@@ -38,8 +40,9 @@ class ActivityController extends Controller
     {
       $motherActivities = MotherActivity::orderBy('description','ASC')->get();
       $activityTypes = ActivityType::orderBy('name','ASC')->get();
+      $processes = Process::orderBy('name','ASC')->get();
 
-      return view('medical_programmer.activities.create',compact('motherActivities','activityTypes'));
+      return view('medical_programmer.activities.create',compact('motherActivities','activityTypes','processes'));
     }
 
     /**
@@ -79,7 +82,9 @@ class ActivityController extends Controller
     {
       $motherActivities = MotherActivity::orderBy('description','ASC')->get();
       $activityTypes = ActivityType::orderBy('name','ASC')->get();
-      return view('medical_programmer.activities.edit', compact('activity','motherActivities','activityTypes'));
+      $processes = Process::orderBy('name','ASC')->get();
+
+      return view('medical_programmer.activities.edit', compact('activity','motherActivities','activityTypes','processes'));
     }
 
     /**
