@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>id_actividad</th>
-            <th>Actvidad Madre</th>
+            <th>Actividad Madre</th>
             <th>Tipo de actividad</th>
             <th>Especialidad</th>
             <th>Rendimiento</th>

@@ -31,7 +31,7 @@
 
   <fieldset class="form-group col col-md">
       <label for="for_id_deis">Contrato</label>
-      <input type="text" class="form-control" name="" value="{{$programmingProposal->contract->law}} - {{$programmingProposal->contract->weekly_hours}}hrs - {{$programmingProposal->contract->year}}" disabled>
+      <input type="text" class="form-control" name="" @if($programmingProposal->contract) value="{{$programmingProposal->contract->law}} - {{$programmingProposal->contract->weekly_hours}}hrs - {{$programmingProposal->contract->year}}" @endif disabled>
   </fieldset>
 
   @if($programmingProposal->specialty)
@@ -89,7 +89,11 @@
     <tbody>
        @foreach($programmingProposal->details as $detail)
         <tr>
-          <td>{{$detail->activity->activity_name}}</td>
+          <td>
+                <b>{{ $detail->activity->activity_name }}</b>
+                @if($detail->activity->motherActivity) - [{{ $detail->activity->motherActivity->description }}]@endif
+                @if($detail->activity->process) - <p style="color:red;display:inline">[{{ $detail->activity->process->name }}]</p>@endif
+          </td>
           <td>@if($detail->subactivity){{$detail->subactivity->sub_activity_name}}@endif</td>
           <td>{{$detail->getDayAttribbute()}}</td>
           <td>{{$detail->start_hour}}</td>
@@ -131,7 +135,11 @@
 
   <fieldset class="form-group col col-md-6">
     <div class="d-flex flex-row-reverse">
-      <div class="p-2"><b>Hrs: {{$total_hours}} / {{$programmingProposal->contract->weekly_hours}}</b></div>
+        @if($programmingProposal->contract)
+            <div class="p-2"><b>Hrs: {{$total_hours}} / {{$programmingProposal->contract->weekly_hours}}</b></div>
+        @else
+            <div class="p-2"><b>Hrs: No hay contrato cargado</b></div>
+        @endif
     </div>
   </fieldset>
 </div>

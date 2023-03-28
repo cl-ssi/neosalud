@@ -58,7 +58,9 @@
                     </td>
                     <td class="bookingTd" data-toggle="tooltip" data-placement="top" title="{{ $activity->description }}">
                       <label class="form-check-label">
-                        {{ $activity->activity_name }}
+                         <b>{{ $activity->activity_name }}</b>
+                        @if($activity->motherActivity) - [{{ $activity->motherActivity->description }}]@endif
+                        @if($activity->process) - <p style="color:red;display:inline">[{{ $activity->process->name }}]</p>@endif
                       </label>
                     </td>
                     @if($activity->performance == 1)
