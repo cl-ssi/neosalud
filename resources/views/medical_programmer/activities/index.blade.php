@@ -31,9 +31,9 @@
     <thead>
         <tr>
             <th>id_actividad</th>
-            <th>Actividad</th>
             <th>Proceso</th>
             <th>Actividad Madre</th>
+            <th>Actividad</th>
             <th>Tipo de actividad</th>
             <th>Rendimiento</th>
             <th>Programable</th>
@@ -44,9 +44,9 @@
         @foreach( $activities as $activity )
         <tr>
             <td>{{ $activity->id_activity }}</td>
-            <td>{{ $activity->activity_name }}</td>
             <td>@if($activity->process) {{ $activity->process->name }} @endif</td>
             <td>@if($activity->motherActivity){{ $activity->motherActivity->description }}@endif</td>
+            <td>{{ $activity->activity_name }}</td>
             <td>@if($activity->activityType){{ $activity->activityType->name }}@endif</td>
             <td>@if($activity->performance) R @else NR @endif</td>
             <td>@if($activity->programmable) Sí @else No @endif</td>
@@ -68,7 +68,7 @@
     </tbody>
 </table>
 
-{{ $activities->links('pagination::bootstrap-4') }}
+{{-- $activities->links('pagination::bootstrap-4') --}}
 
 @endsection
 

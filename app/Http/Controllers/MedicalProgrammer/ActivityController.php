@@ -25,8 +25,10 @@ class ActivityController extends Controller
       $activities = Activity::when($type != null, function ($q) use ($type) {
                                   return $q->where('activity_type_id',$type);
                               })
+                              ->with('process','motherActivity','activityType')
                               ->orderBy('activity_name','ASC')
-                              ->paginate(50);
+                              ->get();
+                            //   ->paginate(50);
 
       return view('medical_programmer.activities.index', compact('request','activities'));
     }
