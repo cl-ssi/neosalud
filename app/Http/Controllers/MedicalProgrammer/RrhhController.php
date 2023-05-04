@@ -708,7 +708,7 @@ class RrhhController extends Controller
         
 
         // si admin, devuelve todos
-        if(Auth::user()->hasPermissionTo('Mp: administrador')){
+        if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
             $specialty_users = Practitioner::whereHas('user')->whereNotNull('specialty_id')->get();
             $profession_users = Practitioner::whereHas('user')->whereNotNull('profession_id')->get();
 
@@ -793,37 +793,6 @@ class RrhhController extends Controller
         $practitioner->delete();
 
         session()->flash('success', 'Se ha eliminado el usuario de tu equipo.');
-        return redirect()->back();
-    }
-
-    public function visators(){
-        // Mp: Proposal - Jefe de Servicio (no debería ir)
-        $users = User::all();
-        $users_jefe_cae_médico = User::permission(['Mp: Proposal - Jefe de CAE Médico'])->get();
-        $users_jefe_cae_no_medico = User::permission(['Mp: Proposal - Jefe de CAE No médico'])->get();
-        $users_subdireccion_medica = User::permission(['Mp: Proposal - Subdirección Médica'])->get();
-        $users_subdireccion_dgcp = User::permission(['Mp: Proposal - Subdirección DGCP'])->get();
-
-        return view('medical_programmer.rrhh.visators',compact('users','users_jefe_cae_médico','users_subdireccion_medica',
-                                                                'users_jefe_cae_no_medico','users_subdireccion_dgcp'));
-    }
-
-    public function add_visator(Request $request){
-
-        $user = User::find($request->user_id);
-        if ($user->hasAnyPermission(['Mp: Proposal - Jefe de CAE Médico','Mp: Proposal - Jefe de CAE No médico','Mp: Proposal - Subdirección Médica','Mp: Proposal - Subdirección DGCP'])) {
-            session()->flash('warning', 'El usuario ya tiene un permiso asignado.');
-        }else{
-            $user->givePermissionTo($request->permission);
-            session()->flash('success', 'Se ha guardado el permiso del usuario.');
-        }
-        
-        return redirect()->back();
-    }
-
-    public function destroy_visator(User $user, $permission){
-        $user->revokePermissionTo($permission);
-        session()->flash('success', 'Se ha eliminado el permiso del usuario.');
         return redirect()->back();
     }
 }

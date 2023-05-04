@@ -25,87 +25,9 @@ class ProgrammingProposalController extends Controller
      */
     public function index(Request $request)
     {
-        // $type = $request->get('type');
-        // $specialty_id = $request->get('specialty_id');
-        // $profesion_id = $request->get('profesion_id');
-        // $user_id = $request->get('user_id');
         $name = $request->get('name');
-
-    //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico') ||
-    //       Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-    //     $programmingProposals = ProgrammingProposal::whereNotNull('specialty_id')
-    //                                                ->when($type != null, function ($q) use ($type) {
-    //                                                   return $q->when($type == "Médico", function ($q) {
-    //                                                      return $q->whereNull('profession_id');
-    //                                                   })->when($type == "No médico", function ($q) {
-    //                                                      return $q->whereNull('specialty_id');
-    //                                                   });
-    //                                                })
-    //                                                ->when($specialty_id != null, function ($q) use ($specialty_id) {
-    //                                                   return $q->where('specialty_id',$specialty_id);
-    //                                                })
-    //                                                ->when($profesion_id != null, function ($q) use ($profesion_id) {
-    //                                                   return $q->where('profesion_id',$profesion_id);
-    //                                                })
-    //                                               //  ->when($user_id != null, function ($q) use ($user_id) {
-    //                                               //     return $q->where('user_id',$user_id);
-    //                                               //  })
-    //                                               ->when($name != null, function ($q) use ($name) {
-    //                                                 return $q->whereHas('user', function ($query) use ($name) {
-    //                                                     return $query->whereHas('humanNames', function ($query) use ($name) {
-    //                                                         return $query->where('text', 'LIKE', '%' . $name . '%')
-    //                                                                      ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
-    //                                                                      ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
-    //                                                       });
-    //                                                   });
-    //                                                })
-    //                                                ->orderBy('id','DESC')
-    //                                                ->paginate(50);
-
-    //   }elseif (Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico') ||
-    //            Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
-    //     $programmingProposals = ProgrammingProposal::whereNotNull('profession_id')
-    //                                                 ->when($type != null, function ($q) use ($type) {
-    //                                                    return $q->when($type == "Médico", function ($q) {
-    //                                                       return $q->whereNull('profession_id');
-    //                                                    })->when($type == "No médico", function ($q) {
-    //                                                       return $q->whereNull('specialty_id');
-    //                                                    });
-    //                                                 })
-    //                                                 ->when($specialty_id != null, function ($q) use ($specialty_id) {
-    //                                                    return $q->where('specialty_id',$specialty_id);
-    //                                                 })
-    //                                                 ->when($profesion_id != null, function ($q) use ($profesion_id) {
-    //                                                    return $q->where('profesion_id',$profesion_id);
-    //                                                 })
-    //                                                 ->when($user_id != null, function ($q) use ($user_id) {
-    //                                                    return $q->where('user_id',$user_id);
-    //                                                 })
-    //                                                 ->orderBy('id','DESC')
-    //                                                 ->paginate(50);
-    //   }else{
-    //     $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
-    //                                                 ->when($type != null, function ($q) use ($type) {
-    //                                                    return $q->when($type == "Médico", function ($q) {
-    //                                                       return $q->whereNull('profession_id');
-    //                                                    })->when($type == "No médico", function ($q) {
-    //                                                       return $q->whereNull('specialty_id');
-    //                                                    });
-    //                                                 })
-    //                                                 ->when($specialty_id != null, function ($q) use ($specialty_id) {
-    //                                                    return $q->where('specialty_id',$specialty_id);
-    //                                                 })
-    //                                                 ->when($profesion_id != null, function ($q) use ($profesion_id) {
-    //                                                    return $q->where('profesion_id',$profesion_id);
-    //                                                 })
-    //                                                 ->when($user_id != null, function ($q) use ($user_id) {
-    //                                                    return $q->where('user_id',$user_id);
-    //                                                 })
-    //                                                 ->paginate(50);
-    //   }
-
         $programmingProposals = array();
-        if(Auth::user()->hasPermissionTo('Mp: administrador')){
+        if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
             $programmingProposals = ProgrammingProposal::orderBy('id','DESC')
                                                         ->when($name != null, function ($q) use ($name) {
                                                             return $q->whereHas('user', function ($query) use ($name) {
@@ -119,7 +41,7 @@ class ProgrammingProposalController extends Controller
                                                         ->paginate(50);
         }else{
             // cuando el usuario está asignado como jefe de unidad
-            if(Auth::user()->hasPermissionTo('Mp: asigna tu equipo')){
+            if(Auth::user()->hasPermissionTo('Mp: perfil jefe de unidad')){
                 $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
                 $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
                 
@@ -179,17 +101,6 @@ class ProgrammingProposalController extends Controller
         $programmingProposalSignatureFlow->signature_date = Carbon::now();
         $programmingProposalSignatureFlow->status = "Solicitud creada";
 
-        //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-        //     $programmingProposalSignatureFlow->type = "Subdirección Médica";
-        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
-        //     $programmingProposalSignatureFlow->type = "Subdirección DGCP";
-        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
-        //     $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
-        //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
-        //     $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-        //   }else{
-        //     $programmingProposalSignatureFlow->type = "Jefe de Servicio";
-        //   }
         if(Auth::user()->unitHead->count() > 0){
             $programmingProposalSignatureFlow->type = "Jefe de Servicio";
         }
@@ -223,14 +134,6 @@ class ProgrammingProposalController extends Controller
       if ($request->buttonaction == "accept_button") {
         $programmingProposalSignatureFlow->status = "Solicitud confirmada";
 
-        // if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica') || Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')) {
-        //   $programmingProposal->status = "Confirmado";
-        //   $programmingProposal->save();
-        // }
-        // else{
-        //   $programmingProposal->status = "En proceso";
-        //   $programmingProposal->save();
-        // }
         if (Auth::user()->programmerVisator->count() > 0) {
             $programmingProposal->status = "Confirmado";
             $programmingProposal->save();
@@ -246,18 +149,6 @@ class ProgrammingProposalController extends Controller
         $programmingProposal->status = "Rechazado";
         $programmingProposal->save();
       }
-
-    //   if (Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección Médica')) {
-    //     $programmingProposalSignatureFlow->type = "Subdirección Médica";
-    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Subdirección DGCP')){
-    //     $programmingProposalSignatureFlow->type = "Subdirección DGCP";
-    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE Médico')){
-    //     $programmingProposalSignatureFlow->type = "Jefatura CAE Médica";
-    //   }elseif(Auth::user()->hasPermissionTo('Mp: Proposal - Jefe de CAE No médico')){
-    //     $programmingProposalSignatureFlow->type = "Jefatura CAE No médica";
-    //   }else{
-    //     $programmingProposalSignatureFlow->type = "Funcionario";
-    //   }
 
     if(Auth::user()->unitHead->count() > 0){
         $programmingProposalSignatureFlow->type = "Jefe de Servicio";

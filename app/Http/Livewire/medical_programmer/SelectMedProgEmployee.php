@@ -35,7 +35,7 @@ class SelectMedProgEmployee extends Component
 
         if ($this->type != null) {
           if ($this->type == "Médico") {
-            if(Auth::user()->hasPermissionTo('Mp: administrador')){
+            if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
                 $this->specialties = Specialty::orderBy('specialty_name','ASC')->get();
             }else{
                 $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
@@ -43,7 +43,7 @@ class SelectMedProgEmployee extends Component
             }
             
           }else{
-            if(Auth::user()->hasPermissionTo('Mp: administrador')){
+            if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
                 $this->professions = Profession::orderBy('profession_name','ASC')->get();
             }else{
                 $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');

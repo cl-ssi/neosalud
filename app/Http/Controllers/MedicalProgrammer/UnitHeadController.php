@@ -17,10 +17,9 @@ use App\Models\MedicalProgrammer\UnitHead;
 class UnitHeadController extends Controller
 {
     public function index(Request $request){
-        // devuelve usuarios con permiso de jefe de areas
-        // $units_head_users = User::permission('Mp: asigna tu equipo')->get();
+        // devuelve usuarios con permiso de jefe de unidad
         $units_heads = UnitHead::whereHas('user', function ($q) {
-                                    return $q->permission('Mp: asigna tu equipo');
+                                    return $q->permission(['Mp: perfil jefe de unidad']);
                                 })->get();
         $users = User::all();
         $specialties = Specialty::all();
@@ -37,8 +36,7 @@ class UnitHeadController extends Controller
             $unitHead->save();
 
             $user = User::find($request->user_id);
-            // $user->syncPermissions('Mp: asigna tu equipo');
-            $user->givePermissionTo('Mp: asigna tu equipo');
+            $user->givePermissionTo('Mp: perfil jefe de unidad');
             $flag = 1;
         }
 
@@ -49,8 +47,7 @@ class UnitHeadController extends Controller
             $unitHead->save();
 
             $user = User::find($request->user_id);
-            // $user->syncPermissions('Mp: asigna tu equipo');
-            $user->givePermissionTo('Mp: asigna tu equipo');
+            $user->givePermissionTo('Mp: perfil jefe de unidad');
             $flag = 1;
         }
 
@@ -67,7 +64,7 @@ class UnitHeadController extends Controller
         $units_head->delete();
         // si no queda ningun usuario más, se elimina el permiso
         if(UnitHead::where('user_id',$units_head->user_id)->count() == 0){
-            $units_head->user->revokePermissionTo('Mp: asigna tu equipo');
+            $units_head->user->revokePermissionTo('Mp: perfil jefe de unidad');
         }
         session()->flash('success', 'Se ha eliminado el acceso.');
         return redirect()->back();   
