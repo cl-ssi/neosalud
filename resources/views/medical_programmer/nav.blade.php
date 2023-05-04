@@ -134,7 +134,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ active('patient.index') }}" href="{{ route('patient.index') }}">
                         <span data-feather="users"></span>
-                        Buscar paciente<span class="sr-only">(current)</span>
+                        Buscar usuario<span class="sr-only">(current)</span>
                     </a>
                 </li>
             @endcanany
