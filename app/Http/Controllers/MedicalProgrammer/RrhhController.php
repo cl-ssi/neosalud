@@ -58,8 +58,12 @@ class RrhhController extends Controller
                         });
                     // });
                   })
-                  ->orderBy('id','ASC')
-                  ->paginate(50);
+                ->whereHas('practitioners', function ($q) {
+                    return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+                })
+                ->orderBy('id','ASC')
+                ->paginate(50);
+
         return view('medical_programmer.rrhh.index', compact('rrhh','request'));
     }
 
@@ -630,8 +634,12 @@ class RrhhController extends Controller
                         $UNIX_DATE = ($column['fecha_termino_contrato_ddmmaaaa'] - 25569) * 86400;
                         $fecha_termino_contrato_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
 
-                        $UNIX_DATE = ($column['fecha_alejamiento_ddmmaaaa'] - 25569) * 86400;
-                        $fecha_alejamiento_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                        if($column['fecha_alejamiento_ddmmaaaa']){
+                            $UNIX_DATE = ($column['fecha_alejamiento_ddmmaaaa'] - 25569) * 86400;
+                            $fecha_alejamiento_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                        }else{
+                            $fecha_alejamiento_ddmmaaaa = null;
+                        }
 
                         $user = User::getUserByRun($column['rut_programable']);
                         //se debe modificar esto, puede haber más de un contrato en el año,
@@ -705,12 +713,32 @@ class RrhhController extends Controller
     }
 
     public function assign_your_team(){
-        
+
+        $specialties = null;
+        $professions = null;
+        $specialty_users = Practitioner::where('id',0);
+        $profession_users = Practitioner::where('id',0);
+        $organizations = Organization::all();
+        $users = User::permission('Mp: user')->get();
+
+        if(auth()->user()->practitioners==null){
+            session()->flash('warning', 'Para asignar a tu equipo, debes tener asignado un establecimiento. Contacta al administrador del sistema.');
+            return view('medical_programmer.rrhh.assign_your_team',compact('specialty_users','profession_users','specialties',
+                                                                        'professions','organizations','users'));
+        }
 
         // si admin, devuelve todos
         if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
-            $specialty_users = Practitioner::whereHas('user')->whereNotNull('specialty_id')->get();
-            $profession_users = Practitioner::whereHas('user')->whereNotNull('profession_id')->get();
+            $specialty_users = Practitioner::whereHas('user')
+                                        ->whereNotNull('specialty_id')
+                                        ->with('specialty','user','organization')
+                                        ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
+                                        ->get();
+            $profession_users = Practitioner::whereHas('user')
+                                        ->whereNotNull('profession_id')
+                                        ->with('specialty','user','organization')
+                                        ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
+                                        ->get();
 
             $specialties = Specialty::OrderBy('specialty_name')->get();
             $professions = Profession::OrderBy('profession_name')->get();
@@ -722,19 +750,19 @@ class RrhhController extends Controller
             // si no, devuelve segun asignación "asigna tu equipo"
             $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
                                             ->whereHas('user')
+                                            ->with('specialty','user','organization')
+                                            ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
                                             ->get();
 
             $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
                                             ->whereHas('user')
+                                            ->with('profession','user','organization')
+                                            ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
                                             ->get();
 
             $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
             $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
         }
-        
-        $organizations = Organization::all();
-        $users = User::permission('Mp: user')->get();
-        // dd($users);
 
         return view('medical_programmer.rrhh.assign_your_team',compact('specialty_users','profession_users','specialties',
                                                                         'professions','organizations','users'));

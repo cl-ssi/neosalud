@@ -50,6 +50,9 @@ class ContractController extends Controller
                                       });
                                   });
                                })
+                            ->whereHas('establishment', function ($q) {
+                                return $q->whereIn('id', auth()->user()->practitionersOrganizations());
+                            })
                              ->paginate(50);
         return view('medical_programmer.contracts.index', compact('contracts', 'request'));
     }

@@ -69,7 +69,7 @@
         @foreach($profession_users as $profession_user)
         <tr>
             <td>{{$profession_user->profession->profession_name}}</td>
-            <td>{{$profession_user->user->OfficialFullName}}}</td>
+            <td>{{$profession_user->user->OfficialFullName}}</td>
             <td>{{$profession_user->organization->name}}</td>
             <td>
                 <form method="POST" action="{{ route('medical_programmer.rrhh.destroy_assign_your_team', $profession_user) }}" class="d-inline">

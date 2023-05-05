@@ -21,7 +21,12 @@ class UnitHeadController extends Controller
         $units_heads = UnitHead::whereHas('user', function ($q) {
                                     return $q->permission(['Mp: perfil jefe de unidad']);
                                 })->get();
-        $users = User::all();
+        // $users = User::all();
+        //solo devuelve los usuarios que pertenescan a mi organización
+        $users = User::whereHas('practitioners', function ($q) {
+                            return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+                        })->get();
+        
         $specialties = Specialty::all();
         $professions = Profession::all();
         return view('medical_programmer.rrhh.units_head',compact('request', 'units_heads','users','specialties','professions'));

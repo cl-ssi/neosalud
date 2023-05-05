@@ -38,6 +38,11 @@ class ProgrammingProposalController extends Controller
                                                                     });
                                                                 });
                                                             })
+                                                        ->whereHas('user', function ($query) use ($name) {
+                                                            return $query->whereHas('practitioners', function ($q) {
+                                                                    return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+                                                                });
+                                                            })
                                                         ->paginate(50);
         }else{
             // cuando el usuario está asignado como jefe de unidad
@@ -53,6 +58,11 @@ class ProgrammingProposalController extends Controller
                                                                                         ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
                                                                                         ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
                                                                         });
+                                                                    });
+                                                                })
+                                                            ->whereHas('user', function ($query) use ($name) {
+                                                                return $query->whereHas('practitioners', function ($q) {
+                                                                        return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
                                                                     });
                                                                 })
                                                             ->whereIn('specialty_id',$unitHeads_specialty)
