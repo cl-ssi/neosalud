@@ -48,14 +48,16 @@
     </fieldset>
 </div>
 
-@if(isset($call))
-    <div class="row g-2">
-        <fieldset class="form-group col-sm-12">
-            <label for="for-regulation">Regulación</label>
+<div class="row g-2">
+    <fieldset class="form-group col-sm-12">
+        <label for="for-regulation">Regulación</label>
+        @if(isset($call))
             <input type="text" class="form-control" name="regulation" id="for-regulation" value="{{ $call->regulation }}" readonly disabled>
-        </fieldset>
-    </div>
-@endif
+        @elseif(isset($event->call))
+            <input type="text" class="form-control" name="regulation" id="for-regulation" value="{{ $event->call->regulation }}" readonly disabled>
+        @endif
+    </fieldset>
+</div>
 
 <br>
 
