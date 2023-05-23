@@ -4,11 +4,13 @@
             <ul class="nav flex-column">
 
                 <!--CHAGAS-->
+                @can('Administrator')
                 <li class="nav-item">
                     <a class="nav-link {{ active('chagas.*') }}" href="{{ route('chagas.welcome') }}">
                         <i class="fas fa-bug"></i> CHAGAS
                     </a>
                 </li>
+                @endcanany
 
                 <!--SAMU-->
                 @canany(['SAMU'])
