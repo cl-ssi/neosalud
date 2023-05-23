@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Identifier;
 use App\Models\ContactPoint;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Organization;
+use App\Models\Practitioner;
 
 class UserController extends Controller
 {
@@ -21,8 +23,10 @@ class UserController extends Controller
 
     public function create()
     {
+
+        $organizations = Organization::whereIn('service', [3, 4])->orderBy('alias')->get();
         $permissions = Permission::OrderBy('name')->get();
-        return view('users.create', compact('permissions'));
+        return view('users.create', compact('permissions', 'organizations'));
     }
 
     public function store(Request $request)
@@ -71,6 +75,16 @@ class UserController extends Controller
         $newContactPoint->user_id = $newUser->id;
         $newContactPoint->save();
 
+
+        $newPractitioner = new Practitioner();
+        $newPractitioner->organization_id = $request->organization;
+        $newPractitioner->user_id = $newUser->id;
+        $newPractitioner->save();
+
+
+
+
+
         session()->flash('success', 'El usuario ' . $newHumanName->name . ' ha sido creado.');
         return view('users.index');
     }
@@ -83,8 +97,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $organizations = Organization::whereIn('service', [3, 4])->orderBy('alias')->get();
         $permissions = Permission::OrderBy('name')->get();
-        return view('users.edit', compact('user', 'permissions'));
+        return view('users.edit', compact('user', 'permissions', 'organizations'));
     }
 
     /**
@@ -134,6 +149,18 @@ class UserController extends Controller
             $newContactPoint->save();
         }
 
+
+        // Verificar si se ha seleccionado un nuevo valor en el combobox
+        if ($user->practitioners->last()->organization_id != $request->organization_id) {
+            // Obtener la instancia existente de Practitioner del usuario
+            $practitioner = Practitioner::where('user_id', $user->id)->latest()->first();
+            // // Actualizar los campos de Practitioner
+            $practitioner->organization_id = $request->organization_id;
+            // // Guardar los cambios en la base de datos
+            $practitioner->save();
+            // dd('kaka');
+        }
+
         $user->save();
 
         session()->flash('success', 'El usuario ' . $user->name . ' ha sido actualizado.');
@@ -141,11 +168,12 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    private function updatePermissions(User $user, Array $permissions) {
+    private function updatePermissions(User $user, array $permissions)
+    {
         foreach ($permissions as $permissionName => $permission) {
-            if($permission === 'true'){
+            if ($permission === 'true') {
                 $user->givePermissionTo($permissionName);
-            }else{
+            } else {
                 $user->revokePermissionTo($permissionName);
             }
         }
@@ -172,12 +200,12 @@ class UserController extends Controller
         return $data;
     }
 
-    public function switch(User $user) {
+    public function switch(User $user)
+    {
         if (session()->has('god')) {
             /* Clean session var */
             session()->pull('god');
-        }
-        else {
+        } else {
             /* set god session var = user_id */
             session(['god' => Auth::id()]);
         }
@@ -185,5 +213,4 @@ class UserController extends Controller
         Auth::login($user);
         return back();
     }
-
 }

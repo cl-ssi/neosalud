@@ -23,7 +23,7 @@ class Identifier extends Model
         'value',
         'dv',
         'period_id',
-        'organization',
+        'organization_id',
     ];
 
     public function user(){

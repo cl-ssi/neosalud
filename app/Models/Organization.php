@@ -17,7 +17,7 @@ class Organization extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'alias', 'sirh_code' 
+        'id', 'name', 'alias', 'sirh_code','organization_id',
     ];
 
     use SoftDeletes;
