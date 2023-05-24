@@ -799,13 +799,26 @@ Route::get('/test/error/{option?}', [TestController::class, 'error']);
 Route::get('/test/projectid', [TestController::class, 'getProjectId']);
 Route::get('/test/cola', [TestController::class, 'cola']);
 
+
+use App\Http\Controllers\Lab\LaboratoryController;
+// Inicio Módulo de Laboratorio
+Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
+    Route::view('/', 'labs.welcome')->name('welcome');
+    Route::get('/chagas/{tray}', [LaboratoryController::class, 'chagasIndex'])->name('chagas.index');
+    Route::post('/reception/{suspectcase}', [LaboratoryController::class, 'chagasReception'])->name('chagas.reception');
+    Route::post('/mass-reception', [LaboratoryController::class, 'massReception'])->name('chagas.massReception');
+});
+// Fin de Módulo de Laboratorio
+
+
 // Inicio Módulo de Chagas
-
-
 Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () {
     Route::view('/', 'chagas.welcome')->name('welcome');
-    Route::view('/tutorials', 'chagas.tutorials')->name('tutorials');
+    
+    // Nueva ruta que llama al método downloadFile
+    Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
+
+    //Route::view('/tutorials', 'chagas.tutorials')->name('tutorials');
 });
-
-
 // Fin de Módulo de Chagas
+

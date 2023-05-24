@@ -6,7 +6,7 @@
 
     <h3 class="mb-3">Editar usuario: <strong> {{ $user->officialFullName }} </strong> </h3>
 
-    @canany(['Administrator', 'SAMU administrador'])
+    @canany(['Administrator', 'SAMU administrador', 'Developer'])
 
         <form class="form-horizontal" method="POST" action="{{ route('user.update', $user) }}">
             @csrf

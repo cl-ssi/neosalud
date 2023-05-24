@@ -4,10 +4,19 @@
             <ul class="nav flex-column">
 
                 <!--CHAGAS-->
-                @can('Administrator')
+                @canany('Administrator')
                 <li class="nav-item">
                     <a class="nav-link {{ active('chagas.*') }}" href="{{ route('chagas.welcome') }}">
                         <i class="fas fa-bug"></i> CHAGAS
+                    </a>
+                </li>
+                @endcanany
+
+                <!--CHAGAS-->
+                @canany(['Developer', 'Administrator', 'Lab:'])
+                <li class="nav-item">
+                    <a class="nav-link {{ active('labs.*') }}" href="{{ route('labs.welcome') }}">
+                        <i class="fas fa-vial"></i> LABORATORIO
                     </a>
                 </li>
                 @endcanany
@@ -31,7 +40,6 @@
                         </a>
                     </li>
                 @endcanany
-
             </ul>
 
             @can('Administrator')

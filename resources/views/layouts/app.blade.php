@@ -20,7 +20,7 @@
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('css/nunito.css') }}" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{{ asset('css/ssi.css') }}" rel="stylesheet">    
+    <link href="{{ asset('css/ssi.css') }}" rel="stylesheet">
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-touch-icon.png">
