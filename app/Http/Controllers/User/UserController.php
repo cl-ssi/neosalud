@@ -40,7 +40,7 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        $newUser = new User($request->all());
+        $newUser = new User($request->except('organization_id[]'));
 
         $newUser->password = bcrypt($newUser->password);
         $newUser->active = 1;
@@ -50,16 +50,17 @@ class UserController extends Controller
 
         $newUser->save();
 
-        $newHumanName = new HumanName($request->all());
+        $newHumanName = new HumanName($request->except('organization_id[]'));
         $newHumanName->user_id = $newUser->id;
         $newHumanName->use = 'official';
         $newHumanName->save();
 
-        $newIdentifier = new Identifier($request->all());
+        $newIdentifier = new Identifier();
         $newIdentifier->cod_con_identifier_type_id = 1;
         $newIdentifier->value = $request->run;
+        $newIdentifier->dv = $request->dv;
         $newIdentifier->user_id = $newUser->id;
-        $newHumanName->use = 'official';
+        $newIdentifier->use = 'official';
         $newIdentifier->save();
 
         $newContactPoint = new ContactPoint();
@@ -76,18 +77,17 @@ class UserController extends Controller
         $newContactPoint->user_id = $newUser->id;
         $newContactPoint->save();
 
+        if ($request->has('organization_id')) {
+            foreach ($request->input('organization_id') as $organizationId) {
+                $newPractitioner = new Practitioner();
+                $newPractitioner->organization_id = $organizationId;
+                $newPractitioner->user_id = $newUser->id;
+                $newPractitioner->save();
+            }
+        }
 
-        $newPractitioner = new Practitioner();
-        $newPractitioner->organization_id = $request->organization_id;
-        $newPractitioner->user_id = $newUser->id;
-        $newPractitioner->save();
-
-
-
-
-
-        session()->flash('success', 'El usuario ' . $newHumanName->name . ' ha sido creado.');
-        //return view('users.index');
+        session()->flash('success', 'El usuario ' . $newHumanName->text . ' ha sido creado.');
+        return view('users.index');
         return redirect()->route('home');
     }
 
@@ -113,7 +113,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->fill($request->all());
+        $user->fill($request->except('organization_id[]'));
 
         $this->updatePermissions($user, is_array($request->input('permissions')) ? $request->input('permissions') : array());
         // $user->syncPermissions(is_array($request->input('permissions')) ? $request->input('permissions') : array());
@@ -151,29 +151,33 @@ class UserController extends Controller
             $newContactPoint->save();
         }
 
+        // Obtener las organizaciones seleccionadas del formulario
+        $selectedOrganizations = $request->input('organization_id', []);
 
-        // Verificar si se ha seleccionado un nuevo valor en el combobox
-        if ($user->practitioners->isEmpty() || $user->practitioners->last()->organization_id != $request->organization_id) {
-            if ($user->practitioners->isEmpty()) {
-                // No existe un Practitioner para el usuario, crear uno nuevo
-                $practitioner = new Practitioner();
-                $practitioner->user_id = $user->id;
-            } else {
-                // Obtener la instancia existente de Practitioner del usuario
-                $practitioner = $user->practitioners->last();
-            }
+        // Obtener las organizaciones existentes del usuario
+        $existingOrganizations = $user->practitioners->pluck('organization_id')->toArray();
 
-            // Actualizar los campos de Practitioner
-            $practitioner->organization_id = $request->organization_id;
 
-            // Guardar los cambios en la base de datos
-            $practitioner->save();
+        // Identificar las organizaciones que se deben agregar
+        $organizationsToAdd = array_diff($selectedOrganizations, $existingOrganizations);
+
+        // Identificar las organizaciones que se deben eliminar
+        $organizationsToRemove = array_diff($existingOrganizations, $selectedOrganizations);
+
+        // Agregar nuevas organizaciones
+        foreach ($organizationsToAdd as $organizationId) {
+            $newPractitioner = new Practitioner();
+            $newPractitioner->organization_id = $organizationId;
+            $newPractitioner->user_id = $user->id;
+            $newPractitioner->save();
         }
 
+        // Eliminar organizaciones
+        Practitioner::where('user_id', $user->id)->whereIn('organization_id', $organizationsToRemove)->delete();
 
         $user->save();
 
-        session()->flash('success', 'El usuario ' . $user->name . ' ha sido actualizado.');
+        session()->flash('success', 'El usuario ' . $user->text . ' ha sido actualizado.');
 
         return redirect()->back();
     }

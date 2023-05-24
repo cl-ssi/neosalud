@@ -9,7 +9,7 @@
     @csrf
     @method('POST')
     <div class="form-row">
-        <fieldset class="form-group col-10 col-md-3">            
+        <fieldset class="form-group col-10 col-md-3">
             <input type="hidden" class="form-control" id="for_id" name="patient_id"
             value="{{$user->id}}"
             >

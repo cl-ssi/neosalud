@@ -48,7 +48,7 @@
 
                         <fieldset class="form-group col-md-4">
                             <label for="for_organization">Organización *</label>
-                            <select class="form-select" name="organization_id" id="for_organization" required>
+                            <select class="form-select select2" name="organization_id[]" id="for_organization" multiple required>
                                 <option value="">Seleccionar organización del Usuario</option>
                                 @foreach ($organizations as $organization)
                                     <option value="{{ $organization->id }}"
@@ -131,10 +131,10 @@
 @endsection
 
 @section('custom_js')
-    <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
-    <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>    
+    <script type="text/javascript">    
         jQuery(document).ready(function($) {
+            $('.select2').select2();
             //obtiene digito verificador
             $('input[name=run]').keyup(function(e) {
                 var str = $("#for_run").val();

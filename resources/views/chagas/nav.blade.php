@@ -6,6 +6,12 @@
         </li>
     @endcanany
 
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador'])
+    <li class="nav-item">
+        <a class="nav-link " href="#"><i class="fas fa-bell"></i> Solicitud de Examen</a>
+    </li>
+    @endcanany
+
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Seguimiento'])
     <li class="nav-item">
         <a class="nav-link " href="#"><i class="fas fa-bell"></i> Seguimiento/Notificación</a>

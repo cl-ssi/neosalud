@@ -23,6 +23,7 @@ class Identifier extends Model
         'value',
         'dv',
         'period_id',
+        'practitioner_id',
         'organization_id',
     ];
 
