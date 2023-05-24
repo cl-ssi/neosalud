@@ -1,13 +1,9 @@
 @extends('layouts.app')
-
-@section('title', 'Asignar permisos a usuario')
-
 @section('content')
-
+    @include('chagas.nav')
     <h3 class="mb-3">Editar usuario: <strong> {{ $user->officialFullName }} </strong> </h3>
 
     @canany(['Administrator', 'SAMU administrador', 'Developer'])
-
         <form class="form-horizontal" method="POST" action="{{ route('user.update', $user) }}">
             @csrf
             @method('PUT')
@@ -101,37 +97,14 @@
 
                     @php $anterior = null; @endphp
                     @foreach ($permissions as $permission)
-                        @if (Gate::check('Administrator'))
-                            @if ($permission->name != 'be god')
-                                @if (current(explode(':', $permission->name)) != current(explode(':', $anterior)))
-                                    <hr>
-                                    @php $anterior = $permission->name; @endphp
-                                @endif
-
-                                <input type="hidden" name="permissions[{{ $permission->name }}]" value="false">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="permissions[{{ $permission->name }}]"
-                                        value="true" id="{{ $permission->name }}"
-                                        {{ $user->can($permission->name) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="{{ $permission->name }}">
-                                        <b>{{ $permission->name }}</b> {{ $permission->description }}</label>
-                                </div>
-                            @endif
-                        @elseif(Gate::check('SAMU administrador') && Str::contains($permission->name, 'SAMU'))
-                            @if (current(explode(':', $permission->name)) != current(explode(':', $anterior)))
-                                <hr>
-                                @php $anterior = $permission->name; @endphp
-                            @endif
-
-                            <input type="hidden" name="permissions[{{ $permission->name }}]" value="false">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="permissions[{{ $permission->name }}]"
-                                    value="true" id="{{ $permission->name }}"
-                                    {{ $user->can($permission->name) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="{{ $permission->name }}">
-                                    <b>{{ $permission->name }}</b> {{ $permission->description }}</label>
-                            </div>
-                        @endif
+                        <input type="hidden" name="permissions[{{ $permission->name }}]" value="false">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="permissions[{{ $permission->name }}]"
+                                value="true" id="{{ $permission->name }}"
+                                {{ $user->can($permission->name) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="{{ $permission->name }}">
+                                <b>{{ $permission->name }}</b> {{ $permission->description }}</label>
+                        </div>
                     @endforeach
                     <hr>
                     <input type="submit" class="btn btn-primary mb-4" value="Guardar">
@@ -140,7 +113,6 @@
             </div>
 
         </form>
-
     @endcanany
 
 @endsection

@@ -814,11 +814,19 @@ Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
 // Inicio Módulo de Chagas
 Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () {
     Route::view('/', 'chagas.welcome')->name('welcome');
-    
+
+    //Muestra el correo de delegeado de epidemiologia
+    Route::get('/delegate-mail', [SuspectCaseController::class, 'delegateMail'])->name('delegateMail');
+    Route::put('/update-mail/{organization}', [SuspectCaseController::class, 'updateMail'])->name('updateMail');
+
     // Nueva ruta que llama al método downloadFile
     Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
 
-    //Route::view('/tutorials', 'chagas.tutorials')->name('tutorials');
+    Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
+        Route::get('/indexchagas/{tray}', [SuspectCaseController::class, 'indexChagasUser'])->name('indexChagasUser');
+
+        Route::get('/create', [SuspectCaseController::class, 'createChagasUser'])->name('create');
+        Route::get('/{user}/edit', [SuspectCaseController::class, 'editChagasUser'])->name('edit');
+    });
 });
 // Fin de Módulo de Chagas
-

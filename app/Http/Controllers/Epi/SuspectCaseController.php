@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 
 class SuspectCaseController extends Controller
 {
@@ -22,11 +23,10 @@ class SuspectCaseController extends Controller
             // dd('soy organizacion');
             $suspectcases = SuspectCase::where('organization_id', Auth::user()->practitioners->last()->organization->id)->get();
             //dd($suspectcases);
-        } 
-        else {
+        } else {
             $suspectcases = SuspectCase::all();
         }
-        return view('epi.chagas.index', compact('suspectcases','tray'));
+        return view('epi.chagas.index', compact('suspectcases', 'tray'));
     }
 
     /**
@@ -107,5 +107,56 @@ class SuspectCaseController extends Controller
     public function destroy(SuspectCase $suspectCase)
     {
         //
+    }
+
+
+    public function indexChagasUser($tray)
+    {
+        $userTrayId = $tray; // ID del tray
+
+        $users = User::whereHas('practitioners', function ($query) use ($userTrayId) {
+            $query->where('organization_id', $userTrayId);
+        })->whereHas('permissions', function ($query) {
+            $query->where('name', 'LIKE', 'Chagas%');
+        })->get();
+
+        return view('epi.chagas.user_index', compact('users'));
+    }
+
+
+
+    public function delegateMail()
+    {
+        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)->OrderBy('alias')->get();
+
+        return view('chagas.delegate_mail', compact('organizations'));
+    }
+
+    public function updateMail(Organization $organization, Request $request)
+    {
+        $organization->epi_mail = $request->epi_mail;
+        $organization->save();
+        return redirect()->back()->with('success', 'Correo electrónico actualizado correctamente.');
+    }
+
+    public function createChagasUser()
+    {
+        $permissions = Permission::where('name', 'LIKE', 'Chagas%')->get();
+        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)
+            ->orderBy('alias')
+            ->get();
+
+        return view('epi.chagas.user_create', compact('organizations', 'permissions'));
+    }
+
+
+    public function editChagasUser(User $user)
+    {
+        $permissions = Permission::where('name', 'LIKE', 'Chagas%')->get();
+        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)
+            ->orderBy('alias')
+            ->get();
+
+        return view('epi.chagas.user_edit', compact('user', 'organizations', 'permissions'));
     }
 }

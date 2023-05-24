@@ -36,7 +36,8 @@ class UserController extends Controller
             ->where('value', $request->run);
         if ($repeatedIdentifier->count() > 0) {
             session()->flash('warning', 'Este rut ya ha sido ingresado. Se ha encontrado el siguiente usuario con este rut.');
-            return view('users.index', ['run' => $request->run]);
+            //return view('users.index', ['run' => $request->run]);
+            return redirect()->back();
         }
 
         $newUser = new User($request->all());
@@ -77,7 +78,7 @@ class UserController extends Controller
 
 
         $newPractitioner = new Practitioner();
-        $newPractitioner->organization_id = $request->organization;
+        $newPractitioner->organization_id = $request->organization_id;
         $newPractitioner->user_id = $newUser->id;
         $newPractitioner->save();
 
@@ -86,7 +87,8 @@ class UserController extends Controller
 
 
         session()->flash('success', 'El usuario ' . $newHumanName->name . ' ha sido creado.');
-        return view('users.index');
+        //return view('users.index');
+        return redirect()->route('home');
     }
 
     /**
