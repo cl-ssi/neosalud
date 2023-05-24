@@ -153,15 +153,23 @@ class UserController extends Controller
 
 
         // Verificar si se ha seleccionado un nuevo valor en el combobox
-        if ($user->practitioners->last()->organization_id != $request->organization_id) {
-            // Obtener la instancia existente de Practitioner del usuario
-            $practitioner = Practitioner::where('user_id', $user->id)->latest()->first();
-            // // Actualizar los campos de Practitioner
+        if ($user->practitioners->isEmpty() || $user->practitioners->last()->organization_id != $request->organization_id) {
+            if ($user->practitioners->isEmpty()) {
+                // No existe un Practitioner para el usuario, crear uno nuevo
+                $practitioner = new Practitioner();
+                $practitioner->user_id = $user->id;
+            } else {
+                // Obtener la instancia existente de Practitioner del usuario
+                $practitioner = $user->practitioners->last();
+            }
+
+            // Actualizar los campos de Practitioner
             $practitioner->organization_id = $request->organization_id;
-            // // Guardar los cambios en la base de datos
+
+            // Guardar los cambios en la base de datos
             $practitioner->save();
-            // dd('kaka');
         }
+
 
         $user->save();
 
