@@ -9,7 +9,7 @@
 
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Solicitud'])
         <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fas fa-file-alt"></i> Solicitud de Examen</a>
+            <a class="nav-link {{ active('chagas.requestChaga') }}" href="{{ route('chagas.requestChaga') }}"><i class="fas fa-file-alt"></i> Solicitud de Examen</a>
         </li>
     @endcanany
 

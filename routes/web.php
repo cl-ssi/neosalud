@@ -815,6 +815,8 @@ Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
 Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () {
     Route::view('/', 'chagas.welcome')->name('welcome');
 
+    Route::get('/request', [SuspectCaseController::class, 'requestChaga'])->name('requestChaga');
+
     //Muestra el correo de delegeado de epidemiologia
     Route::get('/delegate-mail', [SuspectCaseController::class, 'delegateMail'])->name('delegateMail');
     Route::put('/update-mail/{organization}', [SuspectCaseController::class, 'updateMail'])->name('updateMail');

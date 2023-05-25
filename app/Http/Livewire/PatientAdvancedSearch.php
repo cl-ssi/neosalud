@@ -4,22 +4,37 @@ namespace App\Http\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Organization;
 
 class PatientAdvancedSearch extends Component
 {
-
     public $searchByHumanName = null;
     public $searchByIdentifier = null;
     public $searchByAddress = null;
     public $searchByContactPoint = null;
     public $patients = null;
+    public $organizations;
+    public ?Organization $selectedOrganization = null;
+
+    public $confirmOrganization = false;
+    public $selectedUserName;
+    public ?User $selectedPatient = null;
+    public $selectedPatientId;
+
+    public function mount()
+    {
+        $this->organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
+            ->orderBy('alias')
+            ->get();
+
+        $this->selectedOrganization = new Organization();
+    }
 
     public function search()
     {
-        if($this->searchByHumanName || $this->searchByIdentifier || $this->searchByAddress || $this->searchByContactPoint){
+        if ($this->searchByHumanName || $this->searchByIdentifier || $this->searchByAddress || $this->searchByContactPoint) {
             $this->patients = User::query()
                 ->when($this->searchByHumanName, function ($query) {
                     $query->whereHas('humanNames', function ($query) {
@@ -49,17 +64,47 @@ class PatientAdvancedSearch extends Component
                         $query->where('value', 'like', "%{$this->searchByContactPoint}%");
                     });
                 })
-                // //cuando sea usuario del programador, solo trae usuarios que sean del programador
-                // ->when(Auth::user()->hasPermissionTo('Mp: perfil administrador'), function ($query) {
-                //     $query->permission('Mp: user');
-                // })
                 ->get();
         }
+
+        $this->selectedUserName = $this->selectedPatientId ? User::find($this->selectedPatientId)->officialFullName : null;
     }
 
     public function clean()
     {
-        $this->reset();
+        $this->reset(['selectedPatientId']);
+    }
+
+    public function selectOrganization($organizationId, $patientId)
+{
+    $this->confirmOrganization = true;
+    $this->selectedOrganization = Organization::find($organizationId);
+
+    // Obtener el paciente seleccionado
+    $this->selectedPatientId = $patientId;
+    $this->selectedPatient = $this->selectedPatientId ? User::find($this->selectedPatientId) : null;
+}
+
+
+
+    public function confirmOrganizationAction()
+    {
+        // Lógica para realizar la acción de confirmación, como enviar la solicitud de examen de Chagas.
+        // Puedes agregar aquí el código necesario para realizar la acción deseada.
+
+        // Después de realizar la acción deseada, puedes restablecer las variables y mostrar un mensaje de éxito.
+        $this->reset(['confirmOrganization', 'selectedOrganization', 'selectedPatientId']);
+        $this->selectedUserName = null;
+
+        session()->flash('message', 'La solicitud de examen de Chagas se ha enviado correctamente.');
+    }
+
+
+    public function cancelOrganizationAction()
+    {
+        $this->selectedPatient = null;
+        $this->reset(['confirmOrganization', 'selectedOrganization', 'selectedPatientId']);
+        $this->selectedUserName = $this->selectedPatientId ? User::find($this->selectedPatientId)->officialFullName : null;
     }
 
     public function render()

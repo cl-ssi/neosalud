@@ -1,21 +1,45 @@
 <div>
+
+    @if ($confirmOrganization && $selectedOrganization)
+        <div class="alert alert-warning mt-2" role="alert">
+            ¿Está seguro que desea solicitar un examen de Chagas para
+            @if ($selectedPatient)
+                {{ $selectedPatient->officialFullName }}
+            @endif
+            de la organización {{ $selectedOrganization->alias }}?
+            <button type="button" class="btn btn-primary btn-sm ml-2" wire:click.prevent="confirmOrganizationAction">
+                Confirmar
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm ml-2" wire:click.prevent="cancelOrganizationAction">
+                Cancelar
+            </button>
+        </div>
+    @endif
+
+
+
     <form wire:submit.prevent="search">
-        <div class="form-row pb-2">
+        <div class="row g-2">
+            <div class="col-sm-6">
+                <input type="text" class="form-control" placeholder="Autenticación sin digito verificador"
+                    wire:model.lazy="searchByIdentifier" autocomplete="off">
+            </div>
+            <div class="col-sm-6 mb-2">
+                <input type="text" class="form-control" placeholder="Nombre y/o apellido"
+                    wire:model.lazy="searchByHumanName" autocomplete="off">
+            </div>
             <div class="col-6 col-md-6">
-                <input type="text" class="form-control" placeholder="Autenticación sin digito verificador" wire:model.lazy="searchByIdentifier" autocomplete="off">
+                <input type="text" class="form-control" placeholder="Domicilio" wire:model.lazy="searchByAddress"
+                    autocomplete="off">
             </div>
-            <div class="col-6 col-md-6 mb-2">
-                <input type="text" class="form-control" placeholder="Nombre y/o apellido" wire:model.lazy="searchByHumanName" autocomplete="off">
+            <div class="col-sm-6 mb-2">
+                <input type="text" class="form-control" placeholder="Teléfono, celular o e-mail"
+                    wire:model.lazy="searchByContactPoint" autocomplete="off">
             </div>
-            <div class="col-6 col-md-6">
-                <input type="text" class="form-control" placeholder="Domicilio" wire:model.lazy="searchByAddress" autocomplete="off">
-            </div>
-            <div class="col-6 col-md-6 mb-2">
-                <input type="text" class="form-control" placeholder="Teléfono, celular o e-mail" wire:model.lazy="searchByContactPoint" autocomplete="off">
-            </div>
-            <div class="col-12 col-md-12">
+            <div class="col-sm">
                 <button type="button" class="btn btn-secondary mb-2 float-left" wire:click="clean">Limpiar</button>
-                <button type="submit" class="btn btn-primary mb-2 float-right"><i class="fa fa-search"></i> Buscar</button>
+                <button type="submit" class="btn btn-primary mb-2 float-right"><i class="fa fa-search"></i>
+                    Buscar</button>
             </div>
         </div>
     </form>
@@ -32,33 +56,61 @@
                     <th scope="col">Teléfono</th>
                     <th scope="col">Correo</th>
                     <th scope="col">Selec.</th>
-                    @can('Epi: Create')
-                    <th scope="col">Añadir Caso Sospecha</th>
-                    @endcan
+                    <th scope="col">Solicitar Examen.</th>
 
             </thead>
             <tbody>
-                @if($patients)
+                @if ($patients)
                     @forelse($patients as $patient)
-                    <tr>
-                        <td>{{ ($patient) ? $patient->officialFullName : '' }}</td>
-                        <td>{{($patient) ? $patient->identifierRun->value . '-' . $patient->identifierRun->dv : ''}}</td>
-                        <td>{{($patient) ? $patient->ageString : ''}}</td>
-                        <td>{{($patient) ? $patient->actualSex : '' }}</td>
-                        <td>{{($patient) ? $patient->officialFullAddress : ''}}</td>
-                        <td>{{($patient) ? $patient->officialPhone : ''}}</td>
-                        <td>{{($patient && $patient->officialEmail) ? $patient->officialEmail : ''}}</td>
-                        <td><a class="btn-primary btn-sm" href="{{ route('patient.edit',$patient->id)}}" title="Editar"> <i class="fas fa-edit"></i> </a></td>
-                        @can('Epi: Create')
-                        <td>
-                            <a href="{{ route('epi.chagas.create',$patient) }}"><i class="fas fa-viruses"></i></a>
-                        </td>
-                        @endcan
-                    </tr>
+                        <tr>
+                            <td @if ($selectedPatientId == $patient->id) class="bg-primary text-white" @endif>
+                                {{ $patient ? $patient->officialFullName : '' }}
+                            </td>
+                            <td>{{ $patient ? $patient->identifierRun->value . '-' . $patient->identifierRun->dv : '' }}
+                            </td>
+                            <td>{{ $patient ? $patient->ageString : '' }}</td>
+                            <td>{{ $patient ? $patient->actualSex : '' }}</td>
+                            <td>{{ $patient ? $patient->officialFullAddress : '' }}</td>
+                            <td>{{ $patient ? $patient->officialPhone : '' }}</td>
+                            <td>{{ $patient && $patient->officialEmail ? $patient->officialEmail : '' }}</td>
+                            <td><a class="btn-primary btn-sm" href="{{ route('patient.edit', $patient->id) }}"
+                                    title="Editar"> <i class="fas fa-edit"></i> </a></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Seleccionar organización
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        @foreach ($organizations as $organization)
+                                            <li>
+                                                <a class="dropdown-item" href="#"
+                                                    wire:click.prevent="selectOrganization('{{ $organization->id }}', '{{ $patient->id }}')">
+                                                    {{ $organization->alias }}
+                                                </a>
+
+                                            </li>
+                                        @endforeach
+
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                     @empty
-                        <tr><th scope="row" colspan="8" class="text-center">No hay coincidencias con la búsqueda <a class="btn-primary btn-sm" href="{{ route('patient.create')}}"> <i class="fas fa-user-plus"></i> Ingresar nuevo paciente</a></td></th>
+                        <tr>
+                            <th scope="row" colspan="8" class="text-center">No hay coincidencias con la búsqueda
+                                <a class="btn-primary btn-sm" href="{{ route('patient.create') }}"> <i
+                                        class="fas fa-user-plus"></i> Ingresar nuevo paciente</a></td>
+                            </th>
                     @endforelse
-                    @if($patients->count() > 0) <tr><th scope="row" colspan="8" class="text-center">Si ninguno en la búsqueda corresponde al paciente que estas buscando <a class="btn-primary btn-sm" href="{{ route('patient.create')}}"> <i class="fas fa-user-plus"></i> Ingresar nuevo paciente</a></td></th> @endif
+                    @if ($patients->count() > 0)
+                        <tr>
+                            <th scope="row" colspan="8" class="text-center">Si ninguno en la búsqueda corresponde
+                                al paciente que estas buscando <a class="btn-primary btn-sm"
+                                    href="{{ route('patient.create') }}"> <i class="fas fa-user-plus"></i> Ingresar
+                                    nuevo paciente</a></td>
+                            </th>
+                    @endif
                 @endif
             </tbody>
         </table>

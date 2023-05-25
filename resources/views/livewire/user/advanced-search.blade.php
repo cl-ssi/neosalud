@@ -9,7 +9,7 @@
                 <input type="text" class="form-control" placeholder="Nombre y/o apellido"
                     wire:model.lazy="searchByHumanName" autocomplete="off">
             </div>
-            <div class="col-sm-6">
+            <div class="col-6 col-md-6">
                 <input type="text" class="form-control" placeholder="Domicilio" wire:model.lazy="searchByAddress"
                     autocomplete="off">
             </div>
