@@ -1,20 +1,33 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
-    @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Seguimiento'])
+    @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Solicitud', 'Chagas: Toma', 'Chagas: Seguimiento' ,
+        'Chagas: Reportes'])
         <li class="nav-item">
             <a class="nav-link {{ active('chagas.welcome') }}" href="{{ route('chagas.welcome') }}"><i class="fas fa-home"></i>
                 Home</a>
         </li>
     @endcanany
 
-    @canany(['Developer', 'Administrator', 'Chagas: Administrador'])
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Solicitud'])
         <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fas fa-bell"></i> Solicitud de Examen</a>
+            <a class="nav-link " href="#"><i class="fas fa-file-alt"></i> Solicitud de Examen</a>
+        </li>
+    @endcanany
+
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Toma'])
+        <li class="nav-item">
+            <a class="nav-link " href="#"><i class="fas fa-vial"></i> Toma de muestra</a>
         </li>
     @endcanany
 
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Seguimiento'])
         <li class="nav-item">
             <a class="nav-link " href="#"><i class="fas fa-bell"></i> Seguimiento/Notificación</a>
+        </li>
+    @endcanany
+
+    @canany(['Developer', 'Administrator'])
+        <li class="nav-item">
+            <a class="nav-link " href="#"><i class="fas fa-chart-bar"></i> Reportes</a>
         </li>
     @endcanany
 
