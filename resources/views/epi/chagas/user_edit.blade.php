@@ -3,7 +3,7 @@
     @include('chagas.nav')
     <h3 class="mb-3">Editar usuario: <strong> {{ $user->officialFullName }} </strong> </h3>
 
-    @canany(['Administrator', 'SAMU administrador', 'Developer'])
+    @canany(['Administrator', 'Chagas: Administrador', 'Developer'])
         <form class="form-horizontal" method="POST" action="{{ route('user.update', $user) }}">
             @csrf
             @method('PUT')
@@ -47,11 +47,12 @@
 
                         <fieldset class="form-group col-md-4">
                             <label for="for_organization">Organización *</label>
-                            <select class="form-select" name="organization_id" id="for_organization" required>
+                            <select class="form-select select2" name="organization_id[]" id="for_organization" multiple
+                                required>
                                 <option value="">Seleccionar organización del Usuario</option>
                                 @foreach ($organizations as $organization)
                                     <option value="{{ $organization->id }}"
-                                        {{ old('organization_id', optional($user->practitioners->last())->organization_id) == $organization->id ? 'selected' : '' }}>
+                                        {{ in_array($organization->id, old('organization_id', $user->practitioners->pluck('organization_id')->toArray())) ? 'selected' : '' }}>
                                         {{ $organization->alias }}</option>
                                 @endforeach
                             </select>
@@ -115,4 +116,20 @@
         </form>
     @endcanany
 
+@endsection
+
+
+@section('custom_js')
+    <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $('.select2').select2();
+            //obtiene digito verificador
+            $('input[name=run]').keyup(function(e) {
+                var str = $("#for_run").val();
+                $('#for_dv').val($.rut.dv(str));
+            });
+
+        });
+    </script>
 @endsection

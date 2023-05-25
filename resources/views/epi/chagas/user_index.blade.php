@@ -2,6 +2,21 @@
 @section('content')
     @include('chagas.nav')
     <h4 class="mb-3">Listado de usuarios con permisos de Chagas</h4>
+
+
+    <div class="card mb-4">
+        <div class="card-header">
+            Organizaciones
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                @foreach ($organizations as $organization)
+                    <li class="list-group-item">{{ $organization->alias }}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+
     <a href="{{ route('chagas.users.create') }}" class="btn btn-primary mb-3">Crear Usuario</a>
     <table class="table">
         <thead>
@@ -28,7 +43,7 @@
                             </ul>
                         @endif
                     </td>
-                      <td>
+                    <td>
                         @if ($user->permissions)
                             <ul>
                                 @foreach ($user->permissions as $permission)

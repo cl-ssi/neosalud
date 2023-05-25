@@ -823,7 +823,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
 
     Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
-        Route::get('/indexchagas/{tray}', [SuspectCaseController::class, 'indexChagasUser'])->name('indexChagasUser');
+        Route::get('/indexchagas', [SuspectCaseController::class, 'indexChagasUser'])->name('indexChagasUser');
 
         Route::get('/create', [SuspectCaseController::class, 'createChagasUser'])->name('create');
         Route::get('/{user}/edit', [SuspectCaseController::class, 'editChagasUser'])->name('edit');

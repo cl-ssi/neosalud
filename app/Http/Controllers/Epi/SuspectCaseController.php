@@ -110,18 +110,7 @@ class SuspectCaseController extends Controller
     }
 
 
-    public function indexChagasUser($tray)
-    {
-        $userTrayId = $tray; // ID del tray
-
-        $users = User::whereHas('practitioners', function ($query) use ($userTrayId) {
-            $query->where('organization_id', $userTrayId);
-        })->whereHas('permissions', function ($query) {
-            $query->where('name', 'LIKE', 'Chagas%');
-        })->get();
-
-        return view('epi.chagas.user_index', compact('users'));
-    }
+    
 
 
 
@@ -142,20 +131,40 @@ class SuspectCaseController extends Controller
     public function createChagasUser()
     {
         $permissions = Permission::where('name', 'LIKE', 'Chagas%')->get();
-        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)
-            ->orderBy('alias')
-            ->get();
+        $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
+        ->orderBy('alias')
+        ->get();
 
         return view('epi.chagas.user_create', compact('organizations', 'permissions'));
+    }
+
+    public function indexChagasUser()
+    {
+
+        $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
+        ->orderBy('alias')
+        ->get();
+
+        $userTrayIds = Auth::user()->practitioners->pluck('organization_id');
+
+        $users = User::whereHas('practitioners', function ($query) use ($userTrayIds) {
+            $query->whereIn('organization_id', $userTrayIds);
+        })->whereHas('permissions', function ($query) {
+            $query->where('name', 'LIKE', 'Chagas%');
+        })->get();
+
+        return view('epi.chagas.user_index', compact('organizations','users'));
     }
 
 
     public function editChagasUser(User $user)
     {
         $permissions = Permission::where('name', 'LIKE', 'Chagas%')->get();
-        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)
-            ->orderBy('alias')
-            ->get();
+        
+        $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
+        ->orderBy('alias')
+        ->get();
+        
 
         return view('epi.chagas.user_edit', compact('user', 'organizations', 'permissions'));
     }
