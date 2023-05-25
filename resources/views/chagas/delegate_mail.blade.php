@@ -16,20 +16,17 @@
                 <h5 class="card-title">Correo electrónico actual de encargado de epidemiología de
                     {{ $organization->alias ?? '' }}</h5>
                 <p class="card-text">{{ $organization->epi_mail ?? '' }}</p>
+                <h6>Actualizar correo electrónico de encargado de epidemiología de {{ $organization->alias ?? '' }}:</h6>
+                <form method="POST" action="{{ route('chagas.updateMail', $organization) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="epi_mail" class="form-label">Nuevo correo electrónico</label>
+                        <input type="text" class="form-control" id="epi_mail" name="epi_mail" autocomplete="off" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </form>
             </div>
         </div>
     @endforeach
-
-    <h5 class="mb-3">Actualizar correo electrónico</h5>
-
-    <form method="POST" action="{{ route('chagas.updateMail', $organization) }}">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="for_epi_email" class="form-label">Nuevo correo electrónico</label>
-            <input type="text" class="form-control" id="epi_mail" name="epi_mail" autocomplete="off" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-    </form>
 @endsection

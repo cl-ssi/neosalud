@@ -116,7 +116,9 @@ class SuspectCaseController extends Controller
 
     public function delegateMail()
     {
-        $organizations = Organization::where('id', Auth::user()->practitioners->last()->organization->id)->OrderBy('alias')->get();
+        $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
+        ->orderBy('alias')
+        ->get();
 
         return view('chagas.delegate_mail', compact('organizations'));
     }
