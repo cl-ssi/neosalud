@@ -58,6 +58,7 @@ class SuspectCaseController extends Controller
     public function store(Request $request)
     {
         $sc = new SuspectCase($request->All());
+        $sc->creator_id = Auth::user()->id;
         $sc->save();
         session()->flash('success', 'Se creo caso sospecha exitosamente');
         return redirect()->back();
