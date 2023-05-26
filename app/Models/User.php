@@ -100,7 +100,7 @@ class User extends Authenticatable implements Auditable
     public function practitionersOrganizations()
     {
         $array = array();
-        foreach($this->practitioners as $practitioner){
+        foreach ($this->practitioners as $practitioner) {
             array_push($array, $practitioner->organization_id);
         }
 
@@ -209,9 +209,9 @@ class User extends Authenticatable implements Auditable
     {
         return ucwords(mb_strtolower($this->text));
 
-    //   if ($this->actualOfficialHumanName) {
-    //     return "{$this->actualOfficialHumanName->text} {$this->actualOfficialHumanName->fathers_family} {$this->actualOfficialHumanName->mothers_family}";
-    //   }
+        //   if ($this->actualOfficialHumanName) {
+        //     return "{$this->actualOfficialHumanName->text} {$this->actualOfficialHumanName->fathers_family} {$this->actualOfficialHumanName->mothers_family}";
+        //   }
     }
 
     public function getOfficialNameAttribute()
@@ -231,10 +231,19 @@ class User extends Authenticatable implements Auditable
 
 
     //Identificadores
+    //Identificadores solo RUN
     public function getIdentifierRunAttribute()
     {
         return $this->identifiers()
             ->where('cod_con_identifier_type_id', 1)
+            ->latest()
+            ->first();
+    }
+
+
+    public function getIdentificationAttribute()
+    {
+        return $this->identifiers()
             ->latest()
             ->first();
     }
@@ -267,25 +276,26 @@ class User extends Authenticatable implements Auditable
      * Búsqueda realizada en: nombres, apellidos, rut.
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function getUsersBySearch($searchText){
+    public static function getUsersBySearch($searchText)
+    {
         $queryUser = User::query();
         $arraySearch = explode(' ', $searchText);
-        foreach($arraySearch as $word){
-            $queryUser->whereHas('humanNames',  function($q) use($word){
+        foreach ($arraySearch as $word) {
+            $queryUser->whereHas('humanNames',  function ($q) use ($word) {
                 $q->where('text', 'LIKE', '%' . $word . '%')
                     ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
                     ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
             })
-            ->orwhereHas('identifiers', function ($q) use ($word) {
-                $q->where('value', 'LIKE', '%' . $word . '%');
-            });
+                ->orwhereHas('identifiers', function ($q) use ($word) {
+                    $q->where('value', 'LIKE', '%' . $word . '%');
+                });
         }
         return $queryUser;
     }
 
     public static function getUsersByIdentifier($searchText)
     {
-        return User::whereHas('identifiers', function($query) use($searchText) {
+        return User::whereHas('identifiers', function ($query) use ($searchText) {
             return $query->where('value', $searchText);
         });
     }
@@ -303,7 +313,6 @@ class User extends Authenticatable implements Auditable
             ->where('system', 'phone')
             ->latest()
             ->first();
-
     }
 
     public function getOfficialEmailAttribute()
@@ -330,33 +339,40 @@ class User extends Authenticatable implements Auditable
             $address = $this->addresses()
                 ->first(['text', 'line', 'apartment']);
             return "$address->text $address->line $address->apartment";
-        }else
+        } else
             return '';
-
     }
 
     function getSexEspAttribute()
     {
-        switch($this->sex) {
-            case 'male': return 'Masculino'; break;
-            case 'female': return 'Femenino'; break;
-            case 'other': return 'Otro'; break;
-            case 'unknown': return 'Desconocido'; break;
+        switch ($this->sex) {
+            case 'male':
+                return 'Masculino';
+                break;
+            case 'female':
+                return 'Femenino';
+                break;
+            case 'other':
+                return 'Otro';
+                break;
+            case 'unknown':
+                return 'Desconocido';
+                break;
         }
     }
 
     function getAgeStringAttribute()
     {
-        if($this->birthday){
+        if ($this->birthday) {
             $age = $this->birthday->age;
-            if($age > 0){
-                return $age .' años';
-            }elseif($this->birthday->diffInMonths(now()) > 0){
+            if ($age > 0) {
+                return $age . ' años';
+            } elseif ($this->birthday->diffInMonths(now()) > 0) {
                 return $this->birthday->diffInMonths(now()) . ' meses';
-            }else{
+            } else {
                 return $this->birthday->diffInDays(now()) . ' días';
             }
-        }else{
+        } else {
             return '';
         }
     }
@@ -431,7 +447,6 @@ class User extends Authenticatable implements Auditable
                 ->where('commune_id', $commune_id)
                 ->where('region_id', $region_id);
         });
-
     }
 
     public function scopeGetByContactPoint($query, $value)
@@ -570,7 +585,7 @@ class User extends Authenticatable implements Auditable
 
     public function scopeDontHavePermission($query, $permissionName)
     {
-        return $query->whereDoesntHave('permissions', function($subquery) use ($permissionName) {
+        return $query->whereDoesntHave('permissions', function ($subquery) use ($permissionName) {
             return $subquery->where('name', $permissionName);
         });
     }
@@ -587,7 +602,7 @@ class User extends Authenticatable implements Auditable
             $user->fathers_family = trim($user->fathers_family);
             $user->mothers_family = trim($user->mothers_family);
 
-            $user->text = $user->given.' '.$user->fathers_family.' '.$user->mothers_family;
+            $user->text = $user->given . ' ' . $user->fathers_family . ' ' . $user->mothers_family;
 
             // $humanName = HumanName::create([
             //     'use' => 'official',
@@ -603,7 +618,7 @@ class User extends Authenticatable implements Auditable
             $user->fathers_family = trim($user->fathers_family);
             $user->mothers_family = trim($user->mothers_family);
 
-            $user->text = $user->given.' '.$user->fathers_family.' '.$user->mothers_family;
+            $user->text = $user->given . ' ' . $user->fathers_family . ' ' . $user->mothers_family;
         });
     }
 }

@@ -801,12 +801,17 @@ Route::get('/test/cola', [TestController::class, 'cola']);
 
 
 use App\Http\Controllers\Lab\LaboratoryController;
+use App\Http\Controllers\Lab\LaboratoryReportController;
 // Inicio Módulo de Laboratorio
 Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
     Route::view('/', 'labs.welcome')->name('welcome');
     Route::get('/chagas/{tray}', [LaboratoryController::class, 'chagasIndex'])->name('chagas.index');
     Route::post('/reception/{suspectcase}', [LaboratoryController::class, 'chagasReception'])->name('chagas.reception');
     Route::post('/mass-reception', [LaboratoryController::class, 'massReception'])->name('chagas.massReception');
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/reception-by-date', [LaboratoryReportController::class, 'receptionByDate'])->name('receptionByDate');
+        
+    });
 });
 // Fin de Módulo de Laboratorio
 

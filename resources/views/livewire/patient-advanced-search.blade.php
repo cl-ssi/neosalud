@@ -66,8 +66,9 @@
                             <td @if ($selectedPatientId == $patient->id) class="bg-primary text-white" @endif>
                                 {{ $patient ? $patient->officialFullName : '' }}
                             </td>
-                            <td>{{ $patient ? $patient->identifierRun->value . '-' . $patient->identifierRun->dv : '' }}
-                            </td>
+                            <td>{{($patient) ? $patient->Identification->value:'' }}
+                        {{($patient->IdentifierRun)?'-'.$patient->identifierRun->dv:'' }}
+                        </td>
                             <td>{{ $patient ? $patient->ageString : '' }}</td>
                             <td>{{ $patient ? $patient->actualSex : '' }}</td>
                             <td>{{ $patient ? $patient->officialFullAddress : '' }}</td>
