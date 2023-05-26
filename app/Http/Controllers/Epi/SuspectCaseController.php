@@ -9,6 +9,9 @@ use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DelegateChagasNotification;
+use Illuminate\Support\Facades\Storage;
 
 class SuspectCaseController extends Controller
 {
@@ -96,11 +99,75 @@ class SuspectCaseController extends Controller
     {
         //
         $suspectCase->fill($request->all());
+        if ($request->hasFile('chagas_result_screening_file')) {
+            $file_name = $suspectCase->id . '_screening';
+            $file = $request->file('chagas_result_screening_file');
+            $suspectCase->chagas_result_screening_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), ['disk' => 'gcs']);
+        }
+
+        if ($request->hasFile('chagas_result_confirmation_file')) {
+            $file_name = $suspectCase->id . '_confirmation';
+            $file = $request->file('chagas_result_confirmation_file');
+            $suspectCase->chagas_result_confirmation_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), 'gcs');
+        }
+
+        if ($request->hasFile('direct_exam_file')) {
+            $file_name = $suspectCase->id . '_direct_exam';
+            $file = $request->file('direct_exam_file');
+            $suspectCase->direct_exam_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), 'gcs');
+        }
+
+        if ($request->hasFile('pcr_first_file')) {
+            $file_name = $suspectCase->id . '_primer_pcr';
+            $file = $request->file('pcr_first_file');
+            $suspectCase->pcr_first_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), 'gcs');
+        }
+
+        if ($request->hasFile('pcr_second_file')) {
+            $file_name = $suspectCase->id . '_segunda_pcr';
+            $file = $request->file('pcr_second_file');
+            $suspectCase->pcr_second_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), 'gcs');
+        }
+
+        if ($request->hasFile('pcr_third_file')) {
+            $file_name = $suspectCase->id . '_tercera_pcr';
+            $file = $request->file('pcr_third_file');
+            $suspectCase->pcr_third_file = $file->storeAs('/unisalud/chagas', $file_name . '.' . $file->extension(), 'gcs');
+        }
+
         $suspectCase->save();
+
+        if ($request->chagas_result_screening == 'En Proceso') {
+            $organization = Organization::where('id', $suspectCase->organization_id)->first();
+            $epi_mails = $organization->epi_mail;
+            $emails = explode(',', $epi_mails);
+
+            foreach ($emails as $email) {
+                Mail::to(trim($email))->send(new DelegateChagasNotification($suspectCase));
+            }
+        }
+
 
         session()->flash('success', 'Se añadieron los datos adicionales a Caso sospecha');
         return redirect()->back();
-        //return redirect()->route('epi.chagas.index');
+    }
+
+    public function downloadFile($fileName)
+    {
+
+        return Storage::disk('gcs')->download($fileName);
+    }
+
+    public function deleteFile(SuspectCase $suspectCase, $attribute)
+    {
+        $fileAttribute = $attribute . '_file';
+        if ($suspectCase->$fileAttribute) {
+            Storage::disk('gcs')->delete($suspectCase->$fileAttribute);
+            $suspectCase->$fileAttribute = null;
+            $suspectCase->save();
+            session()->flash('info', 'Se ha eliminado el archivo correctamente.');
+        }
+        return redirect()->back();
     }
 
     /**

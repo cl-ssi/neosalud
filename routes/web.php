@@ -773,6 +773,8 @@ Route::prefix('epi')->name('epi.')->group(function () {
         Route::get('/{tray}', [SuspectCaseController::class, 'index'])->name('index');
         Route::get('/{user}/create', [SuspectCaseController::class, 'create'])->name('create');
         Route::post('/', [SuspectCaseController::class, 'store'])->name('store');
+        Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
+        Route::get('file/{suspect_case}/{attribute}', [SuspectCaseController::class, 'deleteFile'])->name('deleteFile');
     });
 });
 //fin rutas EPI
@@ -810,7 +812,7 @@ Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
     Route::post('/mass-reception', [LaboratoryController::class, 'massReception'])->name('chagas.massReception');
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/reception-by-date', [LaboratoryReportController::class, 'receptionByDate'])->name('receptionByDate');
-        
+        Route::get('/average-time', [LaboratoryReportController::class, 'averageTime'])->name('averageTime');
     });
 });
 // Fin de Módulo de Laboratorio

@@ -13,17 +13,18 @@
                     value="{{ $suspectCase->patient->id }}">
 
                 <input type="hidden" class="form-control" id="for_id" name="type" value="Chagas">
-                <label for="for_run">Run</label>
+                <label for="for_run">Run/Identificación</label>
 
                 <input type="number" max="50000000" class="form-control" id="for_run" name="run"
-                    value="{{ $suspectCase->patient->identifierRun->value }}" readonly>
+                    value="{{ $suspectCase->patient->Identification->value }}" readonly>
             </fieldset>
-
-            <fieldset class="form-group col-2 col-md-1">
-                <label for="for_dv">DV</label>
-                <input type="text" class="form-control" id="for_dv" name="dv"
-                    value="{{ $suspectCase->patient->identifierRun->dv }}" readonly>
-            </fieldset>
+            @if ($suspectCase->patient->identifierRun)
+                <fieldset class="form-group col-2 col-md-1">
+                    <label for="for_dv">DV</label>
+                    <input type="text" class="form-control" id="for_dv" name="dv"
+                        value="{{ $suspectCase->patient->identifierRun->dv }}" readonly>
+                </fieldset>
+            @endif
 
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_other_identification">Otra identificación</label>
@@ -82,82 +83,98 @@
 
         <hr>
 
-<div class="row">
-    <div class="form-group col-6 col-md-3">
-        <label for="for_sample_at">Fecha Muestra</label>
-        <input type="datetime-local" class="form-control" id="for_sample_at" name="sample_at"
-            value="{{ $suspectCase->sample_at->format('Y-m-d\TH:i:s') }}" required readonly>
-    </div>
+        <div class="row">
+            <div class="form-group col-6 col-md-3">
+                <label for="for_sample_at">Fecha Muestra</label>
+                <input type="datetime-local" class="form-control" id="for_sample_at" name="sample_at"
+                    value="{{ $suspectCase->sample_at->format('Y-m-d\TH:i:s') }}" required readonly>
+            </div>
 
-    <div class="form-group col-12 col-md-4">
-        <label for="for_establishment_id">Establecimiento*</label>
-        <select name="organization_id" id="for_organization_id" class="form-control" readonly required>
-            <option value="">Seleccionar Establecimiento</option>
-            @foreach ($organizations as $organization)
-                <option value="{{ $organization->id }}"
-                    {{ $organization->id == $suspectCase->organization_id ? 'selected' : '' }}>
-                    {{ $organization->alias ?? '' }}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
-
-<div class="row">
-    <div class="form-group col-12 col-md-3">
-        <label for="for_research_group">Grupo de Pesquiza</label>
-        <select name="research_group" id="for_research_group" class="form-control" readonly>
-            <option value="Control Pre concepcional"
-                {{ $suspectCase->research_group === 'Control Pre concepcional' ? 'selected' : '' }}>Control Pre
-                concepcional</option>
-            <option value="Gestante (+semana gestacional)"
-                {{ $suspectCase->research_group === 'Gestante (+semana gestacional)' ? 'selected' : '' }}>Gestante
-                (+semana gestacional)</option>
-            <option value="Estudio de contacto"
-                {{ $suspectCase->research_group === 'Estudio de contacto' ? 'selected' : '' }}>Estudio de contacto
-            </option>
-            <option value="Morbilidad (cualquier persona)"
-                {{ $suspectCase->research_group === 'Morbilidad (cualquier persona)' ? 'selected' : '' }}>Morbilidad
-                (cualquier persona)</option>
-            <option value="Transmisión Vertical"
-                {{ $suspectCase->research_group === 'Transmisión Vertical' ? 'selected' : '' }}>Transmisión
-                Vertical</option>
-            <option value="Control Chagas Crónico"
-                {{ $suspectCase->research_group === 'Control Chagas Crónico' ? 'selected' : '' }}>Control Chagas
-                Crónico</option>
-            <option value="Perdidas Productivas"
-                {{ $suspectCase->research_group === 'Perdidas Productivas' ? 'selected' : '' }}>Perdidas
-                Productivas</option>
-        </select>
-    </div>
-
-    @if ($suspectCase->research_group === 'Gestante (+semana gestacional)')
-        <div class="form-group col-12 col-md-1">
-            <label for="newborn_week">Semanas</label>
-            <input type="number" class="form-control" id="newborn_week" name="newborn_week" readonly
-                value="{{ $suspectCase->newborn_week }}">
+            <div class="form-group col-12 col-md-4">
+                <label for="for_establishment_id">Establecimiento*</label>
+                <select name="organization_id" id="for_organization_id" class="form-control" readonly required>
+                    <option value="">Seleccionar Establecimiento</option>
+                    @foreach ($organizations as $organization)
+                        <option value="{{ $organization->id }}"
+                            {{ $organization->id == $suspectCase->organization_id ? 'selected' : '' }}>
+                            {{ $organization->alias ?? '' }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-    @endif
 
-    @if ($suspectCase->research_group === 'Transmisión Vertical')
-        <div class="form-group col-12 col-md-4">
-            <label for="for_mother_id">Madre</label>
-            <select name="mother_id" id="for_mother_id" class="form-control" readonly>
-                <option value="{{ $suspectCase->mother_id }}">{{ $suspectCase->mother->OfficialFullName ?? '' }}
-                </option>
-            </select>
+        <div class="row">
+            <div class="form-group col-12 col-md-3">
+                <label for="for_research_group">Grupo de Pesquiza</label>
+                <select name="research_group" id="for_research_group" class="form-control" readonly>
+                    <option value="Control Pre concepcional"
+                        {{ $suspectCase->research_group === 'Control Pre concepcional' ? 'selected' : '' }}>Control Pre
+                        concepcional</option>
+                    <option value="Gestante (+semana gestacional)"
+                        {{ $suspectCase->research_group === 'Gestante (+semana gestacional)' ? 'selected' : '' }}>Gestante
+                        (+semana gestacional)</option>
+                    <option value="Estudio de contacto"
+                        {{ $suspectCase->research_group === 'Estudio de contacto' ? 'selected' : '' }}>Estudio de contacto
+                    </option>
+                    <option value="Morbilidad (cualquier persona)"
+                        {{ $suspectCase->research_group === 'Morbilidad (cualquier persona)' ? 'selected' : '' }}>
+                        Morbilidad
+                        (cualquier persona)</option>
+                    <option value="Transmisión Vertical"
+                        {{ $suspectCase->research_group === 'Transmisión Vertical' ? 'selected' : '' }}>Transmisión
+                        Vertical</option>
+                    <option value="Control Chagas Crónico"
+                        {{ $suspectCase->research_group === 'Control Chagas Crónico' ? 'selected' : '' }}>Control Chagas
+                        Crónico</option>
+                    <option value="Perdidas Productivas"
+                        {{ $suspectCase->research_group === 'Perdidas Productivas' ? 'selected' : '' }}>Perdidas
+                        Productivas</option>
+                </select>
+            </div>
+
+            @if ($suspectCase->research_group === 'Gestante (+semana gestacional)')
+                <div class="form-group col-12 col-md-1">
+                    <label for="newborn_week">Semanas</label>
+                    <input type="number" class="form-control" id="newborn_week" name="newborn_week" readonly
+                        value="{{ $suspectCase->newborn_week }}">
+                </div>
+            @endif
+
+            @if ($suspectCase->research_group === 'Transmisión Vertical')
+                <div class="form-group col-12 col-md-4">
+                    <label for="for_mother_id">Madre</label>
+                    <select name="mother_id" id="for_mother_id" class="form-control" readonly>
+                        <option value="{{ $suspectCase->mother_id }}">{{ $suspectCase->mother->OfficialFullName ?? '' }}
+                        </option>
+                    </select>
+                </div>
+            @endif
         </div>
-    @endif
-</div>
 
-<div class="row">
-    <div class="form-group col-12 col-md-6">
-        <label for="for_observation">Observación</label>
-        <input type="text" class="form-control" name="observation" id="for_observation"
-            value="{{ $suspectCase->observation ?? '' }}" readonly>
-    </div>
-</div>
+        <div class="row">
+            <div class="form-group col-12 col-md-6">
+                <label for="for_observation">Observación</label>
+                <input type="text" class="form-control" name="observation" id="for_observation"
+                    value="{{ $suspectCase->observation ?? '' }}" readonly>
+            </div>
+        </div>
 
-<hr>
+        <hr>
+        <div class="row">
+            <div class="form-group col-6 col-md-3">
+                <label for="for_reception_at">Fecha de Recepción</label>
+                <input type="datetime-local" class="form-control" id="for_reception_at" name="reception_at"
+                    value="{{ $suspectCase->reception_at->format('Y-m-d\TH:i:s') }}" required readonly>
+            </div>
+
+            <fieldset class="form-group col-6 col-md-4">
+                <label for="for_fathers_family">Recepcionado Por</label>
+                <input type="text" class="form-control" id="for_fathers_family" name="fathers_family"
+                    style="text-transform: uppercase;" autocomplete="off"
+                    value="{{ $suspectCase->receptor->actualOfficialHumanName->text ?? '' }}" readonly>
+            </fieldset>
+        </div>
+        <br><br>
 
 
 
@@ -166,7 +183,8 @@
                 <fieldset class="form-group col-6 col-md-3 alert alert-warning">
                     <label for="for_chagas_result_screening_at">Fecha Resultado Tamizaje</label>
                     <input type="datetime-local" class="form-control" id="for_chagas_result_screening_at"
-                        name="chagas_result_screening_at" max="{{ date('Y-m-d\TH:i:s') }}"
+                        name="chagas_result_screening_at" min="{{ $suspectCase->reception_at->format('Y-m-d\TH:i') }}"
+                        max="{{ date('Y-m-d\TH:i:s') }}"
                         value="{{ $suspectCase->chagas_result_screening_at ? $suspectCase->chagas_result_screening_at->format('Y-m-d\TH:i:s') : '' }}">
                 </fieldset>
 
@@ -212,7 +230,8 @@
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_sars_cov_2_at">Fecha Resultado Confirmación</label>
                     <input type="datetime-local" class="form-control" id="for_chagas_result_confirmation_at"
-                        name="chagas_result_confirmation_at" max="{{ date('Y-m-d\TH:i:s') }}"
+                        name="chagas_result_confirmation_at"
+                        min="{{ $suspectCase->reception_at->format('Y-m-d\TH:i') }}" max="{{ date('Y-m-d\TH:i:s') }}"
                         value="{{ $suspectCase->chagas_result_confirmation_at ? $suspectCase->chagas_result_confirmation_at->format('Y-m-d\TH:i:s') : '' }}">
                 </fieldset>
 

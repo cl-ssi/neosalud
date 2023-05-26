@@ -26,6 +26,9 @@
                     <th>Edad</th>
                     <th>Sexo</th>
                     <th>Nacionalidad</th>
+                    @if ($tray !== 'Pendientes de Recepción')
+                        <th>Recepcionado Por (Fecha)</th>
+                    @endif
                     <th>Fecha de Resultado Tamizaje</th>
                     <th>Resultado Tamizaje</th>
                     <th>Fecha de Resultado Confirmación</th>
@@ -46,36 +49,32 @@
                             </td>
                         @endif
                         <td>{{ $suspectcase->id ?? '' }}
-
-                            @can('Epi: Add Value')
-                                @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at === null)
-                                    <form method="POST" class="form-inline"
-                                        action="{{ route('labs.chagas.reception', $suspectcase) }}">
-                                        @csrf
-                                        @method('POST')
-                                        <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
-                                                class="fas fa-inbox"></i></button>
-                                    </form>
-                                @endif
-                                @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at != null)
-                                    <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
-                                            class="fas fa-edit"></i></a>
-                                @endif
-                                @if ($tray === 'Pendientes de Recepción' and $suspectcase->reception_at === null)
-                                    <form method="POST" class="form-inline"
-                                        action="{{ route('labs.chagas.reception', $suspectcase) }}">
-                                        @csrf
-                                        @method('POST')
-                                        <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
-                                                class="fas fa-inbox"></i></button>
-                                    </form>
-                                @endif
-                                @if ($tray === 'Pendientes de Resultado' and $suspectcase->reception_at != null)
-                                    <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
-                                            class="fas fa-edit"></i></a>
-                                @endif
-                            @endcan
-
+                            @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at === null)
+                                <form method="POST" class="form-inline"
+                                    action="{{ route('labs.chagas.reception', $suspectcase) }}">
+                                    @csrf
+                                    @method('POST')
+                                    <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
+                                            class="fas fa-inbox"></i></button>
+                                </form>
+                            @endif
+                            @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at != null)
+                                <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
+                                        class="fas fa-edit"></i></a>
+                            @endif
+                            @if ($tray === 'Pendientes de Recepción' and $suspectcase->reception_at === null)
+                                <form method="POST" class="form-inline"
+                                    action="{{ route('labs.chagas.reception', $suspectcase) }}">
+                                    @csrf
+                                    @method('POST')
+                                    <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
+                                            class="fas fa-inbox"></i></button>
+                                </form>
+                            @endif
+                            @if ($tray === 'Pendientes de Resultado' and $suspectcase->reception_at != null)
+                                <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
+                                        class="fas fa-edit"></i></a>
+                            @endif
                         </td>
                         <td>{{ $suspectcase->research_group ?? '' }}</td>
                         <td>{{ $suspectcase->sample_at ? $suspectcase->sample_at : '' }}</td>
@@ -97,6 +96,11 @@
                         </td>
                         <td>{{ $suspectcase->patient->actualSex()->text ?? '' }}</td>
                         <td>{{ $suspectcase->patient->nationality->name ?? '' }}</td>
+                        @if ($tray !== 'Pendientes de Recepción')
+                            <td>{{ $suspectcase->receptor->actualOfficialHumanName->text ?? '' }}
+                                ({{ $suspectcase->reception_at ?? '' }})
+                            </td>
+                        @endif
                         <td>
                             {{ $suspectcase->chagas_result_screening_at ?? '' }}
                         </td>
@@ -109,11 +113,9 @@
                                         class="fas fa-paperclip"></i>&nbsp
                                 </a>
                             @endif
-
                         </td>
                         <td>{{ $suspectcase->chagas_result_confirmation_at ?? '' }}</td>
                         <td>{{ $suspectcase->chagas_result_confirmation }}
-
                             @if ($suspectcase->chagas_result_confirmation_file)
                                 <a href="{{ route('chagas.downloadFile', ['fileName' => $suspectcase->chagas_result_confirmation_file]) }}"
                                     target="_blank" data-toggle="tooltip" data-placement="top"
@@ -121,8 +123,6 @@
                                         class="fas fa-paperclip"></i>&nbsp
                                 </a>
                             @endif
-
-
                         </td>
                         <td>{{ $suspectcase->observation ?? '' }}</td>
                     </tr>

@@ -23,4 +23,14 @@ class LaboratoryReportController extends Controller
 
         return view('labs.reports.reception', compact('reportData', 'consolidatedData'));
     }
+
+    public function averageTime(Request $request)
+    {
+        $averageTime = SuspectCase::selectRaw('SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND, reception_at, chagas_result_confirmation_at))) as average_time')
+            ->whereNotNull('reception_at')
+            ->whereNotNull('chagas_result_confirmation_at')
+            ->first();
+
+        return view('labs.reports.average_time', compact('averageTime'));
+    }
 }

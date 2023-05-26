@@ -28,9 +28,9 @@
             @foreach($suspectcases as $suspectcase)
             <tr>
                 <td>{{$suspectcase->id??''}} 
-                @can('Epi: Add Value')
+                @canany(['Developer', 'Administrator', 'Lab: Administrador'])
                     <a href="{{ route('epi.chagas.edit',$suspectcase) }}" pclass="btn_edit"><i class="fas fa-edit"></i></a>
-                @endcan                
+                @endcanany
                 </td>
                 <td>{{$suspectcase->sample_at? $suspectcase->sample_at: ''}}</td>
                 <td>{{$suspectcase->organization->alias??''}}</td>

@@ -45,11 +45,11 @@
                     <i class="fas fa-chart-bar"></i> Cantidad de muestras Recepcionadas
                 </a>
             </li>
-            <li>
-                <a class="dropdown-item" href="#">
+            {{-- <li>
+                <a class="dropdown-item" href="{{ route('labs.reports.averageTime') }}">
                     <i class="fas fa-clock"></i> Tiempo promedio entre toma de muestra y recepción
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </li>
 </ul>

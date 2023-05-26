@@ -13,7 +13,7 @@
                 @endcanany
 
                 <!--CHAGAS-->
-                @canany(['Developer', 'Administrator', 'Lab:'])
+                @canany(['Developer', 'Administrator', 'Lab: Administrador'])
                 <li class="nav-item">
                     <a class="nav-link {{ active('labs.*') }}" href="{{ route('labs.welcome') }}">
                         <i class="fas fa-vial"></i> LABORATORIO
