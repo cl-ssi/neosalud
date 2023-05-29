@@ -46,8 +46,8 @@
                     <td>
                         @if ($user->permissions)
                             <ul>
-                                @foreach ($user->permissions as $permission)
-                                    <li>{{ $permission->name }}</li>
+                                @foreach ($user->permissions->sortBy('name') as $permission)
+                                    <li>{{ $permission->name ?? '' }}</li>
                                 @endforeach
                             </ul>
                         @endif

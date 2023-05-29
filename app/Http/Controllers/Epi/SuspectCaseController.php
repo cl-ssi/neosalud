@@ -208,7 +208,7 @@ class SuspectCaseController extends Controller
 
     public function createChagasUser()
     {
-        $permissions = Permission::where('name', 'LIKE', 'Chagas%')->get();
+        $permissions = Permission::where('name', 'LIKE', 'Chagas%')->OrderBy('name')->get();
         $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
             ->orderBy('alias')
             ->get();
@@ -228,7 +228,7 @@ class SuspectCaseController extends Controller
         $users = User::whereHas('practitioners', function ($query) use ($userTrayIds) {
             $query->whereIn('organization_id', $userTrayIds);
         })->whereHas('permissions', function ($query) {
-            $query->where('name', 'LIKE', 'Chagas%');
+            $query->where('name', 'LIKE', 'Chagas%')->OrderBy('name');
         })->get();
 
         return view('epi.chagas.user_index', compact('organizations', 'users'));

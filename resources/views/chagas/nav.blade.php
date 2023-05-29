@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
-    @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Solicitud', 'Chagas: Toma', 'Chagas: Seguimiento' ,
-        'Chagas: Reportes'])
+    @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Solicitud', 'Chagas: Toma',
+        'Chagas: Seguimiento', 'Chagas: Reportes'])
         <li class="nav-item">
             <a class="nav-link {{ active('chagas.welcome') }}" href="{{ route('chagas.welcome') }}"><i class="fas fa-home"></i>
                 Home</a>
@@ -9,13 +9,26 @@
 
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Solicitud'])
         <li class="nav-item">
-            <a class="nav-link {{ active('chagas.requestChaga') }}" href="{{ route('chagas.requestChaga') }}"><i class="fas fa-file-alt"></i> Solicitud de Examen</a>
+            <a class="nav-link {{ active('chagas.requestChaga') }}" href="{{ route('chagas.requestChaga') }}"><i
+                    class="fas fa-file-alt"></i> Solicitud de Examen</a>
         </li>
     @endcanany
 
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Toma'])
-        <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fas fa-vial"></i> Toma de muestra</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-vial"></i> Toma de muestra</a>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                @foreach (Auth::user()->practitioners as $practitioner)
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-vial"></i> {{ $practitioner->organization->alias ?? '' }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </li>
     @endcanany
 
