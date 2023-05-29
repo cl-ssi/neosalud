@@ -12,22 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'soap/*',        
-        
+        'soap/*',
     ];
 
-    // public function handle($request, \Closure $next)
-    // {
-    //     $response = $next($request);
-    //     $response->header('X-Frame-Options', 'sameorigin');
-    //     return $response;
-    // }
-
-
-    // public function handle($request, \Closure $next)
-    // {
-    //     $response = $next($request);
-    //     $response->headers->set('X-Frame-Options', 'sameorigin');
-    //     return $response;
-    // }
 }
