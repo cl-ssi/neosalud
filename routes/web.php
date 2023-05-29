@@ -823,6 +823,8 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     Route::view('/', 'chagas.welcome')->name('welcome');
 
     Route::get('/request', [SuspectCaseController::class, 'requestChaga'])->name('requestChaga');
+    Route::get('/confirm-request/{patient}/{organization}', [SuspectCaseController::class, 'confirmRequestChaga'])->name('confirmRequestChaga');
+
 
     //Muestra el correo de delegeado de epidemiologia
     Route::get('/delegate-mail', [SuspectCaseController::class, 'delegateMail'])->name('delegateMail');

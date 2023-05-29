@@ -22,7 +22,7 @@
                 @endcanany
 
                 <!--SAMU-->
-                @canany(['SAMU'])
+                @canany(['Developer', 'Administrator', 'SAMU'])
                     <li class="nav-item">
                         <a class="nav-link {{ active('samu.*') }}" href="{{ route('samu.welcome') }}">
                             <i class="fas fa-ambulance fa-fw"></i> SAMU

@@ -46,7 +46,8 @@
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_birthday">Fecha Nacimiento</label>
                 <input type="date" class="form-control" id="for_birthday" name="birthday"
-                    value="{{ $suspectCase->patient->birthday }}" readonly required>
+                    value="{{ $suspectCase->patient->birthday ? $suspectCase->patient->birthday->format('Y-m-d') : '' }}"
+                    readonly required>
             </fieldset>
 
             <fieldset class="form-group col-2 col-md-1">
@@ -230,8 +231,8 @@
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_sars_cov_2_at">Fecha Resultado Confirmación</label>
                     <input type="datetime-local" class="form-control" id="for_chagas_result_confirmation_at"
-                        name="chagas_result_confirmation_at"
-                        min="{{ $suspectCase->reception_at->format('Y-m-d\TH:i') }}" max="{{ date('Y-m-d\TH:i:s') }}"
+                        name="chagas_result_confirmation_at" min="{{ $suspectCase->reception_at->format('Y-m-d\TH:i') }}"
+                        max="{{ date('Y-m-d\TH:i:s') }}"
                         value="{{ $suspectCase->chagas_result_confirmation_at ? $suspectCase->chagas_result_confirmation_at->format('Y-m-d\TH:i:s') : '' }}">
                 </fieldset>
 

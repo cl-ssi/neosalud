@@ -10,6 +10,8 @@ use App\Models\Organization;
 
 class PatientAdvancedSearch extends Component
 {
+    public $mode;
+
     public $searchByHumanName = null;
     public $searchByIdentifier = null;
     public $searchByAddress = null;
@@ -76,14 +78,14 @@ class PatientAdvancedSearch extends Component
     }
 
     public function selectOrganization($organizationId, $patientId)
-{
-    $this->confirmOrganization = true;
-    $this->selectedOrganization = Organization::find($organizationId);
+    {
+        $this->confirmOrganization = true;
+        $this->selectedOrganization = Organization::find($organizationId);
 
-    // Obtener el paciente seleccionado
-    $this->selectedPatientId = $patientId;
-    $this->selectedPatient = $this->selectedPatientId ? User::find($this->selectedPatientId) : null;
-}
+        // Obtener el paciente seleccionado
+        $this->selectedPatientId = $patientId;
+        $this->selectedPatient = $this->selectedPatientId ? User::find($this->selectedPatientId) : null;
+    }
 
 
 
@@ -93,10 +95,15 @@ class PatientAdvancedSearch extends Component
         // Puedes agregar aquí el código necesario para realizar la acción deseada.
 
         // Después de realizar la acción deseada, puedes restablecer las variables y mostrar un mensaje de éxito.
+
+        // Redireccionar a la nueva ruta con los parámetros del paciente y la organización seleccionada
+        return redirect()->route('chagas.confirmRequestChaga', [$this->selectedPatient, $this->selectedOrganization]);
+
+
         $this->reset(['confirmOrganization', 'selectedOrganization', 'selectedPatientId']);
         $this->selectedUserName = null;
 
-        session()->flash('message', 'La solicitud de examen de Chagas se ha enviado correctamente.');
+        
     }
 
 

@@ -49,6 +49,13 @@ class SuspectCaseController extends Controller
         return view('epi.chagas.request');
     }
 
+    public function confirmRequestChaga(User $patient, Organization $organization)
+    {
+        
+        
+        return view('epi.chagas.create', compact('patient', 'organization'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -181,10 +188,6 @@ class SuspectCaseController extends Controller
     {
         //
     }
-
-
-
-
 
 
     public function delegateMail()

@@ -56,8 +56,10 @@
                     <th scope="col">Teléfono</th>
                     <th scope="col">Correo</th>
                     <th scope="col">Selec.</th>
-                    <th scope="col">Solicitar Examen.</th>
-
+                    <!-- Mostrar campo "Solicitar Examen" solo si el modo es "solicitante" -->
+                    @if ($mode === 'Solicitante')
+                        <th scope="col">Solicitar Examen.</th>
+                    @endif
             </thead>
             <tbody>
                 @if ($patients)
@@ -66,9 +68,9 @@
                             <td @if ($selectedPatientId == $patient->id) class="bg-primary text-white" @endif>
                                 {{ $patient ? $patient->officialFullName : '' }}
                             </td>
-                            <td>{{($patient) ? $patient->Identification->value:'' }}
-                        {{($patient->IdentifierRun)?'-'.$patient->identifierRun->dv:'' }}
-                        </td>
+                            <td>{{ $patient ? $patient->Identification->value : '' }}
+                                {{ $patient->IdentifierRun ? '-' . $patient->identifierRun->dv : '' }}
+                            </td>
                             <td>{{ $patient ? $patient->ageString : '' }}</td>
                             <td>{{ $patient ? $patient->actualSex : '' }}</td>
                             <td>{{ $patient ? $patient->officialFullAddress : '' }}</td>
@@ -76,26 +78,29 @@
                             <td>{{ $patient && $patient->officialEmail ? $patient->officialEmail : '' }}</td>
                             <td><a class="btn-primary btn-sm" href="{{ route('patient.edit', $patient->id) }}"
                                     title="Editar"> <i class="fas fa-edit"></i> </a></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Seleccionar organización
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @foreach ($organizations as $organization)
-                                            <li>
-                                                <a class="dropdown-item" href="#"
-                                                    wire:click.prevent="selectOrganization('{{ $organization->id }}', '{{ $patient->id }}')">
-                                                    {{ $organization->alias }}
-                                                </a>
+                            <!-- Mostrar el dropbox de organizacion solo si el modo es "solicitante" -->
+                            @if ($mode === 'Solicitante')
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Seleccionar organización
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            @foreach ($organizations as $organization)
+                                                <li>
+                                                    <a class="dropdown-item" href="#"
+                                                        wire:click.prevent="selectOrganization('{{ $organization->id }}', '{{ $patient->id }}')">
+                                                        {{ $organization->alias }}
+                                                    </a>
 
-                                            </li>
-                                        @endforeach
+                                                </li>
+                                            @endforeach
 
-                                    </ul>
-                                </div>
-                            </td>
+                                        </ul>
+                                    </div>
+                                </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
