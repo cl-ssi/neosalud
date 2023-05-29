@@ -24,10 +24,10 @@ class VerifyCsrfToken extends Middleware
     // }
 
 
-    public function handle($request, \Closure $next)
-    {
-        $response = $next($request);
-        $response->headers->set('X-Frame-Options', 'sameorigin');
-        return $response;
-    }
+    // public function handle($request, \Closure $next)
+    // {
+    //     $response = $next($request);
+    //     $response->headers->set('X-Frame-Options', 'sameorigin');
+    //     return $response;
+    // }
 }
