@@ -839,5 +839,10 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
         Route::get('/create', [SuspectCaseController::class, 'createChagasUser'])->name('create');
         Route::get('/{user}/edit', [SuspectCaseController::class, 'editChagasUser'])->name('edit');
     });
+
+    
+        Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
+        Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');
+    
 });
 // Fin de Módulo de Chagas

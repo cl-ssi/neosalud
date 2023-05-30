@@ -16,7 +16,7 @@ class LaboratoryController extends Controller
 
     public function chagasIndex($tray)
     {
-        $query = SuspectCase::orderBy('id', 'desc');
+        $query = SuspectCase::orderBy('id', 'desc')->whereNotNull('sample_at');
         if ($tray === 'Pendientes de Recepción') {
             $query->whereNull('reception_at');
         } elseif ($tray === 'Pendientes de Resultado') {

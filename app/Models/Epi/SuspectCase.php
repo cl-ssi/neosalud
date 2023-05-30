@@ -25,7 +25,7 @@ class SuspectCase extends Model
 
         'age', 'gender', 'sample_at', 'epidemiological_week',
         'origin', 'run_medic', 'symptoms', 'symptoms_at',
-        'reception_at', 'receptor_id',
+        
         'result_ifd_at', 'result_ifd', 'subtype',
         'pcr_sars_cov_2_at', 'pcr_sars_cov_2', 'sample_type', 'validator_id',
         'sent_external_lab_at', 'external_laboratory', 'paho_flu', 'epivigila',
@@ -60,13 +60,21 @@ class SuspectCase extends Model
         'pcr_third_result',
         'pcr_third_file',
 
-        //datos del creador
+        //datos del solicitante
         'creator_id',
+        'requester_id',
+        'request_id',
+        'request_at',
 
 
+        //datos del tomador de muestra
+        'sample_id',
+        'sampler_id',
+        'sample_at',
 
-
-
+        //datos del receptor
+        'reception_at', 
+        'receptor_id',
     ];
 
     protected $dates = [
@@ -76,6 +84,7 @@ class SuspectCase extends Model
         'pcr_first_at',
         'pcr_second_at',
         'pcr_third_at',
+        'request_at',
     ];
 
 
@@ -94,8 +103,14 @@ class SuspectCase extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function creator() {
-        return $this->belongsTo('App\Models\User');
+    public function creator()
+    {
+        return $this->belongsTo('App\Models\User', 'requester_id', 'id');
+    }
+
+    public function requester()
+    {
+        return $this->belongsTo('App\Models\User', 'requester_id', 'id');
     }
 
 

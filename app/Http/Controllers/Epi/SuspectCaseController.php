@@ -23,11 +23,9 @@ class SuspectCaseController extends Controller
     public function index($tray)
     {
         if ($tray == 'Mi Organización') {
-            // dd('soy organizacion');
-            $suspectcases = SuspectCase::where('organization_id', Auth::user()->practitioners->last()->organization->id)->get();
-            //dd($suspectcases);
+            $suspectcases = SuspectCase::where('organization_id', Auth::user()->practitioners->last()->organization->id)->orderByDesc('id')->paginate(100);
         } else {
-            $suspectcases = SuspectCase::all();
+            $suspectcases = SuspectCase::orderByDesc('id')->whereNotNull('sample_at')->paginate(100);
         }
         return view('epi.chagas.index', compact('suspectcases', 'tray'));
     }
@@ -51,8 +49,8 @@ class SuspectCaseController extends Controller
 
     public function confirmRequestChaga(User $patient, Organization $organization)
     {
-        
-        
+
+
         return view('epi.chagas.create', compact('patient', 'organization'));
     }
 
@@ -65,11 +63,12 @@ class SuspectCaseController extends Controller
     public function store(Request $request)
     {
         $sc = new SuspectCase($request->All());
-        $sc->creator_id = Auth::user()->id;
+        $sc->requester_id = Auth::id();
+        $sc->request_at =  date('Y-m-d H:i:s');
         $sc->save();
-        session()->flash('success', 'Se creo caso sospecha exitosamente');
-        return redirect()->back();
-        //return redirect()->route('epi.chagas.index');
+        session()->flash('success', 'Se creo caso sospecha exitosamente, esperando por su toma de muestra');
+        return redirect()->route('chagas.welcome');
+        
     }
 
     /**
@@ -175,7 +174,7 @@ class SuspectCaseController extends Controller
             $suspectCase->save();
             session()->flash('info', 'Se ha eliminado el archivo correctamente.');
         }
-        return redirect()->back();
+        return redirect()->route('chagas.welcome');
     }
 
     /**
@@ -245,5 +244,27 @@ class SuspectCaseController extends Controller
 
 
         return view('epi.chagas.user_edit', compact('user', 'organizations', 'permissions'));
+    }
+
+    public function sampleOrganization(Organization $organization)
+    {
+        $suspectcases = SuspectCase::where('organization_id', $organization->id)
+            ->whereNotNull('requester_id')
+            ->whereNull('sampler_id')
+            ->orderByDesc('id')
+            ->paginate(100);
+
+        return view('epi.chagas.sample.index', compact('organization', 'suspectcases'));
+    }
+
+
+    public function sampleBlood($id)
+    {
+        $suspectCase = SuspectCase::findOrFail($id);
+        $suspectCase->sampler_id = Auth::id();
+        $suspectCase->sample_at = date('Y-m-d H:i:s');
+        $suspectCase->save();
+        session()->flash('success', 'Se tomó la muestra de de sangre de manera exitosa');
+        return redirect()->back();
     }
 }

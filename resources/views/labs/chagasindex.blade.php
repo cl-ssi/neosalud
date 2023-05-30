@@ -97,8 +97,11 @@
                         <td>{{ $suspectcase->patient->actualSex()->text ?? '' }}</td>
                         <td>{{ $suspectcase->patient->nationality->name ?? '' }}</td>
                         @if ($tray !== 'Pendientes de Recepción')
-                            <td>{{ $suspectcase->receptor->actualOfficialHumanName->text ?? '' }}
-                                ({{ $suspectcase->reception_at ?? '' }})
+                            <td>
+                                @if ($suspectcase->receptor)
+                                    {{ $suspectcase->receptor->actualOfficialHumanName->text ?? '' }}
+                                    ({{ $suspectcase->reception_at ?? '' }})
+                                @endif
                             </td>
                         @endif
                         <td>

@@ -35,7 +35,7 @@
 
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_sex">Sexo</label>
-                <select name="sex" id="for_sex" class="form-control sex" readonly>
+                <select name="gender" id="for_sex" class="form-control sex" readonly>
                     <option value="male" {{ $patient->sex === 'male' ? 'selected' : '' }}>Masculino</option>
                     <option value="female" {{ $patient->sex === 'female' ? 'selected' : '' }}>Femenino</option>
                     <option value="other" {{ $patient->sex === 'other' ? 'selected' : '' }}>Otro</option>
@@ -87,8 +87,8 @@
         <div class="row">
 
             <fieldset class="form-group col-6 col-md-3">
-                <label for="for_sample_at">Fecha Muestra</label>
-                <input type="datetime-local" class="form-control" id="for_sample_at" name="sample_at"
+                <label for="for_sample_at">Fecha Solicitud de Muestra</label>
+                <input type="datetime-local" class="form-control" id="for_request" name="request_at"
                     value="{{ date('Y-m-d\TH:i:s') }}" required min="{{ date('Y-m-d\TH:i:s', strtotime('-2 week')) }}"
                     max="{{ date('Y-m-d\TH:i:s') }}">
             </fieldset>
@@ -106,7 +106,7 @@
         <div class="row">
             <fieldset class="form-group col-6 col-md-3">
                 <label for="for_sample_type">Grupo de Pesquiza</label>
-                <select name="research_group" id="research_group" class="form-control" required>
+                <select name="research_group" id="research_group" class="form-select" required>
                 <option value=""></option>
                 <option value="Control Pre concepcional" {{ old('research_group') == 'Control Pre concepcional' ? 'selected' : '' }}>Control Pre concepcional</option>
                 <option value="Gestante (+semana gestacional)" {{ old('research_group') == 'Gestante (+semana gestacional)' ? 'selected' : '' }}>Gestante (+semana gestacional)</option>
@@ -207,4 +207,3 @@
     });
 </script>
 @endsection
-
