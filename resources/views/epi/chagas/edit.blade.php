@@ -238,7 +238,7 @@
 
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_chagas_result_confirmation">Resultado Confirmación</label>
-                    <select name="chagas_result_confirmation" id="for_chagas_result_confirmation" class="form-control">
+                    <select name="chagas_result_confirmation" id="for_chagas_result_confirmation" class="form-select">
                         <option value=""></option>
                         <option value="Negativo"
                             {{ $suspectCase->chagas_result_confirmation === 'Negativo' ? 'selected' : '' }}>Negativo

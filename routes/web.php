@@ -765,21 +765,7 @@ Route::prefix('absences')->name('absences.')->group(function () {
     Route::delete('/{absence}', [AbsenceController::class, 'destroy'])->name('destroy');
 });
 
-//Rutas Epi
-use App\Http\Controllers\Epi\SuspectCaseController;
-use App\Http\Controllers\Epi\TracingController;
-Route::prefix('epi')->name('epi.')->group(function () {
-    Route::prefix('chagas')->name('chagas.')->group(function () {
-        Route::get('/{suspectCase}/edit', [SuspectCaseController::class, 'edit'])->name('edit');
-        Route::put('/{suspectCase}', [SuspectCaseController::class, 'update'])->name('update');
-        Route::get('/{tray}', [SuspectCaseController::class, 'index'])->name('index');
-        Route::get('/{user}/create', [SuspectCaseController::class, 'create'])->name('create');
-        Route::post('/', [SuspectCaseController::class, 'store'])->name('store');
-        Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
-        Route::get('file/{suspect_case}/{attribute}', [SuspectCaseController::class, 'deleteFile'])->name('deleteFile');
-    });
-});
-//fin rutas EPI
+
 
 //Rutas control-attention
 Route::prefix('vista')->name('vista.')->group(function () {
@@ -804,6 +790,27 @@ Route::get('/test/projectid', [TestController::class, 'getProjectId']);
 Route::get('/test/cola', [TestController::class, 'cola']);
 
 
+
+//Rutas Epi
+use App\Http\Controllers\Epi\SuspectCaseController;
+use App\Http\Controllers\Epi\TracingController;
+
+Route::prefix('epi')->name('epi.')->group(function () {
+    Route::prefix('chagas')->name('chagas.')->group(function () {
+        Route::get('/{suspectCase}/edit', [SuspectCaseController::class, 'edit'])->name('edit');
+        Route::put('/{suspectCase}', [SuspectCaseController::class, 'update'])->name('update');
+        Route::get('/{tray}', [SuspectCaseController::class, 'index'])->name('index');
+        Route::get('/{user}/create', [SuspectCaseController::class, 'create'])->name('create');
+        Route::post('/', [SuspectCaseController::class, 'store'])->name('store');
+        Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
+        Route::get('file/{suspect_case}/{attribute}', [SuspectCaseController::class, 'deleteFile'])->name('deleteFile');
+    });
+});
+//fin rutas EPI
+
+
+
+
 use App\Http\Controllers\Lab\LaboratoryController;
 use App\Http\Controllers\Lab\LaboratoryReportController;
 // Inicio Módulo de Laboratorio
@@ -826,6 +833,8 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
 
     Route::get('/request', [SuspectCaseController::class, 'requestChaga'])->name('requestChaga');
     Route::get('/confirm-request/{patient}/{organization}', [SuspectCaseController::class, 'confirmRequestChaga'])->name('confirmRequestChaga');
+    Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
+    Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');
 
 
     //Muestra el correo de delegeado de epidemiologia
@@ -842,9 +851,12 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
         Route::get('/{user}/edit', [SuspectCaseController::class, 'editChagasUser'])->name('edit');
     });
 
-    
-        Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
-        Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');
-    
+    Route::prefix('tracings')->name('tracings.')->middleware('auth')->group(function () {
+        Route::get('/', [TracingController::class, 'index'])->name('index');
+        Route::get('/{suspectcase}/create', [TracingController::class, 'create'])->name('create');
+        Route::post('/', [TracingController::class, 'store'])->name('store');
+        Route::get('/{tracing}/edit', [TracingController::class, 'edit'])->name('edit');
+        Route::put('/{tracing}', [TracingController::class, 'update'])->name('update');
+    });
 });
 // Fin de Módulo de Chagas
