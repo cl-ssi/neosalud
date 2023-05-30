@@ -191,7 +191,7 @@
 
                 <fieldset class="form-group col-6 col-md-3 alert alert-warning">
                     <label for="for_chagas_result_screening">Resultado Tamizaje</label>
-                    <select name="chagas_result_screening" id="for_chagas_result_screening" class="form-control">
+                    <select name="chagas_result_screening" id="for_chagas_result_screening" class="form-select">
                         <option value=""></option>
                         <option value="Negativo"
                             {{ $suspectCase->chagas_result_screening === 'Negativo' ? 'selected' : '' }}>Negativo</option>
@@ -230,7 +230,7 @@
             <div class="row">
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_sars_cov_2_at">Fecha Resultado Confirmación</label>
-                    <input type="datetime-local" class="form-control" id="for_chagas_result_confirmation_at"
+                    <input type="datetime-local" class="form-select" id="for_chagas_result_confirmation_at"
                         name="chagas_result_confirmation_at" min="{{ $suspectCase->reception_at->format('Y-m-d\TH:i') }}"
                         max="{{ date('Y-m-d\TH:i:s') }}"
                         value="{{ $suspectCase->chagas_result_confirmation_at ? $suspectCase->chagas_result_confirmation_at->format('Y-m-d\TH:i:s') : '' }}">
@@ -280,7 +280,7 @@
 
                 <div class="col-6 col-md-3 alert alert-danger">
                     <label for="for_direct_exam_result">Resultado Examen Directo (Microstrout)</label>
-                    <select name="direct_exam_result" id="for_direct_exam_result" class="form-control">
+                    <select name="direct_exam_result" id="for_direct_exam_result" class="form-select">
                         <option value=""></option>
                         <option value="Negativo" {{ $suspectCase->direct_exam_result === 'Negativo' ? 'selected' : '' }}>
                             Negativo</option>
@@ -317,7 +317,7 @@
 
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_first_result">Resultado Examen Primer PCR</label>
-                    <select name="pcr_first_result" id="for_pcr_first_result" class="form-control">
+                    <select name="pcr_first_result" id="for_pcr_first_result" class="form-select">
                         <option value=""></option>
                         <option value="Negativo" {{ $suspectCase->pcr_first_result === 'Negativo' ? 'selected' : '' }}>
                             Negativo</option>
@@ -356,7 +356,7 @@
 
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_second_result">Resultado Examen Segundo PCR</label>
-                    <select name="pcr_second_result" id="for_pcr_second_result" class="form-control">
+                    <select name="pcr_second_result" id="for_pcr_second_result" class="form-select">
                         <option value=""></option>
                         <option value="Negativo" {{ $suspectCase->pcr_second_result === 'Negativo' ? 'selected' : '' }}>
                             Negativo</option>
@@ -395,7 +395,7 @@
 
                 <fieldset class="form-group col-6 col-md-3 alert alert-danger">
                     <label for="for_pcr_third_result">Resultado Examen Tercer PCR</label>
-                    <select name="pcr_third_result" id="for_pcr_third_result" class="form-control">
+                    <select name="pcr_third_result" id="for_pcr_third_result" class="form-select">
                         <option value=""></option>
                         <option value="Negativo" {{ $suspectCase->pcr_third_result === 'Negativo' ? 'selected' : '' }}>
                             Negativo</option>
