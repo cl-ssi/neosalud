@@ -23,7 +23,8 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 @foreach (Auth::user()->practitioners as $practitioner)
                     <li>
-                        <a class="dropdown-item" href="{{ route('chagas.sampleOrganization', ['organization' => $practitioner->organization]) }}">
+                        <a class="dropdown-item"
+                            href="{{ route('chagas.sampleOrganization', ['organization' => $practitioner->organization]) }}">
                             <i class="fas fa-vial"></i> {{ $practitioner->organization->alias ?? '' }}
                         </a>
                     </li>
@@ -33,8 +34,24 @@
     @endcanany
 
     @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Seguimiento'])
-        <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fas fa-bell"></i> Seguimiento/Notificación</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-bell"></i> Seguimiento/Notificación</a>
+
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                @foreach (Auth::user()->practitioners as $practitioner)
+                    <li>
+                        <a class="dropdown-item"
+                            href="{{ route('chagas.tracings.index', ['organization' => $practitioner->organization]) }}">
+                            <i class="fas fa-bell"></i> {{ $practitioner->organization->alias ?? '' }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+
+
+            </a>
         </li>
     @endcanany
 

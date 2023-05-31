@@ -852,8 +852,9 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     });
 
     Route::prefix('tracings')->name('tracings.')->middleware('auth')->group(function () {
-        Route::get('/', [TracingController::class, 'index'])->name('index');
-        Route::get('/{suspectcase}/create', [TracingController::class, 'create'])->name('create');
+        //Route::get('/', [TracingController::class, 'index'])->name('index');
+        Route::get('/{organization}', [TracingController::class, 'index'])->name('index');
+        Route::get('/{suspectcase}/{organization}/create', [TracingController::class, 'create'])->name('create');
         Route::post('/', [TracingController::class, 'store'])->name('store');
         Route::get('/{tracing}/edit', [TracingController::class, 'edit'])->name('edit');
         Route::put('/{tracing}', [TracingController::class, 'update'])->name('update');

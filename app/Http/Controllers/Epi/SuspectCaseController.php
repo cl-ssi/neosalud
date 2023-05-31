@@ -49,8 +49,6 @@ class SuspectCaseController extends Controller
 
     public function confirmRequestChaga(User $patient, Organization $organization)
     {
-
-
         return view('epi.chagas.create', compact('patient', 'organization'));
     }
 

@@ -63,4 +63,21 @@ class Tracing extends Model
     protected $dates = [
         'next_control_at',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo('App\Models\User');
+    }    
+
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization', 'establishment_id', 'id');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo('App\Models\Organization', 'establishment_id', 'id');
+    }
+
+
 }
