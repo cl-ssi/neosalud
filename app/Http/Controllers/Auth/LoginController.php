@@ -32,11 +32,6 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
 
-    public function login()
-    {
-        return view('auth.login');
-    }
-
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([

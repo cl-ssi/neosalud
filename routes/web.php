@@ -113,7 +113,6 @@ Route::get('/claveunica', [ClaveUnicaController::class, 'autenticar'])->name('cl
 Route::get('/claveunica/callback', [ClaveUnicaController::class, 'callback']);
 Route::get('/claveunica/logout', [ClaveUnicaController::class, 'logout'])->name('claveunica.logout');
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 

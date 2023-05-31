@@ -12,31 +12,31 @@ use App\Models\User;
 
 class ClaveUnicaController extends Controller
 {
-	public function autenticar(Request $request){
-		/* Primer paso, redireccionar al login de clave única */
-		$url_base       = "https://accounts.claveunica.gob.cl/openid/authorize/";
-		$client_id      = env("CLAVEUNICA_CLIENT_ID");
-		$redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
+    public function autenticar(Request $request){
+        /* Primer paso, redireccionar al login de clave única */
+        $url_base       = "https://accounts.claveunica.gob.cl/openid/authorize/";
+        $client_id      = env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
 
-		$state 			= csrf_token();
-		$scope      	= 'openid run name';
+        $state          = csrf_token();
+        $scope          = 'openid run name';
 
-		$params     	= '?client_id='.$client_id.
-						'&redirect_uri='.$redirect_uri.
-						'&scope='.$scope.
-						'&response_type=code'.
-						'&state='.$state;
+        $params         = '?client_id='.$client_id.
+                        '&redirect_uri='.$redirect_uri.
+                        '&scope='.$scope.
+                        '&response_type=code'.
+                        '&state='.$state;
 
-		return redirect()->to($url_base.$params)->send();
-	}
+        return redirect()->to($url_base.$params)->send();
+    }
 
     public function callback(Request $request) {
         /* Segundo paso, el usuario ya se autentificó correctamente en CU y retornó a nuestro sistema */
 
         /* Nos aseguramos que vengan los parámetros desde CU */
-		// if ($request->missing(['code','name'])) {
-		// 	return redirect()->route('welcome');
-		// }
+        // if ($request->missing(['code','name'])) {
+        // 	return redirect()->route('welcome');
+        // }
 
         /* Recepcionamos los siguientes parametros desde CU */
         $code   = $request->input('code');
@@ -71,10 +71,10 @@ class ClaveUnicaController extends Controller
             return redirect()->route('welcome');
         }
 
-		/* Paso 3, obtener los datos del usuario en base al $access_token */
-		$url_base = "https://accounts.claveunica.gob.cl/openid/userinfo/";
-		$response = Http::withToken(json_decode($response)->access_token)->post($url_base);
-		
+        /* Paso 3, obtener los datos del usuario en base al $access_token */
+        $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo/";
+        $response = Http::withToken(json_decode($response)->access_token)->post($url_base);
+        
         $user_clave_unica = json_decode($response);
 
         /* Registrar los datos del usuario en la BD local */
@@ -159,27 +159,27 @@ class ClaveUnicaController extends Controller
     }
 
     public function logout() {
-		/* Nos iremos al cerrar sesión en clave única y luego volvermos a nuestro sistema */
-		if(env('APP_ENV') == 'local')
-		{
-			/* Si es ambiente de desarrollo cerramos sólo localmente */
-			return redirect()->route('logout');
-		}
-		else
-		{
-			/** Cerrar sesión clave única */
-			/* Url para cerrar sesión en clave única */
-			$url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
-			/* Url para luego cerrar sesión en nuestro sisetema */
-			$url_redirect   = env('APP_URL')."/logout";
-			$url            = $url_logout.urlencode($url_redirect);
-			return redirect($url);
-		}
+        /* Nos iremos al cerrar sesión en clave única y luego volvermos a nuestro sistema */
+        if(env('APP_ENV') == 'local')
+        {
+            /* Si es ambiente de desarrollo cerramos sólo localmente */
+            return redirect()->route('logout');
+        }
+        else
+        {
+            /** Cerrar sesión clave única */
+            /* Url para cerrar sesión en clave única */
+            $url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+            /* Url para luego cerrar sesión en nuestro sisetema */
+            $url_redirect   = env('APP_URL')."/logout";
+            $url            = $url_logout.urlencode($url_redirect);
+            return redirect($url);
+        }
     }
 
 
     /** Luego de integrar CU ya no es necesario esta función */
-	public function getUserInfo($access_token, $redirect = null) {
+    public function getUserInfo($access_token, $redirect = null) {
         /* Tercer Paso, obtener los datos de usuario  */
         $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
         $response = Http::withToken($access_token)->post($url_base);
