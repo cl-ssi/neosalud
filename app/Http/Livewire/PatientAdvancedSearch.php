@@ -25,6 +25,9 @@ class PatientAdvancedSearch extends Component
     public ?User $selectedPatient = null;
     public $selectedPatientId;
 
+    public $original_id = null;
+    public $organization_id = null;
+
     public function mount()
     {
         $this->organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))

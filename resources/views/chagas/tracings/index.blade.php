@@ -65,6 +65,28 @@
                                 <small>No hay fichas de seguimiento disponibles</small>
                             @endif
                         </td>
+                        <td colspan="2">
+                            <a class="btn btn-primary btn-sm"
+                                href="{{ route('chagas.contacts.create', $suspectcase) }}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                            <ul class="list-unstyled">
+                                @foreach ($suspectcase->patient->contacts as $contact)
+                                    <li class="small">{{ $contact->patient->text ?? '' }}
+                                        ({{ $contact->RelationshipName }})
+                                        <form method="POST" action="{{ route('chagas.contacts.destroy', $contact) }}"
+                                            style="display: inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="#" class="text-danger ml-2"
+                                                onclick="event.preventDefault(); if(confirm('¿Está seguro que desea eliminar al contacto?')) { this.closest('form').submit(); }"><i
+                                                    class="fas fa-trash-alt"></i></a>
+                                        </form>
+                                    </li>
+                                    <br>
+                                @endforeach
+                            </ul>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

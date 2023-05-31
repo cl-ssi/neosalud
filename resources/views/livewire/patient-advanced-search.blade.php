@@ -55,10 +55,14 @@
                     <th scope="col">Dirección</th>
                     <th scope="col">Teléfono</th>
                     <th scope="col">Correo</th>
-                    <th scope="col">Selec.</th>
+                    <th scope="col">Editar.</th>
                     <!-- Mostrar campo "Solicitar Examen" solo si el modo es "solicitante" -->
                     @if ($mode === 'Solicitante')
                         <th scope="col">Solicitar Examen.</th>
+                    @endif
+
+                    @if ($mode === 'Contacto')
+                        <th scope="col">Contacto.</th>
                     @endif
             </thead>
             <tbody>
@@ -99,6 +103,18 @@
 
                                         </ul>
                                     </div>
+                                </td>
+                            @endif
+
+                            <!-- Mostrar un modal solo si es modo "Contacto" -->
+                            @if ($mode === 'Contacto')
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal{{ $patient->id }}">
+                                        <i class="fas fa-people-arrows"></i>
+                                    </a>
+
+                                    @include('patients.modals.create_contact')
                                 </td>
                             @endif
                         </tr>
