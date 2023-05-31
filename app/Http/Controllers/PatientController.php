@@ -589,4 +589,10 @@ class PatientController extends Controller
         $users = User::getUsersBySearch($name)->get();
         return new UserCollection($users);
     }
+
+    public function showRecord($id)
+    {
+        $patient = User::findorfail($id);
+        return view('patients.show_record', compact('patient'));
+    }
 }

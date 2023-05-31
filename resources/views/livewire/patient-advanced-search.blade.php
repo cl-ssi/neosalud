@@ -64,6 +64,13 @@
                     @if ($mode === 'Contacto')
                         <th scope="col">Contacto.</th>
                     @endif
+
+
+                    @if ($mode === 'Ficha')
+                        <th scope="col">Ficha Paciente.</th>
+                    @endif
+
+
             </thead>
             <tbody>
                 @if ($patients)
@@ -116,6 +123,17 @@
 
                                     @include('patients.modals.create_contact')
                                 </td>
+                            @endif
+
+                            <!-- Mostrar la ficha del Paciente solo si es modo "Ficha" -->
+                            @if ($mode === 'Ficha')
+                                @if ($patient->suspectCases()->count() > 0)
+                                    <td>
+                                        <a class="btn-primary btn-sm"
+                                            href="{{ route('patient.showRecord', $patient->id) }}"
+                                            title="Ficha Médica"> <i class="fas fa-file-medical"></i> </a>
+                                    </td>
+                                @endif
                             @endif
                         </tr>
                     @empty

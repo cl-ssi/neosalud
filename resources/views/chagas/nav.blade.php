@@ -55,9 +55,9 @@
         </li>
     @endcanany
 
-    @canany(['Developer', 'Administrator'])
+    @canany(['Developer', 'Administrator', 'Chagas: Ficha'])
         <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fa-solid fa-magnifying-glass-location"></i> Ficha Paciente</a>
+            <a class="nav-link {{ active('chagas.patientRecord') }} " href="{{ route('chagas.patientRecord') }}"><i class="fa-solid fa-magnifying-glass-location"></i> Ficha Paciente</a>
         </li>
     @endcanany
 

@@ -165,6 +165,11 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(UnitHead::class, 'user_id');
     }
 
+    public function suspectCases()
+    {
+        return $this->hasMany('App\Models\Epi\SuspectCase', 'patient_id', 'id');
+    }
+
     // public function manager_shifts(): HasMany
     // {
     //     return $this->hasMany(Shift::class, 'manager_shift');

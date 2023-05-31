@@ -155,6 +155,7 @@ Route::prefix('user')->name('user.')->middleware('auth')->group(function () {
 
 Route::prefix('patient')->name('patient.')->middleware('auth')->group(function () {
     Route::get('/', [PatientController::class, 'index'])->name('index');
+    Route::get('/show-record/{patient}', [PatientController::class, 'showRecord'])->name('showRecord');
     Route::post('/', [PatientController::class, 'store'])->name('store');
     Route::get('/create', [PatientController::class, 'create'])->name('create');
     Route::get('/create-from-sic/{interconsultationId?}', [PatientController::class, 'create'])->name('create_from_sic');
@@ -833,6 +834,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     Route::view('/', 'chagas.welcome')->name('welcome');
 
     Route::get('/request', [SuspectCaseController::class, 'requestChaga'])->name('requestChaga');
+    Route::get('/patient-record', [SuspectCaseController::class, 'patientRecord'])->name('patientRecord');
     Route::get('/confirm-request/{patient}/{organization}', [SuspectCaseController::class, 'confirmRequestChaga'])->name('confirmRequestChaga');
     Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
     Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');

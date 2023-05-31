@@ -231,6 +231,15 @@ class SuspectCaseController extends Controller
         return view('epi.chagas.user_index', compact('organizations', 'users'));
     }
 
+    public function patientRecord()
+    {
+        
+        return view('patients.record');
+
+    }
+
+
+
 
     public function editChagasUser(User $user)
     {
