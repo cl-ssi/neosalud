@@ -31,7 +31,7 @@
 
         <p><strong>Equipo Telemedicina<br>
            <strong>Hospital Dr. Ernesto Torres G.<br>
-           <strong>Servicio de Salud Iquique
+           <strong>Servicio de Salud Tarapacá
         </p>
 
     @endif
@@ -84,9 +84,9 @@
 
     <br>
 
-    <p><strong>Equipo de Farmacia <br>
+    <p><strong>Equipo de Farmacia<br>
        <strong>Hospital Dr. Ernesto Torres T.<br>
-       <strong>Servicio de Salud Iquique
+       <strong>Servicio de Salud Tarapacá
     </p>
 
     @endif

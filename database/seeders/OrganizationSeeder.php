@@ -16,15 +16,15 @@ class OrganizationSeeder extends Seeder
      */
     public function run()
     {
-        //Organization::Create(['name'=>'Actividades gestionadas por la Dirección del Servicio para apoyo de la Red (S.S de Iquique)','alias'=>'Servicio de Salud Iquique','type'=>'Dirección Servicio de Salud','old_code_deis' => '02-010','new_code_deis' => '102010','service'=>'Servicio de Salud Iquique','dependency'=>'Servicio de Salud','commune_id'=>5]);
+        //Organization::Create(['name'=>'Actividades gestionadas por la Dirección del Servicio para apoyo de la Red (S.S de Iquique)','alias'=>'Servicio de Salud Tarapacá','type'=>'Dirección Servicio de Salud','old_code_deis' => '02-010','new_code_deis' => '102010','service'=>'Servicio de Salud Tarapacá','dependency'=>'Servicio de Salud','commune_id'=>5]);
         //////////////////////////////////////////////////////////REGIÓN DE TARAPACÁ//////////////////////////////////////////////
         $Organization = new Organization();
         $Organization->active = 1;
         $Organization->name = 'Actividades gestionadas por la Dirección del Servicio para apoyo de la Red (S.S de Iquique)';
-        $Organization->alias = 'Servicio de Salud Iquique';
+        $Organization->alias = 'Servicio de Salud Tarapacá';
         $Organization->type = 1; //1 Dirección Servicio de Salud
         $Organization->code_deis = 102010;
-        $Organization->service = 3; //3 = Servicio de Salud Iquique
+        $Organization->service = 3; //3 = Servicio de Salud Tarapacá
         $Organization->dependency = 1; //1 = Servicio de Salud
         $Organization->save();
 
@@ -46,7 +46,7 @@ class OrganizationSeeder extends Seeder
         $Organization->alias = 'PRAIS (S.S. Iquique)';
         $Organization->type = 2; //2 Centro PRAIS
         $Organization->code_deis = 102011;
-        $Organization->service = 3; //3 = Servicio de Salud Iquique
+        $Organization->service = 3; //3 = Servicio de Salud Tarapacá
         $Organization->dependency = 1; //1 = Servicio de Salud
         $Organization->save();
 
@@ -68,7 +68,7 @@ class OrganizationSeeder extends Seeder
         $Organization->alias = 'Clínica Dental Móvil';
         $Organization->type = 3; //3 Clínica Dental Móvil
         $Organization->code_deis = 102012;
-        $Organization->service = 3; //3 = Servicio de Salud Iquique
+        $Organization->service = 3; //3 = Servicio de Salud Tarapacá
         $Organization->dependency = 1; //1 = Servicio de Salud
         $Organization->save();
 
@@ -90,7 +90,7 @@ class OrganizationSeeder extends Seeder
         $Organization->alias = 'Hospital Dr. Ernesto Torres Galdames (Iquique)';
         $Organization->type = 5; //5 Hospital (Alta Complejidad)
         $Organization->code_deis = 102100;
-        $Organization->service = 3; //3 = Servicio de Salud Iquique
+        $Organization->service = 3; //3 = Servicio de Salud Tarapacá
         $Organization->dependency = 1; //1 = Servicio de Salud
         $Organization->save();
 

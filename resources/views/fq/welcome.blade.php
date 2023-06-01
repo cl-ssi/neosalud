@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sitio web del Servicio de Salud Iquique">
+    <meta name="description" content="Sitio web del Servicio de Salud Tarapacá">
     <meta name="author" content="Alvaro Torres Fuchslocher">
     <title>{{ config('app.name') }}</title>
 
@@ -51,7 +51,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container bg-nav-gobierno">
         <h5 class="my-0 mr-md-auto font-weight-normal"> <img src="{{ asset('images/gob-header.svg') }}" alt="Logo del gobierno de chile"> </h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2" href="http://www.saludiquique.cl">Servicio de Salud Iquique</a>
+            <a class="p-2" href="http://www.saludiquique.cl">Servicio de Salud Tarapacá</a>
         </nav>
 
     </div>
@@ -107,14 +107,14 @@
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-12 col-md">
-                    <img class="mb-2" src="{{ asset('images/logo_ssi_100px.png') }}" alt="Logo Servicio de Salud Iquique">
+                    <img class="mb-2" src="{{ asset('images/logo_sst_100px.png') }}" alt="Logo Servicio de Salud Tarapacá">
                 </div>
                 <div class="col-6 col-md">
                     <h5>Portales del estado</h5>
                     <ul class="list-unstyled text-small">
                         <li><a class="text-muted" href="http://www.gob.cl">Gobierno de Chile</a></li>
                         <li><a class="text-muted" href="http://www.minsal.cl">Ministerio de Salud</a></li>
-                        <li><a class="text-muted" href="http://www.saludiquique.cl">Servicio de Salud Iquique</a> </li>
+                        <li><a class="text-muted" href="http://www.saludiquique.cl">Servicio de Salud Tarapacá</a> </li>
                     </ul>
                 </div>
                 <div class="col-6 col-md">

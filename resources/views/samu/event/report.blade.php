@@ -9,7 +9,7 @@
     <body>
         <div class="content">
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_samu.png') }}"
-                width="120" alt="Logo Servicio de Salud Iquique"><br>
+                width="120" alt="Logo Servicio de Salud Tarapacá"><br>
 
 
         <div class="titulo">INFORME DE COMETIDO {{ $event->id }}</div>
@@ -312,7 +312,7 @@
     </table>
 
     <div class="pie_pagina seis center">
-        <span class="uppercase">Servicio de Salud Iquique</span><br>
+        <span class="uppercase">Servicio de Salud Tarapacá</span><br>
         Anibal Pinto #815, Iquique -
         Fono: 572409495 -
         www.saludiquique.cl

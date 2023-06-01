@@ -24,7 +24,7 @@ class OrganizationServiceSeeder extends Seeder
         $OrganizationService->save();
 
         $OrganizationService = new OrganizationService();
-        $OrganizationService->name = 'Servicio de Salud Iquique';
+        $OrganizationService->name = 'Servicio de Salud Tarapacá';
         $OrganizationService->save();
 
         $OrganizationService = new OrganizationService();

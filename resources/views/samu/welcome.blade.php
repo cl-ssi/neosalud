@@ -12,9 +12,7 @@
             <div class="card-body text-center">
                     <ul class="list-unstyled mt-3 mb-4">
 
-
-                        
-                        <img class="mb-2" src="{{ asset('images/logo_samu.png') }}" alt="Logo Servicio de Salud Iquique">
+                        <img class="mb-2" src="{{ asset('images/logo_samu.png') }}" alt="Logo Servicio de Salud Tarapacá">
 
                     </ul>
                     

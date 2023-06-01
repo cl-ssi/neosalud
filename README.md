@@ -1,4 +1,4 @@
-# Servicio de Salud Iquique
+# Servicio de Salud Tarapacá
 # NeoSalud - Portal Interno de sistemas 
 ## Dependencias Windows con WSL2
 - [Instalar WSL2](https://docs.microsoft.com/es-es/windows/wsl/install)
@@ -38,4 +38,4 @@
 ## License
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-Developed by Servicio de Salud Iquique.
+Developed by Servicio de Salud Tarapacá.

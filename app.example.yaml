@@ -21,8 +21,8 @@ env_variables:
   APP_ENV: production
   APP_KEY:
   APP_DEBUG: true
-  APP_URL: https://www.saludtarapaca.org
-  APP_SS: "Servicio de Salud Iquique"
+  APP_URL: https://www.saludtarapaca.gob.cl
+  APP_SS: "Servicio de Salud Tarapacá"
   DEBUGBAR_ENABLED: false
 
   APP_STORAGE: /tmp
@@ -76,7 +76,7 @@ env_variables:
   MAIL_PASSWORD: 
   MAIL_ENCRYPTION: tls
   MAIL_FROM_ADDRESS: sistemas.ssi@redsalud.gob.cl
-  MAIL_FROM_NAME: "Salud Iquique"
+  MAIL_FROM_NAME: "Salud Tarapacá"
 
   # CREDENCIALES SERVIDOR SOAP RAYEN
   SOAP_USER:

@@ -159,7 +159,7 @@
                 <label for="for_establishment_id">Establecimiento *</label>
                 <select name="establishment_id" id="for_establishment_id" class="form-control" required="">
                     <option value=""></option>
-                                            <option value="51">Servicio de Salud Iquique</option>
+                                            <option value="51">Servicio de Salud Tarapacá</option>
                                             <option value="4005">Bluelab Laboratorio Biología Molecular</option>
                                             <option value="57">Centro Clínico Militar Iquique</option>
                                             <option value="111">CECOSF Cerro Esmeralda</option>
@@ -2539,8 +2539,8 @@
                                             <option value="SENAME, Unidad de Salud CIP CRC">
                             SENAME, Unidad de Salud CIP CRC
                         </option>
-                                            <option value="Servicio de Salud Iquique  UHCIP MP">
-                            Servicio de Salud Iquique  UHCIP MP
+                                            <option value="Servicio de Salud Tarapacá  UHCIP MP">
+                            Servicio de Salud Tarapacá  UHCIP MP
                         </option>
                                             <option value="BAC SII funcionarios">
                             SII funcionarios
