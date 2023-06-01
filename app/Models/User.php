@@ -249,6 +249,15 @@ class User extends Authenticatable implements Auditable
             ->first();
     }
 
+    //Identificadores solo RUN
+    public function getIdentifierNotRunAttribute()
+    {
+        return $this->identifiers()
+            ->whereNot('cod_con_identifier_type_id', 1)
+            ->latest()
+            ->first();
+    }
+
 
     public function getIdentificationAttribute()
     {

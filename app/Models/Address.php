@@ -62,4 +62,8 @@ class Address extends Model
     public function region(){
         return $this->belongsTo('App\Models\Region', 'region_id');
     }
+
+    public function country(){
+        return $this->belongsTo('App\Models\Country', 'country_id');
+    }
 }

@@ -23,30 +23,57 @@ class ContactPoint extends Model
         'rank',
         'period_id',
         'actually',
-        
+
     ];
 
-    public function getUseValueAttribute(){
+    public function getUseValueAttribute()
+    {
         switch ($this->use) {
             case 'home':
-              return 'Hogar';
-              break;
+                return 'Hogar';
+                break;
             case 'work':
-              return 'Trabajo';
-              break;
+                return 'Trabajo';
+                break;
             case 'old':
-              return 'Antiguo';
-              break;
+                return 'Antiguo';
+                break;
             case 'temp':
-              return 'Temporal';
-              break;
+                return 'Temporal';
+                break;
             case 'mobile':
-              return 'Móvil';
-              break;
+                return 'Móvil';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
 
+    public function getSystemValueAttribute()
+    {
+        switch ($this->system) {
+            case 'phone':
+                return 'Teléfono';
+                break;
+            case 'email':
+                return 'Email';
+                break;
+            case 'fax':
+                return 'Fax';
+                break;
+            case 'url':
+                return 'URL';
+                break;
+            case 'sms':
+                return 'SMS';
+                break;
+            case 'other':
+                return 'Other';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 }
