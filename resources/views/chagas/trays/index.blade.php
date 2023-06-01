@@ -1,9 +1,16 @@
 @extends('layouts.app')
 @section('content')
     @include('chagas.nav')
-    <h4 class="mb-3">
-        Listado de Solicitudes de Examenes de Chagas Solicitado por @auth {{ auth()->user()->officialFullName }} @endauth
-    </h4>
+    @if (isset($organization))
+        <h4 class="mb-3">
+            Listado de Solicitudes de Examenes de Chagas Solicitado del Establecimiento {{ $organization->alias ?? '' }}
+        </h4>
+    @else
+        <h4 class="mb-3">
+            Listado de Solicitudes de Examenes de Chagas Solicitado por @auth {{ auth()->user()->officialFullName }}
+            @endauth
+        </h4>
+    @endif
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered" id="tabla_casos">

@@ -284,11 +284,10 @@ class SuspectCaseController extends Controller
         return view('chagas.trays.index', compact('suspectcases'));
     }
 
-
     public function tray(Organization $organization)
     {
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
             ->paginate(100);
-        return view('chagas.trays.index', compact('suspectcases'));
+        return view('chagas.trays.index', compact('suspectcases', 'organization'));
     }
 }
