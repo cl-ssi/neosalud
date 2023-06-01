@@ -79,5 +79,7 @@ class Tracing extends Model
         return $this->belongsTo('App\Models\Organization', 'establishment_id', 'id');
     }
 
+    
+
 
 }

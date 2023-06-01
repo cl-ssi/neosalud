@@ -97,8 +97,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Practitioner::class, 'user_id');
     }
 
-    public function Contacts() {
-        return $this->hasMany('App\Models\Epi\Contact','patient_id');
+    public function Contacts()
+    {
+        return $this->hasMany('App\Models\Epi\Contact', 'patient_id');
+    }
+
+    public function tracings()
+    {
+        return $this->hasMany('App\Models\Epi\Tracing', 'patient_id');
     }
 
     public function practitionersOrganizations()

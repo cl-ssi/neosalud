@@ -115,11 +115,125 @@
                             <th>Contacto</th>
                         </tr>
                     </thead>
-                    @foreach ($patient->contactPoints as  $contactpoint)
+                    @foreach ($patient->contactPoints as $contactpoint)
                         <tr>
                             <td>{{ $contactpoint->system_value ?? '' }} </td>
                             <td>{{ $contactpoint->use_value ?? '' }} </td>
                             <td>{{ $contactpoint->value ?? '' }} </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
+
+        <div class="card-body">
+            {{-- Comienza las maneras de contactar --}}
+            <h4 class="mt-4">Examenes</h4>
+            <div class="table-responsive-md">
+                <table class="table table-sm table-bordered mb-4 mt-4">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Tipo de Examen</th>
+                            <th>Grupo de Pesquisa</th>
+                            <th>Establecimiento</th>
+                            <th>Fecha Solicitud</th>
+                            <th>Fecha Toma de Muestra</th>
+                            <th>Fecha Tamizaje</th>
+                            <th>Resultado Tamizaje</th>
+                            <th>Fecha Confirmación</th>
+                            <th>Resultado Confirmación</th>
+                        </tr>
+                    </thead>
+                    @foreach ($patient->suspectCases as $suspectcase)
+                        <tr>
+                            <td>{{ $suspectcase->id ?? '' }} </td>
+                            <td>{{ $suspectcase->type ?? '' }} </td>
+                            <td>{{ $suspectcase->research_group ?? '' }} </td>
+                            <td>{{ $suspectcase->establishment->alias ?? '' }} </td>
+                            <td>{{ $suspectcase->request_at ?? '' }} </td>
+                            <td>{{ $suspectcase->sample_at ?? '' }} </td>
+                            <td>{{ $suspectcase->chagas_result_screening_at ?? '' }} </td>
+                            <td>
+                                {{ $suspectcase->chagas_result_screening ?? '' }}
+                                @if ($suspectcase->chagas_result_screening_file)
+                                    <a href="{{ route('epi.chagas.downloadFile', ['fileName' => $suspectcase->chagas_result_screening_file]) }}"
+                                        target="_blank"><i class="fas fa-paperclip"></i>&nbsp
+                                    </a>
+                                @endif
+                            </td>
+                            <td>{{ $suspectcase->chagas_result_confirmation_at ?? '' }} </td>
+                            <td>{{ $suspectcase->chagas_result_confirmation ?? '' }}
+                                @if ($suspectcase->chagas_result_confirmation_file)
+                                    <a href="{{ route('epi.chagas.downloadFile', ['fileName' => $suspectcase->chagas_result_confirmation_file]) }}"
+                                        target="_blank"><i class="fas fa-paperclip"></i>&nbsp
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+            {{-- Comienza las maneras de contactar --}}
+            <h4 class="mt-4">Ficha de Seguimiento del Paciente</h4>
+            <div class="table-responsive-md">
+                <table class="table table-sm table-bordered mb-4 mt-4">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Proximo Seguimiento</th>
+                            <th>Fecha de Notificación</th>
+                            <th>Folio Epivigilia</th>
+                        </tr>
+                    </thead>
+                    @foreach ($patient->tracings as $tracing)
+                        <tr>
+                            <td>
+                                <a href="{{ route('chagas.tracings.show', ['tracing' => $tracing->id]) }}"
+                                    target="_blank">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                                {{ $tracing->id ?? '' }}
+                            </td>
+                            <td>{{ $tracing->next_control_at ?? '' }} </td>
+                            <td>{{ $tracing->date_of_notification ?? '' }} </td>
+                            <td>{{ $tracing->epi_notification ?? '' }} </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="card-body">
+            {{-- Comienza las maneras de contactar --}}
+            <h4 class="mt-4">Contactos Estrechos del Paciente</h4>
+            <div class="table-responsive-md">
+                <table class="table table-sm table-bordered mb-4 mt-4">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Paciente</th>
+                            <th>Nombre del Contacto Estrecho</th>
+                            <th>Fecha Ultimo Contacto</th>
+                            <th>Parentesco</th>
+                            <th>Viven Juntos</th>
+                            <th>Observacion</th>
+                        </tr>
+                    </thead>
+                    @foreach ($patient->contacts as $contact)
+                        <tr>
+                            <td>{{ $patient->OfficialFullName ?? '' }} </td>
+                            <td>{{ $contact->patient->OfficialFullName ?? '' }} </td>
+                            <td>{{ $contact->last_contact_at ?? '' }} </td>
+                            <td>{{ $contact->RelationshipName ?? '' }}</td>
+                            <td>{{ $contact->LiveTogetherDesc ?? '' }}</td>
+                            <td>{{ $contact->observation ?? '' }}</td>
+
                         </tr>
                     @endforeach
                 </table>

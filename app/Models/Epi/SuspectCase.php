@@ -12,6 +12,7 @@ class SuspectCase extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'epi_suspect_cases';
     protected $fillable = [
         'type',
         //datos chagas
@@ -93,6 +94,11 @@ class SuspectCase extends Model
         return $this->belongsTo('App\Models\Organization');
     }
 
+    public function establishment()
+    {
+        return $this->belongsTo('App\Models\Organization', 'organization_id', 'id');
+    }
+
     public function patient()
     {
         return $this->belongsTo('App\Models\User');
@@ -124,5 +130,5 @@ class SuspectCase extends Model
         return $this->hasMany('App\Models\Epi\Tracing');
     }
 
-    protected $table = 'epi_suspect_cases';
+    
 }

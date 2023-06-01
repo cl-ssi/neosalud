@@ -26,15 +26,18 @@ class Contact extends Model
         'last_contact_at',
     ];
 
-    public function patient() {
+    public function patient()
+    {
         return $this->belongsTo('App\Models\User', 'contact_id');
     }
 
-    public function self_patient() {
+    public function self_patient()
+    {
         return $this->belongsTo('App\Models\User', 'patient_id');
     }
 
-    public function getRelationshipNameAttribute(){
+    public function getRelationshipNameAttribute()
+    {
         switch ($this->relationship) {
             case "grandfather":
                 return 'Abuelo';
@@ -128,4 +131,15 @@ class Contact extends Model
     }
 
 
+    public function getLiveTogetherDescAttribute()
+    {
+        switch ($this->live_together) {
+            case 1:
+                return 'SI';
+                break;
+            case 0:
+                return 'NO';
+                break;
+        }
+    }
 }

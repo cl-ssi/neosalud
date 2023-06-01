@@ -830,6 +830,7 @@ Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
 // Inicio Módulo de Chagas
 use App\Http\Controllers\Epi\TracingController;
 use App\Http\Controllers\Epi\ContactPatientController;
+use App\Http\Controllers\Epi\SuspectCaseReportController;
 Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () {
     Route::view('/', 'chagas.welcome')->name('welcome');
 
@@ -860,6 +861,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
         Route::get('/{suspectcase}/{organization}/create', [TracingController::class, 'create'])->name('create');
         Route::post('/', [TracingController::class, 'store'])->name('store');
         Route::get('/{tracing}/edit', [TracingController::class, 'edit'])->name('edit');
+        Route::get('/{tracing}/show', [TracingController::class, 'show'])->name('show');
         Route::put('/{tracing}', [TracingController::class, 'update'])->name('update');
     });
 
@@ -868,6 +870,12 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
         Route::post('/post', [ContactPatientController::class, 'store'])->name('store');
         Route::delete('/{contact}', [ContactPatientController::class, 'destroy'])->name('destroy');
         
+    });
+
+    
+    
+    Route::prefix('reports')->name('reports.')->middleware('auth')->group(function () {
+        Route::get('/{organization?}/chagasRequest/', [SuspectCaseReportController::class, 'chagasRequest'])->name('chagasRequest');
     });
 
 

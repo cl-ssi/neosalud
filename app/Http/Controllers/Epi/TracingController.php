@@ -39,6 +39,11 @@ class TracingController extends Controller
         return view('chagas.tracings.edit', compact('cie10s', 'tracing'));
     }
 
+    public function show(Tracing $tracing)
+    {        
+        return view('chagas.tracings.show', compact('tracing'));
+    }
+
     public function update(Request $request, Tracing $tracing)
     {
         

@@ -39,7 +39,7 @@
                 aria-expanded="false">
                 <i class="fas fa-bell"></i> Seguimiento/Notificación</a>
 
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 @foreach (Auth::user()->practitioners as $practitioner)
                     <li>
                         <a class="dropdown-item"
@@ -57,13 +57,25 @@
 
     @canany(['Developer', 'Administrator', 'Chagas: Ficha'])
         <li class="nav-item">
-            <a class="nav-link {{ active('chagas.patientRecord') }} " href="{{ route('chagas.patientRecord') }}"><i class="fa-solid fa-magnifying-glass-location"></i> Ficha Paciente</a>
+            <a class="nav-link {{ active('chagas.patientRecord') }}" href="{{ route('chagas.patientRecord') }}"><i
+                    class="fa-solid fa-magnifying-glass-location"></i> Ficha Paciente</a>
         </li>
     @endcanany
 
-    @canany(['Developer', 'Administrator'])
-        <li class="nav-item">
-            <a class="nav-link " href="#"><i class="fas fa-chart-bar"></i> Reportes</a>
+    @canany(['Developer', 'Administrator', 'Chagas: Reportes'])
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-chart-bar"></i> Reportes</a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                    <a class="dropdown-item" href="{{ route('chagas.reports.chagasRequest',['organization' =>  0]) }}">
+                        <i class="fas fa-chart-bar"></i> Cantidad de Solicitudes de muestra
+                    </a>
+                </li>
+            </ul>
+
         </li>
     @endcanany
 
