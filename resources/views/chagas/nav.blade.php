@@ -50,10 +50,34 @@
                 @endforeach
             </ul>
 
-
-            </a>
         </li>
     @endcanany
+
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Bandejas'])
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-server"></i> Bandejas</a>
+
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                    <a class="dropdown-item" href="{{ route('chagas.myTray') }}">
+                        <i class="fas fa-tasks"></i> Mis Solicitudes
+                    </a>
+                    <hr>
+                    @foreach (Auth::user()->practitioners as $practitioner)
+                        <a class="dropdown-item"
+                            href="{{ route('chagas.tray', ['organization' => $practitioner->organization]) }}">
+                            <i class="fas fa-building"></i> Solc. De {{ $practitioner->organization->alias ?? '' }}
+                        </a>
+                    @endforeach
+                </li>
+            </ul>
+        </li>
+    @endcanany
+
+
 
     @canany(['Developer', 'Administrator', 'Chagas: Ficha'])
         <li class="nav-item">
@@ -70,7 +94,7 @@
 
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                    <a class="dropdown-item" href="{{ route('chagas.reports.chagasRequest',['organization' =>  0]) }}">
+                    <a class="dropdown-item" href="{{ route('chagas.reports.chagasRequest', ['organization' => 0]) }}">
                         <i class="fas fa-chart-bar"></i> Cantidad de Solicitudes de muestra
                     </a>
                 </li>

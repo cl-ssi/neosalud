@@ -66,7 +66,6 @@ class SuspectCaseController extends Controller
         $sc->save();
         session()->flash('success', 'Se creo caso sospecha exitosamente, esperando por su toma de muestra');
         return redirect()->route('chagas.welcome');
-        
     }
 
     /**
@@ -233,9 +232,8 @@ class SuspectCaseController extends Controller
 
     public function patientRecord()
     {
-        
-        return view('patients.record');
 
+        return view('patients.record');
     }
 
 
@@ -273,5 +271,24 @@ class SuspectCaseController extends Controller
         $suspectCase->save();
         session()->flash('success', 'Se tomó la muestra de de sangre de manera exitosa');
         return redirect()->back();
+    }
+
+    public function myTray()
+    {
+        $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)->orderByDesc('id')
+            ->paginate(100);
+
+        // $suspectcases = SuspectCase::where('requester_id', 2467)->orderByDesc('id')
+        //     ->paginate(100);
+
+        return view('chagas.trays.index', compact('suspectcases'));
+    }
+
+
+    public function tray(Organization $organization)
+    {
+        $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
+            ->paginate(100);
+        return view('chagas.trays.index', compact('suspectcases'));
     }
 }

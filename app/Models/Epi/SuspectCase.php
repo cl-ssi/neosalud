@@ -119,6 +119,11 @@ class SuspectCase extends Model
         return $this->belongsTo('App\Models\User', 'requester_id', 'id');
     }
 
+    public function sampler()
+    {
+        return $this->belongsTo('App\Models\User', 'sample_id', 'id');
+    }
+
 
     public function mother()
     {
