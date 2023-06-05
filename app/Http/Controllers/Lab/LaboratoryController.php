@@ -31,10 +31,16 @@ class LaboratoryController extends Controller
     }
 
 
-    public function chagasReception(SuspectCase $suspectcase)
+    public function chagasReception(SuspectCase $suspectcase, Request $request)
     {
+
+
         $suspectcase->receptor_id = Auth::id();
-        $suspectcase->reception_at = date('Y-m-d H:i:s');
+        if ($request->reception_at) {
+            $suspectcase->reception_at = $request->reception_at;
+        } else {
+            $suspectcase->reception_at = date('Y-m-d H:i:s');
+        }
         //TODO código duro, debería ser dinámico. ¿otra tabla solo para los labotatorios u ocupar organizatión?
         $suspectcase->laboratory_id = 4;
         $suspectcase->save();
@@ -74,6 +80,4 @@ class LaboratoryController extends Controller
 
         return Storage::disk('gcs')->download($fileName);
     }
-
-
 }

@@ -50,26 +50,22 @@
                         @endif
                         <td>{{ $suspectcase->id ?? '' }}
                             @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at === null)
-                                <form method="POST" class="form-inline"
-                                    action="{{ route('labs.chagas.reception', $suspectcase) }}">
-                                    @csrf
-                                    @method('POST')
-                                    <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
-                                            class="fas fa-inbox"></i></button>
-                                </form>
+                                <a class="btn btn-primary btn-sm" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal{{ $suspectcase->id }}">
+                                    <i class="fas fa-inbox"></i>
+                                </a>
+                                @include('labs.modals.reception')
                             @endif
                             @if ($tray === 'Todas las Solicitudes' and $suspectcase->reception_at != null)
                                 <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
                                         class="fas fa-edit"></i></a>
                             @endif
                             @if ($tray === 'Pendientes de Recepción' and $suspectcase->reception_at === null)
-                                <form method="POST" class="form-inline"
-                                    action="{{ route('labs.chagas.reception', $suspectcase) }}">
-                                    @csrf
-                                    @method('POST')
-                                    <button type="submit" class="btn btn-sm btn-primary" title="Recepcionar"><i
-                                            class="fas fa-inbox"></i></button>
-                                </form>
+                                <a class="btn btn-primary btn-sm" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal{{ $suspectcase->id }}">
+                                    <i class="fas fa-inbox"></i>
+                                </a>
+                                @include('labs.modals.reception')
                             @endif
                             @if ($tray === 'Pendientes de Resultado' and $suspectcase->reception_at != null)
                                 <a href="{{ route('epi.chagas.edit', $suspectcase) }}" pclass="btn_edit"><i
