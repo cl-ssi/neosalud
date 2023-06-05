@@ -54,7 +54,8 @@
                                     </ul>
                                 @endif
                             </td>
-                            <td>{{ $patient ? $patient->identifierRun->value . '-' . $patient->identifierRun->dv : '' }}
+                            <td>{{ $patient ? $patient->Identification->value : '' }}
+                                {{ $patient->IdentifierRun ? '-' . $patient->identifierRun->dv : '' }}
                             </td>
                             <td>{{ $patient ? $patient->ageString : '' }}</td>
                             <td>{{ $patient ? $patient->actualSex : '' }}</td>
