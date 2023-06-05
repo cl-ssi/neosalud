@@ -4,7 +4,7 @@
             <ul class="nav flex-column">
 
                 <!--CHAGAS-->
-                @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Seguimiento'])
+                @canany(['Developer', 'Administrator', 'Chagas:', 'Chagas: Administrador', 'Chagas: Solicitud', 'Chagas: Toma', 'Chagas: Seguimiento', 'Chagas: Bandejas', 'Chagas: Ficha', 'Chagas: Reportes'])
                 <li class="nav-item">
                     <a class="nav-link {{ active('chagas.*') }}" href="{{ route('chagas.welcome') }}">
                         <i class="fas fa-bug"></i> CHAGAS
