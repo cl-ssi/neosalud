@@ -79,14 +79,14 @@
 
 
 
-    @canany(['Developer', 'Administrator', 'Chagas: Ficha'])
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador' , 'Chagas: Ficha'])
         <li class="nav-item">
             <a class="nav-link {{ active('chagas.patientRecord') }}" href="{{ route('chagas.patientRecord') }}"><i
                     class="fa-solid fa-magnifying-glass-location"></i> Ficha Paciente</a>
         </li>
     @endcanany
 
-    @canany(['Developer', 'Administrator', 'Chagas: Reportes'])
+    @canany(['Developer', 'Administrator', 'Chagas: Administrador', 'Chagas: Reportes'])
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
