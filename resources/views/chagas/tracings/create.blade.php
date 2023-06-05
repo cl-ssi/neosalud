@@ -131,7 +131,7 @@
                     <fieldset class="form-group col-12 col-sm-6 col-md-5 col-lg-3 order-2 order-lg-2">
                         <label for="for_next_control_at">Próximo seguimiento*</label>
                         <input type="datetime-local" class="form-control" name="next_control_at"
-                            id="for_next_control_at" required value="" max="{{ date('Y-m-d\TH:i:s') }}">
+                            id="for_next_control_at" required value="" min="{{ date('Y-m-d\TH:i:s') }}">
                     </fieldset>
 
                     <fieldset class="form-group col-8 col-sm-5 col-md-3 col-lg-2 order-3 order-lg-3">

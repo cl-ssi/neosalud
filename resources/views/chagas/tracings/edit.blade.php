@@ -152,8 +152,7 @@
                         <label for="for_next_control_at">Próximo seguimiento*</label>
                         <input type="datetime-local" class="form-control" name="next_control_at"
                             id="for_next_control_at" required
-                            value="{{ $tracing->next_control_at ? $tracing->next_control_at->format('Y-m-d\TH:i:s') : '' }}"
-                            max="{{ date('Y-m-d\TH:i:s') }}">
+                            value="{{ $tracing->next_control_at ? $tracing->next_control_at->format('Y-m-d\TH:i:s') : '' }}">
                     </fieldset>
 
                     <fieldset class="form-group col-8 col-sm-5 col-md-3 col-lg-2 order-3 order-lg-3">
