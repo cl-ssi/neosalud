@@ -121,7 +121,7 @@ class SuspectCase extends Model
 
     public function sampler()
     {
-        return $this->belongsTo('App\Models\User', 'sample_id', 'id');
+        return $this->belongsTo('App\Models\User', 'sampler_id', 'id');
     }
 
 
