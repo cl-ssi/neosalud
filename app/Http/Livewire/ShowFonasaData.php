@@ -80,13 +80,17 @@ class ShowFonasaData extends Component
 
     public function fonasa_search()
     {
+        $this->disabled = false;
+
         $user = $this->fonasa($this->run, $this->dv);
+
         /* Si el json contiene la palabra error */
         if(str_contains($user, 'Error'))
         {
             $this->error_fonasa = $user;
+            $this->resetInput();
         }
-        else if($user)
+        elseif($user)
         {
             $patient = json_decode($user);
             $this->run_fixed = true;
@@ -210,5 +214,17 @@ class ShowFonasaData extends Component
         if($this->previsions->doesntContain($prevision))
             $this->previsions->push($prevision)->sort();
         return $prevision;
+    }
+
+    public function resetInput()
+    {
+        $this->gender_id = null;
+        $this->prevision = null;
+        $this->birthday = null;
+        $this->age_year = null;
+        $this->age_month = null;
+        $this->patient_name = null;
+        $this->run_fixed = null;
+        $this->verified_fonasa_at = null;
     }
 }
