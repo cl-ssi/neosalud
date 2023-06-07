@@ -1,7 +1,6 @@
 <div>
 
     <div class="row g-2">
-
         <fieldset class="form-group col-sm-2">
             <label for="for-identifier-type">Tipo de identificación</label>
             <select
@@ -43,19 +42,19 @@
                     wire:target="fonasa_search"
                 >
 
-                <span wire:loading.remove wire:target="fonasa_search">
-                    <i class="fas fa-search"></i>
-                </span>
+                    <span wire:loading.remove wire:target="fonasa_search">
+                        <i class="fas fa-search"></i>
+                    </span>
 
-                <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                    wire:loading
-                    wire:target="fonasa_search">
-                </span>
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        wire:loading
+                        wire:target="fonasa_search">
+                    </span>
 
-                FONASA
+                    FONASA
                 </button>
             </div>
             <div class="text-danger">
@@ -185,7 +184,6 @@
                     </span>
 
                 </span>
-
 
             </div>
 
