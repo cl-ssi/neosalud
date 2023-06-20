@@ -649,6 +649,7 @@ class RrhhController extends Controller
                                             // ->where('year',$fecha_inicio_contrato_ddmmaaaa->format('Y'))
                                             ->where('contract_start_date',$fecha_inicio_contrato_ddmmaaaa)
                                             ->where('contract_end_date',$fecha_termino_contrato_ddmmaaaa)
+                                            ->where('contract_id',$column['correlativo_contrato'])
                                             ->get();
 
                         $establishment_id = Organization::where('code_deis',$column['id_deis'])->first()->id;
