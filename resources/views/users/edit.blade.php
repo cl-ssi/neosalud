@@ -18,9 +18,9 @@
                     <h5 class="card-title">Datos de usuario</h5>
 
                     <input type="hidden" name='human_name_use' value='official'>
-                    <div class="form-row">
-
-                        <fieldset class="form-group col-md-1">
+                    
+                    <div class="row">
+                        <fieldset class="form-group col-md-2">
                             <label for="for_run">Run*</label>
                             <input type="number" class="form-control" name="run" id="for_run" required readonly
                                 value="{{ old('run', $user->identifierRun->value) }}">
@@ -31,7 +31,7 @@
                                 value="{{ old('dv', $user->identifierRun->dv) }}">
                         </fieldset>
 
-                        <fieldset class="form-group col-md-4">
+                        <fieldset class="form-group col-md-3">
                             <label for="for_given">Nombres *</label>
                             <input type="text" class="form-control" name="given" id="for_given" required
                                 value="{{ old('given', $user->officialName) }}">
