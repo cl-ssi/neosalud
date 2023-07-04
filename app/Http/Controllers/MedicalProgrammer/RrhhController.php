@@ -705,7 +705,13 @@ class RrhhController extends Controller
                         }
                         else{
                             // se modifica con info de excel
-                            
+
+                            $contract = Contract::where('user_id',$user->id)
+                                                ->where('contract_start_date',$fecha_inicio_contrato_ddmmaaaa)
+                                                ->where('contract_end_date',$fecha_termino_contrato_ddmmaaaa)
+                                                ->where('contract_id',$column['correlativo_contrato'])
+                                                ->first();
+
                             // $contract->user_id = $user->id;
                             $contract->establishment_id = $establishment_id;
                             $contract->year = $fecha_inicio_contrato_ddmmaaaa->format('Y');
