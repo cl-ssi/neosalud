@@ -703,6 +703,55 @@ class RrhhController extends Controller
 
                             $contract_count = $contract_count + 1;
                         }
+                        else{
+                            // se modifica con info de excel
+                            
+                            // $contract->user_id = $user->id;
+                            $contract->establishment_id = $establishment_id;
+                            $contract->year = $fecha_inicio_contrato_ddmmaaaa->format('Y');
+                            switch ($column['ley']) {
+                                case 19664:
+                                    $contract->law = 'LEY 19.664';
+                                    break;
+                                case 18834:
+                                    $contract->law = 'LEY 18.834';
+                                    break;
+                                case 15076:
+                                    $contract->law = 'LEY 15.076';
+                                    break;
+                                case 'Honorarios':
+                                    $contract->law = 'HSA';
+                            }
+                            $contract->contract_id = $column['correlativo_contrato'];
+                            switch ($column['sistema_de_turno_sino']) {
+                                case 'No':
+                                    $contract->shift_system = 'N';
+                                    break;
+                                case 'Si':
+                                    $contract->shift_system = 'S';
+                                    break;
+                            }
+                            // $contract->shift_system = $column['sistema_de_turno_sino'];
+                            $contract->weekly_hours = $column['hrs_semanales_contratadas'];
+                            $contract->effective_hours = $column['horas_efectivas_al_centro'];
+                            $contract->weekly_collation = $column['tiempo_de_colacion_semanal_min'];
+                            $contract->weekly_union_permit = $column['tiempo_de_permiso_gremial_semanal_min'];
+                            $contract->breastfeeding_time = $column['tiempo_de_lactancia_semanal_min'];
+                            $contract->obs = $column['observaciones_debe_identificar_liberado_de_guardia_lgperiodo_asistencial_obligatoriopaobecario_beca'];
+                            $contract->legal_holidays = $column['feriados_legales'][0];
+                            $contract->compensatory_rest = $column['dias_descanso_compensatorio_ley_urgencia'][0];
+                            $contract->administrative_permit = $column['dias_de_permisos_administrativos'][0];
+                            $contract->covid_permit = $column['descanso_reparatorio_covid'][0];
+                            $contract->training_days = $column['dias_de_congreso_o_capacitacion'][0];
+                            // $contract->covid_permit = $column['rut_programable'];
+                            $contract->contract_start_date = $fecha_inicio_contrato_ddmmaaaa;
+                            $contract->contract_end_date = $fecha_termino_contrato_ddmmaaaa;
+                            $contract->departure_date = $fecha_alejamiento_ddmmaaaa;
+                            $contract->service_id = 50; //sin servicio
+                            $contract->save();
+
+                            $contract_count = $contract_count + 1;
+                        }
                     }
                 }
             }
