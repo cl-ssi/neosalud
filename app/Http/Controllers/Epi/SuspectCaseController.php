@@ -263,11 +263,11 @@ class SuspectCaseController extends Controller
     }
 
 
-    public function sampleBlood($id)
+    public function sampleBlood($id, Request $request)
     {
         $suspectCase = SuspectCase::findOrFail($id);
         $suspectCase->sampler_id = Auth::id();
-        $suspectCase->sample_at = date('Y-m-d H:i:s');
+        $suspectCase->sample_at = $request->input('sample_at');
         $suspectCase->save();
         session()->flash('success', 'Se tomó la muestra de de sangre de manera exitosa');
         return redirect()->back();
