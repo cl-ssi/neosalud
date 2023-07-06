@@ -24,7 +24,7 @@ use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Imports\SirhRrhhImport;
+use App\Imports\SirhFileImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Models\Organization;
@@ -540,7 +540,7 @@ class RrhhController extends Controller
     public function importSirhFile(Request $request){
         $request->validate(['file' => 'required'], [ 'file.required' => 'Archivo es requerido.']);
         $file = request()->file('file');
-        $collection = Excel::toCollection(new SirhRrhhImport, $file);
+        $collection = Excel::toCollection(new SirhFileImport, $file);
         $user_count = 0;
         $contract_count = 0;
 
@@ -549,8 +549,12 @@ class RrhhController extends Controller
 
         foreach($collection as $row){
             foreach($row as $key => $column){ 
-                
-                // dd($column);
+
+                // $operacion = $column['tiempo_de_colacion_semanal_min'];
+                // $resultado = eval("return intval($operacion);");
+                // dd($resultado);
+                // dd($column['tiempo_de_colacion_semanal_min']);
+
                 if(array_key_exists('rut_programable', $column->toArray()))
                 {
                     if($column['rut_programable']!=null)
