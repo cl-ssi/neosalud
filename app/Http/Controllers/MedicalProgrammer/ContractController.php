@@ -31,29 +31,54 @@ class ContractController extends Controller
         $rut = $request->get('rut');
         $name = $request->get('name');
 
-        $contracts = Contract::when($year != null, function ($q) use ($year) {
-                                return $q->where('year',$year);
-                              })
-                             ->when($rut != null, function ($q) use ($rut) {
-                               return $q->whereHas('user', function ($query) use ($rut) {
-                                   return $query->whereHas('identifiers', function ($query) use ($rut) {
-                                       return $query->where('value', $rut)->where('cod_con_identifier_type_id', 1);
-                                     });
-                                 });
-                              })
-                              ->when($name != null, function ($q) use ($name) {
-                                return $q->whereHas('user', function ($query) use ($name) {
-                                    return $query->whereHas('humanNames', function ($query) use ($name) {
-                                        return $query->where('text', 'LIKE', '%' . $name . '%')
-                                                     ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
-                                                     ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
-                                      });
-                                  });
-                               })
-                            ->whereHas('establishment', function ($q) {
-                                return $q->whereIn('id', auth()->user()->practitionersOrganizations());
-                            })
-                             ->paginate(50);
+        if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
+            $contracts = Contract::when($year != null, function ($q) use ($year) {
+                return $q->where('year',$year);
+              })
+             ->when($rut != null, function ($q) use ($rut) {
+               return $q->whereHas('user', function ($query) use ($rut) {
+                   return $query->whereHas('identifiers', function ($query) use ($rut) {
+                       return $query->where('value', $rut)->where('cod_con_identifier_type_id', 1);
+                     });
+                 });
+              })
+              ->when($name != null, function ($q) use ($name) {
+                return $q->whereHas('user', function ($query) use ($name) {
+                    return $query->whereHas('humanNames', function ($query) use ($name) {
+                        return $query->where('text', 'LIKE', '%' . $name . '%')
+                                     ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                     ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                      });
+                  });
+               })
+             ->paginate(50);
+        }
+        else{
+            $contracts = Contract::when($year != null, function ($q) use ($year) {
+                return $q->where('year',$year);
+              })
+             ->when($rut != null, function ($q) use ($rut) {
+               return $q->whereHas('user', function ($query) use ($rut) {
+                   return $query->whereHas('identifiers', function ($query) use ($rut) {
+                       return $query->where('value', $rut)->where('cod_con_identifier_type_id', 1);
+                     });
+                 });
+              })
+              ->when($name != null, function ($q) use ($name) {
+                return $q->whereHas('user', function ($query) use ($name) {
+                    return $query->whereHas('humanNames', function ($query) use ($name) {
+                        return $query->where('text', 'LIKE', '%' . $name . '%')
+                                     ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                     ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                      });
+                  });
+               })
+            ->whereHas('establishment', function ($q) {
+                return $q->whereIn('id', auth()->user()->practitionersOrganizations());
+            })
+             ->paginate(50);
+        }
+        
         return view('medical_programmer.contracts.index', compact('contracts', 'request'));
     }
 
