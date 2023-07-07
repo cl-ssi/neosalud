@@ -29,12 +29,12 @@
     <div class="row">
         <fieldset class="col">
             <label for="for_code_deis">Código DEIS</label>
-            <input type="integer" class="form-control" id="for_code_deis" name="code_deis" value="{{ $organization->code_deis }}">
+            <input type="numeric" class="form-control" id="for_code_deis" name="code_deis" value="{{ $organization->code_deis }}">
         </fieldset>
 
         <fieldset class="col">
             <label for="for_name">Código SIRH</label>
-            <input type="integer" class="form-control" id="for_sirh_code" name="sirh_code" value="{{ $organization->sirh_code }}">
+            <input type="numeric" class="form-control" id="for_sirh_code" name="sirh_code" value="{{ $organization->sirh_code }}">
         </fieldset>
     </div>
 

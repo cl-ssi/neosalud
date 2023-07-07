@@ -28,12 +28,12 @@
     <div class="row">
         <fieldset class="col">
             <label for="for_code_deis">Código DEIS</label>
-            <input type="integer" class="form-control" id="for_code_deis" name="code_deis">
+            <input type="number" class="form-control" id="for_code_deis" name="code_deis">
         </fieldset>
 
         <fieldset class="col">
             <label for="for_name">Código SIRH</label>
-            <input type="integer" class="form-control" id="for_sirh_code" name="sirh_code">
+            <input type="number" class="form-control" id="for_sirh_code" name="sirh_code">
         </fieldset>
     </div>
 

@@ -47,10 +47,11 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         //
-        $establishment = new Establishment($request->All());
-        $establishment->save();
+        $organization = new Organization($request->All());
+        $organization->active = 1;
+        $organization->save();
         session()->flash('success', 'Se creo establecimiento exitosamente');
-        return redirect()->route('parameters.establishment');
+        return redirect()->route('parameter.organization.index','Todas las organizaciones');
     }
 
     /**
@@ -105,6 +106,6 @@ class OrganizationController extends Controller
         //
         $organization->delete();
         session()->flash('success', 'Organización: ' . $organization->name . ' ha sido eliminado.');
-        return redirect()->route('parameter.organization.index');
+        return redirect()->route('parameter.organization.index','Todas las organizaciones');
     }
 }
