@@ -51,6 +51,8 @@
             <th>Contrato Correlativo</th>
             <th>Horas Semanales</th>
             <th>Servicio</th>
+            <th>Inicio C.</th>
+            <th>Término C.</th>
             <th>Año contrato</th>
             <th></th>
         </tr>
@@ -64,6 +66,8 @@
             <td>{{ $contract->contract_id }}</td>
             <td>{{ $contract->weekly_hours }}</td>
             <td>{{ $contract->service->service_name }}</td>
+            <td>{{ $contract->contract_start_date }}</td>
+            <td>{{ $contract->contract_end_date }}</td>
             <td>{{ $contract->year }}</td>
             <td>
       				<a href="{{ route('medical_programmer.contracts.edit', $contract) }}"
