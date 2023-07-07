@@ -42,7 +42,7 @@
 <table class="table table-sm table-borderer table-responsive-xl">
     <thead>
         <tr>
-            <th>Especialidad/Profesión</th>
+            <th>Especialidad</th>
             <th>Funcionario</th>
             <th>Establecimiento</th>
             <th></th>
@@ -65,8 +65,22 @@
             </td>
         </tr>
         @endforeach
+    </tbody>
+</table> 
 
-        @foreach($profession_users as $profession_user)
+<hr>
+
+<table class="table table-sm table-borderer table-responsive-xl">
+    <thead>
+        <tr>
+            <th>Profesión</th>
+            <th>Funcionario</th>
+            <th>Establecimiento</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach($profession_users as $profession_user)
         <tr>
             <td>{{$profession_user->profession->profession_name}}</td>
             <td>{{$profession_user->user->OfficialFullName}}</td>
@@ -85,6 +99,11 @@
     </tbody>
 </table> 
 
+@if($specialty_users->total() > $profession_users->total())
+    {{ $specialty_users->links('pagination::bootstrap-4') }}
+@else
+    {{ $profession_users->links('pagination::bootstrap-4') }}
+@endif
 
 @endsection
 

@@ -794,12 +794,12 @@ class RrhhController extends Controller
                                         ->whereNotNull('specialty_id')
                                         ->with('specialty','user','organization')
                                         ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
-                                        ->get();
+                                        ->paginate(50);
             $profession_users = Practitioner::whereHas('user')
                                         ->whereNotNull('profession_id')
                                         ->with('specialty','user','organization')
                                         ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
-                                        ->get();
+                                        ->paginate(50);
 
             $specialties = Specialty::OrderBy('specialty_name')->get();
             $professions = Profession::OrderBy('profession_name')->get();
@@ -813,13 +813,13 @@ class RrhhController extends Controller
                                             ->whereHas('user')
                                             ->with('specialty','user','organization')
                                             ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
-                                            ->get();
+                                            ->paginate(50);
 
             $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
                                             ->whereHas('user')
                                             ->with('profession','user','organization')
                                             ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
-                                            ->get();
+                                            ->paginate(50);
 
             $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
             $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
