@@ -253,9 +253,20 @@ class SuspectCaseController extends Controller
 
     public function sampleOrganization(Organization $organization)
     {
+
+        $searchTerm = request('search');
+
+
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereHas('patient', function ($query) use ($searchTerm) {
+                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
             ->orderByDesc('id')
             ->paginate(100);
 
