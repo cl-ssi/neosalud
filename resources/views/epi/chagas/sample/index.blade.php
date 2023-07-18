@@ -6,7 +6,8 @@
 
     <form action="{{ route('chagas.sampleOrganization', $organization->id) }}" method="GET">
         <div class="input-group mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido" value="{{ request('search') }}">
+            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido"
+                value="{{ request('search') }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
     </form>
@@ -27,6 +28,9 @@
                     <th>Solicitado por</th>
                     <th>Fecha de Solicitud</th>
                     <th>Tomar muestra</th>
+                    <th>
+                        Eliminar Solicitud <br><small>(Se puede eliminar solo si no está recepcionado)</small>
+                    </th>
                 </tr>
             </thead>
             <tbody id="tableCases">
@@ -61,6 +65,18 @@
                                 <i class="fa-solid fa-vial-virus"></i>
                             </a>
                             @include('epi.chagas.modals.sample')
+                        </td>
+                        <td>
+                            @if ($suspectcase->reception_at == null)
+                                <form method="POST" action="{{ route('epi.chagas.destroy', $suspectcase) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar Solicitud Chagas"
+                                        onclick="return confirm('¿Está seguro de eliminar la solicitud de chagas?');">
+                                        <span class="fas fa-trash-alt" aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
