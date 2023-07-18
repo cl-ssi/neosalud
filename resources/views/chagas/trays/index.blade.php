@@ -33,6 +33,7 @@
                     <th>Fecha de Resultado Confirmación</th>
                     <th>Resultado Confirmación</th>
                     <th>Observación</th>
+                    <th>Eliminar Solicitud <small>(Se puede eliminar solo si no está recepcionado)</small></th>
                 </tr>
             </thead>
             <tbody id="tableCases">
@@ -88,6 +89,17 @@
                             @endif
                         </td>
                         <td>{{ $suspectcase->observation ?? '' }}</td>
+                        <td>
+                            @if ($suspectcase->reception_at == null)
+                                <form method="POST" action="{{ route('epi.chagas.destroy', $suspectcase) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar Solicitud Chagas" onclick="return confirm('¿Está seguro de eliminar la solicitud de chagas?');">
+                                        <span class="fas fa-trash-alt" aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
