@@ -56,14 +56,22 @@ class SelectMedProgEmployee extends Component
           // $this->users = User::whereHas('userSpecialties', function ($query)  {
           //                         return $query->where('specialty_id',$this->specialty_id);
           //                      })->get();
-          $this->users = Practitioner::where('specialty_id',$this->specialty_id)->whereHas('user')->get()->pluck('user');
+          $this->users = Practitioner::where('specialty_id',$this->specialty_id)
+                                    ->whereHas('user')
+                                    ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
+                                    ->get()
+                                    ->pluck('user');
         }
 
         if ($this->profession_id != null) {
           // $this->users = User::whereHas('userProfessions', function ($query)  {
           //                         return $query->where('profession_id',$this->profession_id);
           //                      })->get();
-          $this->users = Practitioner::where('profession_id',$this->profession_id)->whereHas('user')->get()->pluck('user');
+          $this->users = Practitioner::where('profession_id',$this->profession_id)
+                                    ->whereHas('user')
+                                    ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
+                                    ->get()
+                                    ->pluck('user');
         }
 
         if ($this->contract_enable != null) {

@@ -31,23 +31,27 @@
           <option value=""></option>
           @if($specialtyActivities != null)
             @foreach($specialtyActivities as $specialtyActivity)
-                <option value="{{$specialtyActivity->activity->id}}">
-                    <!-- {{$specialtyActivity->activity->activity_name}} -->
-                    <b>{{ $specialtyActivity->activity->activity_name }}</b>
-                    @if($specialtyActivity->activity->motherActivity) - [{{ $specialtyActivity->activity->motherActivity->description }}]@endif
-                    @if($specialtyActivity->activity->process) - <p style="color:red;display:inline">[{{ $specialtyActivity->activity->process->name }}]</p>@endif
-                </option>
+                @if($specialtyActivity->activity)
+                    <option value="{{$specialtyActivity->activity->id}}">
+                        <!-- {{$specialtyActivity->activity->activity_name}} -->
+                        <b>{{ $specialtyActivity->activity->activity_name }}</b>
+                        @if($specialtyActivity->activity->motherActivity) - [{{ $specialtyActivity->activity->motherActivity->description }}]@endif
+                        @if($specialtyActivity->activity->process) - <p style="color:red;display:inline">[{{ $specialtyActivity->activity->process->name }}]</p>@endif
+                    </option>
+                @endif
              @endforeach
            @endif
 
            @if($professionActivities != null)
              @foreach($professionActivities as $professionActivity)
-                <option value="{{$professionActivity->activity->id}}">
-                    <!-- {{$professionActivity->activity->activity_name}} -->
-                    <b>{{ $professionActivity->activity->activity_name }}</b>
-                    @if($professionActivity->activity->motherActivity) - [{{ $professionActivity->activity->motherActivity->description }}]@endif
-                    @if($professionActivity->activity->process) - <p style="color:red;display:inline">[{{ $professionActivity->activity->process->name }}]</p>@endif
-                </option>
+                @if($professionActivity->activity)
+                    <option value="{{$professionActivity->activity->id}}">
+                        <!-- {{$professionActivity->activity->activity_name}} -->
+                        <b>{{ $professionActivity->activity->activity_name }}</b>
+                        @if($professionActivity->activity->motherActivity) - [{{ $professionActivity->activity->motherActivity->description }}]@endif
+                        @if($professionActivity->activity->process) - <p style="color:red;display:inline">[{{ $professionActivity->activity->process->name }}]</p>@endif
+                    </option>
+                @endif
               @endforeach
             @endif
         </select>
