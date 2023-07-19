@@ -183,6 +183,9 @@ class SuspectCaseController extends Controller
     public function destroy(SuspectCase $suspectCase)
     {
         //
+        $suspectCase->delete();
+        session()->flash('success', 'El caso sospecha ha sido eliminado exitosamente');
+        return redirect()->back();
     }
 
 
