@@ -30,7 +30,7 @@
                                 <fieldset class="form-group col-md-3">
                                     <label for="for_reception_at">Fecha de Recepción *</label>
                                     <input type="datetime-local" class="form-control" name="reception_at"
-                                        id="for_reception_at" value="{{ date('Y-m-d\TH:i:s') }}"
+                                        id="for_reception_at"
                                         min="{{ $suspectcase->sample_at ?? '' }}" max="{{ date('Y-m-d\TH:i:s') }}"
                                         required>
                                 </fieldset>
