@@ -779,8 +779,12 @@ class RrhhController extends Controller
         $professions = null;
         $specialty_users = Practitioner::where('id',0);
         $profession_users = Practitioner::where('id',0);
-        $organizations = Organization::all();
-        $users = User::permission('Mp: user')->get();
+        
+        $users = User::permission('Mp: user')
+        ->whereHas('practitioners', function ($q) {
+            return $q->whereIn('organization_id', auth()->user()->practitioners->pluck('organization_id'));
+        })
+        ->get();
 
         if(auth()->user()->practitioners==null){
             session()->flash('warning', 'Para asignar a tu equipo, debes tener asignado un establecimiento. Contacta al administrador del sistema.');
@@ -790,6 +794,8 @@ class RrhhController extends Controller
 
         // si admin, devuelve todos
         if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
+            $organizations = Organization::all();
+
             $specialty_users = Practitioner::whereHas('user')
                                         ->whereNotNull('specialty_id')
                                         ->with('specialty','user','organization')
@@ -805,6 +811,8 @@ class RrhhController extends Controller
             $professions = Profession::OrderBy('profession_name')->get();
         }
         else{
+            $organizations = Organization::whereIn('id',auth()->user()->practitioners->pluck('organization_id'))->get();
+
             $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
             $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
 

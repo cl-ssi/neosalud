@@ -23,12 +23,12 @@
   </fieldset>
   <fieldset class="form-group col col-md">
       <label for="for_id_deis">Fecha Inicio</label>
-      <input type="date" class="form-control" name="start_date">
+      <input type="date" class="form-control" name="start_date" required>
   </fieldset>
 
   <fieldset class="form-group col col-md">
       <label for="for_id_deis">Fecha Término</label>
-      <input type="date" class="form-control" name="end_date">
+      <input type="date" class="form-control" name="end_date" required>
   </fieldset>
 </div>
 
