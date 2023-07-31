@@ -28,8 +28,8 @@
     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">No médico</a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+<!-- <div class="tab-content" id="myTabContent"> -->
+  <!-- <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab"> -->
 
   <table class="table table-sm table-bordered text-center table-striped small">
     <thead>
@@ -78,8 +78,8 @@
     </tbody>
   </table>
 
-  </div>
-  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+  <!-- </div>
+  <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab"> -->
 
   <table class="table table-sm table-bordered text-center table-striped small">
     <thead>
@@ -128,8 +128,8 @@
     </tbody>
   </table>
 
-  </div>
-</div>
+  <!-- </div> -->
+<!-- </div> -->
 
 @endsection
 

@@ -462,7 +462,7 @@ class ProgrammingProposalController extends Controller
                     $array_medic_programmings[$value['fullName']][$value['contractId']][$value['specialty']][$value['activity']]['performance'] = $value['data']->activity->specialties->where('id',$value['data']->programmingProposal->specialty_id)->first()->pivot->performance;
                   }
                   // profesiones
-                  if ($value['data']->programmingProposal->profession) {
+                  if ($value['data']->programmingProposal->specialty) {
                     $start = Carbon::parse($value['start_date']);
                     $end = Carbon::parse($value['end_date']);
                     $array_non_medic_programmings[$value['fullName']][$value['contractId']][$value['specialty']][$value['activity']]['hours'] += $start->diffInMinutes($end)/60;
@@ -471,7 +471,7 @@ class ProgrammingProposalController extends Controller
                 }
               }
 
-              // dd($array_medic_programmings, $array_non_medic_programmings);
+            //   dd($array_medic_programmings, $array_non_medic_programmings);
       }
 
       return view('medical_programmer.management.reports.consolidated_programmings',compact('array_medic_programmings','array_non_medic_programmings','request'));
