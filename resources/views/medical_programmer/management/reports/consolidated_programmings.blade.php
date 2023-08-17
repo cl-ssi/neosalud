@@ -61,10 +61,9 @@
             <th>Especialidad</th>
             <th>Actividad</th>
             <th>Hrs. Asignadas</th>
-            <th>Días Laborales Efectivos</th>
             <th>Rdto/Hr</th>
-            <th>Rdto/Diario</th>
-            <th>Rdto/Semanal</th>
+            <th>Días Laborales Efectivos</th>
+            <th>Semanas Laborales Efectivas</th>
             <th>Rdto/Mensual</th>
             <th>Rdto/Anual</th>
         </tr>
@@ -80,17 +79,13 @@
                         <td>{{$key3}}</td>
                         <td>{{$key4}}</td>
                         <td>{{$activities['hours']}}</td>
-                        <td>{{$activities['effective_worked_days']}}</td>
                         <td>{{$activities['performance']}}</td>
-
+                        <td>{{$activities['effective_worked_days']}}</td>
+                        <td>{{round($activities['effective_worked_days'] / 5)}}</td>
                         @if($activities['performance'] != null)
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12 / 4 / 5))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12 / 4))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance']))}}</td>
+                            <td>{{round((round($activities['effective_worked_days'] / 5) * $activities['hours'] * $activities['performance'])/12)}}</td>
+                            <td>{{round(round($activities['effective_worked_days'] / 5) * $activities['hours'] * $activities['performance'])}}</td>
                         @else
-                            <td></td>
-                            <td></td>
                             <td></td>
                             <td></td>
                         @endif
@@ -113,10 +108,9 @@
             <th>Especialidad</th>
             <th>Actividad</th>
             <th>Hrs. Asignadas</th>
-            <th>Días Laborales Efectivos</th>
             <th>Rdto/Hr</th>
-            <th>Rdto/Diario</th>
-            <th>Rdto/Semanal</th>
+            <th>Días Laborales Efectivos</th>
+            <th>Semanas Laborales Efectivas</th>
             <th>Rdto/Mensual</th>
             <th>Rdto/Anual</th>
         </tr>
@@ -132,17 +126,13 @@
                         <td>{{$key3}}</td>
                         <td>{{$key4}}</td>
                         <td>{{$activities['hours']}}</td>
-                        <td>{{$activities['effective_worked_days']}}</td>
                         <td>{{$activities['performance']}}</td>
-
+                        <td>{{$activities['effective_worked_days']}}</td>
+                        <td>{{round($activities['effective_worked_days'] / 5)}}</td>
                         @if($activities['performance'] != null)
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12 / 4 / 5))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12 / 4))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance'] / 12))}}</td>
-                            <td>{{round(($activities['effective_worked_days'] * $activities['performance']))}}</td>
+                            <td>{{round((round($activities['effective_worked_days'] / 5) * $activities['hours'] * $activities['performance'])/12)}}</td>
+                            <td>{{round(round($activities['effective_worked_days'] / 5) * $activities['hours'] * $activities['performance'])}}</td>
                         @else
-                            <td></td>
-                            <td></td>
                             <td></td>
                             <td></td>
                         @endif
