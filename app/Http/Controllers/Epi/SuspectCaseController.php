@@ -300,7 +300,16 @@ class SuspectCaseController extends Controller
 
     public function tray(Organization $organization)
     {
+
+        $searchTerm = request('search');
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereHas('patient', function ($query) use ($searchTerm) {
+                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
             ->paginate(100);
         return view('chagas.trays.index', compact('suspectcases', 'organization'));
     }

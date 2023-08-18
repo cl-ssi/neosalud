@@ -4,6 +4,13 @@
     @if (isset($organization))
         <h4 class="mb-3">
             Listado de Solicitudes de Examenes de Chagas Solicitado del Establecimiento {{ $organization->alias ?? '' }}
+            <form action="{{ route('chagas.tray', $organization->id) }}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido"
+                        value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
         </h4>
     @else
         <h4 class="mb-3">
@@ -11,6 +18,8 @@
             @endauth
         </h4>
     @endif
+
+
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered" id="tabla_casos">
@@ -94,7 +103,8 @@
                                 <form method="POST" action="{{ route('epi.chagas.destroy', $suspectcase) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar Solicitud Chagas" onclick="return confirm('¿Está seguro de eliminar la solicitud de chagas?');">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar Solicitud Chagas"
+                                        onclick="return confirm('¿Está seguro de eliminar la solicitud de chagas?');">
                                         <span class="fas fa-trash-alt" aria-hidden="true"></span>
                                     </button>
                                 </form>

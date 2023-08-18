@@ -6,7 +6,7 @@
 
     <form action="{{ route('chagas.sampleOrganization', $organization->id) }}" method="GET">
         <div class="input-group mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido"
+            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido del paciente" autocomplete="off"
                 value="{{ request('search') }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
