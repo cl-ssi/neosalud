@@ -206,19 +206,17 @@ class ProgrammingProposalController extends Controller
           $dayOfWeek = $start_date->dayOfWeek;
 
           foreach ($programmingProposal->details->where('day',$dayOfWeek) as $key => $detail) {
-            $programmed_days[$count]['start_date'] = $start_date->format('Y-m-d') . " " . $detail->start_hour;
-            $programmed_days[$count]['end_date'] = $start_date->format('Y-m-d') . " " . $detail->end_hour;
+            $programmed_days[$count]['start_date'] = $start_date->format('Y-m-d') . " " . $detail->start_hour->format('H:s');
+            $programmed_days[$count]['end_date'] = $start_date->format('Y-m-d') . " " . $detail->end_hour->format('H:s');
             $programmed_days[$count]['data'] = $detail;
             $count+=1;
           }
           $start_date->addDays(1);
         }
 
-        // dd($programmed_days);
-
         $total_hours = 0;
         foreach ($programmingProposal->details as $key => $detail) {
-          $total_hours += Carbon::parse($detail->end_hour)->diffInMinutes(Carbon::parse($detail->start_hour))/60;
+          $total_hours += Carbon::parse($detail->end_hour->format('H:s'))->diffInMinutes(Carbon::parse($detail->start_hour->format('H:s')))/60;
         }
 
         //obtiene teoricos para mostrar en jcalendar
@@ -247,8 +245,8 @@ class ProgrammingProposalController extends Controller
            $dayOfWeek = $start_date->dayOfWeek;
 
            foreach ($last_programmingProposal->details->where('day',$dayOfWeek) as $key => $detail) {
-             $last_programmed_days[$count]['start_date'] = $start_date->format('Y-m-d') . " " . $detail->start_hour;
-             $last_programmed_days[$count]['end_date'] = $start_date->format('Y-m-d') . " " . $detail->end_hour;
+             $last_programmed_days[$count]['start_date'] = $start_date->format('Y-m-d') . " " . $detail->start_hour->format('H:s');
+             $last_programmed_days[$count]['end_date'] = $start_date->format('Y-m-d') . " " . $detail->end_hour->format('H:s');
              $last_programmed_days[$count]['data'] = $detail;
              $count+=1;
            }
@@ -335,9 +333,9 @@ class ProgrammingProposalController extends Controller
           }
           foreach ($programmingProposal->details as $key => $detail) {
             if($detail->subactivity) {
-              $array[$detail->activity->activity_name . " - " . $detail->subactivity->sub_activity_name] += Carbon::parse($detail->end_hour)->diffInMinutes(Carbon::parse($detail->start_hour))/60;
+              $array[$detail->activity->activity_name . " - " . $detail->subactivity->sub_activity_name] += Carbon::parse($detail->end_hour)->diffInMinutes(Carbon::parse($detail->start_hour->format('H:s')))/60;
             }else{
-              $array[$detail->activity->activity_name] += Carbon::parse($detail->end_hour)->diffInMinutes(Carbon::parse($detail->start_hour))/60;
+              $array[$detail->activity->activity_name] += Carbon::parse($detail->end_hour)->diffInMinutes(Carbon::parse($detail->start_hour->format('H:s')))/60;
             }
           }
           $programmingProposal->array = $array;
@@ -414,7 +412,7 @@ class ProgrammingProposalController extends Controller
                         
                         //solo los que esten en el rango de fechas
                         if (Carbon::parse($start_date->format('Y-m-d'))->between($request_start_date, $request_end_date)) {
-                            $programmed_days[$programmingProposal->user_id][$count]['duration'] = $detail->start_hour->diffInMinutes($detail->end_hour)/60;
+                            $programmed_days[$programmingProposal->user_id][$count]['duration'] = $detail->start_hour->format('H:s')->diffInMinutes($detail->end_hour)/60;
                             $programmed_days[$programmingProposal->user_id][$count]['data'] = $detail;
                             $programmed_days[$programmingProposal->user_id][$count]['fullName'] = $programmingProposal->aux_OfficialFullName;
                             $programmed_days[$programmingProposal->user_id][$count]['contractId'] = $programmingProposal->aux_contract_id;
