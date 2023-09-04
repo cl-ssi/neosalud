@@ -59,7 +59,15 @@ class EventMobileType
         {
             if($i == $index)
             {
-                $i = $i + $this->results[$position + 1]['total'];
+                //$i = $i + $this->results[$position + 1]['total'];
+                if (isset($this->results[$position]) && isset($this->results[$position]['total'])) {
+                    $i = $this->results[$position]['total'];
+                } else {
+                    $i = 0;
+                }
+
+
+
                 $dateTemp[] = 'TOTAL';
                 $position++;
             }
@@ -107,7 +115,12 @@ class EventMobileType
                     $total = $cloneQuery->whereDate('date', '>=', $this->results[$position]['start'])
                         ->whereDate('date', '<=', $this->results[$position]['end'])
                         ->count();
-                    $i = $i + $this->results[$position + 1]['total'];
+                    //$i = $i + $this->results[$position + 1]['total'];
+                    if (isset($this->results[$position]) && isset($this->results[$position]['total']) && isset($this->results[$position+1]['total'])) {
+                        $i = $i + $this->results[$position+1]['total'];
+                    } else {
+                        $i = 0;
+                    }
                     $data[] = ['total' => $total, 'strong' => true];
                     $position++;
                 }
