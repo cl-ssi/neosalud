@@ -412,7 +412,7 @@ class ProgrammingProposalController extends Controller
                         
                         //solo los que esten en el rango de fechas
                         if (Carbon::parse($start_date->format('Y-m-d'))->between($request_start_date, $request_end_date)) {
-                            $programmed_days[$programmingProposal->user_id][$count]['duration'] = $detail->start_hour->format('H:s')->diffInMinutes($detail->end_hour)/60;
+                            $programmed_days[$programmingProposal->user_id][$count]['duration'] = $detail->start_hour->diffInMinutes($detail->end_hour)/60;
                             $programmed_days[$programmingProposal->user_id][$count]['data'] = $detail;
                             $programmed_days[$programmingProposal->user_id][$count]['fullName'] = $programmingProposal->aux_OfficialFullName;
                             $programmed_days[$programmingProposal->user_id][$count]['contractId'] = $programmingProposal->aux_contract_id;
