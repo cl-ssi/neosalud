@@ -52,7 +52,7 @@ class LoginController extends Controller
             unset($credentials['run']);
             $credentials['id'] = $user->id;
 
-            if (Auth::attempt($credentials, $request->remember)) {
+            if (Auth::attempt($credentials, $request->boolean('remember'))) {
                 $request->session()->regenerate();
 
                 return redirect()->intended('home');
