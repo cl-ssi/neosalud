@@ -5,7 +5,7 @@
         <i class="fas fa-chart-line"></i> Panel de Estadísticas
     </h3>
 
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-sm">
             <div class="card">
                 <h6 class="card-header">
@@ -13,6 +13,24 @@
                 </h6>
                 <div class="card-body">
                     @livewire('samu.dashboard.event-last-month')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm">
+            <div class="card">
+                <h6 class="card-header">
+                   Tiempo promedio llegada de la móvil al sitio en los últimos 12 meses
+                </h6>
+                <div class="card-body">
+                    @livewire('samu.dashboard.avg-mobile-arrival')
+                </div>
+                <div class="card-footer">
+                    <small>
+                        El tiempo promedio en minutos que transcurre entre todos aquellos cometidos que tenga definido las marcas de tiempo "Salida móvil" y "Llegada al lugar".
+                    </small>
                 </div>
             </div>
         </div>
