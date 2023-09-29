@@ -804,6 +804,7 @@ Route::prefix('epi')->name('epi.')->group(function () {
         Route::post('/', [SuspectCaseController::class, 'store'])->name('store');
         Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');
         Route::get('file/{suspect_case}/{attribute}', [SuspectCaseController::class, 'deleteFile'])->name('deleteFile');
+        Route::delete('/{suspectCase}', [SuspectCaseController::class, 'destroy'])->name('destroy');
     });
 });
 //fin rutas EPI
@@ -839,6 +840,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     Route::get('/confirm-request/{patient}/{organization}', [SuspectCaseController::class, 'confirmRequestChaga'])->name('confirmRequestChaga');
     Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
     Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');
+    
 
 
     //Muestra el correo de delegeado de epidemiologia

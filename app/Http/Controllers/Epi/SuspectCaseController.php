@@ -183,6 +183,9 @@ class SuspectCaseController extends Controller
     public function destroy(SuspectCase $suspectCase)
     {
         //
+        $suspectCase->delete();
+        session()->flash('success', 'El caso sospecha ha sido eliminado exitosamente');
+        return redirect()->back();
     }
 
 
@@ -253,9 +256,20 @@ class SuspectCaseController extends Controller
 
     public function sampleOrganization(Organization $organization)
     {
+
+        $searchTerm = request('search');
+
+
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereHas('patient', function ($query) use ($searchTerm) {
+                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
             ->orderByDesc('id')
             ->paginate(100);
 
@@ -263,11 +277,11 @@ class SuspectCaseController extends Controller
     }
 
 
-    public function sampleBlood($id)
+    public function sampleBlood($id, Request $request)
     {
         $suspectCase = SuspectCase::findOrFail($id);
         $suspectCase->sampler_id = Auth::id();
-        $suspectCase->sample_at = date('Y-m-d H:i:s');
+        $suspectCase->sample_at = $request->input('sample_at');
         $suspectCase->save();
         session()->flash('success', 'Se tomó la muestra de de sangre de manera exitosa');
         return redirect()->back();
@@ -286,7 +300,16 @@ class SuspectCaseController extends Controller
 
     public function tray(Organization $organization)
     {
+
+        $searchTerm = request('search');
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereHas('patient', function ($query) use ($searchTerm) {
+                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
             ->paginate(100);
         return view('chagas.trays.index', compact('suspectcases', 'organization'));
     }

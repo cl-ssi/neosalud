@@ -125,7 +125,7 @@ class CallController extends Controller
         /* Obtener el turno actual */
         $shift = Shift::whereStatus(true)->first();
         $communes = Commune::whereHas('samu')->get(['id', 'name', 'latitude', 'longitude']);
-        $keys = Key::get(['id', 'key', 'name']);
+        $keys = Key::orderBy('key')->get(['id', 'key', 'name']);
 
         if(!$shift)
         {

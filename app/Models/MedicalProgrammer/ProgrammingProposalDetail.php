@@ -67,7 +67,7 @@ class ProgrammingProposalDetail extends Model implements Auditable
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['start_hour','end_hour','deleted_at'];
 
     /**
      * The table associated with the model.

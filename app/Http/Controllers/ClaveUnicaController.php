@@ -96,6 +96,9 @@ class ClaveUnicaController extends Controller
             $user_local = new User();
             $user_local->active = 1;
             $user_local->claveunica = true;
+            $user_local->given = implode(' ', $user_clave_unica->name->nombres);
+            $user_local->fathers_family = $user_clave_unica->name->apellidos[0];
+            $user_local->mothers_family = $user_clave_unica->name->apellidos[1];
             $user_local->save();
 
             $identifier = new Identifier();
@@ -109,6 +112,7 @@ class ClaveUnicaController extends Controller
             $human_name = new HumanName();
             $human_name->use = 'official';
             $human_name->text = implode(' ', $user_clave_unica->name->nombres);
+            $human_name->given = implode(' ', $user_clave_unica->name->nombres);
             $human_name->fathers_family = $user_clave_unica->name->apellidos[0];
             $human_name->mothers_family = $user_clave_unica->name->apellidos[1];
             $human_name->user_id = $user_local->id;
@@ -206,6 +210,9 @@ class ClaveUnicaController extends Controller
             $user_local = new User();
             $user_local->active = 1;
             $user_local->claveunica = true;
+            $user_local->given = implode(' ', $user_clave_unica->name->nombres);
+            $user_local->fathers_family = $user_clave_unica->name->apellidos[0];
+            $user_local->mothers_family = $user_clave_unica->name->apellidos[1];
             $user_local->save();
 
             $identifier = new Identifier();
