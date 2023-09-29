@@ -12,7 +12,9 @@ class AvgTypeMobile
     public $collectionsWeeks;
     public $dataset;
     public $mobilesType;
-
+    public $collectionWeeks;
+    public $names;
+    
     /**
      * Initializes the chart.
      *
