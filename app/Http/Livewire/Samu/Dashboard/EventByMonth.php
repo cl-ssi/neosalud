@@ -7,6 +7,9 @@ use Livewire\Component;
 
 class EventByMonth extends Component
 {
+    public $year;
+    public $month;
+    
     public function mount()
     {
         $this->year = now()->year;
