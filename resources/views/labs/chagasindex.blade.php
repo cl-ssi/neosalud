@@ -2,6 +2,35 @@
 @section('content')
     @include('labs.nav')
     <h4 class="mb-3">Listado de Solicitudes de Examenes de Chagas de {{ $tray }}</h4>
+
+    <h6 class="mb-3">Busqueda</h6>
+
+    <div class="row">
+        <form action="{{ route('labs.chagas.index', $tray) }}" method="GET">
+            <div class="col-6 col-md-6 mb-4">
+                <div class="input-group">
+                    <input type="text" name="search_name" class="form-control" placeholder="Buscar por nombre o apellido"
+                        value="{{ request('search_name') }}" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-6 col-md-6 mb-4">
+                <select name="search_organization" class="form-select">
+                    <option value="">Seleccionar organización</option>
+                    @foreach ($organizations as $organization)
+                        <option value="{{ $organization->id }}" @if (request('search_organization') == $organization->id) selected @endif>
+                            {{ $organization->alias ?? '' }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+
+
     @if ($tray === 'Pendientes de Recepción')
         <div class="col-12 col-md-2">
             <div class="input-group mb-3">

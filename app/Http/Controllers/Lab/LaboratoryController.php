@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lab;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Epi\SuspectCase;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,9 +15,41 @@ class LaboratoryController extends Controller
     //
 
 
-    public function chagasIndex($tray)
+    public function chagasIndex($tray, Request $request)
     {
-        $query = SuspectCase::orderBy('id', 'desc')->whereNotNull('sample_at');
+        $organizations = Organization::has('suspectCases')->orderBy('alias')->get();
+        $searchName = $request->input('search_name');
+        $searchOrganization = $request->input('search_organization');
+
+        $query = SuspectCase::with(
+            [
+                'organization',
+                'patient',
+                'patient.nationality',
+
+            ]
+        )->orderBy('id', 'desc')->whereNotNull('sample_at');
+
+
+        // Aplicar filtro por nombre o apellido si se proporcionó un valor de búsqueda
+        if ($searchOrganization) {
+            $query->where('organization_id', $searchOrganization);
+        }
+
+
+        if ($searchName) {
+            $query->whereHas('patient', function ($query) use ($searchName) {
+                $query->where('given', 'LIKE', '%' . $searchName . '%')
+                    ->orWhere('fathers_family', 'LIKE', '%' . $searchName . '%')
+                    ->orWhere('mothers_family', 'LIKE', '%' . $searchName . '%');
+            });
+        }
+
+
+
+
+
+
         if ($tray === 'Pendientes de Recepción') {
             $query->whereNull('reception_at');
         } elseif ($tray === 'Pendientes de Resultado') {
@@ -25,9 +58,9 @@ class LaboratoryController extends Controller
             $query->whereNotNull('chagas_result_screening')->whereNotNull('reception_at');
         }
 
-        $suspectcases = $query->paginate(100);
 
-        return view('labs.chagasindex', compact('suspectcases', 'tray'));
+        $suspectcases = $query->paginate(100);
+        return view('labs.chagasindex', compact('suspectcases', 'tray', 'organizations'));
     }
 
 
