@@ -30,15 +30,15 @@
                 <label for="for_other_identification">Otra identificación</label>
                 <input type="text" class="form-control" id="for_other_identification" placeholder="Extranjeros sin run"
                     name="other_identification" readonly>
-            </fieldset>
+            </fieldset>            
 
             <fieldset class="form-group col-6 col-md-2">
                 <label for="for_sex">Sexo</label>
                 <select name="sex" id="for_sex" class="form-control sex" readonly>
-                    <option value="male" {{ $suspectCase->patient->sex === 'male' ? 'selected' : '' }}>Masculino</option>
-                    <option value="female" {{ $suspectCase->patient->sex === 'female' ? 'selected' : '' }}>Femenino</option>
-                    <option value="other" {{ $suspectCase->patient->sex === 'other' ? 'selected' : '' }}>Otro</option>
-                    <option value="unknown" {{ $suspectCase->patient->sex === 'unknown' ? 'selected' : '' }}>Desconocido
+                    <option value="male" {{ $suspectCase->patient->actualSex === 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                    <option value="female" {{ $suspectCase->patient->actualSex === 'Femenino' ? 'selected' : '' }}>Femenino</option>
+                    <option value="other" {{ $suspectCase->patient->actualSex === 'Otro' ? 'selected' : '' }}>Otro</option>
+                    <option value="unknown" {{ $suspectCase->patient->actualSex === 'Desconocido' ? 'selected' : '' }}>Desconocido
                     </option>
                 </select>
             </fieldset>
