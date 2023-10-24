@@ -41,9 +41,9 @@ class CallsByClassification
         $this->dataset = [];
 
         $records = DB::table('samu_calls')
-            ->selectRaw('count(*) as total, classification')
             ->whereNull('call_id')
             ->whereBetween('hour', [$start, $end])
+            ->selectRaw('count(*) as total, classification',)
             ->groupBy('classification')
             ->get();
 
