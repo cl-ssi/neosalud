@@ -36,6 +36,19 @@
         </div>
     </div>
 
+    <div class="row mb-2">
+        <div class="col-sm">
+            <div class="card">
+                <h6 class="card-header">
+                   Total de llamadas por clasificación
+                </h6>
+                <div class="card-body">
+                    @livewire('samu.dashboard.calls-by-classification')
+                </div>
+            </div>
+        </div>
+    </div>
+
     <br>
 
     <div class="row mb-2">
