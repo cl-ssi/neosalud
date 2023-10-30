@@ -194,6 +194,7 @@
 
         <p><b>Clínico:</b> {{ $event->reception_detail }}</p>
         <p><b>Tratamiento:</b> {{ $event->treatment }}</p>
+        <p><b>Observación:</b> {{ $event->observation }}</p>
 
         <h4>Signos Vitales:</h4>
 
