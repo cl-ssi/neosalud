@@ -264,11 +264,15 @@ class SuspectCaseController extends Controller
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
             ->when($searchTerm, function ($query, $searchTerm) {
-                $query->whereHas('patient', function ($query) use ($searchTerm) {
-                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
-                });
+
+                $searchWords = explode(' ', $searchTerm);
+                foreach ($searchWords as $word) {
+                    $query->whereHas('patient', function ($query) use ($word) {
+                        $query->where('given', 'LIKE', '%' . $word . '%')
+                            ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%');
+                    });
+                }
             })
             ->orderByDesc('id')
             ->paginate(100);
@@ -300,15 +304,17 @@ class SuspectCaseController extends Controller
 
     public function tray(Organization $organization)
     {
-
         $searchTerm = request('search');
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
             ->when($searchTerm, function ($query, $searchTerm) {
-                $query->whereHas('patient', function ($query) use ($searchTerm) {
-                    $query->where('given', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('fathers_family', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('mothers_family', 'LIKE', '%' . $searchTerm . '%');
-                });
+                $searchWords = explode(' ', $searchTerm);
+                foreach ($searchWords as $word) {
+                    $query->whereHas('patient', function ($query) use ($word) {
+                        $query->where('given', 'LIKE', '%' . $word . '%')
+                            ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%');
+                    });
+                }
             })
             ->paginate(100);
         return view('chagas.trays.index', compact('suspectcases', 'organization'));
