@@ -37,6 +37,10 @@ return [
 
 
     'channels' => [
+        'db' => [
+            'driver' => 'custom',
+            'via'    => App\Logging\DatabaseLogger::class,
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['teams'],
