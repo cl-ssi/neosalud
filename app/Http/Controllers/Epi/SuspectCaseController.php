@@ -261,6 +261,10 @@ class SuspectCaseController extends Controller
 
 
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
+            ->with([
+                'patient',
+                'requester',
+            ])
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
             ->when($searchTerm, function ($query, $searchTerm) {
@@ -294,6 +298,11 @@ class SuspectCaseController extends Controller
     public function myTray()
     {
         $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)->orderByDesc('id')
+        ->with([
+            'requester',
+            'sampler',
+            'patient',
+        ])
             ->paginate(100);
 
         // $suspectcases = SuspectCase::where('requester_id', 2467)->orderByDesc('id')
@@ -306,6 +315,11 @@ class SuspectCaseController extends Controller
     {
         $searchTerm = request('search');
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
+        ->with([
+            'requester',
+            'organization',
+            'patient',
+        ])
             ->when($searchTerm, function ($query, $searchTerm) {
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {

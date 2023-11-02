@@ -54,7 +54,9 @@
                         <td>{{ $suspectcase->request_at ?? '' }}</td>
                         <td>{{ $suspectcase->sampler->officialFullName ?? '' }}</td>
                         <td>{{ $suspectcase->sample_at ?? '' }}</td>
-                        <td>{{ $suspectcase->organization->alias ?? '' }}</td>
+                        <td>
+                        {{ $suspectcase->organization->alias ?? '' }}                        
+                        </td>
                         <td>{{ $suspectcase->patient->OfficialFullName ?? '' }}
                             @if ($suspectcase->research_group == 'Gestante (+semana gestacional)')
                                 <img align="center" src="{{ asset('images/pregnant.png') }}" width="24">
