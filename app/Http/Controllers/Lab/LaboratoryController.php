@@ -26,6 +26,7 @@ class LaboratoryController extends Controller
                 'organization',
                 'patient',
                 'patient.nationality',
+                'receptor',
 
             ]
         )->orderBy('id', 'desc')->whereNotNull('sample_at');
