@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactPoint;
-use App\Models\HumanName;
-use App\Models\Identifier;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Http\Client\ConnectionException;
 use App\Models\User;
+use App\Models\Identifier;
+use App\Models\HumanName;
+use App\Models\ContactPoint;
 
 class ClaveUnicaController extends Controller
 {
@@ -49,16 +50,21 @@ class ClaveUnicaController extends Controller
 
         $scope = 'openid+run+name';
 
-        $response = Http::asForm()->post($url_base, [
-            'client_id'     => $client_id,
-            'client_secret' => $client_secret,
-            'redirect_uri'  => $redirect_uri,
-            'grant_type'    => 'authorization_code',
-            'code'          => $code,
-            'state'         => $state,
-        ]);
+        try {
+            $response = Http::asForm()->post($url_base, [
+                'client_id'     => $client_id,
+                'client_secret' => $client_secret,
+                'redirect_uri'  => $redirect_uri,
+                'grant_type'    => 'authorization_code',
+                'code'          => $code,
+                'state'         => $state,
+            ]);
+        } catch(ConnectionException $e) {
+            session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
+            return redirect()->route('welcome');
+        }
 
-       
+
         $access_token = json_decode($response)->access_token ?? null;
 
         /** Si no existe el acces token */
@@ -73,8 +79,13 @@ class ClaveUnicaController extends Controller
 
         /* Paso 3, obtener los datos del usuario en base al $access_token */
         $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo/";
-        $response = Http::withToken(json_decode($response)->access_token)->post($url_base);
-        
+        try {
+            $response = Http::withToken(json_decode($response)->access_token)->post($url_base);
+        } catch(ConnectionException $e) {
+            session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
+            return redirect()->route('welcome');
+        }
+
         $user_clave_unica = json_decode($response);
 
         /* Registrar los datos del usuario en la BD local */
@@ -186,7 +197,12 @@ class ClaveUnicaController extends Controller
     public function getUserInfo($access_token, $redirect = null) {
         /* Tercer Paso, obtener los datos de usuario  */
         $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
-        $response = Http::withToken($access_token)->post($url_base);
+        try {
+            $response = Http::withToken($access_token)->post($url_base);
+        } catch(ConnectionException $e) {
+            session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
+            return redirect()->route('welcome');
+        }
 
         $user_clave_unica = json_decode($response);
 
