@@ -3,6 +3,14 @@
     @include('chagas.nav')
     <h4 class="mb-3">Listado de usuarios con permisos de Chagas</h4>
 
+    <form action="{{ route('chagas.users.indexChagasUser') }}" method="GET">
+        <div class="mb-3">
+            <label for="search">Buscar por Nombre o Apellido:</label>
+            <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">Buscar</button>
+    </form>
+
 
     <div class="card mb-4">
         <div class="card-header">

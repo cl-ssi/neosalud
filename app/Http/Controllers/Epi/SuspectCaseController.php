@@ -215,23 +215,43 @@ class SuspectCaseController extends Controller
         return view('epi.chagas.user_create', compact('organizations', 'permissions'));
     }
 
-    public function indexChagasUser()
+    public function indexChagasUser(Request $request)
     {
-
         $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
             ->orderBy('alias')
             ->get();
-
+    
         $userTrayIds = Auth::user()->practitioners->pluck('organization_id');
-
-        $users = User::whereHas('practitioners', function ($query) use ($userTrayIds) {
+    
+        $query = User::whereHas('practitioners', function ($query) use ($userTrayIds) {
             $query->whereIn('organization_id', $userTrayIds);
         })->whereHas('permissions', function ($query) {
             $query->where('name', 'LIKE', 'Chagas%')->OrderBy('name');
-        })->get();
-
+        });
+    
+        // Agregar la lógica para la búsqueda por Nombre, Apellido Paterno o Apellido Materno
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+    
+            // Dividir la cadena de búsqueda en palabras
+            $searchTerms = explode(' ', $searchTerm);
+    
+            $query->where(function ($q) use ($searchTerms) {
+                foreach ($searchTerms as $term) {
+                    $q->where(function ($qq) use ($term) {
+                        $qq->where('given', 'LIKE', "%$term%")
+                            ->orWhere('fathers_family', 'LIKE', "%$term%")
+                            ->orWhere('mothers_family', 'LIKE', "%$term%");
+                    });
+                }
+            });
+        }
+    
+        $users = $query->get();
+    
         return view('epi.chagas.user_index', compact('organizations', 'users'));
     }
+    
 
     public function patientRecord()
     {
