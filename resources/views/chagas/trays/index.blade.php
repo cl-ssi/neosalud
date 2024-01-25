@@ -111,14 +111,10 @@
                         <td>{{ $suspectcase->observation ?? '' }}</td>
                         <td>
                             @if ($suspectcase->reception_at == null)
-                                <form method="POST" action="{{ route('epi.chagas.destroy', $suspectcase) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar Solicitud Chagas"
-                                        onclick="return confirm('¿Está seguro de eliminar la solicitud de chagas?');">
-                                        <span class="fas fa-trash-alt" aria-hidden="true"></span>
-                                    </button>
-                                </form>
+                                <a class="btn btn-sm btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $suspectcase->id }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                @include('epi.chagas.modals.delete_reason')
                             @endif
                         </td>
                     </tr>

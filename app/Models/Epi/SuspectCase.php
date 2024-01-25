@@ -76,6 +76,11 @@ class SuspectCase extends Model
         //datos del receptor
         'reception_at', 
         'receptor_id',
+
+
+        //datos del borrado
+        'delete_reason',
+        'delete_user_id',
     ];
 
     protected $dates = [

@@ -180,9 +180,14 @@ class SuspectCaseController extends Controller
      * @param  \App\Models\Epi\SuspectCase  $suspectCase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SuspectCase $suspectCase)
+    public function destroy(SuspectCase $suspectCase, Request $request)
     {
-        //
+        
+        $deleteReason = $request->input('delete_reason');
+        $suspectCase->delete_reason = $deleteReason;
+        $suspectCase->delete_user_id = auth()->user()->id;
+        $suspectCase->save();
+
         $suspectCase->delete();
         session()->flash('success', 'El caso sospecha ha sido eliminado exitosamente');
         return redirect()->back();
