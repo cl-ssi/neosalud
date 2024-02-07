@@ -466,7 +466,7 @@
         @enderror
     </fieldset>
     <fieldset class="form-group col-12 col-md-8">
-        <label for="for-observation-sv">Observación</label>
+        <label for="for-observation-sv">Observación SV</label>
         <textarea class="form-control @error('observation_sv') is-invalid @enderror" rows="6" name="observation_sv" id="for-observation-sv">{{ old('observation_sv', optional($event)->observation_sv) }}</textarea>
         @error('observation_sv')
             <div class="text-danger">
