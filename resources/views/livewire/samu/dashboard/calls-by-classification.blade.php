@@ -14,7 +14,7 @@
             </div>
         </fieldset>
     </div>
-    
+
     <div wire:init="getData">
         <div id="calls-by-classification" style="width: auto; height: 400px;"></div>
     </div>
@@ -31,9 +31,13 @@
                 },
                 vAxis: {
                     title: 'Total de llamadas',
-                }
+                },
+                type: 'columns',
+                focusTarget: 'category',
+                isStacked: true,
+                tooltip: { isHtml: false }
             };
-            var chart = new google.visualization.ColumnChart(document.getElementById('calls-by-classification'));
+            var chart = new google.visualization.ComboChart(document.getElementById('calls-by-classification'));
             chart.draw(data, options);
         });
     </script>

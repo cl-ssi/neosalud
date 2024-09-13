@@ -26,17 +26,8 @@ class CallsByClassification extends Component
 
     public function getData()
     {
-        $options = [
-            'Clasificación',
-            'Total de llamadas',
-            ["role" => 'style'],
-            ["role" => 'annotation'],
-        ];
-
-        $chartData = (new SamuCallsByClassification($this->year, $this->month))->getDataset();
-
-        array_unshift($chartData, $options);
-
+        $SamuCallsByClassification = new SamuCallsByClassification($this->year, $this->month);
+        $chartData = ($SamuCallsByClassification->getDataset());
         $this->emit('calls-by-classification', $chartData);
     }
 
