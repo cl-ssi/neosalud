@@ -281,10 +281,8 @@ class SuspectCaseController extends Controller
 
     public function sampleOrganization(Organization $organization)
     {
-
         $searchTerm = request('search');
-
-
+    
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->with([
                 'patient',
@@ -293,21 +291,28 @@ class SuspectCaseController extends Controller
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
             ->when($searchTerm, function ($query, $searchTerm) {
-
+    
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {
                     $query->whereHas('patient', function ($query) use ($word) {
+                        // Búsqueda por nombre o apellidos del paciente
                         $query->where('given', 'LIKE', '%' . $word . '%')
                             ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
-                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%');
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+    
+                            // Búsqueda por identificadores del paciente
+                            ->orWhereHas('identifiers', function ($query) use ($word) {
+                                $query->where('value', 'LIKE', '%' . $word . '%');
+                            });
                     });
                 }
             })
             ->orderByDesc('id')
             ->paginate(100);
-
+    
         return view('epi.chagas.sample.index', compact('organization', 'suspectcases'));
     }
+    
 
 
     public function sampleBlood($id, Request $request)
@@ -351,7 +356,10 @@ class SuspectCaseController extends Controller
                     $query->whereHas('patient', function ($query) use ($word) {
                         $query->where('given', 'LIKE', '%' . $word . '%')
                             ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
-                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%');
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhereHas('identifiers', function ($query) use ($word) {
+                                $query->where('value', 'LIKE', '%' . $word . '%');
+                            });
                     });
                 }
             })

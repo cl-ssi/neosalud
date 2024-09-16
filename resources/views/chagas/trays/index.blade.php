@@ -6,7 +6,7 @@
             Listado de Solicitudes de Examenes de Chagas Solicitado del Establecimiento {{ $organization->alias ?? '' }}
             <form action="{{ route('chagas.tray', $organization->id) }}" method="GET">
                 <div class="input-group mb-3">
-                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido"
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido o Run (sin dv) o Identificación"
                         value="{{ request('search') }}" autocomplete="off">
                     <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
