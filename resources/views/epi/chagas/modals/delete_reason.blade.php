@@ -35,6 +35,7 @@
                                         <option value="Traslado">Traslado</option>
                                         <option value="Rechaza Toma de Muestra">Rechaza Toma de Muestra</option>
                                         <option value="Inubicable">Inubicable</option>
+                                        <option value="Otro">Otro</option
                                     </select>
                                 </fieldset>
                             </div>
