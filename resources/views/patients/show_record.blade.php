@@ -138,6 +138,9 @@
                             <th>Grupo de Pesquisa</th>
                             <th>Establecimiento</th>
                             <th>Fecha Solicitud</th>
+                            @can(['Administrator'])
+                                <th>Usuario Solicitud (Fecha y Hora Digitada en Solicitud)</th>
+                            @endcan
                             <th>Fecha Toma de Muestra</th>
                             <th>Fecha Tamizaje</th>
                             <th>Resultado Tamizaje</th>
@@ -152,6 +155,9 @@
                             <td>{{ $suspectcase->research_group ?? '' }} </td>
                             <td>{{ $suspectcase->establishment->alias ?? '' }} </td>
                             <td>{{ $suspectcase->request_at ?? '' }} </td>
+                            @can(['Administrator'])
+                                <td>{{ $suspectcase->creator->officialFullName ?? '' }} ({{$suspectcase->created_at}}) </td>
+                            @endcan
                             <td>{{ $suspectcase->sample_at ?? '' }} </td>
                             <td>{{ $suspectcase->chagas_result_screening_at ?? '' }} </td>
                             <td>
@@ -183,7 +189,6 @@
                     @include('partials.audit', ['audits' => $suspectcase] )
                 </div>
             @endforeach
-
         @endcan
 
 
