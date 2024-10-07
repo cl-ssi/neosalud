@@ -176,6 +176,16 @@
             </div>
         </div>
 
+        @can(['administrador'])
+            @foreach ($patient->suspectCases as $suspectcase)
+                <br /><hr />
+                <div style="height: 300px; overflow-y: scroll;">
+                    @include('partials.audit', ['audits' => $suspectcase] )
+                </div>
+            @endforeach
+
+        @endcan
+
 
         <div class="card-body">
             {{-- Comienza las maneras de contactar --}}
@@ -239,6 +249,10 @@
                 </table>
             </div>
         </div>
+
+
+
+
 
 
     </div>
