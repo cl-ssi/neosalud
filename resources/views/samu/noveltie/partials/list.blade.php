@@ -7,6 +7,7 @@
                 <th>Teléfono</th>
                 <th>Detalle de Novedades</th>
                 <th>Creador</th>
+                <th>Tipo</th>
             </tr>
         </thead>
         <tbody>
@@ -15,13 +16,14 @@
                 <td>
                     @if($noveltie->shift->status)
                     <a class="btn btn-sm btn-outline-primary" href="{{ route('samu.noveltie.edit', $noveltie) }}">
-                    <i class="fas fa-edit"></i> {{ $noveltie->id }} </a>
+                    <i class="fas fa-edit"></i> {{ $noveltie->id }}</a>
                     @endif
                 </td>
                 <td>{{ $noveltie->created_at }}</td>
                 <td>{{ $noveltie->telephone }}</td>
                 <td>{{ $noveltie->detail ?? '' }} </td>
                 <td>{{ $noveltie->creator->officialFullName }}</td>
+                <td>{{ $noveltie->type}}</td>
             </tr>
             @empty
             <tr>

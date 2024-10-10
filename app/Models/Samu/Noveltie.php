@@ -20,6 +20,7 @@ class Noveltie extends Model implements Auditable
     protected $fillable = [
         'telephone',
         'detail',
+        'type',
         'shift_id'
     ];
 
