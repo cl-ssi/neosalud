@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             @foreach($calls as $call)
-            <tr>
+            <tr class="{{$call->patient_status?'table-'.$call->patient_status:''}}">
                 <td class="text-center" nowrap>
                     @if($edit)
                         <a href="{{ route('samu.call.edit', $call) }}" class="btn btn-sm btn-outline-primary">
@@ -65,6 +65,25 @@
                     <a href="{{ route('samu.event.create', $call) }}" class="btn btn-sm btn-success">
                         <i class="fas fa-plus"></i> Cometido
                     </a>
+                
+                
+                    @if($call->patient_status == null)
+                        <form method="post" action="{{ route('samu.event.call.update', $call) }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="col-auto">
+                                <select class="form-control" name="type" id="type">
+                                    <option value="" selected>Seleccionar</option>
+                                    <option value="danger">Grave</option>
+                                    <option value="warning">Moderado</option>
+                                    <option value="primary">Bajo</option>
+                                </select>
+                            </div>
+                            <div class="col-auto text-center pt-1">
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                            </div>
+                        </form>
+                    @endif
                 </td>
                 @endif
             </tr>

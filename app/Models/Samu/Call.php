@@ -51,6 +51,7 @@ class Call extends Model implements Auditable
         'latitude',
         'longitude',
         'telephone',
+        'patient_status',
     ];
 
     /**

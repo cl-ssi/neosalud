@@ -18,6 +18,7 @@ use App\Models\Organization;
 use App\Services\Samu\EventService;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
@@ -314,5 +315,15 @@ class EventController extends Controller
             $format = "H:i";
 
         return $format;
+    }
+
+    public function updateCall(Request $request, Call $call)
+    {
+        $patient_status = $request['type'];
+        if($patient_status != ''){
+            $call->patient_status = $patient_status;
+            $call->save();
+        }
+        return to_route('samu.event.index');
     }
 }
