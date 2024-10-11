@@ -5,7 +5,7 @@
 
     <form action="{{ route('chagas.users.indexChagasUser') }}" method="GET">
         <div class="mb-3">
-            <label for="search">Buscar por Nombre o Apellido:</label>
+            <label for="search">Buscar por Nombre o Apellido o Run (sin DV):</label>
             <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary mb-3">Buscar</button>

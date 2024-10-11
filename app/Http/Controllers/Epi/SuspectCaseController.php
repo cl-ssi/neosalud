@@ -234,7 +234,7 @@ class SuspectCaseController extends Controller
             $query->where('name', 'LIKE', 'Chagas%')->OrderBy('name');
         });
     
-        // Agregar la lógica para la búsqueda por Nombre, Apellido Paterno o Apellido Materno
+        
         if ($request->has('search')) {
             $searchTerm = $request->input('search');
     
@@ -246,7 +246,10 @@ class SuspectCaseController extends Controller
                     $q->where(function ($qq) use ($term) {
                         $qq->where('given', 'LIKE', "%$term%")
                             ->orWhere('fathers_family', 'LIKE', "%$term%")
-                            ->orWhere('mothers_family', 'LIKE', "%$term%");
+                            ->orWhere('mothers_family', 'LIKE', "%$term%")
+                            ->orWhereHas('identifiers', function ($query) use ($term) {
+                                $query->where('value', 'LIKE', '%' . $term . '%');
+                            });
                     });
                 }
             });
