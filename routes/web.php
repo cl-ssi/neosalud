@@ -851,6 +851,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     //Mis Bandejas chagas
     Route::get('/my-tray-request', [SuspectCaseController::class, 'myTray'])->name('myTray');
     Route::get('/tray/{organization}', [SuspectCaseController::class, 'tray'])->name('tray');
+    Route::get('/tray/export/excel', [SuspectCaseController::class, 'exportExcel'])->name('exportExcel');
 
     // Nueva ruta que llama al método downloadFile
     Route::get('download/{fileName}', [SuspectCaseController::class, 'downloadFile'])->where('fileName', '.*')->name('downloadFile');

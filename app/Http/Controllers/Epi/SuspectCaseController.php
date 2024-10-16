@@ -12,6 +12,8 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DelegateChagasNotification;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\Chagas\SuspectCaseExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SuspectCaseController extends Controller
 {
@@ -369,4 +371,60 @@ class SuspectCaseController extends Controller
             ->paginate(100);
         return view('chagas.trays.index', compact('suspectcases', 'organization'));
     }
+
+    /**
+     * Exporta a Excel el listado de solicitudes de examenes de Chagas
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportExcel(Request $request)
+    {
+        $organizationId = $request->input('organization');
+        $searchTerm = $request->input('search');
+    
+        $suspectcases = SuspectCase::where('organization_id', $organizationId)
+            ->with(['organization', 'requester', 'sampler', 'patient.nationality', 'patient'])
+            ->when(isset($searchTerm) && $searchTerm !== '', function ($query) use ($searchTerm) {
+                $searchWords = explode(' ', $searchTerm);
+                foreach ($searchWords as $word) {
+                    $query->whereHas('patient', function ($query) use ($word) {
+                        $query->where('given', 'LIKE', '%' . $word . '%')
+                            ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhereHas('identifiers', function ($query) use ($word) {
+                                $query->where('value', 'LIKE', '%' . $word . '%');
+                            });
+                    });
+                }
+            })
+            ->orderByDesc('id')
+            ->get()
+            ->map(function ($suspectCase) {
+                return [
+                    'ID' => $suspectCase->id,
+                    'Grupo de Pesquisa' => $suspectCase->research_group,
+                    'Solicitado por' => $suspectCase->requester?->officialFullName,
+                    'Fecha de Solicitud' => $suspectCase->request_at,
+                    'Origen' => $suspectCase->organization->alias,
+                    'Paciente' => $suspectCase->patient?->officialFullName,
+                    'Run o Identificación' => $suspectCase->patient->identifierRun
+                        ? $suspectCase->patient->identifierRun->value . '-' . $suspectCase->patient->identifierRun->dv
+                        : $suspectCase->patient->identification->value,
+                    'Edad' => $suspectCase->patient->AgeString,
+                    'Sexo' => $suspectCase->patient->actualSex()->text ?? '',
+                    'Nacionalidad' => $suspectCase->patient->nationality->name ?? '',
+                    'Fecha de Resultado Tamizaje' => $suspectCase->chagas_result_screening_at,
+                    'Resultado Tamizaje' => $suspectCase->chagas_result_screening,
+                    'Fecha de Resultado Confirmación' => $suspectCase->chagas_result_confirmation_at,
+                    'Resultado Confirmación' => $suspectCase->chagas_result_confirmation,
+                    'Observación' => $suspectCase->observation,
+                ];
+            });
+    
+        return Excel::download(new SuspectCaseExport($suspectcases), 'reporte_chagas.xlsx');
+    }
+    
+    
+
+
 }
