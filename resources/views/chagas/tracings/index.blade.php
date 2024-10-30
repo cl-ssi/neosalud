@@ -15,6 +15,7 @@
                     <th>Edad</th>
                     <th>Sexo</th>
                     <th>Nacionalidad</th>
+                    <th>Resultado Tamizaje</th>
                     <th>Fecha de Resultado Confirmación</th>
                     <th>Resultado Confirmación</th>
                     <th>Observación</th>
@@ -44,6 +45,7 @@
                         <td> {{ $suspectcase->patient->AgeString ?? '' }} </td>
                         <td>{{ $suspectcase->patient->actualSex()->text ?? '' }}</td>
                         <td>{{ $suspectcase->patient->nationality->name ?? '' }}</td>
+                        <td>{{ $suspectcase->chagas_result_screening ?? '' }}</td>
                         <td>{{ $suspectcase->chagas_result_confirmation_at ?? '' }}</td>
                         <td>{{ $suspectcase->chagas_result_confirmation ?? '' }}</td>
                         <td>{{ $suspectcase->observation ?? '' }}</td>

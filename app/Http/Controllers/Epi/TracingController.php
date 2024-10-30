@@ -15,7 +15,12 @@ class TracingController extends Controller
     //
     public function index(Organization $organization)
     {
-        $suspectcases = SuspectCase::where('organization_id', $organization->id)->where('chagas_result_confirmation', 'positivo')->get();
+        $suspectcases = SuspectCase::where('organization_id', $organization->id)
+            ->where(function ($query) {
+                $query->where('chagas_result_confirmation', 'positivo')
+                    ->orWhere('chagas_result_screening', 'Registra muestra anterior');
+            })
+            ->get();
         return view('chagas.tracings.index', compact('suspectcases', 'organization'));
     }
 
