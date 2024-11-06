@@ -43,10 +43,15 @@
 
 
     <p>Se encuentra 
-    @if($suspectCase->chagas_result_screening)
-    <b>{{strtoupper($suspectCase->chagas_result_screening)}}</b> 
+    @if($suspectCase->chagas_result_confirmation == 'Positivo')
+        <b>{{strtoupper($suspectCase->chagas_result_confirmation)}}</b> 
     @else
-    <b>Creada</b> 
+
+        @if($suspectCase->chagas_result_screening)
+        <b>{{strtoupper($suspectCase->chagas_result_screening)}}</b> 
+        @else
+        <b>Creada</b> 
+        @endif
     @endif
 </p>
 
