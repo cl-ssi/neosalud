@@ -332,22 +332,37 @@ class SuspectCaseController extends Controller
 
     public function myTray()
     {
+        $trayType = 'myTray';
+        $searchTerm = request('search');
+
         $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)->orderByDesc('id')
         ->with([
             'requester',
             'sampler',
             'patient',
         ])
+        ->when($searchTerm, function ($query, $searchTerm) {
+            $searchWords = explode(' ', $searchTerm);
+            foreach ($searchWords as $word) {
+                $query->whereHas('patient', function ($query) use ($word) {
+                    $query->where('given', 'LIKE', '%' . $word . '%')
+                        ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                        ->orWhereHas('identifiers', function ($query) use ($word) {
+                            $query->where('value', 'LIKE', '%' . $word . '%');
+                        });
+                });
+            }
+        })
             ->paginate(100);
 
-        // $suspectcases = SuspectCase::where('requester_id', 2467)->orderByDesc('id')
-        //     ->paginate(100);
 
-        return view('chagas.trays.index', compact('suspectcases'));
+        return view('chagas.trays.index', compact('suspectcases', 'trayType'));
     }
 
     public function tray(Organization $organization)
     {
+        $trayType = 'tray';
         $searchTerm = request('search');
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
         ->with([
@@ -369,22 +384,24 @@ class SuspectCaseController extends Controller
                 }
             })
             ->paginate(100);
-        return view('chagas.trays.index', compact('suspectcases', 'organization'));
+        return view('chagas.trays.index', compact('suspectcases', 'organization', 'trayType'));
     }
 
-    /**
-     * Exporta a Excel el listado de solicitudes de examenes de Chagas
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportExcel(Request $request)
+    public function allMyTray()
     {
-        $organizationId = $request->input('organization');
-        $searchTerm = $request->input('search');
-    
-        $suspectcases = SuspectCase::where('organization_id', $organizationId)
-            ->with(['organization', 'requester', 'sampler', 'patient.nationality', 'patient'])
-            ->when(isset($searchTerm) && $searchTerm !== '', function ($query) use ($searchTerm) {
+        $trayType = 'allMyTray';
+        $searchTerm = request('search');
+        
+        $organizationIds = Auth::user()->practitioners->pluck('organization_id');
+
+        $suspectcases = SuspectCase::whereIn('organization_id', $organizationIds)
+            ->orderByDesc('id')
+            ->with([
+                'requester',
+                'organization',
+                'patient',
+            ])
+            ->when($searchTerm, function ($query, $searchTerm) {
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {
                     $query->whereHas('patient', function ($query) use ($word) {
@@ -397,7 +414,60 @@ class SuspectCaseController extends Controller
                     });
                 }
             })
-            ->orderByDesc('id')
+            ->paginate(100);
+    
+        
+        return view('chagas.trays.index', compact('suspectcases', 'trayType'));
+    }
+    
+
+    /**
+     * Exporta a Excel el listado de solicitudes de examenes de Chagas
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportExcel(Request $request)
+    {
+        // Capturamos el tipo de tray
+        $trayType = $request->input('my_tray') ? 'myTray' : ($request->input('all_my_tray') ? 'allMyTray' : 'tray');
+        $searchTerm = $request->input('search');
+        
+        // Obtenemos las organizaciones del usuario autenticado
+        $organizationIds = Auth::user()->practitioners->pluck('organization_id');
+        $organizationId = $request->input('organization');
+    
+        // Consultamos los casos sospechosos con los filtros correspondientes
+        if($trayType == 'myTray'){
+        $suspectcases = SuspectCase::when($trayType === 'myTray', function ($query) {
+                $query->where('requester_id', Auth::user()->id);
+            });
+        } else {
+
+        
+        
+        $suspectcases = SuspectCase::when($trayType === 'allMyTray' && $organizationId == null, function ($query) use ($organizationIds) {
+                $query->whereIn('organization_id', $organizationIds);
+            }, function ($query) use ($organizationId) {
+                $query->where('organization_id', $organizationId);
+            });
+
+        }
+
+        $suspectcases = $suspectcases->orderByDesc('id')
+            ->with(['requester', 'organization', 'patient'])
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $searchWords = explode(' ', $searchTerm);
+                foreach ($searchWords as $word) {
+                    $query->whereHas('patient', function ($query) use ($word) {
+                        $query->where('given', 'LIKE', '%' . $word . '%')
+                            ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhereHas('identifiers', function ($query) use ($word) {
+                                $query->where('value', 'LIKE', '%' . $word . '%');
+                            });
+                    });
+                }
+            })
             ->get()
             ->map(function ($suspectCase) {
                 return [
@@ -421,8 +491,10 @@ class SuspectCaseController extends Controller
                 ];
             });
     
+        // Se retorna el archivo de Excel
         return Excel::download(new SuspectCaseExport($suspectcases), 'reporte_chagas.xlsx');
     }
+    
     
     
 

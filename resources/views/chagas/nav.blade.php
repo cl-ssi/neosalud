@@ -72,6 +72,12 @@
                             <i class="fas fa-building"></i> Solc. De {{ $practitioner->organization->alias ?? '' }}
                         </a>
                     @endforeach
+                    @if(Auth::user()->practitioners->count() > 1)
+                        <hr>
+                        <a class="dropdown-item" href="{{ route('chagas.allMyTray') }}">
+                            <i class="fas fa-tasks"></i> Solc de Todos Mis Establecimientos
+                        </a>
+                    @endif
                 </li>
             </ul>
         </li>
