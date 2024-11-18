@@ -184,17 +184,18 @@ class UserController extends Controller
 
     private function updatePermissions(User $user, array $permissions)
     {
-        foreach ($permissions as $permissionName => $permission) {
-            if ($permission === 'true') {
-                $user->givePermissionTo($permissionName);
-            } else {
-                
-                if (Permission::where('name', $permissionName)->exists()) {
-                    $user->revokePermissionTo($permissionName);
-                }
-                
-            }
-        }
+        
+        $validPermissions = Permission::whereIn('name', array_keys($permissions))
+            ->pluck('name')
+            ->toArray();
+    
+        
+        $permissionsToSync = array_filter($permissions, function ($value, $key) use ($validPermissions) {
+            return $value === 'true' && in_array($key, $validPermissions);
+        }, ARRAY_FILTER_USE_BOTH);
+    
+        // Sincronizar permisos
+        $user->syncPermissions(array_keys($permissionsToSync));
     }
 
     public function searchByName(Request $request)
