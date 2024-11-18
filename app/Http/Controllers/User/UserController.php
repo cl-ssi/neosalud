@@ -188,7 +188,11 @@ class UserController extends Controller
             if ($permission === 'true') {
                 $user->givePermissionTo($permissionName);
             } else {
-                $user->revokePermissionTo($permissionName);
+                
+                if (Permission::where('name', $permissionName)->exists()) {
+                    $user->revokePermissionTo($permissionName);
+                }
+                
             }
         }
     }
