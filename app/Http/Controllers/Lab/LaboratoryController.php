@@ -17,6 +17,10 @@ class LaboratoryController extends Controller
 
     public function chagasIndex($tray, Request $request)
     {
+        // Set default date range
+        $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = request('end_date', now()->format('Y-m-d'));
+
         $organizations = Organization::has('suspectCases')->orderBy('alias')->get();
         $searchName = $request->input('search_name');
         $searchOrganization = $request->input('search_organization');
@@ -29,7 +33,9 @@ class LaboratoryController extends Controller
                 'receptor',
 
             ]
-        )->orderBy('id', 'desc')->whereNotNull('sample_at');
+        )->orderBy('id', 'desc')
+        ->whereNotNull('sample_at')
+        ->whereBetween('request_at', [$startDate, $endDate]);
 
 
         // Aplicar filtro por nombre o apellido si se proporcionó un valor de búsqueda
@@ -45,11 +51,6 @@ class LaboratoryController extends Controller
                     ->orWhere('mothers_family', 'LIKE', '%' . $searchName . '%');
             });
         }
-
-
-
-
-
 
         if ($tray === 'Pendientes de Recepción') {
             $query->whereNull('reception_at');

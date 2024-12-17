@@ -8,6 +8,18 @@
     <div class="row">
         <form action="{{ route('labs.chagas.index', $tray) }}" method="GET">
             <div class="col-6 col-md-6 mb-4">
+                <label for="start_date">Fecha de Inicio</label>
+                <input type="date" name="start_date" class="form-control" 
+                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
+            </div>
+
+            <div class="col-6 col-md-6 mb-4">
+                <label for="end_date">Fecha de Término</label>
+                <input type="date" name="end_date" class="form-control" 
+                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
+            </div>
+
+            <div class="col-6 col-md-6 mb-4">
                 <div class="input-group">
                     <input type="text" name="search_name" class="form-control" placeholder="Buscar por nombre o apellido"
                         value="{{ request('search_name') }}" autocomplete="off">
@@ -24,10 +36,11 @@
                     @endforeach
                 </select>
             </div>
-    </div>
+    
 
-    <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div><br>
 
 
 
