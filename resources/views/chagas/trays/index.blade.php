@@ -6,12 +6,25 @@
     @if ($trayType === 'myTray')
         <h4 class="mb-3">Listado de Solicitudes de Exámenes de Chagas Solicitado por @auth {{ auth()->user()->officialFullName }} @endauth</h4>
         <form action="{{ route('chagas.myTray') }}" method="GET">
-            <div class="input-group mb-3">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
-                    value="{{ request('search') }}" autocomplete="off">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+            <div class="col-md-4">
+                <label for="start_date">Fecha de Inicio</label>
+                <input type="date" name="start_date" class="form-control" 
+                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
             </div>
-        </form>
+            <div class="col-md-4">
+                <label for="end_date">Fecha de Término</label>
+                <input type="date" name="end_date" class="form-control" 
+                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-4">
+                <label for="search">Búsqueda</label>
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
+                        value="{{ request('search') }}" autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form><br>
 
         <div>
             <a class="btn btn-primary" href="{{ route('chagas.exportExcel', ['search' => request('search'), 'my_tray' => true]) }}">
@@ -24,12 +37,25 @@
     @if ($trayType === 'allMyTray')
         <h4 class="mb-3">Listado de Solicitudes de Exámenes de Chagas para Todas Mis Organizaciones</h4>
         <form action="{{ route('chagas.allMyTray') }}" method="GET">
-            <div class="input-group mb-3">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
-                    value="{{ request('search') }}" autocomplete="off">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+            <div class="col-md-4">
+                <label for="start_date">Fecha de Inicio</label>
+                <input type="date" name="start_date" class="form-control" 
+                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
             </div>
-        </form>
+            <div class="col-md-4">
+                <label for="end_date">Fecha de Término</label>
+                <input type="date" name="end_date" class="form-control" 
+                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-4">
+                <label for="search">Búsqueda</label>
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
+                        value="{{ request('search') }}" autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form><br>
 
         <div>
             <a class="btn btn-primary" href="{{ route('chagas.exportExcel', ['search' => request('search'), 'all_my_tray' => true]) }}">
@@ -42,12 +68,25 @@
     @if ($trayType === 'tray' && isset($organization))
         <h4 class="mb-3">Listado de Solicitudes de Exámenes de Chagas Solicitado del Establecimiento {{ $organization->alias ?? '' }}</h4>
         <form action="{{ route('chagas.tray', $organization->id) }}" method="GET">
-            <div class="input-group mb-3">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
-                    value="{{ request('search') }}" autocomplete="off">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+            <div class="col-md-4">
+                <label for="start_date">Fecha de Inicio</label>
+                <input type="date" name="start_date" class="form-control" 
+                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
             </div>
-        </form>
+            <div class="col-md-4">
+                <label for="end_date">Fecha de Término</label>
+                <input type="date" name="end_date" class="form-control" 
+                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-4">
+                <label for="search">Búsqueda</label>
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
+                        value="{{ request('search') }}" autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form><br>
 
         <div>
             <a class="btn btn-primary" href="{{ route('chagas.exportExcel', ['organization' => $organization->id, 'search' => request('search')]) }}">

@@ -287,6 +287,10 @@ class SuspectCaseController extends Controller
     public function sampleOrganization(Organization $organization)
     {
         $searchTerm = request('search');
+
+        // Set default date range
+        $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = request('end_date', now()->format('Y-m-d'));
     
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->with([
@@ -313,6 +317,7 @@ class SuspectCaseController extends Controller
                 }
             })
             ->orderByDesc('id')
+            ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
     
         return view('epi.chagas.sample.index', compact('organization', 'suspectcases'));
@@ -330,46 +335,52 @@ class SuspectCaseController extends Controller
         return redirect()->back();
     }
 
+    // public function myTray()
+    // {
+    //     $trayType = 'myTray';
+    //     $searchTerm = request('search');
+
+    //     $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)->orderByDesc('id')
+    //     ->with([
+    //         'requester',
+    //         'sampler',
+    //         'patient',
+    //     ])
+    //     ->when($searchTerm, function ($query, $searchTerm) {
+    //         $searchWords = explode(' ', $searchTerm);
+    //         foreach ($searchWords as $word) {
+    //             $query->whereHas('patient', function ($query) use ($word) {
+    //                 $query->where('given', 'LIKE', '%' . $word . '%')
+    //                     ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+    //                     ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+    //                     ->orWhereHas('identifiers', function ($query) use ($word) {
+    //                         $query->where('value', 'LIKE', '%' . $word . '%');
+    //                     });
+    //             });
+    //         }
+    //     })
+    //         ->paginate(100);
+
+
+    //     return view('chagas.trays.index', compact('suspectcases', 'trayType'));
+    // }
+
     public function myTray()
     {
         $trayType = 'myTray';
         $searchTerm = request('search');
+        
+        // Set default date range
+        $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = request('end_date', now()->format('Y-m-d'));
 
-        $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)->orderByDesc('id')
-        ->with([
-            'requester',
-            'sampler',
-            'patient',
-        ])
-        ->when($searchTerm, function ($query, $searchTerm) {
-            $searchWords = explode(' ', $searchTerm);
-            foreach ($searchWords as $word) {
-                $query->whereHas('patient', function ($query) use ($word) {
-                    $query->where('given', 'LIKE', '%' . $word . '%')
-                        ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
-                        ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
-                        ->orWhereHas('identifiers', function ($query) use ($word) {
-                            $query->where('value', 'LIKE', '%' . $word . '%');
-                        });
-                });
-            }
-        })
-            ->paginate(100);
-
-
-        return view('chagas.trays.index', compact('suspectcases', 'trayType'));
-    }
-
-    public function tray(Organization $organization)
-    {
-        $trayType = 'tray';
-        $searchTerm = request('search');
-        $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
-        ->with([
-            'requester',
-            'organization',
-            'patient',
-        ])
+        $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)
+            ->orderByDesc('id')
+            ->with([
+                'requester',
+                'sampler',
+                'patient',
+            ])
             ->when($searchTerm, function ($query, $searchTerm) {
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {
@@ -383,7 +394,43 @@ class SuspectCaseController extends Controller
                     });
                 }
             })
+            ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
+
+        return view('chagas.trays.index', compact('suspectcases', 'trayType', 'startDate', 'endDate'));
+    }
+
+    public function tray(Organization $organization)
+    {
+        $trayType = 'tray';
+        $searchTerm = request('search');
+
+        // Set default date range
+        $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = request('end_date', now()->format('Y-m-d'));
+
+        $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
+            ->with([
+                'requester',
+                'organization',
+                'patient',
+            ])
+            ->when($searchTerm, function ($query, $searchTerm) {
+                $searchWords = explode(' ', $searchTerm);
+                foreach ($searchWords as $word) {
+                    $query->whereHas('patient', function ($query) use ($word) {
+                        $query->where('given', 'LIKE', '%' . $word . '%')
+                            ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
+                            ->orWhereHas('identifiers', function ($query) use ($word) {
+                                $query->where('value', 'LIKE', '%' . $word . '%');
+                            });
+                    });
+                }
+            })
+            ->whereBetween('request_at', [$startDate, $endDate])
+            ->paginate(100);
+
         return view('chagas.trays.index', compact('suspectcases', 'organization', 'trayType'));
     }
 
@@ -393,6 +440,10 @@ class SuspectCaseController extends Controller
         $searchTerm = request('search');
         
         $organizationIds = Auth::user()->practitioners->pluck('organization_id');
+
+        // Set default date range
+        $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
+        $endDate = request('end_date', now()->format('Y-m-d'));  
 
         $suspectcases = SuspectCase::whereIn('organization_id', $organizationIds)
             ->orderByDesc('id')
@@ -414,6 +465,7 @@ class SuspectCaseController extends Controller
                     });
                 }
             })
+            ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
     
         

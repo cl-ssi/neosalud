@@ -5,12 +5,25 @@
         {{ $organization->alias ?? '' }}</h4>
 
     <form action="{{ route('chagas.sampleOrganization', $organization->id) }}" method="GET">
-        <div class="input-group mb-3">
-            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido o Run (sin dv) o Identificación" autocomplete="off"
-                value="{{ request('search') }}">
-            <button type="submit" class="btn btn-primary">Buscar</button>
+        <div class="col-md-4">
+            <label for="start_date">Fecha de Inicio</label>
+            <input type="date" name="start_date" class="form-control" 
+                value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
         </div>
-    </form>
+        <div class="col-md-4">
+            <label for="end_date">Fecha de Término</label>
+            <input type="date" name="end_date" class="form-control" 
+                value="{{ request('end_date', now()->format('Y-m-d')) }}">
+        </div>
+        <div class="col-md-4">
+            <label for="search">Búsqueda</label>
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
+                    value="{{ request('search') }}" autocomplete="off">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form><br>
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered" id="tabla_casos">
