@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Epi;
 
-use App\Models\Epi\SuspectCase;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Organization;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Organization;
+use Illuminate\Http\Request;
+use App\Models\Epi\SuspectCase;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\DelegateChagasNotification;
-use Illuminate\Support\Facades\Storage;
-use App\Exports\Chagas\SuspectCaseExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\DelegateChagasNotification;
+use Spatie\Permission\Models\Permission;
+use App\Exports\Chagas\SuspectCaseExport;
 
 class SuspectCaseController extends Controller
 {
@@ -291,6 +292,10 @@ class SuspectCaseController extends Controller
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));
+
+        if ($endDate) {
+            $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
+        }
     
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->with([
@@ -374,6 +379,10 @@ class SuspectCaseController extends Controller
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));
 
+        if ($endDate) {
+            $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
+        }
+
         $suspectcases = SuspectCase::where('requester_id', Auth::user()->id)
             ->orderByDesc('id')
             ->with([
@@ -408,6 +417,10 @@ class SuspectCaseController extends Controller
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));
+
+        if ($endDate) {
+            $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
+        }
 
         $suspectcases = SuspectCase::where('organization_id', $organization->id)->orderByDesc('id')
             ->with([
@@ -444,6 +457,10 @@ class SuspectCaseController extends Controller
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));  
+
+        if ($endDate) {
+            $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
+        }
 
         $suspectcases = SuspectCase::whereIn('organization_id', $organizationIds)
             ->orderByDesc('id')
