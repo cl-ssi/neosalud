@@ -14,6 +14,7 @@
         "actived/microsoft-teams-notifier": "*",
         "aquaro/laravel-maintenance-mode": "^0.1.0",
         "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-dompdf": "^3.1",
         "doctrine/dbal": "^3.4",
         "econea/nusoap": "^0.9.11",
         "firebase/php-jwt": "^6.2",
