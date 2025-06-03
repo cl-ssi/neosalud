@@ -26,6 +26,8 @@ class Form extends Component
     public $hgt;
     public $fill_capillary;
     public $t;
+    public $p;
+    public $lcf;
 
     public $listeners = [
         'loadVitalSign'
@@ -71,6 +73,8 @@ class Form extends Component
         $this->hgt = $vitalSign['hgt'];
         $this->fill_capillary = $vitalSign['fill_capillary'];
         $this->t = $vitalSign['t'];
+        $this->p = $vitalSign['p'];
+        $this->lcf = $vitalSign['lcf'];
     }
 
     public function updateVitalSign()
@@ -116,6 +120,8 @@ class Form extends Component
             'hgt',
             'fill_capillary',
             't',
+            'p',
+            'lcf',
         ]);
     }
 

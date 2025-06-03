@@ -35,6 +35,10 @@ class VitalSignRequest extends FormRequest
             'hgt'               => 'nullable|integer',
             'fill_capillary'    => 'nullable|integer',
             't'                 => 'nullable|numeric|min:0|max:50',
+            'p'                 => 'nullable|numeric|min:0|max:500',
+            'lcf'               => 'nullable|integer',
+            'eva'               => 'nullable|integer|min:0|max:10',     
+            'co2'               => 'nullable|integer|min:0|max:100',  
         ];
     }
 }

@@ -60,9 +60,9 @@
             <tr><td class="table-danger">Aviso de salida</td></tr>
             <tr><td class="table-warning">Rumbo a destino</td></tr>
             <tr><td class="table-primary">En destino</td></tr>
-            <tr><td class="table-info">Ruta AP</td></tr>
-            <tr><td class="table-success">Retorna a base</td></tr>
-            <tr><td class="table-success">En base</td></tr>
+            <tr><td class="table-success">Ruta AP</td></tr>
+            <tr><td class="table-light">Retorna a base</td></tr>
+            <tr><td class="table-light">En base</td></tr>
         </table>
     </div>
 </div>
@@ -73,6 +73,7 @@
     <i class="fas fa-phone"></i> Llamadas pendientes (sin cometido asociado)
 </h3>
 @include('samu.call.partials.list',['calls' => $calls, 'edit' => true, 'createEvent' => true])
+
 
 
 <h3 class="mb-3"><i class="fas fa-car-crash"></i> Listado de cometidos abiertos</h3>

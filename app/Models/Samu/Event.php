@@ -262,12 +262,12 @@ class Event extends Model implements Auditable
         if($this->on_base_at || $this->return_base_at)
         {
             $status = 'Disponible';
-            $color = 'success';
+            $color = 'light';
         }
         elseif($this->route_to_healtcenter_at || $this->healthcenter_at || $this->patient_reception_at)
         {
             $status = 'AP';
-            $color = 'info';
+            $color = 'success';
         }
         elseif($this->mobile_arrival_at)
         {
