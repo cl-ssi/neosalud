@@ -11,17 +11,9 @@ class Table extends Component
 {
     public $event;                    // Evento actual (inyectado desde la vista padre)
     public $vitalSigns;               // Colección de signos vitales del evento
-<<<<<<< HEAD
     public $showModal = false;        // Controla visibilidad del modal
     public $isEditMode = false;       // Indica si se está editando o creando
     public $selectedIndex = null;     // Índice del registro seleccionado
-=======
-    public $vitalSignsId;             // IDs de signos vitales para cargar en el modal
-    public $showModal = false;        // Controla visibilidad del modal
-    public $isEditMode = false;       // Indica si se está editando o creando
-    public $selectedIndex = null; 
-        // Índice del registro seleccionado
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
     public $form = [                  // Atributos para el formulario
         'id'             => null,
         'registered_at'  => null,
@@ -48,11 +40,7 @@ class Table extends Component
         if(isset($event)){
 
             $this->event = $event;        
-<<<<<<< HEAD
             $this->loadVitalSigns();
-=======
-            $this->loadEventVitalSigns();
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
         }
         else{
             $this->event = null;
@@ -60,11 +48,7 @@ class Table extends Component
         }
     }
 
-<<<<<<< HEAD
     public function loadVitalSigns()
-=======
-    public function loadEventVitalSigns()
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
     {
         // Recupera todos los signos vitales asociados al evento
         $this->vitalSigns = VitalSign::where('event_id', $this->event?->id)
@@ -73,17 +57,6 @@ class Table extends Component
                                      ->toArray();
     }
 
-<<<<<<< HEAD
-=======
-    public function loadVitalSigns($vitalSignsId)
-    {
-        $this->vitalSigns = VitalSign::whereIn('id', $vitalSignsId)
-                                     ->orderBy('registered_at', 'desc')
-                                     ->get()
-                                     ->toArray();
-    }
-
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
     public function openCreateModal()
     {
         // Reiniciar el formulario para crear
@@ -125,7 +98,6 @@ class Table extends Component
         $validator = Validator::make($this->form, (new \App\Http\Requests\VitalSign\VitalSignRequest())->rules());
         $validator->validate();
 
-<<<<<<< HEAD
         if (!is_null($this->event) && $this->isEditMode && $this->form['id']) {
             // Actualizar registro existente
             $vs = VitalSign::findOrFail($this->form['id']);
@@ -134,30 +106,13 @@ class Table extends Component
             // Crear nuevo registro e insertar event_id
             $newData = $this->form;
             $vs = VitalSign::create($newData);
-=======
-        if ($this->event && $this->form['id']) {
-            // Actualizar registro existente
-            $vs = VitalSign::findOrFail($this->form['id']);
-            $vs->update($this->form);
-        } else if ($this->event) {
-            // Crear nuevo registro con event_id existente
-            $newData = array_merge($this->form, ['event_id' => $this->event->id]);
-            VitalSign::create($newData);
-        } else {
-            // Crear nuevo registro sin event_id y emitir para almacenar temporalmente
-            $vs = VitalSign::create($this->form);
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
             $this->emitUp('addVitalSigns', $vs->id);
         }
 
         // Cerrar modal, recargar listado y resetear formulario
         $this->showModal = false;
-<<<<<<< HEAD
         $this->resetForm();
         $this->loadVitalSigns();
-=======
-        $this->resetForm();        
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
     }
 
     public function deleteVitalSign($index)

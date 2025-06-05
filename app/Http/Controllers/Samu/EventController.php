@@ -23,17 +23,6 @@ use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
-
-    protected $listeners = [
-<<<<<<< HEAD
-        'addVitalSigns' => 'addVitalSigns',
-=======
-        'addVitalSigns' => 'addVitalSigns'
->>>>>>> e73d7699 (SAMU: Rollback vital signs)
-    ];
-
-    public array $vitalSignsId = [];
-
     /**
      * Display a listing of the resource.
      *
@@ -145,7 +134,7 @@ class EventController extends Controller
 
         if($shift)
         {
-            (new EventService())->create($event, $call, $request->validated(), $this->vitalSignsId);
+            (new EventService())->create($event, $call, $request->validated());
 
             session()->flash('success', 'Se ha creado el evento');
             return redirect()->route('samu.event.index');
@@ -178,7 +167,6 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        $this->vitalSignsId = $event->vitalSigns->pluck('id')->toArray();
         /* Obtener el turno actual */
         $shift = Shift::whereStatus(true)->first();
         if(!$shift)
@@ -227,7 +215,7 @@ class EventController extends Controller
             : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
-        (new EventService())->update($event, $request->validated(), $this->vitalSignsId);
+        (new EventService())->update($event, $request->validated());
 
         session()->flash('success', 'Cometido actualizado satisfactoriamente.');
         return redirect()->route('samu.event.index');
@@ -337,10 +325,5 @@ class EventController extends Controller
             $call->save();
         }
         return to_route('samu.event.index');
-    }
-
-    public function addVitalSigns(int $vitalsign_id)
-    {
-        $this->vitalSignsId[] = $vitalsign_id;
     }
 }
