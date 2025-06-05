@@ -441,17 +441,7 @@
 
 <h4>Asignación Signos Vitales</h4>
 
-@livewire('samu.vital-sign.form', [
-    'event' => $event,
-    'edit' => request()->routeIs('samu.event.edit') ? true : false
-])
-
-<br>
-
-@livewire('samu.vital-sign.lists', [
-    'event' => $event ? $event : null,
-    'edit' => request()->routeIs('samu.event.edit') ? true : false
-])
+@livewire('samu.vital-sign.table', ['event' => $event])
 
 <br>
 

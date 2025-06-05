@@ -72,20 +72,7 @@ class Event extends Model implements Auditable
         'reception_person',
         'reception_place_id',
         'rau',
-
-        /* Asignacion signos vitales */
-        // TODO: Eliminar signos vitales
-        'fc',
-        'fr',
-        'pa',
-        'pam',
-        'gl',
-        'soam',
-        'soap',
-        'hgt',
-        'fill_capillary',
-        't',
-
+        
         'treatment',
         'observation_sv',
 
@@ -259,31 +246,23 @@ class Event extends Model implements Auditable
     {
         $status = null;
         $color = 'secondary';
-        if($this->on_base_at || $this->return_base_at)
-        {
-            $status = 'Disponible';
-            $color = 'light';
+        $statusMap = [
+            'on_base_at' => ['Disponible', 'light'],
+            'return_base_at' => ['Disponible', 'light'],
+            'route_to_healtcenter_at' => ['AP', 'success'],
+            'healthcenter_at' => ['AP', 'success'],
+            'patient_reception_at' => ['AP', 'success'],
+            'mobile_arrival_at' => ['En destino', 'primary'],
+            'mobile_departure_at' => ['Rumbo a destino', 'warning'],
+            'departure_at' => ['Aviso de salida', 'danger']
+        ];
+
+        foreach ($statusMap as $field => $values) {
+            if ($this->$field) {
+            return $option ? $values[0] : $values[1];
+            }
         }
-        elseif($this->route_to_healtcenter_at || $this->healthcenter_at || $this->patient_reception_at)
-        {
-            $status = 'AP';
-            $color = 'success';
-        }
-        elseif($this->mobile_arrival_at)
-        {
-            $status = 'En destino';
-            $color = 'primary';
-        }
-        elseif($this->mobile_departure_at)
-        {
-            $status = 'Rumbo a destino';
-            $color = 'warning';
-        }
-        elseif($this->departure_at)
-        {
-            $status = 'Aviso de salida';
-            $color = 'danger';
-        }
+
         return $option ? $status : $color;
     }
 
