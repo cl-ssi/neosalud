@@ -37,8 +37,15 @@ class Table extends Component
 
     public function mount($event)
     {
-        $this->event = $event;        
-        $this->loadVitalSigns();
+        if(isset($event)){
+
+            $this->event = $event;        
+            $this->loadVitalSigns();
+        }
+        else{
+            $this->event = null;
+            $this->vitalSigns = [];
+        }
     }
 
     public function loadVitalSigns()
@@ -91,15 +98,15 @@ class Table extends Component
         $validator = Validator::make($this->form, (new \App\Http\Requests\VitalSign\VitalSignRequest())->rules());
         $validator->validate();
 
-        if ($this->isEditMode && $this->form['id']) {
+        if (!is_null($this->event) && $this->isEditMode && $this->form['id']) {
             // Actualizar registro existente
             $vs = VitalSign::findOrFail($this->form['id']);
             $vs->update($this->form);
-        } else {
+        } else if (is_null($this->event)) {
             // Crear nuevo registro e insertar event_id
             $newData = $this->form;
-            $newData['event_id'] = $this->event->id;
-            VitalSign::create($newData);
+            $vs = VitalSign::create($newData);
+            $this->emitUp('addVitalSigns', $vs->id);
         }
 
         // Cerrar modal, recargar listado y resetear formulario
