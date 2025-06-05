@@ -45,6 +45,10 @@ class EventService
                 $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
                 $dataVitalSign['fill_capillary'] = $this->dataVitalSign['fill_capillary'][$index];
                 $dataVitalSign['t'] = $this->dataVitalSign['t'][$index];
+                $dataVitalSign['p'] = $this->dataVitalSign['p'][$index];
+                $dataVitalSign['lcf'] = $this->dataVitalSign['lcf'][$index];
+                $dataVitalSign['eva'] = $this->dataVitalSign['eva'][$index];
+                $dataVitalSign['co2'] = $this->dataVitalSign['co2'][$index];
                 $dataVitalSign['registered_at'] = $registered_at;
 
                 $vitalSign = VitalSign::create($dataVitalSign);
@@ -85,6 +89,10 @@ class EventService
                 $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
                 $dataVitalSign['fill_capillary'] = $this->dataVitalSign['fill_capillary'][$index];
                 $dataVitalSign['t'] = $this->dataVitalSign['t'][$index];
+                $dataVitalSign['p'] = $this->dataVitalSign['p'][$index];
+                $dataVitalSign['lcf'] = $this->dataVitalSign['lcf'][$index];
+                $dataVitalSign['eva'] = $this->dataVitalSign['eva'][$index];
+                $dataVitalSign['co2'] = $this->dataVitalSign['co2'][$index];
                 $dataVitalSign['registered_at'] = $this->dataVitalSign['registered_at'][$index];
 
                 $vitalSign->fill($dataVitalSign);
@@ -131,6 +139,10 @@ class EventService
             $this->dataVitalSign['hgt'] = $dataValidated['hgt'];
             $this->dataVitalSign['fill_capillary'] = $dataValidated['fill_capillary'];
             $this->dataVitalSign['t'] = $dataValidated['t'];
+            $this->dataVitalSign['p'] = $dataValidated['p'];
+            $this->dataVitalSign['lcf'] = $dataValidated['lcf'];
+            $this->dataVitalSign['eva'] = $dataValidated['eva'];
+            $this->dataVitalSign['co2'] = $dataValidated['co2'];
 
             unset($dataValidated['fc']);
             unset($dataValidated['fr']);
@@ -142,6 +154,10 @@ class EventService
             unset($dataValidated['hgt']);
             unset($dataValidated['fill_capillary']);
             unset($dataValidated['t']);
+            unset($dataValidated['p']);
+            unset($dataValidated['lcf']);
+            unset($dataValidated['eva']);
+            unset($dataValidated['co2']);
             unset($dataValidated['registered_at']);
         }
 

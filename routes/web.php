@@ -567,6 +567,7 @@ use App\Http\Controllers\Samu\GpsController;
 use App\Http\Controllers\Samu\CommuneController;
 use App\Http\Controllers\Samu\PreHospital;
 use App\Http\Livewire\Samu\Coordinate\CoordinateIndex;
+use App\Http\Livewire\Samu\Event;
 use App\Http\Livewire\Samu\Event\EventFilter;
 use App\Http\Livewire\Samu\EventByMonth;
 use App\Http\Livewire\Samu\FindEvent;
@@ -680,6 +681,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
         ->middleware('permission:SAMU administrador|SAMU despachador')
         ->group(function () {
             Route::get('/',             [EventController::class, 'index'])->name('index');
+            Route::get('/lw/create/{call?}', Event::class)->name('lw.index');
             Route::get('/{event}/duplicate', [EventController::class, 'create'])->name('duplicate');
             Route::get('/create/{call?}', [EventController::class, 'create'])->name('create');
             Route::post('/store/{call?}', [EventController::class, 'store'])->name('store');

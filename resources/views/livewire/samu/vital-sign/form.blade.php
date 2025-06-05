@@ -204,6 +204,72 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-1">
+            <label for="for-t">Peso</label>
+
+            <input
+                type="number"
+                class="form-control @error('p') is-invalid @enderror"
+                id="for-p"
+                wire:model.defer="p"
+            >
+
+            @error('p')
+                <div class="text-danger">
+                    <small>{{ $message }}</small>
+                </div>
+            @enderror
+        </fieldset>
+        <fieldset class="form-group col-sm-1">
+            <label for="for-t">LCF</label>
+
+            <input
+                type="number"
+                class="form-control @error('lcf') is-invalid @enderror"
+                id="for-lcf"
+                wire:model.defer="lcf"
+            >
+
+            @error('lcf')
+                <div class="text-danger">
+                    <small>{{ $message }}</small>
+                </div>
+            @enderror
+        </fieldset>
+        <fieldset class="form-group col-sm-1">
+            <label for="for-t">EVA</label>
+
+            <input
+                type="number"
+                class="form-control @error('eva') is-invalid @enderror"
+                id="for-eva"
+                wire:model.defer="eva"
+            >
+
+            @error('eva')
+                <div class="text-danger">
+                    <small>{{ $message }}</small>
+                </div>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-sm-1">
+            <label for="for-t">CO 2</label>
+
+            <input
+                type="number"
+                class="form-control @error('co2') is-invalid @enderror"
+                id="for-co2"
+                wire:model.defer="co2"
+            >
+
+            @error('co2')
+                <div class="text-danger">
+                    <small>{{ $message }}</small>
+                </div>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-sm-1">
             <label>Acciones <br> Signo Vital</label>
             @if($mode == 'create')
                 <button

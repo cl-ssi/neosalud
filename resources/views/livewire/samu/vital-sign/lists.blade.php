@@ -15,6 +15,8 @@
                     <th>HGT mg/dl</th>
                     <th>Llene capilar</th>
                     <th>Temperatura °C</th>
+                    <th>EVA</th>
+                    <th>Co2</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -33,6 +35,10 @@
                     <td>{{ $vitalSign['hgt'] ? $vitalSign['hgt'] : '-'}}</td>
                     <td>{{ $vitalSign['fill_capillary'] ? $vitalSign['fill_capillary'] : '-'}}</td>
                     <td>{{ $vitalSign['t'] ? $vitalSign['t'] : '-'}}</td>
+                    <td>{{ $vitalSign['p'] ? $vitalSign['p'] : '-'}}</td>
+                    <td>{{ $vitalSign['lcf'] ? $vitalSign['lcf'] : '-'}}</td>
+                    <td>{{ $vitalSign['eva'] ? $vitalSign['eva'] : '-'}}</td>
+                    <td>{{ $vitalSign['co2'] ? $vitalSign['co2'] : '-'}}</td>
                     <td nowrap>
                         <button
                             type="button"
@@ -77,6 +83,10 @@
             <input type="hidden" name="hgt[]" class="form-control" value="{{ $vitalSign['hgt'] }}"/>
             <input type="hidden" name="fill_capillary[]" class="form-control" value="{{ $vitalSign['fill_capillary'] }}"/>
             <input type="hidden" name="t[]" class="form-control" value="{{ $vitalSign['t'] }}"/>
+            <input type="hidden" name="p[]" class="form-control" value="{{ $vitalSign['p'] }}"/>
+            <input type="hidden" name="lcf[]" class="form-control" value="{{ $vitalSign['lcf'] }}"/>
+            <input type="hidden" name="eva[]" class="form-control" value="{{ $vitalSign['eva'] }}"/>
+            <input type="hidden" name="co2[]" class="form-control" value="{{ $vitalSign['co2'] }}"/>
         @endforeach
     </div>
 </div>

@@ -28,6 +28,8 @@ class Form extends Component
     public $t;
     public $p;
     public $lcf;
+    public $eva;
+    public $co2;
 
     public $listeners = [
         'loadVitalSign'
@@ -75,6 +77,8 @@ class Form extends Component
         $this->t = $vitalSign['t'];
         $this->p = $vitalSign['p'];
         $this->lcf = $vitalSign['lcf'];
+        $this->lcf = $vitalSign['eva'];
+        $this->lcf = $vitalSign['co2'];
     }
 
     public function updateVitalSign()
@@ -122,6 +126,8 @@ class Form extends Component
             't',
             'p',
             'lcf',
+            'eva',
+            'co2',
         ]);
     }
 

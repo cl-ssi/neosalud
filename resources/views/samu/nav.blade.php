@@ -66,6 +66,13 @@
     </li>
     @endcan
 
+    @canany(['be god'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('samu.event.lw.index') }} {{ $disabled }}"
+        href=" {{ route('samu.event.lw.index') }}"><i class="fas fa-car-crash"></i> Despacho V2</a>
+    </li>
+    @endcan
+
     @canany(['SAMU administrador','SAMU despachador','SAMU regulador','SAMU operador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.map') }}"
