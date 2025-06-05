@@ -21,27 +21,37 @@ class EventService
      * @param  array  $dataValidated
      * @return void
      */
-    public function create(Event $event = null, Call $call = null, $dataValidated, $vitalSignsIds = [])
+    public function create(Event $event = null, Call $call = null, $dataValidated)
     {
-        
+        $this->getDataVitalSign($dataValidated);
         $this->getTimestamps($event, $dataValidated);
 
         $callRelationed = $event ? $event->call : $call;
         $newEvent = Event::create($this->dataEvent);
         $newEvent->call()->associate($callRelationed);
         $newEvent->save();
-        if($vitalSignsIds)
+
+        if($this->notEmptyVitalSign($dataValidated))
         {
-            foreach($vitalSignsIds as $vitalSignId)
+            foreach($this->dataVitalSign['registered_at'] as $index => $registered_at)
             {
-                $vitalSign = VitalSign::find($vitalSignId);
-                if($vitalSign)
-                {
-                    $newEvent->vitalSigns()->attach($vitalSign);
-                }
+                $dataVitalSign['fc'] = $this->dataVitalSign['fc'][$index];
+                $dataVitalSign['fr'] = $this->dataVitalSign['fr'][$index];
+                $dataVitalSign['pa'] = $this->dataVitalSign['pa'][$index];
+                $dataVitalSign['pam'] = $this->dataVitalSign['pam'][$index];
+                $dataVitalSign['gl'] = $this->dataVitalSign['gl'][$index];
+                $dataVitalSign['soam'] = $this->dataVitalSign['soam'][$index];
+                $dataVitalSign['soap'] = $this->dataVitalSign['soap'][$index];
+                $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
+                $dataVitalSign['fill_capillary'] = $this->dataVitalSign['fill_capillary'][$index];
+                $dataVitalSign['t'] = $this->dataVitalSign['t'][$index];
+                $dataVitalSign['registered_at'] = $registered_at;
+
+                $vitalSign = VitalSign::create($dataVitalSign);
+                $newEvent->vitalSigns()->save($vitalSign);
+                $newEvent->save();
             }
         }
-        
     }
 
     /**
@@ -53,11 +63,37 @@ class EventService
      */
     public function update(Event $event, $dataValidated)
     {
-        
+        $this->getDataVitalSign($dataValidated);
         $this->dataEvent['status'] = ($dataValidated["save_close"] == "yes") ? false : $event->status;
         $event->update($this->dataEvent);
 
-        
+        $this->deleteVitalSigns($event);
+
+        if($this->notEmptyVitalSign($dataValidated))
+        {
+            foreach($this->dataVitalSign['ids'] as $index => $id)
+            {
+                $vitalSign = VitalSign::findOrNew($id);
+
+                $dataVitalSign['fc'] = $this->dataVitalSign['fc'][$index];
+                $dataVitalSign['fr'] = $this->dataVitalSign['fr'][$index];
+                $dataVitalSign['pa'] = $this->dataVitalSign['pa'][$index];
+                $dataVitalSign['pam'] = $this->dataVitalSign['pam'][$index];
+                $dataVitalSign['gl'] = $this->dataVitalSign['gl'][$index];
+                $dataVitalSign['soam'] = $this->dataVitalSign['soam'][$index];
+                $dataVitalSign['soap'] = $this->dataVitalSign['soap'][$index];
+                $dataVitalSign['hgt'] = $this->dataVitalSign['hgt'][$index];
+                $dataVitalSign['fill_capillary'] = $this->dataVitalSign['fill_capillary'][$index];
+                $dataVitalSign['t'] = $this->dataVitalSign['t'][$index];
+                $dataVitalSign['registered_at'] = $this->dataVitalSign['registered_at'][$index];
+
+                $vitalSign->fill($dataVitalSign);
+                $vitalSign->save();
+
+                $event->vitalSigns()->save($vitalSign);
+                $event->save();
+            }
+        }
 
         $mobileInService = MobileInService::whereShiftId($event->shift->id)->whereMobileId($dataValidated['mobile_id'])->first();
 
@@ -73,7 +109,45 @@ class EventService
         }
     }
 
-    
+    /**
+     * Get field of event and vital sign from dataValidated
+     *
+     * @param  array  $dataValidated
+     * @return void
+     */
+    public function getDataVitalSign($dataValidated)
+    {
+        if(array_key_exists('registered_at',  $dataValidated))
+        {
+            $this->dataVitalSign['ids'] = $dataValidated['ids'];
+            $this->dataVitalSign['registered_at'] = $dataValidated['registered_at'];
+            $this->dataVitalSign['fc'] = $dataValidated['fc'];
+            $this->dataVitalSign['fr'] = $dataValidated['fr'];
+            $this->dataVitalSign['pa'] = $dataValidated['pa'];
+            $this->dataVitalSign['pam'] = $dataValidated['pam'];
+            $this->dataVitalSign['gl'] = $dataValidated['gl'];
+            $this->dataVitalSign['soam'] = $dataValidated['soam'];
+            $this->dataVitalSign['soap'] = $dataValidated['soap'];
+            $this->dataVitalSign['hgt'] = $dataValidated['hgt'];
+            $this->dataVitalSign['fill_capillary'] = $dataValidated['fill_capillary'];
+            $this->dataVitalSign['t'] = $dataValidated['t'];
+
+            unset($dataValidated['fc']);
+            unset($dataValidated['fr']);
+            unset($dataValidated['pa']);
+            unset($dataValidated['pam']);
+            unset($dataValidated['gl']);
+            unset($dataValidated['soam']);
+            unset($dataValidated['soap']);
+            unset($dataValidated['hgt']);
+            unset($dataValidated['fill_capillary']);
+            unset($dataValidated['t']);
+            unset($dataValidated['registered_at']);
+        }
+
+        $this->dataEvent = $dataValidated;
+    }
+
     /**
      * Get the timestamp of the event
      *
@@ -115,5 +189,34 @@ class EventService
         }
 
         return $datetime;
+    }
+
+    /**
+     * Checks if at least one data of the vital signs are defined
+     *
+     * @param  array  $dataValidated
+     * @return boolean
+     */
+    public function notEmptyVitalSign($dataValidated)
+    {
+        return (isset($dataValidated['registered_at']) && count($dataValidated['registered_at']) > 0);
+    }
+
+    /**
+     * Delete vital signs
+     *
+     * @param  \App\Models\Samu\Event  $event
+     * @return void
+     */
+    public function deleteVitalSigns(Event $event)
+    {
+        $ids = array_key_exists('ids',  $this->dataVitalSign) ? $this->dataVitalSign['ids'] : [];
+        $collectionIds = collect($ids);
+
+        foreach($event->vitalSigns as $vitalSign)
+        {
+            if($collectionIds->search($vitalSign->id) === false)
+                $vitalSign->delete();
+        }
     }
 }
