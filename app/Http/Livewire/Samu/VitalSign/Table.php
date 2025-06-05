@@ -37,14 +37,14 @@ class Table extends Component
 
     public function mount($event)
     {
-        $this->event = $event;
+        $this->event = $event;        
         $this->loadVitalSigns();
     }
 
     public function loadVitalSigns()
     {
         // Recupera todos los signos vitales asociados al evento
-        $this->vitalSigns = VitalSign::where('event_id', $this->event->id)
+        $this->vitalSigns = VitalSign::where('event_id', $this->event?->id)
                                      ->orderBy('registered_at', 'desc')
                                      ->get()
                                      ->toArray();

@@ -440,8 +440,9 @@
 <hr>
 
 <h4>Asignación Signos Vitales</h4>
-
-@livewire('samu.vital-sign.table', ['event' => $event])
+@if(isset($event))
+    @livewire('samu.vital-sign.table', ['event' => $event])
+@endif
 
 <br>
 
