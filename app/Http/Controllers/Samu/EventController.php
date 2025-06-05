@@ -25,7 +25,11 @@ class EventController extends Controller
 {
 
     protected $listeners = [
+<<<<<<< HEAD
         'addVitalSigns' => 'addVitalSigns',
+=======
+        'addVitalSigns' => 'addVitalSigns'
+>>>>>>> e73d7699 (SAMU: Rollback vital signs)
     ];
 
     public array $vitalSignsId = [];
