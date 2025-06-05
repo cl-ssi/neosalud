@@ -76,6 +76,7 @@ class EventStoreRequest extends FormRequest
             'hgt.*'                 => 'nullable|integer',
             'fill_capillary.*'      => 'nullable|integer',
             't.*'                   => 'nullable|numeric|min:0|max:50',
+            'p.*'                   => 'nullable|numeric|min:0',
             'eva.*'                   => 'nullable|numeric|min:0',
             'co2.*'                   => 'nullable|numeric|min:0',
             'registered_at.*'       => 'nullable',
