@@ -4,8 +4,11 @@ namespace App\Http\Livewire\Samu;
 
 use Livewire\Component;
 use App\Models\Samu\Event;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Facades\Excel;
 
-class RemStatistics extends Component
+class RemStatistics extends Component implements FromView
 {
     protected $month;
     protected $year;
@@ -19,7 +22,14 @@ class RemStatistics extends Component
     ];
     protected const SCA = [5];
     protected const PCR = [2];
-    protected const PT = [63, 64, 65, 66, 67, 68, 69];
+    protected const PT = [63, 64, 65, 66, 67, 68, 69]; //201*, 401d, 402b, 701i 
+    protected const CRITICAL = [2, 13, 35, 36, 37, 46, 66, 78, 86, 93, 96, 97, 127]; //['101a', '102a', '105a', '105b', '105c', '107a', '201c', '401b', '402b', '501a', '501b', '403d', '701i']
+
+    protected const MOBILES = [
+        'BASIC' => [1, 5],
+        'ADVANCED' => [2, 3, 6],
+        'HYBRID' => [4]
+    ];
 
     protected $ages = [
         ['0', '4'],
@@ -56,13 +66,40 @@ class RemStatistics extends Component
     public function getStats()
     {
         $events = $this->getEvents();
-        $stats = [];
+
+        // STATS SECTION K
+
+        $basicas = $events->whereIn('mobile_id', self::MOBILES['BASIC']);
+        $avanzadas = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
+        $mobiles['BASIC']['TOTAL'] = $basicas->count();
+        $mobiles['ADVANCED']['TOTAL'] = $avanzadas->count();
+        $mobiles['TOTAL']['TOTAL'] = $events->count();
+
+        // $mobiles['BASIC']['CRITICAL'] = $basicas->where('severity', 'CRITICAL')->count();
+        // $mobiles['BASIC']['UNCRITICAL'] = $basicas->where('severity', 'UNCRITICAL')->count();
+        // $mobiles['ADVANCED']['CRITICAL'] = $avanzadas->where('severity', 'CRITICAL')->count();
+        // $mobiles['ADVANCED']['UNCRITICAL'] = $avanzadas->where('severity', 'UNCRITICAL')->count();
+
+        $mobiles['BASIC']['recipients'] = $basicas->unique('patient_identification')->count();
+        $mobiles['ADVANCED']['recipients'] = $avanzadas->unique('patient_identification')->count();
+
+
+        // STATS SECTION N
         $stats['SCA'] = $this->ageRangeByGender($events, self::SCA);
         $stats['PCR'] = $this->ageRangeByGender($events, self::PCR);
         $stats['PT'] = $this->ageRangeByGender($events, self::PT);
         $otherEvents = $events->whereNotIn('key_id', array_merge(self::SCA, self::PCR, self::PT));
         $stats['OTHERS'] = $this->ageRangeByGender($otherEvents);
         return $stats;
+    }
+
+    public function getEvents()
+    {
+        $events = Event::whereMonth('created_at', $this->month)
+            ->whereYear('created_at', $this->year)
+            ->with('key')
+            ->get();
+        return $events;
     }
 
     public function ageRangeByGender($events, array $key = null)
@@ -89,13 +126,23 @@ class RemStatistics extends Component
         return $genderByAge;
     }
 
-    public function getEvents()
+    public function view(): View
     {
-        $events = Event::whereMonth('created_at', $this->month)
-            ->whereYear('created_at', $this->year)
-            ->onlyValid()
-            ->with('key')
-            ->get();
-        return $events;
+        $this->month = now()->month;
+        $this->year = now()->year;
+        $stats = $this->getStats();
+        return view(
+            'samu.rem.section-n',
+            [
+                'stats' => $stats,
+                'ages' => $this->ages,
+                'labels' => self::LABELS
+            ]
+        );
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new RemStatistics, 'test.xlsx');
     }
 }

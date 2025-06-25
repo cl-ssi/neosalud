@@ -65,18 +65,9 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\RayenWs\SoapController;
 use Spatie\Permission\Contracts\Role;
 
-
-
 use App\Http\Controllers\CoordinateController;
-use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
-
 
 use Illuminate\Support\Facades\Log; //borrar
-
-use App\Http\Livewire\Samu\MorbidHistory;
-use App\Http\Livewire\Samu\Alterations;
-use App\Http\Livewire\Samu\Medicines;
-use App\Http\Livewire\Samu\GlasgowScale;
 
 
 /*
@@ -584,6 +575,14 @@ use App\Http\Livewire\Samu\Shift\ShiftSearcher;
 use App\Http\Livewire\Samu\ShiftUserEdit;
 use App\Http\Livewire\Samu\Novelties;
 
+use App\Http\Livewire\Samu\MorbidHistory;
+use App\Http\Livewire\Samu\Alterations;
+use App\Http\Livewire\Samu\Medicines;
+use App\Http\Livewire\Samu\GlasgowScale;
+
+use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
+use App\Http\Livewire\Samu\RemStatistics;
+
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/monitor', MonitorIndex::class)->name('monitor');
 
@@ -599,6 +598,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::view('/', 'samu.welcome')->name('welcome');
     Route::get('/map', [CallController::class, 'maps'])->name('map');
     Route::get('/dashboard', DashboardIndex::class)->name('dashboard');
+    Route::get('/rem', RemStatistics::class)->name('rem');
 
     Route::prefix('shifts')->name('shift.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
