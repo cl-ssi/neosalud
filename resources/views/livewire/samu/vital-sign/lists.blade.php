@@ -15,6 +15,8 @@
                     <th>HGT mg/dl</th>
                     <th>Llene capilar</th>
                     <th>Temperatura °C</th>
+                    <th>Peso</th>
+                    <th>Lat. Cardiaco Fetal</th>
                     <th>EVA</th>
                     <th>Co2</th>
                     <th>Acciones</th>
@@ -46,7 +48,7 @@
                             title="Editar Signo Vital"
                             wire:click="editVitalSign({{ $index }})"
                             @if($event && $event->status == false) disabled @endif
-                        >
+                            >
                             <i class="fas fa-edit"></i>
                         </button>
                         <button
@@ -55,7 +57,7 @@
                             title="Elimina Signo Vital"
                             wire:click="deleteVitalSign({{ $index }})"
                             @if($event && $event->status == false) disabled @endif
-                        >
+                            >
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -71,22 +73,22 @@
         </table>
 
         @foreach($vitalSigns as $vitalSign)
-            <input type="hidden" name="ids[]" class="form-control" value="{{ $vitalSign['id'] }}"/>
-            <input type="hidden" name="registered_at[]" class="form-control" value="{{ $vitalSign['registered_at'] }}"/>
-            <input type="hidden" name="fc[]" class="form-control" value="{{ $vitalSign['fc'] }}"/>
-            <input type="hidden" name="fr[]" class="form-control" value="{{ $vitalSign['fr'] }}"/>
-            <input type="hidden" name="pa[]" class="form-control" value="{{ $vitalSign['pa'] }}"/>
-            <input type="hidden" name="pam[]" class="form-control" value="{{ $vitalSign['pam'] }}"/>
-            <input type="hidden" name="gl[]" class="form-control" value="{{ $vitalSign['gl'] }}"/>
-            <input type="hidden" name="soam[]" class="form-control" value="{{ $vitalSign['soam'] }}"/>
-            <input type="hidden" name="soap[]" class="form-control" value="{{ $vitalSign['soap'] }}"/>
-            <input type="hidden" name="hgt[]" class="form-control" value="{{ $vitalSign['hgt'] }}"/>
-            <input type="hidden" name="fill_capillary[]" class="form-control" value="{{ $vitalSign['fill_capillary'] }}"/>
-            <input type="hidden" name="t[]" class="form-control" value="{{ $vitalSign['t'] }}"/>
-            <input type="hidden" name="p[]" class="form-control" value="{{ $vitalSign['p'] }}"/>
-            <input type="hidden" name="lcf[]" class="form-control" value="{{ $vitalSign['lcf'] }}"/>
-            <input type="hidden" name="eva[]" class="form-control" value="{{ $vitalSign['eva'] }}"/>
-            <input type="hidden" name="co2[]" class="form-control" value="{{ $vitalSign['co2'] }}"/>
+        <input type="hidden" name="ids[]" class="form-control" value="{{ $vitalSign['id'] }}" />
+        <input type="hidden" name="registered_at[]" class="form-control" value="{{ $vitalSign['registered_at'] }}" />
+        <input type="hidden" name="fc[]" class="form-control" value="{{ $vitalSign['fc'] }}" />
+        <input type="hidden" name="fr[]" class="form-control" value="{{ $vitalSign['fr'] }}" />
+        <input type="hidden" name="pa[]" class="form-control" value="{{ $vitalSign['pa'] }}" />
+        <input type="hidden" name="pam[]" class="form-control" value="{{ $vitalSign['pam'] }}" />
+        <input type="hidden" name="gl[]" class="form-control" value="{{ $vitalSign['gl'] }}" />
+        <input type="hidden" name="soam[]" class="form-control" value="{{ $vitalSign['soam'] }}" />
+        <input type="hidden" name="soap[]" class="form-control" value="{{ $vitalSign['soap'] }}" />
+        <input type="hidden" name="hgt[]" class="form-control" value="{{ $vitalSign['hgt'] }}" />
+        <input type="hidden" name="fill_capillary[]" class="form-control" value="{{ $vitalSign['fill_capillary'] }}" />
+        <input type="hidden" name="t[]" class="form-control" value="{{ $vitalSign['t'] }}" />
+        <input type="hidden" name="p[]" class="form-control" value="{{ $vitalSign['p'] }}" />
+        <input type="hidden" name="lcf[]" class="form-control" value="{{ $vitalSign['lcf'] }}" />
+        <input type="hidden" name="eva[]" class="form-control" value="{{ $vitalSign['eva'] }}" />
+        <input type="hidden" name="co2[]" class="form-control" value="{{ $vitalSign['co2'] }}" />
         @endforeach
     </div>
 </div>

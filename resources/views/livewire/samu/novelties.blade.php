@@ -2,13 +2,13 @@
     @include('samu.nav')
 
     <h4 class="mb-3 mt-3">Novedades</h4>
-    
+
     <div class="row mb-3">
         <div class="col-md-8">
             <div class="input-group">
                 <input type="text" class="form-control" wire:model.defer='search' placeholder="Buscar en detalle...">
                 {{-- wire:model.lazy para que el render se ejecute al perder el foco --}}
-                <input type="date" class="form-control" wire:model.lazy='date'> 
+                <input type="date" class="form-control" wire:model.lazy='date'>
                 <button class="btn btn-outline-secondary" wire:click='render' type="button">Buscar</button>
             </div>
         </div>
@@ -28,9 +28,9 @@
 
     {{-- Mostrar mensaje de error si existe (para el modal) --}}
     @if (session()->has('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
     @endif
 
     @include('samu.noveltie.partials.list', ['novelties' => $novelties ])
@@ -56,9 +56,9 @@
                         <label for="pdfPeriod" class="form-label">Período:</label>
                         <select id="pdfPeriod" class="form-select" wire:model.defer="pdfPeriod">
                             <option value="all">Todos (Mañana, Tarde y Noche)</option>
-                            <option value="morning">Solo Mañana (00:00 - 11:59)</option>
-                            <option value="afternoon">Solo Tarde (12:00 - 19:59)</option>
-                            <option value="night">Solo Noche (20:00 - 23:59)</option>
+                            <option value="morning">Solo Mañana (08:00 - 16:59)</option>
+                            <option value="afternoon">Solo Tarde (17:00 - 23:59)</option>
+                            <option value="night">Solo Noche (00:00 - 07:59)</option>
                         </select>
                         @error('pdfPeriod') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
