@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Samu;
 
 use Livewire\Component;
-use App\Jobs\EndLunchBreakJob;
+use App\Jobs\Samu\EndLunchBreakJob;
 
 class Lunch extends Component
 {
@@ -32,7 +32,6 @@ class Lunch extends Component
         $this->mis->lunch_break_start_at = now();
         $this->mis->save();
         $this->mis->fresh();
-        
     }
 
     public function lunchBreakEnd()
