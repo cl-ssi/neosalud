@@ -122,7 +122,7 @@ class Novelties extends Component
         if ($this->pdfPeriod == 'all' || $this->pdfPeriod == 'night') {
             $nightNovelties = $noveltiesOfTheDay->filter(function ($noveltie) {
                 $hour = $noveltie->created_at->hour;
-                return $hour >= 0 && $hour <= 8;
+                return $hour >= 0 && $hour <= 7;
             });
         }
 

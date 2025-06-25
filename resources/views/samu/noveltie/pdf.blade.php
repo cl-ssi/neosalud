@@ -91,6 +91,35 @@
 <body>
     <div class="container">
         <h1>Novedades del Día: {{ $date }}</h1>
+        @if($pdfPeriod === 'night' || $pdfPeriod === 'all')
+        <h2>Noche (00:00 - 07:59)</h2>
+        @if($nightNovelties->count() > 0)
+        <table>
+            <thead>
+                <tr>
+                    <th class="time-column">Hora</th>
+                    <th>Teléfono</th>
+                    <th class="detail-column">Detalle</th>
+                    <th class="creator-column">Creador</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($nightNovelties as $noveltie)
+                <tr>
+                    <td>{{ $noveltie->created_at->format('H:i:s') }}</td>
+                    <td>{{ $noveltie->telephone ?? '-' }}</td>
+                    <td>{{ $noveltie->detail ?? '-' }}</td>
+                    <td>{{ $noveltie->creator->officialFullName ?? '-' }}</td>
+                    <td>{{ $noveltie->type ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @else
+        <p class="no-novelties">No se registraron novedades en la noche.</p>
+        @endif
+        @endif
 
         @if($pdfPeriod === 'morning' || $pdfPeriod === 'all')
         <h2>Mañana (08:00 - 16:59)</h2>
@@ -152,35 +181,7 @@
         @endif
         @endif
 
-        @if($pdfPeriod === 'night' || $pdfPeriod === 'all')
-        <h2>Noche (00:00 - 07:59)</h2>
-        @if($nightNovelties->count() > 0)
-        <table>
-            <thead>
-                <tr>
-                    <th class="time-column">Hora</th>
-                    <th>Teléfono</th>
-                    <th class="detail-column">Detalle</th>
-                    <th class="creator-column">Creador</th>
-                    <th>Tipo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($nightNovelties as $noveltie)
-                <tr>
-                    <td>{{ $noveltie->created_at->format('H:i:s') }}</td>
-                    <td>{{ $noveltie->telephone ?? '-' }}</td>
-                    <td>{{ $noveltie->detail ?? '-' }}</td>
-                    <td>{{ $noveltie->creator->officialFullName ?? '-' }}</td>
-                    <td>{{ $noveltie->type ?? '-' }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @else
-        <p class="no-novelties">No se registraron novedades en la noche.</p>
-        @endif
-        @endif
+
     </div>
 </body>
 
