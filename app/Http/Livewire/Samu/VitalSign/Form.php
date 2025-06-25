@@ -77,8 +77,8 @@ class Form extends Component
         $this->t = $vitalSign['t'];
         $this->p = $vitalSign['p'];
         $this->lcf = $vitalSign['lcf'];
-        $this->lcf = $vitalSign['eva'];
-        $this->lcf = $vitalSign['co2'];
+        $this->eva = $vitalSign['eva'];
+        $this->co2 = $vitalSign['co2'];
     }
 
     public function updateVitalSign()
@@ -134,9 +134,9 @@ class Form extends Component
     public function getTypeInput()
     {
         $created_at = $this->event ? Carbon::parse($this->event->created_at) : null;
-        if($this->event == null)
+        if ($this->event == null)
             $typeInput = "time";
-        if($created_at && $created_at->format('Y-m-d') == now()->format('Y-m-d'))
+        if ($created_at && $created_at->format('Y-m-d') == now()->format('Y-m-d'))
             $typeInput = "time";
         else
             $typeInput = "datetime-local";
