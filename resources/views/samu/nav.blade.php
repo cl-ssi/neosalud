@@ -158,6 +158,13 @@
                     <i class="fas fa-chart-line"></i> Panel Estadísticas
                 </a>
             </li>
+            @canany(['be god'])
+            <li>
+                <a class="dropdown-item {{ active('samu.rem') }}" href="{{ route('samu.rem') }}">
+                    <i class="fas fa-chart-line"></i> Estadísticas REM
+                </a>
+            </li>
+            @endcanany
             <li>
                 <a class="dropdown-item {{ active('samu.event.filter') }}" href="{{ route('samu.event.filter') }}">
                     <i class="fas fa-car-crash"></i> Eventos
