@@ -10,7 +10,8 @@ RUN apk add --no-cache \
         libwebp-dev \
         freetype-dev \
         libxml2-dev \
-        libzip-dev
+        libzip-dev \
+        libc6-dev
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -26,6 +27,8 @@ RUN docker-php-ext-install soap
 RUN docker-php-ext-install zip
 
 RUN docker-php-ext-install bcmath
+
+RUN docker-php-ext-install calendar
 
 RUN mkdir -p /run/nginx
 
