@@ -582,6 +582,7 @@ use App\Http\Livewire\Samu\GlasgowScale;
 
 use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 use App\Http\Livewire\Samu\RemStatistics;
+use App\Http\Livewire\Samu\MinsalStatistics;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/monitor', MonitorIndex::class)->name('monitor');
@@ -599,6 +600,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/map', [CallController::class, 'maps'])->name('map');
     Route::get('/dashboard', DashboardIndex::class)->name('dashboard');
     Route::get('/rem', RemStatistics::class)->name('rem');
+    Route::get('/minsal', MinsalStatistics::class)->name('minsal');
 
     Route::prefix('shifts')->name('shift.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
@@ -839,6 +841,7 @@ Route::prefix('labs')->name('labs.')->middleware('auth')->group(function () {
 use App\Http\Controllers\Epi\TracingController;
 use App\Http\Controllers\Epi\ContactPatientController;
 use App\Http\Controllers\Epi\SuspectCaseReportController;
+
 Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () {
     Route::view('/', 'chagas.welcome')->name('welcome');
 
@@ -847,7 +850,7 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
     Route::get('/confirm-request/{patient}/{organization}', [SuspectCaseController::class, 'confirmRequestChaga'])->name('confirmRequestChaga');
     Route::get('/sample/{organization}', [SuspectCaseController::class, 'sampleOrganization'])->name('sampleOrganization');
     Route::post('/sample-blood/{id}', [SuspectCaseController::class, 'sampleBlood'])->name('sampleBlood');
-    
+
 
 
     //Muestra el correo de delegeado de epidemiologia
@@ -885,15 +888,12 @@ Route::prefix('chagas')->name('chagas.')->middleware('auth')->group(function () 
         Route::get('/create/{suspectcase}', [ContactPatientController::class, 'create'])->name('create');
         Route::post('/post', [ContactPatientController::class, 'store'])->name('store');
         Route::delete('/{contact}', [ContactPatientController::class, 'destroy'])->name('destroy');
-        
     });
 
-    
-    
+
+
     Route::prefix('reports')->name('reports.')->middleware('auth')->group(function () {
         Route::get('/{organization?}/chagasRequest/', [SuspectCaseReportController::class, 'chagasRequest'])->name('chagasRequest');
     });
-
-
 });
 // Fin de Módulo de Chagas

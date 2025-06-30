@@ -1,89 +1,89 @@
 <h4 class="d-none d-print-block">SAMU</h4>
 
 @php
-    $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
+$disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
 @endphp
 
 <ul class="nav nav-tabs mb-3 d-print-none">
-    <li class="nav-item" >
+    <li class="nav-item">
         <a class="nav-link {{ active('samu.welcome') }}"
-        href=" {{ route('samu.welcome') }}"><i class="fas fa-home"></i> Home</a>
+            href=" {{ route('samu.welcome') }}"><i class="fas fa-home"></i> Home</a>
     </li>
 
     @canany(['SAMU administrador','SAMU regulador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active(['samu.shift.*']) }}"
-        href=" {{ route('samu.shift.index') }}"> <i class="fas fa-blender-phone"></i> Turnos</a>
+            href=" {{ route('samu.shift.index') }}"> <i class="fas fa-blender-phone"></i> Turnos</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.mobileinservice.*') }} {{ $disabled }}"
-        href=" {{ route('samu.mobileinservice.index') }}"><i class="fas fa-ambulance"></i> Moviles en servicio</a>
+            href=" {{ route('samu.mobileinservice.index') }}"><i class="fas fa-ambulance"></i> Moviles en servicio</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU creador inventarios ambulancia','SAMU aprobador inventarios ambulancia'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.mobileinserviceinventory.*') }} {{ $disabled }}"
-        href=" {{ route('samu.mobileinserviceinventory.index') }}"><i class="fa-solid fa-list"></i> Inventarios en Móviles</a>
+            href=" {{ route('samu.mobileinserviceinventory.index') }}"><i class="fa-solid fa-list"></i> Inventarios en Móviles</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador','SAMU operador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.noveltie.*') }} {{ $disabled }}"
-        href=" {{ route('samu.noveltie.index') }}"><i class="fas fa-book"></i> Novedades</a>
+            href=" {{ route('samu.noveltie.index') }}"><i class="fas fa-book"></i> Novedades</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU operador','SAMU regulador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.call.create') }} {{ $disabled }}"
-        href=" {{ route('samu.call.create') }}"><i class="fas fa-headset"></i> Llamadas</a>
+            href=" {{ route('samu.call.create') }}"><i class="fas fa-headset"></i> Llamadas</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador'])
     <li class="nav-item">
         <a class="nav-link {{ active(['samu.call.index','samu.call.edit']) }} {{ $disabled }}"
-        href=" {{ route('samu.call.index') }}"><i class="fas fa-clipboard-check"></i> Regulación</a>
+            href=" {{ route('samu.call.index') }}"><i class="fas fa-clipboard-check"></i> Regulación</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU regulador','SAMU operador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.call.ots') }} {{ $disabled }}"
-        href=" {{ route('samu.call.ots') }}"><i class="fas fa-phone"></i> OT</a>
+            href=" {{ route('samu.call.ots') }}"><i class="fas fa-phone"></i> OT</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU despachador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.event.index') }} {{ $disabled }}"
-        href=" {{ route('samu.event.index') }}"><i class="fas fa-car-crash"></i> Despacho</a>
+            href=" {{ route('samu.event.index') }}"><i class="fas fa-car-crash"></i> Despacho</a>
     </li>
     @endcan
 
     @canany(['be god'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.event.lw.index') }} {{ $disabled }}"
-        href=" {{ route('samu.event.lw.index') }}"><i class="fas fa-car-crash"></i> Despacho V2</a>
+            href=" {{ route('samu.event.lw.index') }}"><i class="fas fa-car-crash"></i> Despacho V2</a>
     </li>
     @endcan
 
     @canany(['SAMU administrador','SAMU despachador','SAMU regulador','SAMU operador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.map') }}"
-        href="{{ route('samu.map') }}" targe="_blank"><i class="fas fa-map"></i> </a>
+            href="{{ route('samu.map') }}" targe="_blank"><i class="fas fa-map"></i> </a>
     </li>
     @endcan
 
     @can('SAMU conductor')
     <li class="nav-item">
         <a class="nav-link {{ active('samu.mobiles.mobile_selector') }}"
-        href="{{ route('samu.mobiles.mobile_selector') }}"><i class="fas fa-clock"></i></a>
+            href="{{ route('samu.mobiles.mobile_selector') }}"><i class="fas fa-clock"></i></a>
     </li>
     @endcan
 
@@ -118,8 +118,7 @@
             id="navbarDropdown"
             role="button"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
-        >
+            aria-expanded="false">
             <i class="fas fa-search"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -148,8 +147,7 @@
             id="navbarDropdown"
             role="button"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
-        >
+            aria-expanded="false">
             <i class="fas fa-chart-line"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -158,13 +156,16 @@
                     <i class="fas fa-chart-line"></i> Panel Estadísticas
                 </a>
             </li>
-            @canany(['be god'])
             <li>
                 <a class="dropdown-item {{ active('samu.rem') }}" href="{{ route('samu.rem') }}">
                     <i class="fas fa-chart-line"></i> Estadísticas REM
                 </a>
             </li>
-            @endcanany
+            <li>
+                <a class="dropdown-item {{ active('samu.minsal') }}" href="{{ route('samu.minsal') }}">
+                    <i class="fas fa-chart-line"></i> Estadísticas MINSAL
+                </a>
+            </li>
             <li>
                 <a class="dropdown-item {{ active('samu.event.filter') }}" href="{{ route('samu.event.filter') }}">
                     <i class="fas fa-car-crash"></i> Eventos
@@ -219,8 +220,7 @@
             id="navbarDropdown"
             role="button"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
-        >
+            aria-expanded="false">
             <i class="fas fa-cog"></i> </a>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
