@@ -26,7 +26,7 @@ class MinsalStatistics extends Component
 
     public function mount()
     {
-        $this->year = now()->year;
+        $this->year = '2024';
         $this->loadStatistics();
     }
 
@@ -37,6 +37,7 @@ class MinsalStatistics extends Component
 
     public function updatedYear()
     {
+        dd('peo');
         $this->loadStatistics();
     }
 
@@ -66,6 +67,11 @@ class MinsalStatistics extends Component
         return Call::whereYear('hour', $this->year)
             ->whereIn('classification', ['T1', 'T2'])
             ->select(DB::raw('MONTH(hour) as month, COUNT(*) as total'))
+            ->whereHas('events', function ($query) {
+                $query->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                });
+            })
             ->groupBy(DB::raw('MONTH(hour)'))
             ->orderBy(DB::raw('MONTH(hour)'))
             ->get()
@@ -82,6 +88,11 @@ class MinsalStatistics extends Component
     {
         $results = Call::whereYear('hour', $this->year)
             ->whereIn('classification', ['T1', 'T2'])
+            ->whereHas('events', function ($query) {
+                $query->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                });
+            })
             ->select(DB::raw('MONTH(hour) as month, COUNT(*) as total'))
             ->groupBy(DB::raw('MONTH(hour)'))
             ->orderBy(DB::raw('MONTH(hour)'))
@@ -113,6 +124,9 @@ class MinsalStatistics extends Component
         foreach ($key_ids as $name => $ids) {
             $results = Event::whereYear('date', $this->year)
                 ->whereIn('key_id', $ids)
+                ->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                })
                 ->whereNotNull('departure_at')
                 ->whereNotNull('mobile_arrival_at')
                 ->select(DB::raw('MONTH(date) as month, AVG(TIMESTAMPDIFF(SECOND, departure_at, mobile_arrival_at)) as avg_response_time'))
@@ -137,6 +151,11 @@ class MinsalStatistics extends Component
     {
         return Call::whereYear('hour', $this->year)
             ->whereIn('classification', ['T1', 'T2'])
+            ->whereHas('events', function ($query) {
+                $query->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                });
+            })
             ->select(DB::raw('MONTH(hour) as month, COUNT(*) as total'))
             ->groupBy(DB::raw('MONTH(hour)'))
             ->orderBy(DB::raw('MONTH(hour)'))
@@ -154,6 +173,11 @@ class MinsalStatistics extends Component
     {
         return Call::whereYear('hour', $this->year)
             ->whereIn('classification', ['T1', 'T2'])
+            ->whereHas('events', function ($query) {
+                $query->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                });
+            })
             ->whereHas('events', function ($query) {
                 $query->whereNotNull('mobile_id'); // Asumiendo que mobile_id indica cometido
             })
@@ -200,6 +224,9 @@ class MinsalStatistics extends Component
     public function getUniquePatientsAttended()
     {
         return Event::whereYear('date', $this->year)
+            ->whereHas('mobile', function ($query) {
+                $query->where('name', 'SAMU');
+            })
             ->whereNotNull('patient_identification')
             ->distinct('patient_identification')
             ->count('patient_identification');
@@ -215,6 +242,9 @@ class MinsalStatistics extends Component
 
         foreach ($classifications as $classification) {
             $count = Event::whereYear('date', $this->year)
+                ->whereHas('mobile', function ($query) {
+                    $query->where('name', 'SAMU');
+                })
                 ->whereNotNull('patient_identification')
                 ->whereHas('call', function ($query) use ($classification) {
                     $query->where('classification', $classification);
