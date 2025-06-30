@@ -10,8 +10,7 @@ RUN apk add --no-cache \
         libwebp-dev \
         freetype-dev \
         libxml2-dev \
-        libzip-dev \
-        libc6-dev
+        libzip-dev 
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
