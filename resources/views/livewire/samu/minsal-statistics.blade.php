@@ -224,14 +224,69 @@
                 </button>
             </div>
             <div class="card-body">
-                <div class="alert alert-info">
-                    <h4 class="text-center">{{ $statistics['unique_patients'] }}</h4>
-                    <p class="text-center mb-0">Total de pacientes únicos atendidos en {{ $year }}</p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Mes</th>
+                                <th>Pacientes Únicos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($statistics['unique_patients'] as $item)
+                            <tr>
+                                <td>{{ $months[$item->month] }}</td>
+                                <td class="text-center">{{ $item->total }}</td>
+
+                            </tr>
+                            @endforeach
+                            <tr>
+                                <td>Total de pacientes únicos atendidos en {{ $year }}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         <!-- 8. Pacientes Únicos por Clasificación -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">8. Pacientes Únicos por Clasificación</h5>
+                <button wire:click="exportUniquePatientsByClassification" class="btn btn-primary btn-sm">
+                    <i class="fas fa-download"></i> Exportar Excel
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Meses</th>
+                                @foreach ($classifications as $classification)
+                                <th>{{ $classification }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (array_values($months) as $month)
+                            <tr>
+                                <td>{{$month}}</td>
+                                @foreach ($classifications as $classification)
+                                <td class="text-center">
+                                    {{ $statistics['unique_patients_by_classification'][$classification][$month] ?? 0 }}
+                                </td>
+                                @endforeach
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">8. Pacientes Únicos por Clasificación</h5>

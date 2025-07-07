@@ -21,6 +21,29 @@ class MinsalStatistics extends Component
     public $year;
     public $statistics = [];
     public $loading = false;
+    public $classifications = ['T1', 'T2', 'M1', 'M2'];
+    public $myClassifications = ['T1', 'T2'];
+    public $key_ids = [
+        'PCR' => [2, 13],
+        'SCA' => [16],
+        'ACV' => [116],
+        'IRA' => [120],
+        'Politraumatismo' => [127]
+    ];
+    public $months = [
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
+        10 => 'Octubre',
+        11 => 'Noviembre',
+        12 => 'Diciembre'
+    ];
 
     protected $listeners = ['yearChanged' => 'loadStatistics'];
 
@@ -65,7 +88,7 @@ class MinsalStatistics extends Component
     public function getMaxSamuExitsMonthly()
     {
         return Call::whereYear('hour', $this->year)
-            ->whereIn('classification', ['T1', 'T2'])
+            ->whereIn('classification', $this->myClassifications)
             ->select(DB::raw('MONTH(hour) as month, COUNT(*) as total'))
             ->whereHas('events', function ($query) {
                 $query->whereHas('mobile', function ($query) {
@@ -87,7 +110,7 @@ class MinsalStatistics extends Component
     public function getAverageSamuExitsMonthly()
     {
         $results = Call::whereYear('hour', $this->year)
-            ->whereIn('classification', ['T1', 'T2'])
+            ->whereIn('classification', $this->myClassifications)
             ->whereHas('events', function ($query) {
                 $query->whereHas('mobile', function ($query) {
                     $query->where('name', 'SAMU');
@@ -111,17 +134,11 @@ class MinsalStatistics extends Component
      */
     public function getAverageResponseTimeMonthly()
     {
-        $key_ids = [
-            'PCR' => [2, 13],
-            'SCA' => [16],
-            'ACV' => [116],
-            'IRA' => [120],
-            'Politraumatismo' => [127]
-        ];
+
 
         $data = [];
 
-        foreach ($key_ids as $name => $ids) {
+        foreach ($this->key_ids as $name => $ids) {
             $results = Event::whereYear('date', $this->year)
                 ->whereIn('key_id', $ids)
                 ->whereHas('mobile', function ($query) {
@@ -150,7 +167,7 @@ class MinsalStatistics extends Component
     public function getTotalManagedCallsMonthly()
     {
         return Call::whereYear('hour', $this->year)
-            ->whereIn('classification', ['T1', 'T2'])
+            ->whereIn('classification', $this->myClassifications)
             ->whereHas('events', function ($query) {
                 $query->whereHas('mobile', function ($query) {
                     $query->where('name', 'SAMU');
@@ -172,7 +189,7 @@ class MinsalStatistics extends Component
     public function getTotalDispatchedCallsMonthly()
     {
         return Call::whereYear('hour', $this->year)
-            ->whereIn('classification', ['T1', 'T2'])
+            ->whereIn('classification', $this->myClassifications)
             ->whereHas('events', function ($query) {
                 $query->whereHas('mobile', function ($query) {
                     $query->where('name', 'SAMU');
@@ -228,8 +245,15 @@ class MinsalStatistics extends Component
                 $query->where('name', 'SAMU');
             })
             ->whereNotNull('patient_identification')
+            ->select(DB::raw('MONTH(date) as month, COUNT(*) as total'))
+            ->groupBy(DB::raw('MONTH(date)'))
+            ->orderBy(DB::raw('MONTH(date)'))
             ->distinct('patient_identification')
-            ->count('patient_identification');
+            ->get();
+
+        foreach ($events as $event) {
+            $event->month_name = $this->getMonthName($event->month);
+        }
     }
 
     /**
@@ -237,23 +261,26 @@ class MinsalStatistics extends Component
      */
     public function getUniquePatientsAttendedByClassification()
     {
-        $classifications = ['T1', 'T2', 'M1', 'M2'];
+
         $data = [];
+        $events = Event::whereYear('date', $this->year)
+            ->whereHas('mobile', function ($query) {
+                $query->where('name', 'SAMU');
+            })
+            ->whereNotNull('patient_identification')
+            ->select(DB::raw('MONTH(date) as month, COUNT(*) as total'))
+            ->groupBy(DB::raw('MONTH(date)'))
+            ->orderBy(DB::raw('MONTH(date)'))
+            ->distinct('patient_identification')
+            ->with('call')
+            ->has('call')
+            ->get();
 
-        foreach ($classifications as $classification) {
-            $count = Event::whereYear('date', $this->year)
-                ->whereHas('mobile', function ($query) {
-                    $query->where('name', 'SAMU');
-                })
-                ->whereNotNull('patient_identification')
-                ->whereHas('call', function ($query) use ($classification) {
-                    $query->where('classification', $classification);
-                })
-                ->distinct('patient_identification')
-                ->count('patient_identification');
-            $data[$classification] = $count;
+        foreach ($this->classifications as $classification) {
+            $data[$classification] = $events->filter(function ($event) use ($classification) {
+                return $event->call?->classification === $classification;
+            });
         }
-
         return $data;
     }
 
