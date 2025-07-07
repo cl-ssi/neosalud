@@ -14,11 +14,11 @@ class RemStatistics extends Component implements FromView
     protected $year;
     protected $chartData;
 
-    protected const LABELS = [
+    public const LABELS = [
         'SCA' => 'Sindrome Coronario Agudo',
         'PCR' => 'Paro Cardiaco Respiratorio',
         'PT' => 'Politraumatismo',
-        'OTHERS' => 'Otros'
+        'OTHERS' => 'Otros',
     ];
     protected const SCA = [5];
     protected const PCR = [2];
@@ -51,6 +51,9 @@ class RemStatistics extends Component implements FromView
         ['80', '+'],
     ];
 
+    public $showExportModal = false;
+    public $exportSection = 'N';
+
     public function mount()
     {
         $this->month = now()->month;
@@ -67,35 +70,90 @@ class RemStatistics extends Component implements FromView
     {
         $events = $this->getEvents();
 
+
         // STATS SECTION K
+        // Calculate basic and advanced mobile stats
+        $basicEvents = $events->whereIn('mobile_id', self::MOBILES['BASIC']);
+        $advancedEvents = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
 
-        $basicas = $events->whereIn('mobile_id', self::MOBILES['BASIC']);
-        $avanzadas = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
-        $mobiles['BASIC']['TOTAL'] = $basicas->count();
-        $mobiles['ADVANCED']['TOTAL'] = $avanzadas->count();
-        $mobiles['TOTAL']['TOTAL'] = $events->count();
+        // Basic Totals
+        $basicTotal = $basicEvents->count();
+        $basicCriticalEvents = $basicEvents->whereIn('key_id', self::CRITICAL);
+        $basicCriticalTotal = $basicCriticalEvents->count();
+        $basicNonCriticalEvents = $basicEvents->whereNotIn('key_id', self::CRITICAL);
+        $basicNonCriticalTotal = $basicNonCriticalEvents->count();
 
-        // $mobiles['BASIC']['CRITICAL'] = $basicas->where('severity', 'CRITICAL')->count();
-        // $mobiles['BASIC']['UNCRITICAL'] = $basicas->where('severity', 'UNCRITICAL')->count();
-        // $mobiles['ADVANCED']['CRITICAL'] = $avanzadas->where('severity', 'CRITICAL')->count();
-        // $mobiles['ADVANCED']['UNCRITICAL'] = $avanzadas->where('severity', 'UNCRITICAL')->count();
+        // Advanced Totals
+        $advancedTotal = $advancedEvents->count();
+        $advancedCriticalEvents = $advancedEvents->whereIn('key_id', self::CRITICAL);
+        $advancedCriticalTotal = $advancedCriticalEvents->count();
+        $advancedNonCriticalEvents = $advancedEvents->whereNotIn('key_id', self::CRITICAL);
+        $advancedNonCriticalTotal = $advancedNonCriticalEvents->count();
 
-        $mobiles['BASIC']['recipients'] = $basicas->unique('patient_identification')->count();
-        $mobiles['ADVANCED']['recipients'] = $avanzadas->unique('patient_identification')->count();
+        // Unique Patients Basic and Advanced
+        $basicBeneficiaries = $basicEvents->unique('patient_identification')->count();
+        $advancedBeneficiaries = $advancedEvents->unique('patient_identification')->count();
+
+        // Basic Arrival Times
+        $basicCriticalArrivalTimes = $this->getTimeRanges($basicCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
+        $basicNonCriticalArrivalTimes = $this->getTimeRanges($basicNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
+
+        // Advanced Arrival Times
+        $advancedCriticalArrivalTimes = $this->getTimeRanges($advancedCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
+        $advancedNonCriticalArrivalTimes = $this->getTimeRanges($advancedNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
 
 
         // STATS SECTION N
-        $stats['SCA'] = $this->ageRangeByGender($events, self::SCA);
-        $stats['PCR'] = $this->ageRangeByGender($events, self::PCR);
-        $stats['PT'] = $this->ageRangeByGender($events, self::PT);
+        $SCA = $this->ageRangeByGender($events, self::SCA);
+        $PCR = $this->ageRangeByGender($events, self::PCR);
+        $PT = $this->ageRangeByGender($events, self::PT);
         $otherEvents = $events->whereNotIn('key_id', array_merge(self::SCA, self::PCR, self::PT));
-        $stats['OTHERS'] = $this->ageRangeByGender($otherEvents);
+        $OTHERS = $this->ageRangeByGender($otherEvents);
+
+        // Calculate CRITICAL and UNCRITICAL stats
+        $criticalEvents = $events->whereIn('key_id', self::CRITICAL);
+        $nonCriticalEvents = $events->whereNotIn('key_id', self::CRITICAL);
+        $CRITICAL = $this->ageRangeByGender($criticalEvents, self::CRITICAL);
+        $UNCRITICAL = $this->ageRangeByGender($nonCriticalEvents, null);
+
+        $stats = [
+            // Section K
+            'BASIC' => [
+                'COUNT' => [
+                    'TOTAL' => $basicTotal,
+                    'CRITICAL' => $basicCriticalTotal,
+                    'UNCRITICAL' => $basicNonCriticalTotal,
+                ],
+                'RECIPIENTS' => $basicBeneficiaries,
+                'CRITICAL' => $basicCriticalArrivalTimes,
+                'UNCRITICAL' => $basicNonCriticalArrivalTimes,
+            ],
+            'ADVANCED' => [
+                'COUNT' => [
+                    'TOTAL' => $advancedTotal,
+                    'CRITICAL' => $advancedCriticalTotal,
+                    'UNCRITICAL' => $advancedNonCriticalTotal,
+                ],
+                'RECIPIENTS' => $advancedBeneficiaries,
+                'CRITICAL' => $advancedCriticalArrivalTimes,
+                'UNCRITICAL' => $advancedNonCriticalArrivalTimes,
+            ],
+
+            // Section N
+            'SCA' => $SCA,
+            'PCR' => $PCR,
+            'PT' => $PT,
+            'OTHERS' => $OTHERS,
+            'CRITICAL' => $CRITICAL,
+            'UNCRITICAL' => $UNCRITICAL,
+        ];
+
         return $stats;
     }
 
     public function getEvents()
     {
-        $events = Event::whereMonth('created_at', $this->month)
+        $events = Event::whereMonth('created_at', 6) // $this->month
             ->whereYear('created_at', $this->year)
             ->with('key')
             ->get();
@@ -126,23 +184,74 @@ class RemStatistics extends Component implements FromView
         return $genderByAge;
     }
 
-    public function view(): View
+    public function getTransportTime($event)
     {
-        $this->month = now()->month;
-        $this->year = now()->year;
-        $stats = $this->getStats();
-        return view(
-            'samu.rem.section-n',
-            [
-                'stats' => $stats,
-                'ages' => $this->ages,
-                'labels' => self::LABELS
-            ]
-        );
+        return $event->mobile_arrival_at->diffInMinutes($event->mobile_departure_at);
     }
 
-    public function exportExcel()
+    public function getTimeRanges($events)
     {
-        return Excel::download(new RemStatistics, 'test.xlsx');
+        $times = $events->map(function ($event) {
+            if ($event->mobile_departure_at && $event->mobile_arrival_at) {
+                return $this->getTransportTime($event);
+            }
+            return null;
+        })->filter(function ($time) {
+            return $time !== null; // Filter out null values
+        })->toArray();
+        $arrivalTimes = [];
+        $arrivalTimes['0 - 20 min'] = count(array_filter($times, function ($time) {
+            return $time <= 20;
+        }));
+
+        $arrivalTimes['20 - 40 min'] = count(array_filter($times, function ($time) {
+            return $time > 20 && $time <= 40;
+        }));
+
+        $arrivalTimes['More than 40 min'] = count(array_filter($times, function ($time) {
+            return $time > 40;
+        }));
+        return $arrivalTimes;
+    }
+
+    public function showExportOptions($show = false)
+    {
+        $this->showExportModal = $show;
+    }
+
+    public function setExportSection($section)
+    {
+        $this->exportSection = $section;
+        $this->showExportOptions(false);
+        if ($section === 'K') {
+            $this->exportSection = 'K';
+        } else {
+            $this->exportSection = 'N';
+        }
+        return Excel::download(new RemStatistics, 'Seccion' . $this->exportSection . '.xlsx');
+    }
+
+    public function view(): View
+    {
+        $stats = $this->getStats();
+        // dd($this->exportSection);
+        $view = null;
+        if ($this->exportSection === 'K') {
+            $view = view('samu.rem.export-k', [
+                'stats' => $stats
+            ]);
+        } else if ($this->exportSection === 'N') {
+            $view = view(
+                'samu.rem.export-n',
+                [
+                    'stats' => $stats,
+                    'ages' => $this->ages,
+                    'labels' => self::LABELS
+                ]
+            );
+        } else {
+            $view = view('samu.rem');
+        }
+        return $view;
     }
 }
