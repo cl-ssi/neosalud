@@ -63,83 +63,88 @@ class RemStatistics extends Component implements FromView
     public function render()
     {
         $stats = $this->getStats();
-        return view('livewire.samu.rem-statistics', ['stats' => $stats]);
+
+        return view('livewire.samu.rem-statistics', [
+            'K' => $stats['section_k'],
+            'N' => $stats['section_n'],
+            'L' => $stats['section_l'],
+        ]);
+    }
+
+    public function getEvents()
+    {
+        $events = Event::whereMonth('created_at', 6) // $this->month
+            ->whereYear('created_at', $this->year)
+            ->with('key', 'call')
+            ->has('call');
+        return $events;
     }
 
     public function getStats()
     {
         $events = $this->getEvents();
+        return [
+            'section_k' => $this->getSectionK($events),
+            'section_n' => $this->getSectionN($events),
+            'section_l' => $this->getSectionL($events),
+        ];
+    }
 
-
-        // STATS SECTION K
-        // Calculate basic and advanced mobile stats
+    public function getSectionK($events)
+    {
+        $events = $events->get();
+        // Basic
         $basicEvents = $events->whereIn('mobile_id', self::MOBILES['BASIC']);
-        $advancedEvents = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
-
-        // Basic Totals
-        $basicTotal = $basicEvents->count();
         $basicCriticalEvents = $basicEvents->whereIn('key_id', self::CRITICAL);
-        $basicCriticalTotal = $basicCriticalEvents->count();
         $basicNonCriticalEvents = $basicEvents->whereNotIn('key_id', self::CRITICAL);
-        $basicNonCriticalTotal = $basicNonCriticalEvents->count();
-
-        // Advanced Totals
-        $advancedTotal = $advancedEvents->count();
-        $advancedCriticalEvents = $advancedEvents->whereIn('key_id', self::CRITICAL);
-        $advancedCriticalTotal = $advancedCriticalEvents->count();
-        $advancedNonCriticalEvents = $advancedEvents->whereNotIn('key_id', self::CRITICAL);
-        $advancedNonCriticalTotal = $advancedNonCriticalEvents->count();
-
-        // Unique Patients Basic and Advanced
-        $basicBeneficiaries = $basicEvents->unique('patient_identification')->count();
-        $advancedBeneficiaries = $advancedEvents->unique('patient_identification')->count();
-
-        // Basic Arrival Times
         $basicCriticalArrivalTimes = $this->getTimeRanges($basicCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
         $basicNonCriticalArrivalTimes = $this->getTimeRanges($basicNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
 
-        // Advanced Arrival Times
+        // Advanced
+        $advancedEvents = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
+        $advancedCriticalEvents = $advancedEvents->whereIn('key_id', self::CRITICAL);
+        $advancedNonCriticalEvents = $advancedEvents->whereNotIn('key_id', self::CRITICAL);
         $advancedCriticalArrivalTimes = $this->getTimeRanges($advancedCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
         $advancedNonCriticalArrivalTimes = $this->getTimeRanges($advancedNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at'));
 
-
-        // STATS SECTION N
-        $SCA = $this->ageRangeByGender($events, self::SCA);
-        $PCR = $this->ageRangeByGender($events, self::PCR);
-        $PT = $this->ageRangeByGender($events, self::PT);
-        $otherEvents = $events->whereNotIn('key_id', array_merge(self::SCA, self::PCR, self::PT));
-        $OTHERS = $this->ageRangeByGender($otherEvents);
-
-        // Calculate CRITICAL and UNCRITICAL stats
-        $criticalEvents = $events->whereIn('key_id', self::CRITICAL);
-        $nonCriticalEvents = $events->whereNotIn('key_id', self::CRITICAL);
-        $CRITICAL = $this->ageRangeByGender($criticalEvents, self::CRITICAL);
-        $UNCRITICAL = $this->ageRangeByGender($nonCriticalEvents, null);
-
-        $stats = [
-            // Section K
+        return [
             'BASIC' => [
                 'COUNT' => [
-                    'TOTAL' => $basicTotal,
-                    'CRITICAL' => $basicCriticalTotal,
-                    'UNCRITICAL' => $basicNonCriticalTotal,
+                    'TOTAL' => $basicEvents->count(),
+                    'CRITICAL' => $basicCriticalEvents->count(),
+                    'UNCRITICAL' => $basicNonCriticalEvents->count(),
                 ],
-                'RECIPIENTS' => $basicBeneficiaries,
+                'RECIPIENTS' => $basicEvents->unique('patient_identification')->count(),
                 'CRITICAL' => $basicCriticalArrivalTimes,
                 'UNCRITICAL' => $basicNonCriticalArrivalTimes,
             ],
             'ADVANCED' => [
                 'COUNT' => [
-                    'TOTAL' => $advancedTotal,
-                    'CRITICAL' => $advancedCriticalTotal,
-                    'UNCRITICAL' => $advancedNonCriticalTotal,
+                    'TOTAL' => $advancedEvents->count(),
+                    'CRITICAL' => $advancedCriticalEvents->count(),
+                    'UNCRITICAL' => $advancedNonCriticalEvents->count(),
                 ],
-                'RECIPIENTS' => $advancedBeneficiaries,
+                'RECIPIENTS' => $advancedEvents->unique('patient_identification')->count(),
                 'CRITICAL' => $advancedCriticalArrivalTimes,
                 'UNCRITICAL' => $advancedNonCriticalArrivalTimes,
             ],
+        ];
+    }
 
-            // Section N
+    public function getSectionN($events)
+    {
+        $events = $events->get();
+        $SCA = $this->ageRangeByGender($events, self::SCA);
+        $PCR = $this->ageRangeByGender($events, self::PCR);
+        $PT = $this->ageRangeByGender($events, self::PT);
+        $OTHERS = $this->ageRangeByGender($events->whereNotIn('key_id', array_merge(self::SCA, self::PCR, self::PT)));
+
+        $criticalEvents = $events->whereIn('key_id', self::CRITICAL);
+        $nonCriticalEvents = $events->whereNotIn('key_id', self::CRITICAL);
+        $CRITICAL = $this->ageRangeByGender($criticalEvents, self::CRITICAL);
+        $UNCRITICAL = $this->ageRangeByGender($nonCriticalEvents, null);
+
+        return [
             'SCA' => $SCA,
             'PCR' => $PCR,
             'PT' => $PT,
@@ -147,24 +152,37 @@ class RemStatistics extends Component implements FromView
             'CRITICAL' => $CRITICAL,
             'UNCRITICAL' => $UNCRITICAL,
         ];
-
-        return $stats;
     }
 
-    public function getEvents()
+    public function getSectionL($events)
     {
-        $events = Event::whereMonth('created_at', 6) // $this->month
-            ->whereYear('created_at', $this->year)
-            ->with('key')
-            ->get();
-        return $events;
+
+        $filteredEvents = $events->whereHas('call', function ($query) {
+            $query->where('classification', 'T1');
+        })->get();
+        $basicEvents = $filteredEvents->where('mobile_id', 1);
+        $advancedEvents = $filteredEvents->where('mobile_id', 2);
+        $basicTotal = $basicEvents->count();
+        $basicUniques = $basicEvents->unique('patient_identification')->count();
+        $advancedTotal = $advancedEvents->count();
+        $advancedUniques = $advancedEvents->unique('patient_identification')->count();
+        return [
+            'BASIC' => [
+                'TOTAL' => $basicTotal,
+                'UNIQUE' => $basicUniques,
+            ],
+            'ADVANCED' => [
+                'TOTAL' => $advancedTotal,
+                'UNIQUE' => $advancedUniques,
+            ]
+        ];
     }
 
     public function ageRangeByGender($events, array $key = null)
     {
         $genderByAge = [];
 
-        // Events Variables        
+        // Events Variables
         $maleEvents = $events->filter(fn($e) => $e->gender_id == 1);
         $maleEvents = $key ? $maleEvents->whereIn('key_id', $key) : $maleEvents;
         $femaleEvents = $events->filter(fn($e) => $e->gender_id == 2);

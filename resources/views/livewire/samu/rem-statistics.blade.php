@@ -58,12 +58,12 @@
                         @foreach (SELF::LABELS as $key => $label)
                         <tr>
                             <td class="text-center">{{ $label }}</td>
-                            <td class="text-center">{{ $stats[$key]['total']['both'] }}</td>
-                            <td class="text-center">{{ $stats[$key]['total']['male'] }}</td>
-                            <td class="text-center">{{ $stats[$key]['total']['female'] }}</td>
+                            <td class="text-center">{{ $N[$key]['total']['both'] }}</td>
+                            <td class="text-center">{{ $N[$key]['total']['male'] }}</td>
+                            <td class="text-center">{{ $N[$key]['total']['female'] }}</td>
                             @foreach ($this->ages as $age)
-                            <td class="text-center">{{ $stats[$key][$age[0] . '-' . $age[1]]['male'] }}</td>
-                            <td class="text-center">{{ $stats[$key][$age[0] . '-' . $age[1]]['female'] }}</td>
+                            <td class="text-center">{{ $N[$key][$age[0] . '-' . $age[1]]['male'] }}</td>
+                            <td class="text-center">{{ $N[$key][$age[0] . '-' . $age[1]]['female'] }}</td>
                             @endforeach
                         </tr>
                         @endforeach
@@ -110,29 +110,66 @@
                         <tr>
                             <th rowspan="2">Intervenciones Clínicas Pre Hospitalarias</th>
                             <th>Intervención de Móvil Básico</th>
-                            <td class="text-center">{{ $stats['BASIC']['COUNT']['TOTAL'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['COUNT']['CRITICAL'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['COUNT']['UNCRITICAL'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['RECIPIENTS'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['CRITICAL']['0 - 20 min'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['CRITICAL']['20 - 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['CRITICAL']['More than 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['UNCRITICAL']['0 - 20 min'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['UNCRITICAL']['20 - 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['BASIC']['UNCRITICAL']['More than 40 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['COUNT']['TOTAL'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['COUNT']['CRITICAL'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['COUNT']['UNCRITICAL'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['RECIPIENTS'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['CRITICAL']['0 - 20 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['CRITICAL']['20 - 40 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['CRITICAL']['More than 40 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['UNCRITICAL']['0 - 20 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['UNCRITICAL']['20 - 40 min'] }}</td>
+                            <td class="text-center">{{ $K['BASIC']['UNCRITICAL']['More than 40 min'] }}</td>
                         </tr>
                         <tr>
                             <th>Intervención de Móvil Avanzado</th>
-                            <td class="text-center">{{ $stats['ADVANCED']['COUNT']['TOTAL'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['COUNT']['CRITICAL'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['COUNT']['UNCRITICAL'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['RECIPIENTS'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['CRITICAL']['0 - 20 min'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['CRITICAL']['20 - 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['CRITICAL']['More than 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['UNCRITICAL']['0 - 20 min'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['UNCRITICAL']['20 - 40 min'] }}</td>
-                            <td class="text-center">{{ $stats['ADVANCED']['UNCRITICAL']['More than 40 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['COUNT']['TOTAL'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['COUNT']['CRITICAL'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['COUNT']['UNCRITICAL'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['RECIPIENTS'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['CRITICAL']['0 - 20 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['CRITICAL']['20 - 40 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['CRITICAL']['More than 40 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['UNCRITICAL']['0 - 20 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['UNCRITICAL']['20 - 40 min'] }}</td>
+                            <td class="text-center">{{ $K['ADVANCED']['UNCRITICAL']['More than 40 min'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br><br>
+
+        <!-- Sección L: Estadísticas de SAMU -->
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <h3>Seccion L:</h3>
+            </div>
+            <div class="col-10">
+                <h4 class="text-center">Estadísticas de SAMU</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th rowspan="2" colspan="2" class="align-middle">Tipo</th>
+                            <th rowspan="2" class="align-middle">Total</th>
+                            <th rowspan="2" class="align-middle">Beneficiarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" class="align-middle">Samu</th>
+                            <td>Básico</td>
+                            <td class="text-center">{{ $L['BASIC']['TOTAL'] }}</td>
+                            <td class="text-center">{{ $L['BASIC']['UNIQUE'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Avanzado</td>
+                            <td class="text-center">{{ $L['ADVANCED']['TOTAL'] }}</td>
+                            <td class="text-center">{{ $L['ADVANCED']['UNIQUE'] }}</td>
                         </tr>
                     </tbody>
                 </table>
