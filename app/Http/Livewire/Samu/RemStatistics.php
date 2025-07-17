@@ -10,8 +10,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RemStatistics extends Component implements FromView
 {
-    protected $month;
-    protected $year;
+    protected $listeners = ['updateDate' => 'changePeriod'];
+
+    public $month;
+
+    public $year;
+
     protected $chartData;
 
     public const LABELS = [
@@ -20,9 +24,13 @@ class RemStatistics extends Component implements FromView
         'PT' => 'Politraumatismo',
         'OTHERS' => 'Otros',
     ];
+
     protected const SCA = [5];
+
     protected const PCR = [2];
+
     protected const PT = [63, 64, 65, 66, 67, 68, 69]; //201*, 401d, 402b, 701i 
+
     protected const CRITICAL = [2, 13, 35, 36, 37, 46, 66, 78, 86, 93, 96, 97, 127]; //['101a', '102a', '105a', '105b', '105c', '107a', '201c', '401b', '402b', '501a', '501b', '403d', '701i']
 
     protected const MOBILES = [
@@ -52,12 +60,12 @@ class RemStatistics extends Component implements FromView
     ];
 
     public $showExportModal = false;
+
     public $exportSection = 'N';
 
     public function mount()
     {
-        $this->month = now()->month;
-        $this->year = now()->year;
+        $this->changePeriod();
     }
 
     public function render()
@@ -73,7 +81,7 @@ class RemStatistics extends Component implements FromView
 
     public function getEvents()
     {
-        $events = Event::whereMonth('created_at', 6) // $this->month
+        $events = Event::whereMonth('created_at', $this->month)
             ->whereYear('created_at', $this->year)
             ->with('key', 'call')
             ->has('call');
@@ -156,12 +164,11 @@ class RemStatistics extends Component implements FromView
 
     public function getSectionL($events)
     {
-
         $filteredEvents = $events->whereHas('call', function ($query) {
             $query->where('classification', 'T1');
         })->get();
         $basicEvents = $filteredEvents->where('mobile_id', 1);
-        $advancedEvents = $filteredEvents->where('mobile_id', 2);
+        $advancedEvents = $filteredEvents->whereIn('mobile_id', [2, 3]);
         $basicTotal = $basicEvents->count();
         $basicUniques = $basicEvents->unique('patient_identification')->count();
         $advancedTotal = $advancedEvents->count();
@@ -234,7 +241,8 @@ class RemStatistics extends Component implements FromView
 
     public function showExportOptions($show = false)
     {
-        $this->showExportModal = $show;
+        // $this->showExportModal = $show;
+        $this->showExportModal = false;
     }
 
     public function setExportSection($section)
@@ -243,8 +251,10 @@ class RemStatistics extends Component implements FromView
         $this->showExportOptions(false);
         if ($section === 'K') {
             $this->exportSection = 'K';
-        } else {
+        } else if ($section === 'N') {
             $this->exportSection = 'N';
+        } else {
+            $this->exportSection = 'L';
         }
         return Excel::download(new RemStatistics, 'Seccion' . $this->exportSection . '.xlsx');
     }
@@ -252,24 +262,31 @@ class RemStatistics extends Component implements FromView
     public function view(): View
     {
         $stats = $this->getStats();
-        // dd($this->exportSection);
-        $view = null;
-        if ($this->exportSection === 'K') {
-            $view = view('samu.rem.export-k', [
-                'stats' => $stats
-            ]);
-        } else if ($this->exportSection === 'N') {
-            $view = view(
-                'samu.rem.export-n',
-                [
-                    'stats' => $stats,
-                    'ages' => $this->ages,
-                    'labels' => self::LABELS
-                ]
-            );
-        } else {
-            $view = view('samu.rem');
+        $view = view('samu.rem');
+        switch ($this->exportSection) {
+            case 'K':
+                $view = view('samu.rem.export-k', ['stats' => $stats]);
+                break;
+            case 'N':
+                $view = view(
+                    'samu.rem.export-n',
+                    [
+                        'stats' => $stats,
+                        'ages' => $this->ages,
+                        'labels' => self::LABELS
+                    ]
+                );
+                break;
+            case 'L':
+                $view = view('samu.rem.export-l', ['stats' => $stats]);
+                break;
         }
         return $view;
+    }
+
+    public function changePeriod($month = null, $year = null)
+    {
+        $this->month = $month ?? now()->month;
+        $this->year = $year ?? now()->year;
     }
 }

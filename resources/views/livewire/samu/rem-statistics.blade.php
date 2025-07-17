@@ -1,8 +1,6 @@
 <div>
     @include('samu.nav')
-    <div class="mb-3 d-flex justify-content-end">
-        <button class="btn btn-primary" wire:click="showExportOptions(true)">Exportar a Excel</button>
-    </div>
+
     @if($showExportModal)
     <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
@@ -19,6 +17,22 @@
         </div>
     </div>
     @endif
+    <div class="row">
+        <div class="col-3 justify-content-end align-self-end">
+            <h5 wire:loading>
+                Cargando Datos...
+                <div class="spinner-border spinner-border-sm" role="status">
+                </div>
+            </h5>
+        </div>
+        <div class="col-6">
+            @livewire('samu.month-year-selector', ['month' => $month, 'year' => $year])
+        </div>
+        <div class="offset-1 col-2 align-self-end">
+            <!-- <button class="btn btn-primary" wire:click="showExportOptions(true)">Exportar a Excel</button> -->
+        </div>
+    </div>
+    <br></br>
     <h1 class="text-center mb-4">Estadísticas de Eventos SAMU</h1>
     <br></br>
     <div class="container">
