@@ -1,5 +1,7 @@
 <div>
+    @canany(['Developer', 'Administrator', 'SAMU'])
     @include('samu.nav')
+    @endcan
 
     @if($showExportModal)
     <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
