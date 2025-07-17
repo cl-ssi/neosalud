@@ -40,11 +40,12 @@ class MonthYearSelector extends Component
     public function getMonthYearOptions()
     {
         $options = [];
-        $current = Carbon::now();
-        for ($i = 0; $i < 6; $i++) {
-            $monthYear = $current->format('m-Y');
-            $options[$monthYear] = $this->months[$current->format('m')] . ' ' . $current->format('Y');
-            $current->subMonth();
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+
+        for ($month = $currentMonth; $month >= 1; $month--) {
+            $monthYear = sprintf('%02d-%d', $month, $currentYear);
+            $options[$monthYear] = $this->months[sprintf('%02d', $month)] . ' ' . $currentYear;
         }
         $this->options = $options;
     }
