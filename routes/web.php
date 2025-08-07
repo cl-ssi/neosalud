@@ -688,6 +688,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
             Route::get('/create/{call?}', [EventController::class, 'create'])->name('create');
             Route::post('/store/{call?}', [EventController::class, 'store'])->name('store');
             Route::put('/call/update/{call?}', [EventController::class, 'updateCall'])->name('call.update');
+            Route::put('/call/update/triage/{call?}', [EventController::class, 'updateTriage'])->name('call.update.triage');
             Route::post('/store/{event?}/duplicate', [EventController::class, 'store'])->name('store.duplicate');
             Route::get('/edit/{event}', [EventController::class, 'edit'])->name('edit');
             Route::put('/update/{event}', [EventController::class, 'update'])->name('update');

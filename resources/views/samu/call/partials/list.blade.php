@@ -10,14 +10,12 @@
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Receptor de llamada</th>
-                @if($createEvent)
-                <th>Acciones</th>
-                @endif
+                <th>Triage</th>
             </tr>
         </thead>
         <tbody>
             @foreach($calls as $call)
-            <tr class="{{$call->patient_status?'table-'.$call->patient_status:''}}">
+            <tr>
                 <td class="text-center" nowrap>
                     @if($edit)
                     <a href="{{ route('samu.call.edit', $call) }}" class="btn btn-sm btn-outline-primary">
@@ -60,21 +58,28 @@
                 </td>
                 <td>{{ $call->telephone }}</td>
                 <td>{{ $call->receptor->officialFullName }}</td>
-                @if($createEvent)
-                <td class="text-center">
-                    <a href="{{ route('samu.event.create', $call) }}" class="btn btn-sm btn-success">
-                        <i class="fas fa-plus"></i> Cometido
-                    </a>
-                    @if($call->patient_status == null)
-                    <form method="post" action="{{ route('samu.event.call.update', $call) }}">
+                @if($call->triage)
+                <td style="background-color: {{$call->triageColor[0]}} !important" class="{{$call->triageColor[1]}}">
+                    <b>{{ strtoupper ($call->triage) }}</b>
+                    <br>
+                    @if ($call->triage == 'r1' || $call->triage == 'r2')
+                    Crítico
+                    @else
+                    No Crítico
+                    @endif
+                    @else
+                <td>
+
+                    <form method="post" action="{{ route('samu.event.call.update.triage', $call) }}">
                         @csrf
                         @method('PUT')
                         <div class="col-auto">
                             <select class="form-control" name="type" id="type">
                                 <option value="" selected>Seleccionar</option>
-                                <option value="danger">Grave</option>
-                                <option value="warning">Moderado</option>
-                                <option value="primary">Bajo</option>
+                                <option value="r1">R1 - Crítico</option>
+                                <option value="r2">R2 - Crítico</option>
+                                <option value="r3">R3 - No Crítico</option>
+                                <option value="r4">R4 - No Crítico</option>
                             </select>
                         </div>
                         <div class="col-auto text-center pt-1">
@@ -83,7 +88,6 @@
                     </form>
                     @endif
                 </td>
-                @endif
             </tr>
             @endforeach
         </tbody>

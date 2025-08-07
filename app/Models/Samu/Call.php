@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Enums\Triage as TriageEnum;
 use App\Models\Samu\Shift;
 use App\Models\Samu\Event;
 use App\Models\Samu\Ot;
@@ -19,13 +20,13 @@ class Call extends Model implements Auditable
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="samu_calls";
+    protected $table = "samu_calls";
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'shift_id',
         'call_id',
@@ -51,16 +52,22 @@ class Call extends Model implements Auditable
         'latitude',
         'longitude',
         'telephone',
+        'triage',
         'patient_status',
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
-        'hour','bls'
+        'hour',
+        'bls'
+    ];
+
+    protected $appends = [
+        'triageColor'
     ];
 
     /**
@@ -83,13 +90,12 @@ class Call extends Model implements Auditable
 
     public function receptor()
     {
-        return $this->belongsTo(User::class,'receptor_id');
+        return $this->belongsTo(User::class, 'receptor_id');
     }
 
     public function regulator()
     {
-        return $this->belongsTo(User::class,'regulator_id');
-
+        return $this->belongsTo(User::class, 'regulator_id');
     }
 
     /* Una llamada puede hace referencia o tener relación con otra llamada  */
@@ -106,24 +112,29 @@ class Call extends Model implements Auditable
 
     public function getSexAbbrAttribute()
     {
-        switch($this->sex)
-        {
-            case 'MALE': return 'MASC'; break;
-            case 'FEMALE': return 'FEM'; break;
-            case 'UNKNOWN': return 'DESC'; break;
-            case 'OTHER': return 'OTRO'; break;
+        switch ($this->sex) {
+            case 'MALE':
+                return 'MASC';
+                break;
+            case 'FEMALE':
+                return 'FEM';
+                break;
+            case 'UNKNOWN':
+                return 'DESC';
+                break;
+            case 'OTHER':
+                return 'OTRO';
+                break;
         }
     }
 
     public function getAgeFormatAttribute()
     {
         $age = '';
-        if($this->year != 0)
-        {
+        if ($this->year != 0) {
             $age .= ($this->year) . ($this->year == 1 ?  ' AÑO ' : ' AÑOS ');
         }
-        if($this->month)
-        {
+        if ($this->month) {
             $age .= ($this->month) . ($this->month == 1 ?  ' MES' : ' MESES');
         }
         return $age;
@@ -133,8 +144,7 @@ class Call extends Model implements Auditable
     {
         // TODO: Eliminar a futuro, no se elimina de inmediato ya que es necesaria para migración
         $month = null;
-        if($this->age)
-        {
+        if ($this->age) {
             list($year, $month) = explode('.', $this->age);
             $month = ($month == 0) ? null : (int)$month;
         }
@@ -144,9 +154,25 @@ class Call extends Model implements Auditable
     public function getFullAddressAttribute()
     {
         $full_address = $this->address;
-        if($this->address_reference)
+        if ($this->address_reference)
             $full_address = "$this->address ($this->address_reference)";
         return $full_address;
+    }
+
+    public function getTriageColorAttribute()
+    {
+        $triages = [
+            'r1' => ['red', 'text-light'],
+            'r2' => ['orange', 'text-dark'],
+            'r3' => ['yellow', 'text-dark'],
+            'r4' => ['green', 'text-light'],
+        ];
+
+        if ($this->triage) {
+            return $triages[$this->triage];
+        } else {
+            return '';
+        }
     }
 
     public function scopeWithClassification($query, $type)

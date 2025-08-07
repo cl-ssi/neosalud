@@ -246,7 +246,7 @@ class Event extends Model implements Auditable
         $status = null;
         $color = 'secondary';
         $statusMap = [
-            'on_base_at' => ['Disponible', '#B4F8C6'],
+            'on_base_at' => ['Disponible', '#b'],
             'return_base_at' => ['Disponible', '#C3E9D9'],
             'route_to_healtcenter_at' => ['En ruta AP', '#E0D0F1'],
             'healthcenter_at' => ['En AP', '#B2E3E6'],
