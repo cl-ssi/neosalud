@@ -52,7 +52,7 @@
                     @endif
                 </td>
             </tr>
-            <tr class="table-{{ $event->color }}">
+            <tr style="background-color: {{$event->color}};">
                 <td class="text-center">
                     <i class="fas fa-phone"></i>
                     <br>

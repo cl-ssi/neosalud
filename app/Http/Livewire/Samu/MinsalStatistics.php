@@ -87,6 +87,7 @@ class MinsalStatistics extends Component
      */
     public function getMaxSamuExitsMonthly()
     {
+        /*
         return Call::whereYear('hour', $this->year)
             ->whereIn('classification', $this->myClassifications)
             ->select(DB::raw('MONTH(hour) as month, COUNT(*) as total'))
@@ -102,6 +103,39 @@ class MinsalStatistics extends Component
                 $item->month_name = $this->getMonthName($item->month);
                 return $item;
             });
+        */
+        $results = collect();
+        for ($month = 1; $month <= 12; $month++) {
+            /* 1-3. Conteo de eventos por día para el mes */
+            $dailyCounts = DB::table('samu_events AS e')
+                ->selectRaw('DATE(c.hour) AS dia, COUNT(*) AS total')
+                ->join('samu_calls AS c', 'c.id', '=', 'e.call_id')
+                ->join('samu_mobiles AS m', 'm.id', '=', 'e.mobile_id')
+                ->whereYear('c.hour', $this->year)
+                ->whereMonth('c.hour', $month)
+                ->whereIn('c.classification', $this->myClassifications)
+                ->where('m.name', 'SAMU')
+                ->groupBy('dia')
+                ->orderBy('dia')
+                ->pluck('total');   // Colección con los conteos diarios
+
+            /* 4. Mediana sobre los conteos */
+            $count = $dailyCounts->count();
+            if ($count === 0) {
+                $mediana = 0;
+            } elseif ($count % 2 === 1) {
+                $mediana = $dailyCounts->get((int)($count / 2));
+            } else {
+                $mediana = ($dailyCounts->get($count / 2 - 1) + $dailyCounts->get($count / 2)) / 2;
+            }
+
+            $results->push((object)[
+                'month_name' => $this->getMonthName($month),
+                'mediana'    => $mediana,
+            ]);
+        }
+
+        return $results->toArray();
     }
 
     /**

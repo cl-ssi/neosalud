@@ -26,7 +26,7 @@
         <!-- 1. Máximos de Salidas SAMU -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">1. Máximos de Salidas por Mes (Solo SAMU)</h5>
+                <h5 class="mb-0">1. Mediana de Salidas Diarias por Mes (Solo SAMU)</h5>
                 <button wire:click="exportMaxSamuExits" class="btn btn-primary btn-sm">
                     <i class="fas fa-download"></i> Exportar Excel
                 </button>
@@ -44,7 +44,7 @@
                             @foreach($statistics['max_samu_exits'] as $item)
                             <tr>
                                 <td>{{ $item->month_name }}</td>
-                                <td class="text-center">{{ $item->total }}</td>
+                                <td class="text-center">{{ $item->mediana    }}</td>
                             </tr>
                             @endforeach
                         </tbody>
