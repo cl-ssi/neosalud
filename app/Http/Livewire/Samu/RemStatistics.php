@@ -141,7 +141,7 @@ class RemStatistics extends Component implements FromView
 
     public function getSectionN($events)
     {
-        $events = $events->get();
+        $events = $events->whereNotNull('gender_id')->get();
         $SCA = $this->ageRangeByGender($events, self::SCA);
         $PCR = $this->ageRangeByGender($events, self::PCR);
         $PT = $this->ageRangeByGender($events, self::PT);

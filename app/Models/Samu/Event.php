@@ -244,7 +244,7 @@ class Event extends Model implements Auditable
     public function getStatus($option)
     {
         $status = null;
-        $color = 'secondary';
+        $color = '#ffffff';
         $statusMap = [
             'on_base_at' => ['Disponible', '#B4F8C6'],
             'return_base_at' => ['Disponible', '#C3E9D9'],
