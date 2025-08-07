@@ -4,6 +4,7 @@
 
     <div class="container">
         <!-- Selector de año -->
+        <!-- 
         <div class="row justify-content-center mb-4">
             <div class="col-md-4">
                 <label for="year" class="form-label">Seleccionar Año:</label>
@@ -14,6 +15,7 @@
                 </select>
             </div>
         </div>
+        -->
 
         @if($loading)
         <div class="text-center">
@@ -26,7 +28,7 @@
         <!-- 1. Máximos de Salidas SAMU -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">1. Mediana de Salidas Diarias por Mes (Solo SAMU)</h5>
+                <h5 class="mb-0">1. Estadísticas Diarias por Mes (Solo SAMU)</h5>
                 <button wire:click="exportMaxSamuExits" class="btn btn-primary btn-sm">
                     <i class="fas fa-download"></i> Exportar Excel
                 </button>
@@ -37,14 +39,18 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>Mes</th>
-                                <th>Total de Salidas</th>
+                                <th>Promedio</th>
+                                <th>Mediana</th>
+                                <th>Máximo</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($statistics['max_samu_exits'] as $item)
                             <tr>
                                 <td>{{ $item->month_name }}</td>
-                                <td class="text-center">{{ $item->mediana    }}</td>
+                                <td class="text-center">{{ $item->promedio}}</td>
+                                <td class="text-center">{{ $item->mediana}}</td>
+                                <td class="text-center">{{ $item->maximo}}</td>
                             </tr>
                             @endforeach
                         </tbody>

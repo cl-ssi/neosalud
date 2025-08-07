@@ -129,9 +129,13 @@ class MinsalStatistics extends Component
                 $mediana = ($dailyCounts->get($count / 2 - 1) + $dailyCounts->get($count / 2)) / 2;
             }
 
+            $maximo   = $dailyCounts->max() ?: 0;
+            $promedio = $dailyCounts->avg() ?: 0;   // avg() devuelve float|null
             $results->push((object)[
                 'month_name' => $this->getMonthName($month),
                 'mediana'    => $mediana,
+                'maximo'     => $maximo,
+                'promedio'   => round($promedio, 2),   // 2 decimales
             ]);
         }
 
