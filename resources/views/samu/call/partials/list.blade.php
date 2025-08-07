@@ -11,6 +11,9 @@
                 <th>Teléfono</th>
                 <th>Receptor de llamada</th>
                 <th>Triage</th>
+                @if($createEvent)
+                <th>Acciones</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -88,6 +91,13 @@
                     </form>
                     @endif
                 </td>
+                @if($createEvent)
+                <td class="text-center">
+                    <a href="{{ route('samu.event.create', $call) }}" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus"></i> Cometido
+                    </a>
+                </td>
+                @endif
             </tr>
             @endforeach
         </tbody>
