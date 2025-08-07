@@ -17,17 +17,17 @@
 
         <tbody>
             @foreach($events as $event)
-            <tr class="table-{{ $event->color }}">
+            <tr style="background-color: {{$event->color}};">
                 <td nowrap>
                     <a href="{{ route('samu.event.edit', $event) }}">
-                            @if($event->status)
-                                <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-edit"></i>
+                        @if($event->status)
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i>
                             @else
-                                <button class="btn btn-sm btn-outline-success">
+                            <button class="btn btn-sm btn-outline-success">
                                 <i class="fas fa-eye"></i>
-                            @endif
-                            {{ $event->id }}
+                                @endif
+                                {{ $event->id }}
                             </button>
                     </a>
                     @if($event->trashed())
@@ -60,22 +60,22 @@
                 </td>
                 <td colspan="9">
                     @if($event->call)
-                        <li>
-                            <a href="{{ route('samu.call.edit', $event->call) }}">{{ $event->call->id }}</a> -
-                            {{ $event->call->sex_abbr }}
-                            {{ $event->call->age_format }}
-                            {{ $event->call->information }}
-                        </li>
-                        @foreach($event->call->associatedCalls as $associatedCall)
-                            <li>
-                                <a href="{{ route('samu.call.edit', $associatedCall) }}">{{ $associatedCall->id }}</a> -
-                                {{ $associatedCall->sex_abbr }}
-                                {{ $associatedCall->age_format }}
-                                {{ $associatedCall->information }}
-                            </li>
-                        @endforeach
+                    <li>
+                        <a href="{{ route('samu.call.edit', $event->call) }}">{{ $event->call->id }}</a> -
+                        {{ $event->call->sex_abbr }}
+                        {{ $event->call->age_format }}
+                        {{ $event->call->information }}
+                    </li>
+                    @foreach($event->call->associatedCalls as $associatedCall)
+                    <li>
+                        <a href="{{ route('samu.call.edit', $associatedCall) }}">{{ $associatedCall->id }}</a> -
+                        {{ $associatedCall->sex_abbr }}
+                        {{ $associatedCall->age_format }}
+                        {{ $associatedCall->information }}
+                    </li>
+                    @endforeach
                     @else
-                        <li>No hay llamadas asociadas</li>
+                    <li>No hay llamadas asociadas</li>
                     @endif
                 </td>
             </tr>

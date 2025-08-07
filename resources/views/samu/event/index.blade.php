@@ -20,49 +20,66 @@
                 </tr>
             </thead>
             @foreach($shift->mobilesInService->sortBy('position') as $mis)
-                <tr class="{{ (($mis->lunch_start_at AND !$mis->lunch_end_at) OR !$mis->status) ? 'bg-secondary text-white' : '' }}">
-                    <td>{{ $mis->position }}</td>
-                    <td nowrap>{{ $mis->mobile->code }} {{ $mis->mobile->name }}</td>
-                    <td>{{ optional($mis->type)->name }}</td>
-                    <td> {{ $mis->mis_status }}</td>
-                    <td>
-                        @if(!$mis->status)
-                            {{ $mis->observation }}
-                        @else
-                            @foreach($mis->currentCrew as $tripulant)
-                                {{ $tripulant->officialFullName }}
-                                <span class="badge bg-secondary text-white">
-                                    {{ $tripulant->pivot->jobType->short_name }}
-                                </span>
-                            @endforeach
-                        @endif
-                        <br>
-                    </td>
-                    <td>{{ $mis->o2 }}</td>
-                    <td>{{ $mis->observation }}</td>
-                    <td nowrap>
-                        @if($mis->lunch_start_at AND !$mis->lunch_end_at)
-                            {{ $mis->lunch_start_at->format('H:i')}} -
-                            {{ now()->diff($mis->lunch_start_at->copy()->addMinutes('45'))->format('%I') }}"
-                        @elseif($mis->lunch_end_at)
-                            {{ $mis->lunch_start_at->format('H:i')}} -
-                            {{ $mis->lunch_end_at->format('H:i')}} -
-                            {{ $mis->lunch_start_at->diff($mis->lunch_end_at)->format('%I') }}"
-                        @endif
-                    </td>
-                </tr>
+            <tr class="{{ (($mis->lunch_start_at AND !$mis->lunch_end_at) OR !$mis->status) ? 'bg-secondary text-white' : '' }}">
+                <td>{{ $mis->position }}</td>
+                <td nowrap>{{ $mis->mobile->code }} {{ $mis->mobile->name }}</td>
+                <td>{{ optional($mis->type)->name }}</td>
+                <td> {{ $mis->mis_status }}</td>
+                <td>
+                    @if(!$mis->status)
+                    {{ $mis->observation }}
+                    @else
+                    @foreach($mis->currentCrew as $tripulant)
+                    {{ $tripulant->officialFullName }}
+                    <span class="badge bg-secondary text-white">
+                        {{ $tripulant->pivot->jobType->short_name }}
+                    </span>
+                    @endforeach
+                    @endif
+                    <br>
+                </td>
+                <td>{{ $mis->o2 }}</td>
+                <td>{{ $mis->observation }}</td>
+                <td nowrap>
+                    @if($mis->lunch_start_at AND !$mis->lunch_end_at)
+                    {{ $mis->lunch_start_at->format('H:i')}} -
+                    {{ now()->diff($mis->lunch_start_at->copy()->addMinutes('45'))->format('%I') }}"
+                    @elseif($mis->lunch_end_at)
+                    {{ $mis->lunch_start_at->format('H:i')}} -
+                    {{ $mis->lunch_end_at->format('H:i')}} -
+                    {{ $mis->lunch_start_at->diff($mis->lunch_end_at)->format('%I') }}"
+                    @endif
+                </td>
+            </tr>
             @endforeach
         </table>
     </div>
     <div class="col-12 col-md-1">
         <table class="table table-sm small">
-            <tr><th>Colores</th></tr>
-            <tr><td class="table-danger">Aviso de salida</td></tr>
-            <tr><td class="table-warning">Rumbo a destino</td></tr>
-            <tr><td class="table-primary">En destino</td></tr>
-            <tr><td class="table-success">Ruta AP</td></tr>
-            <tr><td class="table-light">Retorna a base</td></tr>
-            <tr><td class="table-light">En base</td></tr>
+            <tr>
+                <th>Colores</th>
+            </tr>
+            <tr>
+                <td style="background-color: #F59898">Aviso de salida</td>
+            </tr>
+            <tr>
+                <td style="background-color: #e3e07d">Rumbo a destino</td>
+            </tr>
+            <tr>
+                <td style="background-color: #5e88c0">En destino</td>
+            </tr>
+            <tr>
+                <td style="background-color: #45b3c4">En Ruta a AP</td>
+            </tr>
+            <tr>
+                <td style="background-color: #a06cd4">En AP</td>
+            </tr>
+            <tr>
+                <td style="background-color: #7ccfab">Recepcion y Retorno a base</td>
+            </tr>
+            <tr>
+                <td style="background-color: #13cf45">En base</td>
+            </tr>
         </table>
     </div>
 </div>

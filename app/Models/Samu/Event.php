@@ -72,7 +72,7 @@ class Event extends Model implements Auditable
         'reception_person',
         'reception_place_id',
         'rau',
-        
+
         'treatment',
         'observation_sv',
 
@@ -80,10 +80,10 @@ class Event extends Model implements Auditable
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'date',
         'departure_at',
@@ -125,12 +125,12 @@ class Event extends Model implements Auditable
 
     public function key()
     {
-       return $this->belongsTo(Key::class);
+        return $this->belongsTo(Key::class);
     }
 
     public function returnKey()
     {
-       return $this->belongsTo(Key::class, 'return_key_id');
+        return $this->belongsTo(Key::class, 'return_key_id');
     }
 
     public function mobileInService()
@@ -145,7 +145,7 @@ class Event extends Model implements Auditable
 
     public function establishment()
     {
-       return $this->belongsTo(Organization::class, 'establishment_id');
+        return $this->belongsTo(Organization::class, 'establishment_id');
     }
 
     public function creator()
@@ -190,7 +190,7 @@ class Event extends Model implements Auditable
     {
         $crew = null;
 
-        if($this->mobileInService && $this->mobileInService->crew && $this->departure_at)
+        if ($this->mobileInService && $this->mobileInService->crew && $this->departure_at)
             $crew = $this->mobileInService->crew->where('pivot.assumes_at', '<=', $this->departure_at);
 
         return $crew;
@@ -200,8 +200,7 @@ class Event extends Model implements Auditable
     {
         $jobs = null;
 
-        if($this->shift && $this->shift->users && $this->departure_at)
-        {
+        if ($this->shift && $this->shift->users && $this->departure_at) {
             $jobs = $this->shift->users->where('pivot.assumes_at', '<=', $this->departure_at)
                 ->where('pivot.leaves_at', '>=', $this->departure_at);
         }
@@ -211,7 +210,7 @@ class Event extends Model implements Auditable
 
     public function getMobileTypeAttribute()
     {
-        if($this->mobileInService)
+        if ($this->mobileInService)
             return optional(optional($this->mobileInService)->type)->name;
         else
             return optional(optional($this->mobile)->type)->name;
@@ -220,7 +219,7 @@ class Event extends Model implements Auditable
     public function getFullAddressAttribute()
     {
         $full_address = $this->address;
-        if($this->address_reference)
+        if ($this->address_reference)
             $full_address = "$this->address ($this->address_reference)";
         return $full_address;
     }
@@ -237,7 +236,7 @@ class Event extends Model implements Auditable
 
     public function getDateFormatAttribute()
     {
-        if($this->date != null)
+        if ($this->date != null)
             return $this->date->format('Y-m-d');
         return null;
     }
@@ -247,19 +246,19 @@ class Event extends Model implements Auditable
         $status = null;
         $color = 'secondary';
         $statusMap = [
-            'on_base_at' => ['Disponible', 'light'],
-            'return_base_at' => ['Disponible', 'light'],
-            'route_to_healtcenter_at' => ['AP', 'success'],
-            'healthcenter_at' => ['AP', 'success'],
-            'patient_reception_at' => ['AP', 'success'],
-            'mobile_arrival_at' => ['En destino', 'primary'],
-            'mobile_departure_at' => ['Rumbo a destino', 'warning'],
-            'departure_at' => ['Aviso de salida', 'danger']
+            'on_base_at' => ['Disponible', '#13cf45'],
+            'return_base_at' => ['Disponible', '#7ccfab'],
+            'route_to_healtcenter_at' => ['En ruta AP', '#a06cd4'],
+            'healthcenter_at' => ['En AP', '#45b3c4'],
+            'patient_reception_at' => ['AP', '#7ccfab'],
+            'mobile_arrival_at' => ['En destino', '#5e88c0'],
+            'mobile_departure_at' => ['Rumbo a destino', '#e3e07d'],
+            'departure_at' => ['Aviso de salida', '#F59898']
         ];
 
         foreach ($statusMap as $field => $values) {
             if ($this->$field) {
-            return $option ? $values[0] : $values[1];
+                return $option ? $values[0] : $values[1];
             }
         }
 
@@ -269,7 +268,7 @@ class Event extends Model implements Auditable
     public function scopeOnlyValid($query)
     {
         $exceptKey = ['605', '606'];
-        return $query->whereHas('key', function($query) use($exceptKey) {
+        return $query->whereHas('key', function ($query) use ($exceptKey) {
             $query->whereNotIn('key', $exceptKey);
         });
     }
