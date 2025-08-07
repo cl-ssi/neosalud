@@ -60,25 +60,25 @@
                 <th>Colores</th>
             </tr>
             <tr>
-                <td style="background-color: #F59898">Aviso de salida</td>
+                <td style="background-color: #F9C8C8">Aviso de salida</td>
             </tr>
             <tr>
-                <td style="background-color: #e3e07d">Rumbo a destino</td>
+                <td style="background-color: #F4F3CD">Rumbo a destino</td>
             </tr>
             <tr>
-                <td style="background-color: #5e88c0">En destino</td>
+                <td style="background-color: #D3DFEE">En destino</td>
             </tr>
             <tr>
-                <td style="background-color: #45b3c4">En Ruta a AP</td>
+                <td style="background-color: #E0D0F1">En Ruta a AP</td>
             </tr>
             <tr>
-                <td style="background-color: #a06cd4">En AP</td>
+                <td style="background-color: #B2E3E6">En AP</td>
             </tr>
             <tr>
-                <td style="background-color: #7ccfab">Recepcion y Retorno a base</td>
+                <td style="background-color: #C3E9D9">Recepcion y Retorno a base</td>
             </tr>
             <tr>
-                <td style="background-color: #13cf45">En base</td>
+                <td style="background-color: #B4F8C6">En base</td>
             </tr>
         </table>
     </div>
