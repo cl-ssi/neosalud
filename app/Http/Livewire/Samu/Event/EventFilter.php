@@ -16,7 +16,13 @@ class EventFilter extends Component
     public $keys;
     public $communes;
 
-    public $date;
+    public $useRange = false;
+
+    public $date = [
+        'from'   => null,
+        'to'     => null,
+        'single' => null,
+    ];
     public $key_id;
     public $address;
     public $commune_id;
@@ -27,7 +33,7 @@ class EventFilter extends Component
     {
         $this->filter_by = "all";
         $this->keys = Key::orderBy('key')->get();
-        $this->communes = Commune::whereHas('samu')->pluck('id','name')->sort();
+        $this->communes = Commune::whereHas('samu')->pluck('id', 'name')->sort();
     }
 
     public function render()
@@ -41,23 +47,27 @@ class EventFilter extends Component
     {
         $query =  Event::query();
 
-        $query->when($this->date, function($query) {
-            $query->whereDate('date', $this->date);
+        $query->when($this->date, function ($query) {
+            if ($this->useRange) {
+                $query->whereBetween('date', [$this->date['from'], $this->date['to']]);
+            } else {
+                $query->whereBetween('date', [$this->date['single'], $this->date['single']]);
+            }
         });
 
-        $query->when($this->key_id, function($query) {
+        $query->when($this->key_id, function ($query) {
             $query->where('key_id', $this->key_id);
         });
 
-        $query->when($this->address, function($query) {
+        $query->when($this->address, function ($query) {
             $query->where('address', 'LIKE', '%' . $this->address . '%');
         });
 
-        $query->when($this->commune_id, function($query) {
+        $query->when($this->commune_id, function ($query) {
             $query->where('commune_id', $this->commune_id);
         });
 
-        $query->when($this->filter_by == 'valid', function($query) {
+        $query->when($this->filter_by == 'valid', function ($query) {
             $query->onlyValid();
         });
 

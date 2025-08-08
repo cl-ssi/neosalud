@@ -49,7 +49,7 @@
                     </a>
                     @endif
                 </td>
-                <td width="90">{{ $call->hour }}</td>
+                <td width="90">{{ $call->hour->format('d-m-Y h:s') }}</td>
                 <td>{{ $call->applicant }}</td>
                 <td>
                     {{ $call->sex_abbr }}

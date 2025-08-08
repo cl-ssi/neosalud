@@ -56,7 +56,7 @@
                 <td class="text-center">
                     <i class="fas fa-phone"></i>
                     <br>
-                    <small>{{ $event->date->format('Y-m-d') }}</small>
+                    <small>{{ $event->date->format('d-m-Y') }}</small>
                 </td>
                 <td colspan="9">
                     @if($event->call)
