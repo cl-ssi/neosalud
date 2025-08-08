@@ -246,19 +246,20 @@ class Event extends Model implements Auditable
         $status = null;
         $color = '#ffffff';
         $statusMap = [
-            'on_base_at' => ['Disponible', '#B4F8C6'],
-            'return_base_at' => ['Disponible', '#C3E9D9'],
+            'departure_at' => ['Aviso de salida', '#F9C8C8'],
+            'mobile_departure_at' => ['Rumbo a destino', '#F4F3CD'],
+            'mobile_arrival_at' => ['En destino', '#D3DFEE'],
             'route_to_healtcenter_at' => ['En ruta AP', '#E0D0F1'],
             'healthcenter_at' => ['En AP', '#B2E3E6'],
             'patient_reception_at' => ['AP', '#C3E9D9'],
-            'mobile_arrival_at' => ['En destino', '#D3DFEE'],
-            'mobile_departure_at' => ['Rumbo a destino', '#F4F3CD'],
-            'departure_at' => ['Aviso de salida', '#F9C8C8']
+            'return_base_at' => ['Disponible', '#C3E9D9'],
+            'on_base_at' => ['Disponible', '#B4F8C6'],
         ];
 
         foreach ($statusMap as $field => $values) {
             if ($this->$field) {
-                return $option ? $values[0] : $values[1];
+                $status = $values[0];
+                $color = $values[1];
             }
         }
 
