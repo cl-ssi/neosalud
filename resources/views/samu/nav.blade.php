@@ -38,6 +38,13 @@ $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
     </li>
     @endcan
 
+    @canany(['be god'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('samu.shiftreception.*') }} {{ $disabled }}"
+            href=" {{ route('samu.shiftreception.index') }}"><i class="fas fa-book"></i> Recepcion Turno Enfermeria</a>
+    </li>
+    @endcan
+
     @canany(['SAMU administrador','SAMU operador','SAMU regulador'])
     <li class="nav-item">
         <a class="nav-link {{ active('samu.call.create') }} {{ $disabled }}"

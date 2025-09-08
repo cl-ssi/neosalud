@@ -583,6 +583,8 @@ use App\Http\Livewire\Samu\GlasgowScale;
 use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 use App\Http\Livewire\Samu\RemStatistics;
 use App\Http\Livewire\Samu\MinsalStatistics;
+use App\Http\Livewire\Samu\ShiftReception;
+use App\Http\Livewire\Samu\ShiftReceptionForm;
 
 Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/monitor', MonitorIndex::class)->name('monitor');
@@ -665,6 +667,18 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
             Route::post('/store',         [NoveltieController::class, 'store'])->name('store');
             Route::get('/edit/{noveltie}', [NoveltieController::class, 'edit'])->name('edit');
             Route::put('/update/{noveltie}', [NoveltieController::class, 'update'])->name('update');
+        });
+
+
+    Route::prefix('shift-reception')->name('shiftreception.')
+        // ->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
+        ->group(function () {
+            Route::get('/', ShiftReception::class)->name('index');
+            Route::get('/create', ShiftReceptionForm::class)->name('create');
+            Route::get('/edit/{shiftReception}', ShiftReceptionForm::class)->name('edit');
+            // Route::get('/show/{shiftReception}', ShiftReception::class)->name('show');
+            // Route::post('/store', [NursingShift::class, 'store'])->name('store');
+            // Route::get('/update/{nursingShift}', [NursingShift::class, 'update'])->name('update');
         });
 
     Route::prefix('calls')->name('call.')
