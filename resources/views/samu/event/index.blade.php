@@ -89,7 +89,7 @@
 <h3 class="mb-3">
     <i class="fas fa-phone"></i> Llamadas pendientes (sin cometido asociado)
 </h3>
-@include('samu.call.partials.list',['calls' => $calls, 'edit' => true, 'createEvent' => true])
+@include('samu.call.partials.list',['calls' => $calls, 'edit' => true, 'createEvent' => true, 'triage' =>true])
 
 
 

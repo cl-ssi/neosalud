@@ -27,29 +27,29 @@ class CallController extends Controller
      */
     public function index()
     {
-        /*  */
-        $openShift = Shift::where('status',true)
-                    ->with(['calls','calls.events','calls.referenceCall','calls.receptor','calls.commune'])
-                    ->first();
+        $triage = [false];
+        $openShift = Shift::where('status', true)
+            ->with(['calls', 'calls.events', 'calls.referenceCall', 'calls.receptor', 'calls.commune'])
+            ->first();
         $lastShift = Shift::latest()
-                    ->skip(1)
-                    ->with(['calls','calls.events','calls.referenceCall','calls.receptor','calls.commune'])
-                    ->first();
+            ->skip(1)
+            ->with(['calls', 'calls.events', 'calls.referenceCall', 'calls.receptor', 'calls.commune'])
+            ->first();
 
-        return view ('samu.call.index' , compact('openShift','lastShift'));
+        return view('samu.call.index', compact('openShift', 'lastShift', 'triage'));
     }
 
     public function ots()
     {
-        $openShift = Shift::where('status',true)
-                    ->with(['calls','calls.events','calls.receptor','calls.commune'])
-                    ->first();
+        $openShift = Shift::where('status', true)
+            ->with(['calls', 'calls.events', 'calls.receptor', 'calls.commune'])
+            ->first();
         $lastShift = Shift::latest()
-                    ->skip(1)
-                    ->with(['calls','calls.events','calls.receptor','calls.commune'])
-                    ->first();
+            ->skip(1)
+            ->with(['calls', 'calls.events', 'calls.receptor', 'calls.commune'])
+            ->first();
 
-        return view ('samu.call.ots' , compact('openShift','lastShift'));
+        return view('samu.call.ots', compact('openShift', 'lastShift'));
     }
 
     /**
@@ -61,16 +61,15 @@ class CallController extends Controller
     public function create()
     {
         /* Obtener el turno actual */
-        $shift = Shift::where('status',true)->first();
+        $shift = Shift::where('status', true)->first();
         $communes = Commune::whereHas('samu')->get(['id', 'name', 'latitude', 'longitude']);
 
-        if(!$shift)
-        {
+        if (!$shift) {
             session()->flash('danger', 'Debe abrir un turno primero');
             return redirect()->route('samu.welcome');
         }
 
-        return view ('samu.call.create' , compact('communes', 'shift'));
+        return view('samu.call.create', compact('communes', 'shift'));
     }
 
     /**
@@ -81,22 +80,20 @@ class CallController extends Controller
      */
     public function store(StoreCallRequest $request)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
-            ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".')
+        Gate::allowIf(
+            auth()->user()->cannot('SAMU auditor')
+                ? Response::allow()
+                : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
-        if(Shift::whereStatus(true)->exists())
-        {
+        if (Shift::whereStatus(true)->exists()) {
             $dataValidated = $request->validated();
             //$dataValidated['age'] = generateAge($dataValidated['year'], $dataValidated['month']);
             Call::create($dataValidated);
 
             $request->session()->flash('success', 'Se ha guardado el nuevo llamado.');
             return redirect()->route('samu.call.create');
-        }
-        else
-        {
+        } else {
             $request->session()->flash('danger', 'No se puede guardar el llamado,
                 el turno se ha cerrado, solicite que abran un turno y luego intente guardar nuevamente.');
             return redirect()->back()->withInput();
@@ -127,13 +124,12 @@ class CallController extends Controller
         $communes = Commune::whereHas('samu')->get(['id', 'name', 'latitude', 'longitude']);
         $keys = Key::orderBy('key')->get(['id', 'key', 'name']);
 
-        if(!$shift)
-        {
+        if (!$shift) {
             session()->flash('danger', 'Debe abrir un turno primero');
             return redirect()->route('samu.welcome');
         }
 
-        return view ('samu.call.edit' , compact('call', 'communes','keys', 'shift'));
+        return view('samu.call.edit', compact('call', 'communes', 'keys', 'shift'));
     }
 
     /**
@@ -145,23 +141,23 @@ class CallController extends Controller
      */
     public function update(UpdateCallRequest $request, Call $call)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
-            ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".')
+        Gate::allowIf(
+            auth()->user()->cannot('SAMU auditor')
+                ? Response::allow()
+                : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         $dataValidated = $request->validated();
         //$dataValidated['age'] = generateAge($dataValidated['year'], $dataValidated['month']);
 
-        if($call->classification != $request->filled('classification'))
-        {
+        if ($call->classification != $request->filled('classification')) {
             $dataValidated['regulator_id'] = auth()->id();
         }
 
         $call->update($dataValidated);
         $request->session()->flash('success', 'Se han actualizado los datos la orientación telefónica.');
 
-        switch($call->classification) {
+        switch ($call->classification) {
             case 'OT':
                 return redirect()->route('samu.call.ots');
                 break;
@@ -184,9 +180,10 @@ class CallController extends Controller
      */
     public function destroy(Call $call)
     {
-        Gate::allowIf( auth()->user()->cannot('SAMU auditor')
-            ? Response::allow()
-            : Response::deny('Acción no autorizada para "SAMU auditor".')
+        Gate::allowIf(
+            auth()->user()->cannot('SAMU auditor')
+                ? Response::allow()
+                : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         $call->delete();

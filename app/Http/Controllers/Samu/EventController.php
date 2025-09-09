@@ -61,7 +61,9 @@ class EventController extends Controller
             ->latest()
             ->get();
 
-        return view('samu.event.index', compact('shift', 'open_events', 'events_today', 'events_yesterday', 'calls'));
+        $triage = [true];
+
+        return view('samu.event.index', compact('shift', 'open_events', 'events_today', 'events_yesterday', 'calls', 'triage'));
     }
 
     /**
