@@ -31,6 +31,7 @@ class RemStatistics extends Component implements FromView
 
     protected const PT = [63, 64, 65, 66, 67, 68, 69]; //201*, 401d, 402b, 701i 
 
+    //TODO: Critical calls.r1 & calls.r2
     protected const CRITICAL = [2, 13, 35, 36, 37, 46, 66, 78, 86, 93, 96, 97, 127]; //['101a', '102a', '105a', '105b', '105c', '107a', '201c', '401b', '402b', '501a', '501b', '403d', '701i']
 
     protected const MOBILES = [

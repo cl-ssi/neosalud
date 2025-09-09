@@ -72,7 +72,7 @@
                     @endif
                     @else
                 <td>
-                    @if ($triage)
+                    @if ($triage??false)
                     <form method="post" action="{{ route('samu.event.call.update.triage', $call) }}">
                         @csrf
                         @method('PUT')
