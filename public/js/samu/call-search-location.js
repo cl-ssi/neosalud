@@ -28,7 +28,7 @@ btnSearch.addEventListener('click', (event) => {
     let country = 'chile';
     commune = (commune.value != '') ? commune.options[commune.selectedIndex].text : '';
 
-    if(address.value != '') {
+    if (address.value != '') {
         getLocation(address.value, commune, country);
     } else {
         showError('El campo dirección es obligatorio para autoposicionar el pin en el mapa.');
@@ -44,7 +44,7 @@ async function getLocation(address, commune, country) {
         const response = await axios.get(`${URL_GEOCODE}`, { params });
         let locations = response.data.items;
 
-        if(locations.length != 0) {
+        if (locations.length != 0) {
             let location = locations[0].position;
             marker.setLatLng([location.lat, location.lng]);
             map.setView([location.lat, location.lng], ZOOM_SEARCH);
@@ -55,6 +55,7 @@ async function getLocation(address, commune, country) {
             showError('La dirección indicada no fue encontrada.');
         }
     } catch (error) {
+        console.log(error);
         showError('Disculpe, en este momento no podemos buscar la dirección indicada.');
     }
 }
