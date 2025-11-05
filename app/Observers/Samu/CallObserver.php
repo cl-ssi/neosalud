@@ -42,8 +42,8 @@ class CallObserver
                 $geocodingService = app(GeocodingService::class);
                 $address = str_replace(' ', '+', trim($call->address));
                 $coordinates = $geocodingService->getCoordinates($address . '+' . $call->commune->name);
-                $call->latitude = $coordinates['lat'] ?? null;
-                $call->longitude = $coordinates['lng'] ?? null;
+                $call->latitude = ((float) $coordinates['lat']) ?? null;
+                $call->longitude = ((float) $coordinates['lng']) ?? null;
                 $call->saveQuietly();
             }
         }
@@ -72,8 +72,8 @@ class CallObserver
                 $geocodingService = app(GeocodingService::class);
                 $address = str_replace(' ', '+', trim($call->address));
                 $coordinates = $geocodingService->getCoordinates($address . '+' . $call->commune->name);
-                $call->latitude = $coordinates['lat'] ?? null;
-                $call->longitude = $coordinates['lng'] ?? null;
+                $call->latitude = ((float) $coordinates['lat']) ?? null;
+                $call->longitude = ((float) $coordinates['lng']) ?? null;
                 $call->saveQuietly();
             }
         }
