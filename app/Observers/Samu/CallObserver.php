@@ -38,7 +38,7 @@ class CallObserver
     public function created(Call $call): void
     {
         if ($call->latitude == null || $call->longitude == null) {
-            if ($call->address != null && $call->commune->name != null) {
+            if ($call->address != null && $call->commune?->name != null) {
                 $geocodingService = app(GeocodingService::class);
                 $coordinates = $geocodingService->getCoordinates($call->address . '+' . $call->commune->name);
                 $call->latitude = $coordinates['lat'] ?? null;

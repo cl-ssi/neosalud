@@ -8,7 +8,7 @@ class GeocodingService
 
     public function __construct()
     {
-        $this->apiKey = config('API_KEY_GOOGLE_MAPS');
+        $this->apiKey = env('API_KEY_GOOGLE_MAPS');
     }
 
     public function getCoordinates($address)
