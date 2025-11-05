@@ -41,18 +41,17 @@ class Mobile extends Model implements Auditable
 
     public function mobileInServices()
     {
-        return $this->hasMany(MobileInService::class);
+        return $this->hasMany(MobileInService::class, 'mobile_id', null);
     }
 
     public function type()
     {
-        return $this->belongsTo(MobileType::class,'type_id');
+        return $this->belongsTo(MobileType::class, 'type_id');
     }
 
     public function getLastLocationAttribute()
     {
-        if($this->locations())
-        {
+        if ($this->locations()) {
             return $this->locations;
         }
         return null;
@@ -60,7 +59,7 @@ class Mobile extends Model implements Auditable
 
     public function getManagedInLettersAttribute()
     {
-        if($this->managed)
+        if ($this->managed)
             return "SAMU";
         return "Externa";
     }

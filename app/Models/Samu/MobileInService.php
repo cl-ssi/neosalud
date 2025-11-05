@@ -12,6 +12,7 @@ use App\Models\Samu\MobileCrew;
 use App\Models\Samu\MobileInServiceInventory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MobileInService extends Model implements Auditable
 {
@@ -19,7 +20,7 @@ class MobileInService extends Model implements Auditable
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="samu_mobiles_in_service";
+    protected $table = "samu_mobiles_in_service";
 
     protected $fillable = [
         'id',
@@ -39,10 +40,10 @@ class MobileInService extends Model implements Auditable
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'lunch_start_at',
         'lunch_break_start_at',
@@ -57,8 +58,7 @@ class MobileInService extends Model implements Auditable
 
     public function mobile()
     {
-        /* HasOne? */
-        return $this->belongsTo(Mobile::class);
+        return $this->belongsTo(Mobile::class, 'mobile_id', null);
     }
 
     public function type()
@@ -77,10 +77,10 @@ class MobileInService extends Model implements Auditable
         // }
         // return $users;
         return $this->belongsToMany(User::class, 'samu_mobile_crew', 'mobiles_in_service_id')
-                    //->join('amenity_master','amenity_icon_url','=','image_url')
-                    ->using(MobileCrew::class)
-                    ->withPivot('id', 'job_type_id', 'assumes_at', 'leaves_at')
-                    ->withTimestamps();
+            //->join('amenity_master','amenity_icon_url','=','image_url')
+            ->using(MobileCrew::class)
+            ->withPivot('id', 'job_type_id', 'assumes_at', 'leaves_at')
+            ->withTimestamps();
     }
 
     public function currentCrew()
@@ -88,12 +88,12 @@ class MobileInService extends Model implements Auditable
         return $this->belongsToMany(User::class, 'samu_mobile_crew', 'mobiles_in_service_id')
             ->using(MobileCrew::class)
             ->withPivot('id', 'job_type_id', 'assumes_at', 'leaves_at')
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('mobiles_in_service_id', $this->id)
                     ->where('assumes_at', '<', now())
                     ->where('leaves_at', '>', now());
             })
-            ->orWhere(function($query) {
+            ->orWhere(function ($query) {
                 $query->where('mobiles_in_service_id', $this->id)
                     ->where('assumes_at', '<', now())
                     ->where('leaves_at', '=', null);
@@ -114,14 +114,11 @@ class MobileInService extends Model implements Auditable
     public function getTotalMinutesAttribute()
     {
         $total = 0;
-        if($this->lunch_start_at && $this->lunch_break_start_at && $this->lunch_break_end_at && $this->lunch_end_at)
-        {
+        if ($this->lunch_start_at && $this->lunch_break_start_at && $this->lunch_break_end_at && $this->lunch_end_at) {
             $firstBreak = intval($this->lunch_start_at->diff($this->lunch_break_start_at)->format('%I'));
             $secondBreak = intval($this->lunch_break_end_at->diff($this->lunch_end_at)->format('%I'));
             $total = $firstBreak + $secondBreak;
-        }
-        elseif($this->lunch_start_at && $this->lunch_end_at)
-        {
+        } elseif ($this->lunch_start_at && $this->lunch_end_at) {
             $total = intval($this->lunch_start_at->diff($this->lunch_end_at)->format('%I'));
         }
         return $total;
@@ -135,9 +132,9 @@ class MobileInService extends Model implements Auditable
     public function getMisStatusAttribute()
     {
         $status = 'Disponible';
-        if($this->last_event)
+        if ($this->last_event)
             $status = $this->last_event->event_status;
-        if(!$this->status)
+        if (!$this->status)
             $status = "Inactivo";
         return $status;
     }
@@ -145,7 +142,7 @@ class MobileInService extends Model implements Auditable
     public function getColorAttribute()
     {
         $color = 'success';
-        if($this->last_event)
+        if ($this->last_event)
             $color = $this->last_event->color;
         return $color;
     }
@@ -163,8 +160,7 @@ class MobileInService extends Model implements Auditable
             ->orderBy('position', 'ASC')
             ->get();
 
-        foreach($mobilesInService as $index => $mis)
-        {
+        foreach ($mobilesInService as $index => $mis) {
             $mis->update([
                 'position' => $index + 1
             ]);

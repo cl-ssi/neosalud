@@ -30,10 +30,10 @@ class Shift extends Model implements Auditable
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'opening_at',
         'closing_at'
@@ -45,9 +45,9 @@ class Shift extends Model implements Auditable
     public function users()
     {
         return $this->belongsToMany(User::class, 'samu_shift_user', 'shift_id')
-                    ->using(ShiftUser::class)
-                    ->withPivot('id', 'shift_id', 'job_type_id', 'assumes_at', 'leaves_at')
-                    ->withTimestamps();
+            ->using(ShiftUser::class)
+            ->withPivot('id', 'shift_id', 'job_type_id', 'assumes_at', 'leaves_at')
+            ->withTimestamps();
     }
 
     public function novelties()
@@ -64,6 +64,16 @@ class Shift extends Model implements Auditable
         //             ->withPivot('id','observation')
         //             ->withTimestamps();
     }
+
+    // public function mobiles()
+    // {
+    //     // return $this->hasManyThrough(Mobile::class, MobileInService::class, 'mobile_id', 'shift_id', null, null); // error
+    //     return $this->hasManyThrough(Mobile::class, MobileInService::class, 'mobile_id', null, 'shift_id', null); // not error
+    //     // return $this->hasManyThrough(Mobile::class, MobileInService::class, 'mobile_id', null, null, 'shift_id'); // error
+    //     // return $this->hasManyThrough(Mobile::class, MobileInService::class, 'shift_id', 'mobile_id', null, null); // error
+    //     // return $this->hasManyThrough(Mobile::class, MobileInService::class, 'shift_id', null, 'mobile_id', null); // not error
+    //     // return $this->hasManyThrough(Mobile::class, MobileInService::class, 'shift_id', null, null, 'mobile_id');// error
+    // }
 
     public function calls()
     {
@@ -99,7 +109,7 @@ class Shift extends Model implements Auditable
     public function getOpeningAtFormatAttribute()
     {
         $opening = '-';
-        if($this->opening_at)
+        if ($this->opening_at)
             $opening = $this->opening_at->format('Y-m-d H:i');
         return $opening;
     }
@@ -107,7 +117,7 @@ class Shift extends Model implements Auditable
     public function getClosingAtFormatAttribute()
     {
         $closing = '-';
-        if($this->closing_at)
+        if ($this->closing_at)
             $closing = $this->closing_at->format('Y-m-d H:i');
         return $closing;
     }

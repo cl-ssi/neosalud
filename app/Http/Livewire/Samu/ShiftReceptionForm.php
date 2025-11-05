@@ -3,6 +3,10 @@
 namespace App\Http\Livewire\Samu;
 
 use App\Models\Samu\ShiftsReception as ShiftsReceptionModel;
+use App\Models\Samu\Mobile;
+use App\Models\Samu\MobileCrew;
+use App\Models\Samu\Shift;
+use App\Models\User;
 use Livewire\Component;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
@@ -14,6 +18,13 @@ class ShiftReceptionForm extends Component
     public $isEditing = false;
     public $activeTab = 'encabezado';
 
+    // Listas para los selects
+    public $cardOptions = ['02', '13', '03', '05', '07', '4H'];
+    public $mobileOptions = [];
+    public $crewUsers = [];
+    public $mobilesInService = [];
+    public $radioNumbers = [1, 2, 3, 4, 5, 6, 7];
+
     // Main fields
     public $date, $shift, $shift_leader, $room_key = false;
     public $medical_regulator, $nursing_regulator;
@@ -24,7 +35,7 @@ class ShiftReceptionForm extends Component
     public $absences = [];
     public $cards = [];
     public $radio_loans = [];
-    public $vehicles = [];
+    public $mobiles = [];
     public $fuel_status = [];
     public $equipment_loans = [];
     public $portable_oxygen = [];
@@ -33,6 +44,18 @@ class ShiftReceptionForm extends Component
 
     public function mount($nursingShift = null)
     {
+        // Cargar datos para los selects
+        // $this->mobileOptions = Mobile::pluck('name', 'id')->toArray();
+
+        $latestShift = Shift::latest()->first();
+        if ($latestShift) {
+            $mobileIds = $latestShift->mobilesInService->pluck('mobile_id');
+            $this->mobilesInService = Mobile::whereIn('id', $mobileIds)->get();
+        }
+
+        $userIds = MobileCrew::pluck('user_id')->unique();
+        $this->crewUsers = User::whereIn('id', $userIds)->pluck('text', 'id')->toArray();
+
         if ($nursingShift) {
             $this->nursingShift = ShiftsReceptionModel::findOrFail($nursingShift);
             $this->fill($this->nursingShift->toArray());
@@ -49,12 +72,12 @@ class ShiftReceptionForm extends Component
         $this->shift_leader = '';
         $this->room_key = false;
 
-        // Initialize arrays with at least one empty row
-        $this->absences = [['staff' => '', 'reason' => '', 'absence_days' => '', 'replacement' => '']];
-        $this->cards = [['vehicle' => '', 'fuel_card' => '', 'vehicle2' => '', 'bathroom_card' => '', 'lanyard_hah1' => '', 'lanyard_blue2' => '']];
-        $this->radio_loans = [['radio_number' => '', 'personnel' => '', 'vehicle' => '']];
-        $this->vehicles = [['vehicle' => '', 'type' => '', 'driver' => '']];
-        $this->fuel_status = [['vehicle' => '', 'fuel_status' => '', 'o2_status' => '', 'refill' => '']];
+        // Inicializar arrays con una fila vacía
+        $this->absences = [['user_id' => '', 'reason' => '', 'absence_days' => '', 'replacement' => '']];
+        $this->cards = [['card_number' => '', 'mobile_id' => '']];
+        $this->radio_loans = [['radio_number' => '', 'hour' => '', 'detail' => '']];
+        $this->mobiles = [['mobile_id' => '', 'type' => '', 'driver' => '']];
+        $this->fuel_status = [['mobile_id' => '', 'fuel_status' => '', 'o2_status' => '', 'refill' => '']];
         $this->equipment_loans = [['equipment' => '', 'service' => '', 'responsible' => '']];
         $this->portable_oxygen = [['cylinder_quantity' => '', 'full' => '', 'empty' => '', 'refill' => '']];
         $this->novelties = [['novelty' => '']];
@@ -63,7 +86,28 @@ class ShiftReceptionForm extends Component
 
     public function addRow($section)
     {
-        $this->$section[] = [];
+        $newRow = [];
+        switch ($section) {
+            case 'absences':
+                $newRow = ['user_id' => '', 'reason' => '', 'absence_days' => '', 'replacement' => ''];
+                break;
+            case 'cards':
+                $newRow = ['card_number' => '', 'mobile_id' => ''];
+                break;
+            case 'radio_loans':
+                $newRow = ['radio_number' => '', 'hour' => '', 'detail' => ''];
+                break;
+            case 'mobiles':
+                $newRow = ['mobile_id' => '', 'type' => '', 'driver' => ''];
+                break;
+            case 'fuel_status':
+                $newRow = ['mobile_id' => '', 'fuel_status' => '', 'o2_status' => '', 'refill' => ''];
+                break;
+            default:
+                $newRow = [];
+                break;
+        }
+        $this->$section[] = $newRow;
     }
 
     public function removeRow($section, $index)
@@ -71,9 +115,6 @@ class ShiftReceptionForm extends Component
         if (count($this->$section) > 1) {
             unset($this->$section[$index]);
             $this->$section = array_values($this->$section);
-        } else {
-            // If it's the last row, clear the fields
-            $this->$section[0] = array_fill_keys(array_keys($this->$section[0] ?? []), '');
         }
     }
 
@@ -91,33 +132,15 @@ class ShiftReceptionForm extends Component
             'handover' => $this->handover,
             'receive' => $this->receive,
             'signature' => $this->signature,
-            'absences' => array_filter($this->absences, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'cards' => array_filter($this->cards, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'radio_loans' => array_filter($this->radio_loans, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'vehicles' => array_filter($this->vehicles, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'fuel_status' => array_filter($this->fuel_status, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'equipment_loans' => array_filter($this->equipment_loans, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'portable_oxygen' => array_filter($this->portable_oxygen, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'novelties' => array_filter($this->novelties, function ($item) {
-                return !empty(array_filter($item));
-            }),
-            'secondary_transfers' => array_filter($this->secondary_transfers, function ($item) {
-                return !empty(array_filter($item));
-            }),
+            'absences' => array_filter($this->absences, fn($item) => !empty(array_filter($item))),
+            'cards' => array_filter($this->cards, fn($item) => !empty(array_filter($item))),
+            'radio_loans' => array_filter($this->radio_loans, fn($item) => !empty(array_filter($item))),
+            'mobiles' => array_filter($this->mobiles, fn($item) => !empty(array_filter($item))),
+            'fuel_status' => array_filter($this->fuel_status, fn($item) => !empty(array_filter($item))),
+            'equipment_loans' => array_filter($this->equipment_loans, fn($item) => !empty(array_filter($item))),
+            'portable_oxygen' => array_filter($this->portable_oxygen, fn($item) => !empty(array_filter($item))),
+            'novelties' => array_filter($this->novelties, fn($item) => !empty(array_filter($item))),
+            'secondary_transfers' => array_filter($this->secondary_transfers, fn($item) => !empty(array_filter($item))),
         ];
 
         if ($this->isEditing) {

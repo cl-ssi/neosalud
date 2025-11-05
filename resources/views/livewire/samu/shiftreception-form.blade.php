@@ -172,21 +172,18 @@
                                         @foreach($absences as $index => $absence)
                                         <tr>
                                             <td>
-                                                <input type="text" wire:model="absences.{{ $index }}.staff" class="form-control">
+                                                <select wire:model="absences.{{ $index }}.user_id" class="form-select">
+                                                    <option value="">Seleccione funcionario...</option>
+                                                    @foreach($crewUsers as $id => $name)
+                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
+                                            <td><input type="text" wire:model="absences.{{ $index }}.reason" class="form-control"></td>
+                                            <td><input type="number" wire:model="absences.{{ $index }}.absence_days" class="form-control"></td>
+                                            <td><input type="text" wire:model="absences.{{ $index }}.replacement" class="form-control"></td>
                                             <td>
-                                                <input type="text" wire:model="absences.{{ $index }}.reason" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="number" wire:model="absences.{{ $index }}.absence_days" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="absences.{{ $index }}.replacement" class="form-control">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    wire:click="removeRow('absences', {{ $index }})"
-                                                    @if(count($absences) <=1) disabled @endif>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeRow('absences', {{ $index }})" @if(count($absences) <=1) disabled @endif>
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -194,9 +191,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('absences')">
-                                    <i class="fas fa-plus"></i> Agregar Ausencia
-                                </button>
+                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('absences')"><i class="fas fa-plus"></i> Agregar Ausencia</button>
                             </div>
                         </div>
 
@@ -206,12 +201,8 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-dark">
                                         <tr>
+                                            <th>Tarjeta</th>
                                             <th>Móvil</th>
-                                            <th>Tarj. Combustible</th>
-                                            <th>Móvil 2</th>
-                                            <th>Tarjeta Baño</th>
-                                            <th>Lanyard HAH1</th>
-                                            <th>Lanyard Azul2</th>
                                             <th width="100">Acciones</th>
                                         </tr>
                                     </thead>
@@ -219,27 +210,23 @@
                                         @foreach($cards as $index => $card)
                                         <tr>
                                             <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.vehicle" class="form-control">
+                                                <select wire:model="cards.{{ $index }}.card_number" class="form-select">
+                                                    <option value="">Seleccione tarjeta...</option>
+                                                    @foreach($cardOptions as $option)
+                                                    <option value="{{ $option }}">{{ $option }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
                                             <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.fuel_card" class="form-control">
+                                                <select wire:model="cards.{{ $index }}.mobile_id" class="form-select">
+                                                    <option value="">Seleccione móvil...</option>
+                                                    @foreach($mobilesInService as $mobile)
+                                                    <option value="{{ $mobile->id }}">{{ $mobile->code . '-' . $mobile->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
                                             <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.vehicle2" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.bathroom_card" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.lanyard_hah1" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="cards.{{ $index }}.lanyard_blue2" class="form-control">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    wire:click="removeRow('cards', {{ $index }})"
-                                                    @if(count($cards) <=1) disabled @endif>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeRow('cards', {{ $index }})" @if(count($cards) <=1) disabled @endif>
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -247,9 +234,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('cards')">
-                                    <i class="fas fa-plus"></i> Agregar Tarjeta
-                                </button>
+                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('cards')"><i class="fas fa-plus"></i> Agregar Tarjeta</button>
                             </div>
                         </div>
 
@@ -260,8 +245,8 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th>Número Radio</th>
-                                            <th>Personal</th>
-                                            <th>Móvil</th>
+                                            <th>Hora</th>
+                                            <th>Detalle</th>
                                             <th width="100">Acciones</th>
                                         </tr>
                                     </thead>
@@ -269,18 +254,17 @@
                                         @foreach($radio_loans as $index => $radio)
                                         <tr>
                                             <td>
-                                                <input type="number" wire:model="radio_loans.{{ $index }}.radio_number" class="form-control">
+                                                <select wire:model="radio_loans.{{ $index }}.radio_number" class="form-select">
+                                                    <option value="">Seleccione...</option>
+                                                    @foreach($radioNumbers as $number)
+                                                    <option value="{{ $number }}">{{ $number }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
+                                            <td><input type="time" wire:model="radio_loans.{{ $index }}.hour" class="form-control"></td>
+                                            <td><input type="text" wire:model="radio_loans.{{ $index }}.detail" class="form-control"></td>
                                             <td>
-                                                <input type="text" wire:model="radio_loans.{{ $index }}.personnel" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="radio_loans.{{ $index }}.vehicle" class="form-control">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    wire:click="removeRow('radio_loans', {{ $index }})"
-                                                    @if(count($radio_loans) <=1) disabled @endif>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeRow('radio_loans', {{ $index }})" @if(count($radio_loans) <=1) disabled @endif>
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -288,9 +272,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('radio_loans')">
-                                    <i class="fas fa-plus"></i> Agregar Préstamo Radio
-                                </button>
+                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('radio_loans')"><i class="fas fa-plus"></i> Agregar Préstamo Radio</button>
                             </div>
                         </div>
 
@@ -307,21 +289,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($vehicles as $index => $vehicle)
+                                        @foreach($mobiles as $index => $mobile)
                                         <tr>
                                             <td>
-                                                <input type="text" wire:model="vehicles.{{ $index }}.vehicle" class="form-control">
+                                                <select wire:model="mobiles.{{ $index }}.mobile_id" class="form-select">
+                                                    <option value="">Seleccione móvil...</option>
+                                                    @foreach($mobilesInService as $mobile)
+                                                    <option value="{{ $mobile->id }}">{{ $mobile->code . '-' . $mobile->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
+                                            <td><input type="text" wire:model="mobiles.{{ $index }}.type" class="form-control"></td>
+                                            <td><input type="text" wire:model="mobiles.{{ $index }}.driver" class="form-control"></td>
                                             <td>
-                                                <input type="text" wire:model="vehicles.{{ $index }}.type" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="vehicles.{{ $index }}.driver" class="form-control">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    wire:click="removeRow('vehicles', {{ $index }})"
-                                                    @if(count($vehicles) <=1) disabled @endif>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeRow('mobiles', {{ $index }})" @if(count($mobiles) <=1) disabled @endif>
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -329,9 +310,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('vehicles')">
-                                    <i class="fas fa-plus"></i> Agregar Móvil
-                                </button>
+                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('mobiles')"><i class="fas fa-plus"></i> Agregar Móvil</button>
                             </div>
                         </div>
 
@@ -352,21 +331,18 @@
                                         @foreach($fuel_status as $index => $fuel)
                                         <tr>
                                             <td>
-                                                <input type="text" wire:model="fuel_status.{{ $index }}.vehicle" class="form-control">
+                                                <select wire:model="fuel_status.{{ $index }}.mobile_id" class="form-select">
+                                                    <option value="">Seleccione móvil...</option>
+                                                    @foreach($mobilesInService as $mobile)
+                                                    <option value="{{ $mobile->id }}">{{ $mobile->code . '-' . $mobile->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
+                                            <td><input type="text" wire:model="fuel_status.{{ $index }}.fuel_status" class="form-control"></td>
+                                            <td><input type="text" wire:model="fuel_status.{{ $index }}.o2_status" class="form-control"></td>
+                                            <td><input type="text" wire:model="fuel_status.{{ $index }}.refill" class="form-control"></td>
                                             <td>
-                                                <input type="text" wire:model="fuel_status.{{ $index }}.fuel_status" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="fuel_status.{{ $index }}.o2_status" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" wire:model="fuel_status.{{ $index }}.refill" class="form-control">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    wire:click="removeRow('fuel_status', {{ $index }})"
-                                                    @if(count($fuel_status) <=1) disabled @endif>
+                                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeRow('fuel_status', {{ $index }})" @if(count($fuel_status) <=1) disabled @endif>
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -374,9 +350,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('fuel_status')">
-                                    <i class="fas fa-plus"></i> Agregar Estado Combustible
-                                </button>
+                                <button type="button" class="btn btn-outline-primary" wire:click="addRow('fuel_status')"><i class="fas fa-plus"></i> Agregar Estado Combustible</button>
                             </div>
                         </div>
 
