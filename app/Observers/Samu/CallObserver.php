@@ -40,7 +40,8 @@ class CallObserver
         if ($call->latitude == null || $call->longitude == null) {
             if ($call->address != null && $call->commune?->name != null) {
                 $geocodingService = app(GeocodingService::class);
-                $coordinates = $geocodingService->getCoordinates($call->address . '+' . $call->commune->name);
+                $address = str_replace(' ', '+', trim($call->address));
+                $coordinates = $geocodingService->getCoordinates($address . '+' . $call->commune->name);
                 $call->latitude = $coordinates['lat'] ?? null;
                 $call->longitude = $coordinates['lng'] ?? null;
                 $call->saveQuietly();
@@ -60,6 +61,20 @@ class CallObserver
             if ($call->commune->latitude == $call->latitude && $call->commune->longitude == $call->longitude) {
                 $call->latitude = null;
                 $call->longitude = null;
+            }
+        }
+    }
+
+    public function updated(Call $call): void
+    {
+        if ($call->isDirty('commune_id') || $call->isDirty('address')) {
+            if ($call->address != null && $call->commune?->name != null) {
+                $geocodingService = app(GeocodingService::class);
+                $address = str_replace(' ', '+', trim($call->address));
+                $coordinates = $geocodingService->getCoordinates($address . '+' . $call->commune->name);
+                $call->latitude = $coordinates['lat'] ?? null;
+                $call->longitude = $coordinates['lng'] ?? null;
+                $call->saveQuietly();
             }
         }
     }
