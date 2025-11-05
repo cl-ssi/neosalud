@@ -29,6 +29,12 @@ class CallObserver
         $call->hour = now();
     }
 
+    /**
+     * Handle the Call "created" event.
+     *
+     * @param  \App\Models\Call  $call
+     * @return void
+     */
     public function created(Call $call): void
     {
         if ($call->latitude == null || $call->longitude == null) {
@@ -37,6 +43,7 @@ class CallObserver
                 $coordinates = $geocodingService->getCoordinates($call->address . '+' . $call->commune->name);
                 $call->latitude = $coordinates['lat'] ?? null;
                 $call->longitude = $coordinates['lng'] ?? null;
+                $call->saveQuietly();
             }
         }
     }
