@@ -18,6 +18,8 @@ class RemStatistics extends Component implements FromView
 
     protected $chartData;
 
+    protected $rem;
+
     public const LABELS = [
         'SCA' => 'Sindrome Coronario Agudo',
         'PCR' => 'Paro Cardiaco Respiratorio',
@@ -73,18 +75,18 @@ class RemStatistics extends Component implements FromView
     public function render()
     {
         $stats = $this->getStats();
-
         return view('livewire.samu.rem-statistics', [
             'K' => $stats['section_k'],
             'N' => $stats['section_n'],
             'L' => $stats['section_l'],
+            // 'all_events' => $this->rem->get()->toArray(),
         ]);
     }
 
     public function getEvents()
     {
         $events = Event::whereMonth('created_at', $this->month)
-            ->whereYear('created_at', $this->year)
+            ->whereYear('created_at', $this->year) //6006003200
             ->with('key', 'call')
             ->has('call');
         return $events;
@@ -93,63 +95,68 @@ class RemStatistics extends Component implements FromView
     public function getStats()
     {
         $events = $this->getEvents();
-        return [
-            'section_k' => $this->getSectionK($events),
-            'section_n' => $this->getSectionN($events),
-            'section_l' => $this->getSectionL($events),
-        ];
+        $aux = clone $events;
+        $out = [];
+
+        // $this->rem = $events->get();
+        $out['section_k'] = $this->getSectionK($events);
+        $events = clone $aux;
+        $out['section_n'] = $this->getSectionN($events);
+        $events = clone $aux;
+        $out['section_l'] = $this->getSectionL($events);
+        return $out;
     }
 
-    public function getSectionK($events)
+    public function getSectionK($query)
     {
-        $events = $events;
+        $events = clone $query;
+        $sectionK =  [];
         // Basic
         $basicEvents = $events->whereIn('mobile_id', self::MOBILES['BASIC']);
-        $basicCriticalEvents = $basicEvents->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL));
-        $basicNonCriticalEvents = $basicEvents->whereHas('call', fn($query) => $query->whereNotIn('triage', self::CRITICAL));
-        $basicCriticalArrivalTimes = $this->getTimeRanges($basicCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
-        $basicNonCriticalArrivalTimes = $this->getTimeRanges($basicNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
+        $aux = clone $basicEvents;
+        $sectionK['BASIC']['COUNT']['TOTAL'] = $basicEvents->count();
+        $sectionK['BASIC']['RECIPIENTS'] = $basicEvents->get()->unique('patient_identification')->count();
 
+        $basicCriticalEvents = $basicEvents->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL));
+        $sectionK['BASIC']['COUNT']['CRITICAL'] = $basicCriticalEvents->count();
+
+        $basicEvents = $aux;
+        $basicNonCriticalEvents = $basicEvents->whereHas('call', fn($query) => $query->whereNotIn('triage', self::CRITICAL));
+        $sectionK['BASIC']['COUNT']['UNCRITICAL'] = $basicNonCriticalEvents->count();
+        $basicCriticalArrivalTimes = $this->getTimeRanges($basicCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
+        $sectionK['BASIC']['CRITICAL'] = $basicCriticalArrivalTimes;
+        $basicNonCriticalArrivalTimes = $this->getTimeRanges($basicNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
+        $sectionK['BASIC']['UNCRITICAL'] = $basicNonCriticalArrivalTimes;
+
+        $events = clone $query;
         // Advanced
         $advancedEvents = $events->whereIn('mobile_id', self::MOBILES['ADVANCED']);
+        $aux = clone $advancedEvents;
+        $sectionK['ADVANCED']['COUNT']['TOTAL'] = $advancedEvents->count();
+        $sectionK['ADVANCED']['RECIPIENTS'] = $advancedEvents->get()->unique('patient_identification')->count();
         $advancedCriticalEvents = $advancedEvents->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL));
+        $sectionK['ADVANCED']['COUNT']['CRITICAL'] = $advancedCriticalEvents->count();
+        $advancedEvents = $aux;
         $advancedNonCriticalEvents = $advancedEvents->whereHas('call', fn($query) => $query->whereNotIn('triage', self::CRITICAL));
+        $sectionK['ADVANCED']['COUNT']['UNCRITICAL'] = $advancedNonCriticalEvents->count();
         $advancedCriticalArrivalTimes = $this->getTimeRanges($advancedCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
+        $sectionK['ADVANCED']['CRITICAL'] = $advancedCriticalArrivalTimes;
         $advancedNonCriticalArrivalTimes = $this->getTimeRanges($advancedNonCriticalEvents->whereNotNull('mobile_departure_at')->whereNotNull('mobile_arrival_at')->get());
-
-        return [
-            'BASIC' => [
-                'COUNT' => [
-                    'TOTAL' => $basicEvents->count(),
-                    'CRITICAL' => $basicCriticalEvents->count(),
-                    'UNCRITICAL' => $basicNonCriticalEvents->count(),
-                ],
-                'RECIPIENTS' => $basicEvents->get()->unique('patient_identification')->count(),
-                'CRITICAL' => $basicCriticalArrivalTimes,
-                'UNCRITICAL' => $basicNonCriticalArrivalTimes,
-            ],
-            'ADVANCED' => [
-                'COUNT' => [
-                    'TOTAL' => $advancedEvents->count(),
-                    'CRITICAL' => $advancedCriticalEvents->count(),
-                    'UNCRITICAL' => $advancedNonCriticalEvents->count(),
-                ],
-                'RECIPIENTS' => $advancedEvents->get()->unique('patient_identification')->count(),
-                'CRITICAL' => $advancedCriticalArrivalTimes,
-                'UNCRITICAL' => $advancedNonCriticalArrivalTimes,
-            ],
-        ];
+        $sectionK['ADVANCED']['UNCRITICAL'] = $advancedNonCriticalArrivalTimes;
+        return $sectionK;
     }
 
     public function getSectionN($events)
     {
         $events = $events->whereNotNull('gender_id');
+        $aux = clone $events;
         $SCA = $this->ageRangeByGender($events->get(), self::SCA);
         $PCR = $this->ageRangeByGender($events->get(), self::PCR);
         $PT = $this->ageRangeByGender($events->get(), self::PT);
         $OTHERS = $this->ageRangeByGender($events->whereNotIn('key_id', array_merge(self::SCA, self::PCR, self::PT))->get());
-
+        $events = clone $aux;
         $criticalEvents = $events->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL));
+        $events = clone $aux;
         $nonCriticalEvents = $events->whereHas('call', fn($query) => $query->whereNotIn('triage', self::CRITICAL))->get();
         $CRITICAL = $this->ageRangeByGenderCritical($criticalEvents);
         $UNCRITICAL = $this->ageRangeByGender($nonCriticalEvents, null);
@@ -169,7 +176,9 @@ class RemStatistics extends Component implements FromView
         $filteredEvents = $events->whereHas('call', function ($query) {
             $query->where('classification', 'T1');
         });
+        $aux = clone $filteredEvents;
         $basicEvents = $filteredEvents->where('mobile_id', 1)->get();
+        $filteredEvents = $aux;
         $advancedEvents = $filteredEvents->whereIn('mobile_id', [2, 3])->get();
         $basicTotal = $basicEvents->count();
         $basicUniques = $basicEvents->unique('patient_identification')->count();
@@ -206,12 +215,13 @@ class RemStatistics extends Component implements FromView
     public function ageRangeByGenderCritical($events)
     {
         // Events Variables
-        $maleEvents = $events->where('gender_id', 1);
-        $maleEvents = $maleEvents->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL))->get();
-        $femaleEvents = $events->where('gender_id', 2);
-        $femaleEvents = $femaleEvents->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL))->get();
+        $aux = clone $events;
+        $maleEvents = $events->where('gender_id', 1)->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL))->get();
+        $events = clone $aux;
+        $femaleEvents = $events->where('gender_id', 2)->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL))->get();
 
         // Total Count
+        $events = $aux;
         $totals['both'] = $events->whereHas('call', fn($query) => $query->whereIn('triage', self::CRITICAL))->count();
         $totals['male'] = $maleEvents->count();
         $totals['female'] = $femaleEvents->count();
@@ -223,9 +233,6 @@ class RemStatistics extends Component implements FromView
     {
         $genderByAge = [];
         $genderByAge['total'] = $totals;
-        // $genderByAge['total']['both'] = $totals['both'];
-        // $genderByAge['total']['male'] = $totals['male'];
-        // $genderByAge['total']['female'] = $totals['female'];
 
         foreach ($this->ages as $range) {
             $genderByAge[$range[0] . '-' . $range[1]]['male'] = $maleEvents->filter($ageFilter = function ($event) use ($range) {
@@ -289,7 +296,7 @@ class RemStatistics extends Component implements FromView
     public function view(): View
     {
         $stats = $this->getStats();
-        $view = view('samu.rem');
+        $view = view('samu.rem', ['stats' => $stats]);
         switch ($this->exportSection) {
             case 'K':
                 $view = view('samu.rem.export-k', ['stats' => $stats]);
