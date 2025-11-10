@@ -20,7 +20,6 @@ class ShiftReceptionForm extends Component
 
     // Listas para los selects
     public $cardOptions = ['02', '13', '03', '05', '07', '4H'];
-    public $mobileOptions = [];
     public $crewUsers = [];
     public $mobilesInService = [];
     public $radioNumbers = [1, 2, 3, 4, 5, 6, 7];
@@ -44,18 +43,17 @@ class ShiftReceptionForm extends Component
 
     public function mount($nursingShift = null)
     {
-        // Cargar datos para los selects
-        // $this->mobileOptions = Mobile::pluck('name', 'id')->toArray();
-
         $latestShift = Shift::latest()->first();
         if ($latestShift) {
             $mobileIds = $latestShift->mobilesInService->pluck('mobile_id');
             $this->mobilesInService = Mobile::whereIn('id', $mobileIds)->get();
         }
-
-        $userIds = MobileCrew::pluck('user_id')->unique();
-        $this->crewUsers = User::whereIn('id', $userIds)->pluck('text', 'id')->toArray();
-
+        $this->shift_leader = $latestShift->users->where('pivot.job_type_id', '=', '1')->first()->given ?? '';
+        $this->medical_regulator = $latestShift->users->where('pivot.job_type_id', '2')->first()->given ?? '';
+        $this->nursing_regulator = $latestShift->users->where('pivot.job_type_id', '3')->first()->given ?? '';
+        $this->operators_regulator = $latestShift->users->where('pivot.job_type_id', '4')->first()->given ?? '';
+        $this->dispatcher_regulator = $latestShift->users->where('pivot.job_type_id', '5')->first()->given ?? '';
+        $this->crewUsers = $latestShift->users->pluck('text', 'id')->toArray();
         if ($nursingShift) {
             $this->nursingShift = ShiftsReceptionModel::findOrFail($nursingShift);
             $this->fill($this->nursingShift->toArray());
