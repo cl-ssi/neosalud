@@ -32,21 +32,22 @@ class MonthYearSelector extends Component
 
     public function mount()
     {
-
-        $this->selectedMonthYear = $this->month . '-' . $this->year;
         $this->getMonthYearOptions();
+        $this->selectedMonthYear = array_key_last($this->options);
     }
 
     public function getMonthYearOptions()
     {
         $options = [];
-        $currentYear = Carbon::now()->year;
-        $currentMonth = Carbon::now()->month;
+        $currentDate = Carbon::now();
+        $startDate = Carbon::create($currentDate->year - 1, 7, 1); // Julio año pasado
 
-        for ($month = $currentMonth; $month >= 1; $month--) {
-            $monthYear = sprintf('%02d-%d', $month, $currentYear);
-            $options[$monthYear] = $this->months[sprintf('%02d', $month)] . ' ' . $currentYear;
+        while ($startDate->lte($currentDate)) {
+            $monthYear = $startDate->format('m-Y');
+            $options[$monthYear] = $this->months[$startDate->format('m')] . ' ' . $startDate->year;
+            $startDate->addMonth();
         }
+
         $this->options = $options;
     }
 
