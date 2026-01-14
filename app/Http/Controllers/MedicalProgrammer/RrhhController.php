@@ -775,16 +775,22 @@ class RrhhController extends Controller
 
     public function assign_your_team(){
 
+        // Leer parámetros de filtro y paginación
+        $filter_type = request('filter_type', 'all');
+        $specialty_id = request('specialty_id');
+        $profession_id = request('profession_id');
+        $perPage = 50;
+
         $specialties = null;
         $professions = null;
-        $specialty_users = Practitioner::where('id',0);
-        $profession_users = Practitioner::where('id',0);
-        
+        $specialty_users = collect();
+        $profession_users = collect();
+
         $users = User::permission('Mp: user')
-        ->whereHas('practitioners', function ($q) {
-            return $q->whereIn('organization_id', auth()->user()->practitioners->pluck('organization_id'));
-        })
-        ->get();
+            ->whereHas('practitioners', function ($q) {
+                return $q->whereIn('organization_id', auth()->user()->practitioners->pluck('organization_id'));
+            })
+            ->get();
 
         if(auth()->user()->practitioners==null){
             session()->flash('warning', 'Para asignar a tu equipo, debes tener asignado un establecimiento. Contacta al administrador del sistema.');
@@ -792,42 +798,64 @@ class RrhhController extends Controller
                                                                         'professions','organizations','users'));
         }
 
-        // si admin, devuelve todos
         if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
             $organizations = Organization::all();
 
-            $specialty_users = Practitioner::whereHas('user')
-                                        ->whereNotNull('specialty_id')
-                                        ->with('specialty','user','organization')
-                                        ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
-                                        ->paginate(50);
-            $profession_users = Practitioner::whereHas('user')
-                                        ->whereNotNull('profession_id')
-                                        ->with('specialty','user','organization')
-                                        ->whereIn('organization_id', auth()->user()->practitionersOrganizations())
-                                        ->paginate(50);
+            $specialty_query = Practitioner::whereHas('user')
+                ->whereNotNull('specialty_id')
+                ->with('specialty','user','organization')
+                ->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+            if($specialty_id) {
+                $specialty_query->where('specialty_id', $specialty_id);
+            }
+            $profession_query = Practitioner::whereHas('user')
+                ->whereNotNull('profession_id')
+                ->with('profession','user','organization')
+                ->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+            if($profession_id) {
+                $profession_query->where('profession_id', $profession_id);
+            }
+
+            if($filter_type == 'specialty') {
+                $specialty_users = $specialty_query->paginate($perPage);
+            } elseif($filter_type == 'profession') {
+                $profession_users = $profession_query->paginate($perPage);
+            } else {
+                $specialty_users = $specialty_query->paginate($perPage);
+                $profession_users = $profession_query->paginate($perPage);
+            }
 
             $specialties = Specialty::OrderBy('specialty_name')->get();
             $professions = Profession::OrderBy('profession_name')->get();
-        }
-        else{
+        } else {
             $organizations = Organization::whereIn('id',auth()->user()->practitioners->pluck('organization_id'))->get();
 
             $unitHeads_specialty = UnitHead::where('user_id',Auth::id())->pluck('specialty_id');
             $unitHeads_profession = UnitHead::where('user_id',Auth::id())->pluck('profession_id');
 
-            // si no, devuelve segun asignación "asigna tu equipo"
-            $specialty_users = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
-                                            ->whereHas('user')
-                                            ->with('specialty','user','organization')
-                                            ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
-                                            ->paginate(50);
+            $specialty_query = Practitioner::whereIn('specialty_id',$unitHeads_specialty)
+                ->whereHas('user')
+                ->with('specialty','user','organization')
+                ->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+            if($specialty_id) {
+                $specialty_query->where('specialty_id', $specialty_id);
+            }
+            $profession_query = Practitioner::whereIn('profession_id',$unitHeads_profession)
+                ->whereHas('user')
+                ->with('profession','user','organization')
+                ->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+            if($profession_id) {
+                $profession_query->where('profession_id', $profession_id);
+            }
 
-            $profession_users = Practitioner::whereIn('profession_id',$unitHeads_profession)
-                                            ->whereHas('user')
-                                            ->with('profession','user','organization')
-                                            ->whereIn('organization_id', auth()->user()->practitionersOrganizations()) //solo devuelve los usuarios que pertenescan a mi organización
-                                            ->paginate(50);
+            if($filter_type == 'specialty') {
+                $specialty_users = $specialty_query->paginate($perPage);
+            } elseif($filter_type == 'profession') {
+                $profession_users = $profession_query->paginate($perPage);
+            } else {
+                $specialty_users = $specialty_query->paginate($perPage);
+                $profession_users = $profession_query->paginate($perPage);
+            }
 
             $specialties = Specialty::whereIn('id',$unitHeads_specialty)->OrderBy('specialty_name')->get();
             $professions = Profession::whereIn('id',$unitHeads_profession)->OrderBy('profession_name')->get();
