@@ -51,6 +51,7 @@ class ContractController extends Controller
                       });
                   });
                })
+             ->orderBy('created_at','DESC')
              ->paginate(50);
         }
         else{
@@ -76,6 +77,7 @@ class ContractController extends Controller
             ->whereHas('establishment', function ($q) {
                 return $q->whereIn('id', auth()->user()->practitionersOrganizations());
             })
+             ->orderBy('created_at','DESC')
              ->paginate(50);
         }
         

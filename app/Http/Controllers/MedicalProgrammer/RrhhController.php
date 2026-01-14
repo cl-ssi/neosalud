@@ -42,47 +42,43 @@ class RrhhController extends Controller
         $rut = $request->get('rut');
         $name = $request->get('name');
 
-        if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
-            $rrhh = User::permission('Mp: user')
-            ->when($rut != null, function ($q) use ($rut) {
-              return $q->whereHas('identifiers', function ($q) use ($rut) {
-                return $q->where('value', $rut)->where('cod_con_identifier_type_id', 1);
-              });
-            })
-            ->when($name != null, function ($query) use ($name) {
-              // return $q->whereHas('user', function ($query) use ($name) {
-                  return $query->whereHas('humanNames', function ($query) use ($name) {
-                      return $query->where('text', 'LIKE', '%' . $name . '%')
-                                  ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
-                                  ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
-                    });
-                // });
-              })
-            ->orderBy('id','ASC')
-            ->paginate(50);
-        }
-        else{
-            $rrhh = User::permission('Mp: user')
-            ->when($rut != null, function ($q) use ($rut) {
-              return $q->whereHas('identifiers', function ($q) use ($rut) {
-                return $q->where('value', $rut)->where('cod_con_identifier_type_id', 1);
-              });
-            })
-            ->when($name != null, function ($query) use ($name) {
-              // return $q->whereHas('user', function ($query) use ($name) {
-                  return $query->whereHas('humanNames', function ($query) use ($name) {
-                      return $query->where('text', 'LIKE', '%' . $name . '%')
-                                  ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
-                                  ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
-                    });
-                // });
-              })
-            ->whereHas('practitioners', function ($q) {
-                return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
-            })
-            ->orderBy('id','ASC')
-            ->paginate(50);
-        }
+                if(Auth::user()->hasPermissionTo('Mp: perfil administrador')){
+                        $rrhh = User::permission('Mp: user')
+                        ->when($rut != null, function ($q) use ($rut) {
+                            return $q->whereHas('identifiers', function ($q) use ($rut) {
+                                return $q->where('value', $rut)->where('cod_con_identifier_type_id', 1);
+                            });
+                        })
+                        ->when($name != null, function ($query) use ($name) {
+                                    return $query->whereHas('humanNames', function ($query) use ($name) {
+                                            return $query->where('text', 'LIKE', '%' . $name . '%')
+                                                                    ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                                                    ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                                        });
+                            })
+                        ->orderBy('created_at','DESC')
+                        ->paginate(50);
+                }
+                else{
+                        $rrhh = User::permission('Mp: user')
+                        ->when($rut != null, function ($q) use ($rut) {
+                            return $q->whereHas('identifiers', function ($q) use ($rut) {
+                                return $q->where('value', $rut)->where('cod_con_identifier_type_id', 1);
+                            });
+                        })
+                        ->when($name != null, function ($query) use ($name) {
+                                    return $query->whereHas('humanNames', function ($query) use ($name) {
+                                            return $query->where('text', 'LIKE', '%' . $name . '%')
+                                                                    ->orwhere('fathers_family', 'LIKE', '%' . $name . '%')
+                                                                    ->orwhere('mothers_family', 'LKE', '%' . $name . '%');
+                                        });
+                            })
+                        ->whereHas('practitioners', function ($q) {
+                                return $q->whereIn('organization_id', auth()->user()->practitionersOrganizations());
+                        })
+                        ->orderBy('created_at','DESC')
+                        ->paginate(50);
+                }
         
 
         return view('medical_programmer.rrhh.index', compact('rrhh','request'));
@@ -559,219 +555,263 @@ class RrhhController extends Controller
     }
 
     public function importSirhFile(Request $request){
-        $request->validate(['file' => 'required'], [ 'file.required' => 'Archivo es requerido.']);
-        $file = request()->file('file');
-        $collection = Excel::toCollection(new SirhFileImport, $file);
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls'], [
+            'file.required' => 'Archivo es requerido.',
+            'file.mimes' => 'El archivo debe ser formato Excel (.xlsx, .xls).'
+        ]);
         $user_count = 0;
         $contract_count = 0;
-
+        $warnings = [];
         set_time_limit(7200);
         ini_set('memory_limit', '2048M');
-
-        foreach($collection as $row){
-            foreach($row as $key => $column){ 
-
-                // $operacion = $column['tiempo_de_colacion_semanal_min'];
-                // $resultado = eval("return intval($operacion);");
-                // dd($resultado);
-                // dd($column['tiempo_de_colacion_semanal_min']);
-
-                if(array_key_exists('rut_programable', $column->toArray()))
-                {
-                    if($column['rut_programable']!=null)
-                    {
-                        //********** INFO RRHH  ***********/
-
-                        //si no existe usuario, se crea.
-                        if(!User::getUserByRun($column['rut_programable']))
-                        {
-                            if (array_key_exists(3,explode(" ", $column['nombre']))) 
-                            {
-                                $newPatient = new User();
-                                $newPatient->given = explode(" ", $column['nombre'])[2] . " " . explode(" ", $column['nombre'])[3];
-                                $newPatient->fathers_family = explode(" ", $column['nombre'])[0];
-                                $newPatient->mothers_family = explode(" ", $column['nombre'])[1];
-                                $newPatient->active = 1;
-                                $newPatient->save();
-
-                                $newHumanName = new HumanName();
-                                $newHumanName->use = "official";
-                                $newHumanName->given = explode(" ", $column['nombre'])[2] . " " . explode(" ", $column['nombre'])[3];
-                                $newHumanName->fathers_family = explode(" ", $column['nombre'])[0];
-                                $newHumanName->mothers_family = explode(" ", $column['nombre'])[1];
-                                $newHumanName->period_start = Carbon::now();;
-                                $newHumanName->user_id = $newPatient->id;
-                                $newPatient->syncPermissions('Mp: user');
-                                $newHumanName->save();
-
-                            }else{
-                                $newPatient = new User();
-                                $newPatient->given = explode(" ", $column['nombre'])[2];
-                                $newPatient->fathers_family = explode(" ", $column['nombre'])[0];
-                                $newPatient->mothers_family = explode(" ", $column['nombre'])[1];
-                                $newPatient->active = 1;
-                                $newPatient->save();
-
-                                $newHumanName = new HumanName();
-                                $newHumanName->use = "official";
-                                $newHumanName->given = explode(" ", $column['nombre'])[2];
-                                $newHumanName->fathers_family = explode(" ", $column['nombre'])[0];
-                                $newHumanName->mothers_family = explode(" ", $column['nombre'])[1];
-                                $newHumanName->period_start = Carbon::now();;
-                                $newHumanName->user_id = $newPatient->id;
-                                $newPatient->syncPermissions('Mp: user');
-                                $newHumanName->save();
-                            }
-                
-                            $newIdentifier = new Identifier();
-                            $newIdentifier->value = $column['rut_programable'];
-                            $newIdentifier->dv = $column['dv'];
-                            $newIdentifier->user_id = $newPatient->id;
-                            $newIdentifier->use = "official";
-                            $newIdentifier->cod_con_identifier_type_id = 1;
-                            $newIdentifier->save();
-
-                            $organization_id = Organization::where('code_deis',$column['id_deis'])->first()->id;
-
-                            $newPractitioner = new Practitioner();
-                            $newPractitioner->active = 1;
-                            $newPractitioner->user_id = $newPatient->id;
-                            $newPractitioner->organization_id = $organization_id;
-                            // $newPractitioner->profession_id = $request->profession_id[$key];
-                            // $newPractitioner->specialty_id = $request->specialty_id[$key];
-                            $newPractitioner->save();
-
-                            $userAditional = new UserAditional($request->all());
-                            switch ($column['ausentismo_sino']) {
-                                case "Si":
-                                    $userAditional->risk_group = 1;
-                                    break;
-                                case "No":
-                                    $userAditional->risk_group = 0;
-                                    break;
-                            }
-                            // $userAditional->missing_condition = 
-                            $userAditional->missing_reason = $column['motivo_maternales_psgs_comisiones_de_estudio'];
-                            $userAditional->job_title = $column['titulo_profesional_desempeno'];
-                            $userAditional->sis_specialty = $column['especialidad_sis'];
-                            $userAditional->user_id = $newPatient->id;
-                            $userAditional->save();
-
-                            $user_count = $user_count + 1;
-                        }
-                        else{
-                            $user = User::getUserByRun($column['rut_programable']);
-                            $organization_id = Organization::where('code_deis',$column['id_deis'])->first()->id;
-                            if($user->practitioners->count()==0){
-                                $newPractitioner = new Practitioner();
-                                $newPractitioner->active = 1;
-                                $newPractitioner->user_id = $user->id;
-                                $newPractitioner->organization_id = $organization_id;
-                                $newPractitioner->save();
-                            }else{
-                                $practitioner = Practitioner::where('user_id',$user->id)->first();
-                                $practitioner->active = 1;
-                                $practitioner->organization_id = $organization_id;
-                                $practitioner->save();
-                            }
-                            
-                        }
-                        /********** INFO CONTRATOS ********/
-
-                        //formatea excel date to carbon date
-                        $UNIX_DATE = ($column['fecha_inicio_contrato_ddmmaaaa'] - 25569) * 86400;
-                        $fecha_inicio_contrato_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
-
-                        $UNIX_DATE = ($column['fecha_termino_contrato_ddmmaaaa'] - 25569) * 86400;
-                        $fecha_termino_contrato_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
-
-                        if($column['fecha_alejamiento_ddmmaaaa']){
-                            $UNIX_DATE = ($column['fecha_alejamiento_ddmmaaaa'] - 25569) * 86400;
-                            $fecha_alejamiento_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
-                        }else{
-                            $fecha_alejamiento_ddmmaaaa = null;
-                        }
-
-                        $user = User::getUserByRun($column['rut_programable']);
-                        //se debe modificar esto, puede haber más de un contrato en el año,
-                        //si existe un contrato para una persona en el mismo periodo (inicio a termino), se modifica. ¿?
-                        //si no, se crea uno nuevo.
-                        
-                        // $contract = Contract::where('user_id',$user->id)
-                        //                     // ->where('year',$fecha_inicio_contrato_ddmmaaaa->format('Y'))
-                        //                     ->where('contract_start_date',$fecha_inicio_contrato_ddmmaaaa)
-                        //                     ->where('contract_end_date',$fecha_termino_contrato_ddmmaaaa)
-                        //                     ->where('contract_id',$column['correlativo_contrato'])
-                        //                     ->get();
-
-                        $establishment_id = Organization::where('code_deis',$column['id_deis'])->first()->id;                 
-
-                        switch ($column['ley']) {
-                            case 19664:
-                                $contract_law = 'LEY 19.664';
-                                break;
-                            case 18834:
-                                $contract_law = 'LEY 18.834';
-                                break;
-                            case 15076:
-                                $contract_law = 'LEY 15.076';
-                                break;
-                            case 'Honorarios':
-                                $contract_law = 'HSA';
-                        };
-
-                        switch ($column['sistema_de_turno_sino']) {
-                            case 'No':
-                                $contract_shift_system = 'N';
-                                break;
-                            case 'Si':
-                                $contract_shift_system = 'S';
-                                break;
-                        };
-
-                        $contract = Contract::updateOrCreate(
-                        [
-                            'user_id' => $user->id,
-                            'contract_start_date' => $fecha_inicio_contrato_ddmmaaaa,
-                            'contract_end_date'=> $fecha_termino_contrato_ddmmaaaa,
-                            'contract_id' => $column['correlativo_contrato']
-                        ],
-                        [
-                            'user_id' => $user->id,
-                            'establishment_id' => $establishment_id,
-                            'year' => $fecha_inicio_contrato_ddmmaaaa->format('Y'),
-                            'law' => $contract_law,
-                            'contract_id' => $column['correlativo_contrato'],
-                            'shift_system' => $contract_shift_system,
-                            // $contract->shift_system = $column['sistema_de_turno_sino'];
-                            'weekly_hours' => $column['hrs_semanales_contratadas'],
-                            'effective_hours' => $column['horas_efectivas_al_centro'],
-                            'weekly_collation' => $column['tiempo_de_colacion_semanal_min'],
-                            'weekly_union_permit' => $column['tiempo_de_permiso_gremial_semanal_min'],
-                            'breastfeeding_time' => $column['tiempo_de_lactancia_semanal_min'],
-                            'obs' => $column['observaciones_debe_identificar_liberado_de_guardia_lgperiodo_asistencial_obligatoriopaobecario_beca'],
-                            'legal_holidays' => $column['feriados_legales'][0],
-                            'compensatory_rest' => $column['dias_descanso_compensatorio_ley_urgencia'][0],
-                            'administrative_permit' => $column['dias_de_permisos_administrativos'][0],
-                            'covid_permit' => $column['descanso_reparatorio_covid'][0],
-                            'training_days' => $column['dias_de_congreso_o_capacitacion'][0],
-                            // $contract->covid_permit = $column['rut_programable'];
-                            'contract_start_date' => $fecha_inicio_contrato_ddmmaaaa,
-                            'contract_end_date' => $fecha_termino_contrato_ddmmaaaa,
-                            'departure_date' => $fecha_alejamiento_ddmmaaaa,
-                            'service_id' => 50 //sin servicio
-                        ]);
-
-                        $contract_count = $contract_count + 1;
+        try {
+            $file = $request->file('file');
+            if (!$file) {
+                session()->flash('error', 'No se recibió el archivo.');
+                return redirect()->back();
+            }
+            $collection = \Maatwebsite\Excel\Facades\Excel::toCollection(null, $file);
+            if ($collection->isEmpty() || $collection[0]->isEmpty()) {
+                session()->flash('error', 'El archivo está vacío o no se pudo leer.');
+                return redirect()->back();
+            }
+            $rows = $collection[0];
+            // Convertir la primera fila en encabezados y las siguientes en arrays asociativos
+            $headerRow = $rows[0]->toArray();
+            $dataRows = [];
+            for ($i = 1; $i < count($rows); $i++) {
+                $row = $rows[$i]->toArray();
+                $assoc = [];
+                foreach ($headerRow as $idx => $field) {
+                    $assoc[$field] = isset($row[$idx]) ? $row[$idx] : null;
+                }
+                $dataRows[] = $assoc;
+            }
+            $detectedHeaders = $headerRow;
+            $requiredFields = [
+                'rut_programable','dv','nombre','id_deis','ausentismo_sino','motivo_maternales_psgs_comisiones_de_estudio',
+                'titulo_profesional_desempeno','especialidad_sis','correlativo_contrato','ley','sistema_de_turno_sino',
+                'hrs_semanales_contratadas','horas_efectivas_al_centro','tiempo_de_colacion_semanal_min','tiempo_de_permiso_gremial_semanal_min',
+                'tiempo_de_lactancia_semanal_min','observaciones_debe_identificar_liberado_de_guardia_lgperiodo_asistencial_obligatoriopaobecario_beca',
+                'feriados_legales','dias_descanso_compensatorio_ley_urgencia','dias_de_permisos_administrativos','descanso_reparatorio_covid',
+                'dias_de_congreso_o_capacitacion','fecha_inicio_contrato_ddmmaaaa','fecha_termino_contrato_ddmmaaaa'
+            ];
+            // Validación previa de todas las filas
+            foreach($dataRows as $key => $data){
+                // Saltar filas completamente vacías
+                if (empty(array_filter($data, function($v){ return $v !== null && $v !== ''; }))) {
+                    $warnings[] = "Fila " . ($key+2) . " vacía, omitida.";
+                    continue;
+                }
+                // Validar campos requeridos
+                foreach($requiredFields as $field){
+                    if(!array_key_exists($field, $data) || $data[$field] === null || $data[$field] === ''){
+                        $warnings[] = "Falta el campo '$field' en la fila " . ($key+2) . ". Encabezados detectados: " . implode(', ', $detectedHeaders);
+                        continue 2;
                     }
                 }
+                if (!preg_match('/^[0-9]+$/', $data['rut_programable'])) {
+                    $warnings[] = "RUT inválido en la fila " . ($key+2);
+                    continue;
+                }
+                $validLaws = ['19664','18834','15076','Honorarios'];
+                if (!in_array($data['ley'], $validLaws)) {
+                    $warnings[] = "Ley inválida en la fila " . ($key+2);
+                    continue;
+                }
+                if (!is_numeric($data['fecha_inicio_contrato_ddmmaaaa']) || !is_numeric($data['fecha_termino_contrato_ddmmaaaa'])) {
+                    $warnings[] = "Formato de fecha inválido en la fila " . ($key+2);
+                    continue;
+                }
+                $org = \App\Models\Organization::where('code_deis',$data['id_deis'])->first();
+                if (!$org) {
+                    $warnings[] = "Código DEIS no encontrado en la fila " . ($key+2);
+                    continue;
+                }
+                // Si pasa todas las validaciones, procesar normalmente SOLO UNA VEZ
+                try {
+                    if(array_key_exists('rut_programable', $data)) {
+                        if($data['rut_programable']!=null) {
+                            //********** INFO RRHH  ***********/
+                            if(!User::getUserByRun($data['rut_programable'])) {
+                                if (array_key_exists(3,explode(" ", $data['nombre']))) {
+                                    $newPatient = new User();
+                                    $newPatient->given = explode(" ", $data['nombre'])[2] . " " . explode(" ", $data['nombre'])[3];
+                                    $newPatient->fathers_family = explode(" ", $data['nombre'])[0];
+                                    $newPatient->mothers_family = explode(" ", $data['nombre'])[1];
+                                    $newPatient->active = 1;
+                                    $newPatient->save();
+                                    $newHumanName = new HumanName();
+                                    $newHumanName->use = "official";
+                                    $newHumanName->given = explode(" ", $data['nombre'])[2] . " " . explode(" ", $data['nombre'])[3];
+                                    $newHumanName->fathers_family = explode(" ", $data['nombre'])[0];
+                                    $newHumanName->mothers_family = explode(" ", $data['nombre'])[1];
+                                    $newHumanName->period_start = Carbon::now();
+                                    $newHumanName->user_id = $newPatient->id;
+                                    $newPatient->syncPermissions('Mp: user');
+                                    $newHumanName->save();
+                                } else {
+                                    $newPatient = new User();
+                                    $newPatient->given = explode(" ", $data['nombre'])[2];
+                                    $newPatient->fathers_family = explode(" ", $data['nombre'])[0];
+                                    $newPatient->mothers_family = explode(" ", $data['nombre'])[1];
+                                    $newPatient->active = 1;
+                                    $newPatient->save();
+                                    $newHumanName = new HumanName();
+                                    $newHumanName->use = "official";
+                                    $newHumanName->given = explode(" ", $data['nombre'])[2];
+                                    $newHumanName->fathers_family = explode(" ", $data['nombre'])[0];
+                                    $newHumanName->mothers_family = explode(" ", $data['nombre'])[1];
+                                    $newHumanName->period_start = Carbon::now();
+                                    $newHumanName->user_id = $newPatient->id;
+                                    $newPatient->syncPermissions('Mp: user');
+                                    $newHumanName->save();
+                                }
+                                $newIdentifier = new Identifier();
+                                $newIdentifier->value = $data['rut_programable'];
+                                $newIdentifier->dv = $data['dv'];
+                                $newIdentifier->user_id = $newPatient->id;
+                                $newIdentifier->use = "official";
+                                $newIdentifier->cod_con_identifier_type_id = 1;
+                                $newIdentifier->save();
+                                $organization_id = Organization::where('code_deis',$data['id_deis'])->first()->id;
+                                $newPractitioner = new Practitioner();
+                                $newPractitioner->active = 1;
+                                $newPractitioner->user_id = $newPatient->id;
+                                $newPractitioner->organization_id = $organization_id;
+                                $newPractitioner->save();
+                                $userAditional = new UserAditional();
+                                switch ($data['ausentismo_sino']) {
+                                    case "Si":
+                                        $userAditional->risk_group = 1;
+                                        break;
+                                    case "No":
+                                        $userAditional->risk_group = 0;
+                                        break;
+                                }
+                                $userAditional->missing_reason = $data['motivo_maternales_psgs_comisiones_de_estudio'];
+                                $userAditional->job_title = $data['titulo_profesional_desempeno'];
+                                $userAditional->sis_specialty = $data['especialidad_sis'];
+                                $userAditional->user_id = $newPatient->id;
+                                $userAditional->save();
+                                $user_count++;
+                            } else {
+                                $user = User::getUserByRun($data['rut_programable']);
+                                $organization_id = Organization::where('code_deis',$data['id_deis'])->first()->id;
+                                if($user->practitioners->count()==0){
+                                    $newPractitioner = new Practitioner();
+                                    $newPractitioner->active = 1;
+                                    $newPractitioner->user_id = $user->id;
+                                    $newPractitioner->organization_id = $organization_id;
+                                    $newPractitioner->save();
+                                } else {
+                                    $practitioner = Practitioner::where('user_id',$user->id)->first();
+                                    $practitioner->active = 1;
+                                    $practitioner->organization_id = $organization_id;
+                                    $practitioner->save();
+                                }
+                            }
+                            //********** INFO CONTRATOS ********/
+                            $UNIX_DATE = ($data['fecha_inicio_contrato_ddmmaaaa'] - 25569) * 86400;
+                            $fecha_inicio_contrato_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                            $UNIX_DATE = ($data['fecha_termino_contrato_ddmmaaaa'] - 25569) * 86400;
+                            $fecha_termino_contrato_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                            if(isset($data['fecha_alejamiento_ddmmaaaa']) && $data['fecha_alejamiento_ddmmaaaa']){
+                                $UNIX_DATE = ($data['fecha_alejamiento_ddmmaaaa'] - 25569) * 86400;
+                                $fecha_alejamiento_ddmmaaaa = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                            } else {
+                                $fecha_alejamiento_ddmmaaaa = null;
+                            }
+                            $user = User::getUserByRun($data['rut_programable']);
+                            $establishment_id = Organization::where('code_deis',$data['id_deis'])->first()->id;
+                            switch ($data['ley']) {
+                                case 19664:
+                                    $contract_law = 'LEY 19.664';
+                                    break;
+                                case 18834:
+                                    $contract_law = 'LEY 18.834';
+                                    break;
+                                case 15076:
+                                    $contract_law = 'LEY 15.076';
+                                    break;
+                                case 'Honorarios':
+                                    $contract_law = 'HSA';
+                            };
+                            switch ($data['sistema_de_turno_sino']) {
+                                case 'No':
+                                    $contract_shift_system = 'N';
+                                    break;
+                                case 'Si':
+                                    $contract_shift_system = 'S';
+                                    break;
+                            };
+                            $contract = Contract::updateOrCreate(
+                                [
+                                    'user_id' => $user->id,
+                                    'contract_start_date' => $fecha_inicio_contrato_ddmmaaaa,
+                                    'contract_end_date'=> $fecha_termino_contrato_ddmmaaaa,
+                                    'contract_id' => $data['correlativo_contrato']
+                                ],
+                                [
+                                    'user_id' => $user->id,
+                                    'establishment_id' => $establishment_id,
+                                    'year' => $fecha_inicio_contrato_ddmmaaaa->format('Y'),
+                                    'law' => $contract_law,
+                                    'contract_id' => $data['correlativo_contrato'],
+                                    'shift_system' => $contract_shift_system,
+                                    'weekly_hours' => $data['hrs_semanales_contratadas'],
+                                    'effective_hours' => $data['horas_efectivas_al_centro'],
+                                    'weekly_collation' => $data['tiempo_de_colacion_semanal_min'],
+                                    'weekly_union_permit' => $data['tiempo_de_permiso_gremial_semanal_min'],
+                                    'breastfeeding_time' => $data['tiempo_de_lactancia_semanal_min'],
+                                    'obs' => $data['observaciones_debe_identificar_liberado_de_guardia_lgperiodo_asistencial_obligatoriopaobecario_beca'],
+                                    'legal_holidays' => $data['feriados_legales'],
+                                    'compensatory_rest' => $data['dias_descanso_compensatorio_ley_urgencia'],
+                                    'administrative_permit' => $data['dias_de_permisos_administrativos'],
+                                    'covid_permit' => $data['descanso_reparatorio_covid'],
+                                    'training_days' => $data['dias_de_congreso_o_capacitacion'],
+                                    'contract_start_date' => $fecha_inicio_contrato_ddmmaaaa,
+                                    'contract_end_date' => $fecha_termino_contrato_ddmmaaaa,
+                                    'departure_date' => $fecha_alejamiento_ddmmaaaa,
+                                    'service_id' => 50 //sin servicio
+                                ]
+                            );
+                            $contract_count++;
+                        }
+                    }
+                } catch (\Exception $e) {
+                    $warnings[] = 'Error procesando la fila ' . ($key+2) . ': ' . $e->getMessage();
+                    continue;
+                }
             }
-            
+            // Mensaje de éxito y advertencias
+            $msg = '<div style="font-size:1.1em;font-weight:bold;margin-bottom:8px;">'
+                . 'Importación finalizada: <span style="color:#007bff">' . $user_count . '</span> usuarios y <span style="color:#007bff">' . $contract_count . '</span> contratos creados/modificados.</div>';
+            if(count($warnings)>0){
+                $msg .= '<div style="margin-top:8px;"><b>Advertencias:</b><ul style="margin-left:18px;">';
+                foreach($warnings as $w){
+                    $msg .= '<li>' . htmlspecialchars($w) . '</li>';
+                }
+                $msg .= '</ul></div>';
+            }
+            session()->flash('success', $msg);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error general en la importación: ' . $e->getMessage());
+            return redirect()->back();
         }
-
-        session()->flash('success', 'Se ha cargado correctamente el archivo (Se han creado/modificado ' . $user_count . ' usuarios y ' . $contract_count . ' contratos).');
-        return redirect()->back();
     }
+
+        /**
+         * Descargar archivo de ejemplo para importación SIRH
+         */
+        public function downloadExampleSirhFile()
+            {
+                return \Maatwebsite\Excel\Facades\Excel::download(
+                    new \App\Exports\SirhExampleExport,
+                    'sirh_ejemplo_importacion.xlsx'
+                );
+            }
 
     public function assign_your_team(){
 
