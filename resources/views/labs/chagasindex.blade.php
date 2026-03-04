@@ -63,6 +63,7 @@
                     <th>Grupo de Pesquisa</th>
                     <th>Fecha muestra</th>
                     <th>Origen</th>
+                    <th>Laboratorio</th>
                     <th>Nombre</th>
                     <th>RUN o Identificación</th>
                     <th>Edad</th>
@@ -117,6 +118,7 @@
                         <td>{{ $suspectcase->research_group ?? '' }}</td>
                         <td>{{ $suspectcase->sample_at ? $suspectcase->sample_at : '' }}</td>
                         <td>{{ $suspectcase->organization->alias ?? '' }}</td>
+                        <td>{{ $suspectcase->laboratory?->alias ?? '' }}</td>
                         <td>{{ $suspectcase->patient->OfficialFullName ?? '' }}
                             @if ($suspectcase->research_group == 'Gestante (+semana gestacional)')
                                 <img align="center" src="{{ asset('images/pregnant.png') }}" width="24">

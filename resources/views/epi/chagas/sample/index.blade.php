@@ -40,6 +40,7 @@
                     <th>Observacion</th>
                     <th>Solicitado por</th>
                     <th>Fecha de Solicitud</th>
+                    <th>Laboratorio</th>
                     <th>Tomar muestra</th>
                     <th>
                         Eliminar Solicitud <br><small>(Se puede eliminar solo si no está recepcionado)</small>
@@ -72,6 +73,7 @@
                         <td>{{ $suspectcase->observation ?? '' }}</td>
                         <td>{{ $suspectcase->requester->OfficialFullName ?? '' }}</td>
                         <td>{{ $suspectcase->request_at ?? '' }}</td>
+                        <td>{{ $suspectcase->laboratory?->alias ?? '' }}</td>
                         <td>
                             <a class="virus-button btn btn-link" type="button" href="#" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal{{ $suspectcase->id }}">
