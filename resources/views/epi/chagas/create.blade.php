@@ -99,6 +99,16 @@
                     <option value="{{ $organization->id }}">{{ $organization->alias ?? '' }}</option>
                 </select>
             </fieldset>
+
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_laboratory_id">Laboratorio*</label>
+                <select name="laboratory_id" id="for_laboratory_id" class="form-select" required>
+                    @foreach ($laboratories as $laboratory)
+                        <option value="{{ $laboratory->id }}" @if ($laboratory->id == 4) selected @endif >{{ $laboratory->alias ?? '' }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+
         </div>
 
 

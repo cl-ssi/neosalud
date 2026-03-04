@@ -52,7 +52,8 @@ class SuspectCaseController extends Controller
 
     public function confirmRequestChaga(User $patient, Organization $organization)
     {
-        return view('epi.chagas.create', compact('patient', 'organization'));
+        $laboratories = Organization::find(['4002', '4']);
+        return view('epi.chagas.create', compact('patient', 'organization', 'laboratories'));
     }
 
     /**
