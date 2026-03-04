@@ -101,6 +101,11 @@ class SuspectCase extends Model implements Auditable
         return $this->belongsTo('App\Models\Organization');
     }
 
+    public function laboratory()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
+
     public function establishment()
     {
         return $this->belongsTo('App\Models\Organization', 'organization_id', 'id');
