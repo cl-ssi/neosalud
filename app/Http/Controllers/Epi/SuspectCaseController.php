@@ -289,6 +289,7 @@ class SuspectCaseController extends Controller
     public function sampleOrganization(Organization $organization)
     {
         $searchTerm = request('search');
+        $lab_id = request('laboratory_id');
 
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
@@ -323,6 +324,7 @@ class SuspectCaseController extends Controller
                     });
                 }
             })
+            ->when($lab_id, fn ($query, $lab_id) => $query->where('laboratory_id', $lab_id))
             ->orderByDesc('id')
             ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);

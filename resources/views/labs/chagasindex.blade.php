@@ -7,38 +7,51 @@
 
     <div class="row">
         <form action="{{ route('labs.chagas.index', $tray) }}" method="GET">
-            <div class="col-6 col-md-6 mb-4">
-                <label for="start_date">Fecha de Inicio</label>
-                <input type="date" name="start_date" class="form-control" 
-                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
-            </div>
-
-            <div class="col-6 col-md-6 mb-4">
-                <label for="end_date">Fecha de Término</label>
-                <input type="date" name="end_date" class="form-control" 
-                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
-            </div>
-
-            <div class="col-6 col-md-6 mb-4">
-                <div class="input-group">
-                    <input type="text" name="search_name" class="form-control" placeholder="Buscar por nombre o apellido"
-                        value="{{ request('search_name') }}" autocomplete="off">
+            <div class="row">
+                <div class="col-4 col-md-4 mb-4">
+                    <label for="start_date">Fecha de Inicio</label>
+                    <input type="date" name="start_date" class="form-control"
+                        value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
                 </div>
-            </div>
 
-            <div class="col-6 col-md-6 mb-4">
-                <select name="search_organization" class="form-select">
-                    <option value="">Seleccionar organización</option>
-                    @foreach ($organizations as $organization)
-                        <option value="{{ $organization->id }}" @if (request('search_organization') == $organization->id) selected @endif>
-                            {{ $organization->alias ?? '' }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-    
+                <div class="col-4 col-md-4 mb-4">
+                    <label for="end_date">Fecha de Término</label>
+                    <input type="date" name="end_date" class="form-control"
+                        value="{{ request('end_date', now()->format('Y-m-d')) }}">
+                </div>
 
-        <button type="submit" class="btn btn-primary">Buscar</button>
+                <div class="col-md-4">
+                    <label for="laboratory_id">Laboratorio</label>
+                    <select name="laboratory_id" class="form-select">
+                        <option>Seleccionar</option>
+                        @foreach ($laboratories as $lab)
+                            <option value="{{ $lab->id }}" @if (request('laboratory_id') == $lab->id) selected @endif>{{ $lab->alias }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-6 col-md-6 mb-4">
+                    <div class="input-group">
+                        <input type="text" name="search_name" class="form-control"
+                            placeholder="Buscar por nombre o apellido" value="{{ request('search_name') }}"
+                            autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-6 mb-4">
+                    <select name="search_organization" class="form-select">
+                        <option value="">Seleccionar organización</option>
+                        @foreach ($organizations as $organization)
+                            <option value="{{ $organization->id }}" @if (request('search_organization') == $organization->id) selected @endif>
+                                {{ $organization->alias ?? '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
         </form>
     </div><br>
 
@@ -125,17 +138,17 @@
                             @endif
                         </td>
                         <td>
-                            @if ($suspectcase->patient->identifierRun)
+                            @if ($suspectcase->patient?->identifierRun)
                                 {{ $suspectcase->patient->identifierRun->value ?? '' }}-{{ $suspectcase->patient->identifierRun->dv }}
                             @else
                                 {{ $suspectcase->patient->Identification->value ?? '' }}
                             @endif
                         </td>
                         <td>
-                            {{ $suspectcase->patient->AgeString ?? '' }}
+                            {{ $suspectcase->patient?->AgeString ?? '' }}
                         </td>
-                        <td>{{ $suspectcase->patient->actualSex()->text ?? '' }}</td>
-                        <td>{{ $suspectcase->patient->nationality->name ?? '' }}</td>
+                        <td>{{ $suspectcase->patient?->actualSex()->text ?? '' }}</td>
+                        <td>{{ $suspectcase->patient?->nationality->name ?? '' }}</td>
                         @if ($tray !== 'Pendientes de Recepción')
                             <td>
                                 @if ($suspectcase->receptor)
