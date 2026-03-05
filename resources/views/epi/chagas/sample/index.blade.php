@@ -5,22 +5,33 @@
         {{ $organization->alias ?? '' }}</h4>
 
     <form action="{{ route('chagas.sampleOrganization', $organization->id) }}" method="GET">
-        <div class="col-md-4">
-            <label for="start_date">Fecha de Inicio</label>
-            <input type="date" name="start_date" class="form-control" 
-                value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
-        </div>
-        <div class="col-md-4">
-            <label for="end_date">Fecha de Término</label>
-            <input type="date" name="end_date" class="form-control" 
-                value="{{ request('end_date', now()->format('Y-m-d')) }}">
-        </div>
-        <div class="col-md-4">
-            <label for="search">Búsqueda</label>
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
-                    value="{{ request('search') }}" autocomplete="off">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+        <div class="row">
+            <div class="col-md-2">
+                <label for="start_date">Fecha de Inicio</label>
+                <input type="date" name="start_date" class="form-control"
+                    value="{{ request('start_date', now()->startOfMonth()->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-2">
+                <label for="end_date">Fecha de Término</label>
+                <input type="date" name="end_date" class="form-control"
+                    value="{{ request('end_date', now()->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-4">
+                <label for="laboratory_id">Laboratorio</label>
+                <select name="laboratory_id" class="form-select">
+                    @foreach ($laboratories as $lab)
+                        <option value="{{ $lab->id }}">{{ $lab->alias }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="search">Búsqueda</label>
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control"
+                        placeholder="Buscar por nombre, apellido, RUN (sin dv) o identificación"
+                        value="{{ request('search') }}" autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
             </div>
         </div>
     </form><br>
@@ -83,7 +94,8 @@
                         </td>
                         <td>
                             @if ($suspectcase->reception_at == null)
-                                <a class="btn btn-sm btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $suspectcase->id }}">
+                                <a class="btn btn-sm btn-danger" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal{{ $suspectcase->id }}">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                                 @include('epi.chagas.modals.delete_reason')

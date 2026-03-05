@@ -302,6 +302,7 @@ class SuspectCaseController extends Controller
             ->with([
                 'patient',
                 'requester',
+                'laboratory',
             ])
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
@@ -325,8 +326,13 @@ class SuspectCaseController extends Controller
             ->orderByDesc('id')
             ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
+
+        $laboratories = Organization::query()
+            ->whereHas('suspectcasesAsLaboratory')
+            ->orderBy('alias')
+            ->get();
     
-        return view('epi.chagas.sample.index', compact('organization', 'suspectcases'));
+        return view('epi.chagas.sample.index', compact('organization', 'suspectcases', 'laboratories'));
     }
     
 
