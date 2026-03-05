@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Epi\SuspectCase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Samu\Establishment;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organization extends Model
 {
@@ -64,5 +66,10 @@ class Organization extends Model
     public function suspectCases()
     {
         return $this->hasMany('App\Models\Epi\SuspectCase', 'organization_id');
+    }
+
+    public function suspectcasesAsLaboratory(): HasMany
+    {
+        return $this->hasMany(SuspectCase::class, 'laboratory_id');
     }
 }
