@@ -19,8 +19,9 @@
             <div class="col-md-4">
                 <label for="laboratory_id">Laboratorio</label>
                 <select name="laboratory_id" class="form-select">
+                    <option>Seleccionar</option>
                     @foreach ($laboratories as $lab)
-                        <option value="{{ $lab->id }}">{{ $lab->alias }}</option>
+                        <option value="{{ $lab->id }}" @if (request('laboratory_id') == $lab->id) selected @endif>{{ $lab->alias }}</option>
                     @endforeach
                 </select>
             </div>

@@ -17,6 +17,7 @@ class LaboratoryController extends Controller
 
     public function chagasIndex($tray, Request $request)
     {
+        $lab_id = request('laboratory_id');
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));
@@ -35,7 +36,8 @@ class LaboratoryController extends Controller
             ]
         )->orderBy('id', 'desc')
         ->whereNotNull('sample_at')
-        ->whereBetween('request_at', [$startDate, $endDate]);
+        ->whereBetween('request_at', [$startDate, $endDate])
+        ->when($lab_id, fn ($query, $lab_id) => $query->where('laboratory_id', $lab_id));
 
 
         // Aplicar filtro por nombre o apellido si se proporcionó un valor de búsqueda
@@ -60,9 +62,14 @@ class LaboratoryController extends Controller
             $query->whereNotNull('chagas_result_screening')->whereNotNull('reception_at');
         }
 
-
         $suspectcases = $query->paginate(100);
-        return view('labs.chagasindex', compact('suspectcases', 'tray', 'organizations'));
+
+        $laboratories = Organization::query()
+            ->whereHas('suspectcasesAsLaboratory')
+            ->orderBy('alias')
+            ->get();
+
+        return view('labs.chagasindex', compact('suspectcases', 'tray', 'organizations', 'laboratories'));
     }
 
 
