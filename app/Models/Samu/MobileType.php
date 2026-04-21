@@ -52,6 +52,25 @@ class MobileType extends Model
         return Str::substr($this->name, 0, 3);
     }
 
+    /**
+     * Get classification attribute: Advanced or Basic
+     * Basic: M1, Hibrido, RU1
+     * Advanced: M2, M3, RU2
+     */
+    public function getClassificationAttribute()
+    {
+        $advancedTypes = ['M2', 'M3', 'RU2'];
+        $basicTypes = ['M1', 'Hibrido', 'RU1'];
+
+        if (in_array($this->name, $advancedTypes)) {
+            return 'Advanced';
+        } elseif (in_array($this->name, $basicTypes)) {
+            return 'Basic';
+        }
+
+        return 'Unknown';
+    }
+
     public function serviceInventoryTemplates()
     {
         return $this->hasMany(MobileInServiceInventoryTemplate::class,'type_id');

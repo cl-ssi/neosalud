@@ -9,6 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\Samu\Shift;
 use App\Models\Samu\Mobile;
 use App\Models\Samu\MobileCrew;
+use App\Models\Samu\MobileException;
 use App\Models\Samu\MobileInServiceInventory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\User;
@@ -109,6 +110,26 @@ class MobileInService extends Model implements Auditable
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function exceptions()
+    {
+        return $this->hasMany(MobileException::class);
+    }
+
+    /**
+     * Check if mobile has valid crew for current time.
+     * Returns true if at least one crew member is active (assumes_at < now AND (leaves_at > now OR leaves_at is null))
+     */
+    public function hasValidCrew()
+    {
+        return $this->crew()
+            ->where('assumes_at', '<', now())
+            ->where(function ($query) {
+                $query->where('leaves_at', '>', now())
+                    ->orWhereNull('leaves_at');
+            })
+            ->exists();
     }
 
     public function getTotalMinutesAttribute()
