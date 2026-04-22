@@ -164,6 +164,11 @@ $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
                 </a>
             </li>
             <li>
+                <a class="dropdown-item {{ active('samu.mobile.stats') }}" href="{{ route('samu.mobile.stats') }}">
+                    <i class="fas fa-chart-line"></i> Panel Estadísticas de Mobiles
+                </a>
+            </li>
+            <li>
                 <a class="dropdown-item {{ active('samu.rem') }}" href="{{ route('samu.rem') }}">
                     <i class="fas fa-chart-line"></i> Estadísticas REM
                 </a>

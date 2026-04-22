@@ -545,6 +545,7 @@ Route::prefix('soap')->name('soap.')->group(function () {
 
 use App\Http\Controllers\Samu\ShiftController;
 use App\Http\Controllers\Samu\MobileInServiceController;
+use App\Http\Controllers\Samu\MobileExceptionController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryDetailController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryTemplateController;
@@ -584,6 +585,7 @@ use App\Http\Livewire\Samu\GlasgowScale;
 use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 use App\Http\Livewire\Samu\RemStatistics;
 use App\Http\Livewire\Samu\MinsalStatistics;
+use App\Http\Livewire\Samu\MobilesStats;
 use App\Http\Livewire\Samu\ShiftReception;
 use App\Http\Livewire\Samu\ShiftReceptionForm;
 
@@ -630,6 +632,14 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
             Route::put('/crewupdate/{mobileCrew}',    [MobileInServiceController::class, 'crewupdate'])->name('crewupdate');
             Route::delete('/{mobileInService}',     [MobileInServiceController::class, 'destroy'])->name('destroy');
             Route::get('/{mobileInService}/location', [MobileInServiceController::class, 'location'])->name('location');
+        });
+
+    // Mobile Exceptions Routes
+    Route::prefix('exceptions')->name('exception.')
+        ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
+        ->group(function () {
+            Route::post('/{mobileInService}', [MobileExceptionController::class, 'store'])->name('store');
+            Route::delete('/{exception}', [MobileExceptionController::class, 'destroy'])->name('destroy');
         });
 
     Route::prefix('mobiles-in-service-inventory')->name('mobileinserviceinventory.')->group(function () {
@@ -737,11 +747,13 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
             Route::get('/',                [MobileController::class, 'index'])->name('index');
             Route::get('/create',        [MobileController::class, 'create'])->name('create');
             Route::post('/store',        [MobileController::class, 'store'])->name('store');
+            Route::get('/stats',        MobilesStats::class)->name('stats');
             Route::get('/edit/{mobile}', [MobileController::class, 'edit'])->name('edit');
             Route::put('/{mobile}',        [MobileController::class, 'update'])->name('update');
             Route::delete('/{mobile}',     [MobileController::class, 'destroy'])->name('destroy');
             Route::get('/{mobile}/gps', [GpsController::class, 'index'])->name('gps');
             Route::get('/gps', GetLocation::class);
+
         });
 
     Route::get('/movil/event/{event}', TimestampsAndLocation::class)->name('mobiles.timestamps_locations');
