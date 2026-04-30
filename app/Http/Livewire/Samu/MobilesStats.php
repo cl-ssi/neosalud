@@ -8,6 +8,7 @@ use App\Models\Samu\Shift;
 use App\Models\Samu\Mobile;
 use App\Models\Samu\MobileInService;
 use App\Exports\Samu\MobileUsageExport;
+use App\Models\Samu\MobileCrew;
 
 class MobilesStats extends Component
 {
@@ -80,7 +81,7 @@ class MobilesStats extends Component
             $q->whereYear('opening_at', $year)
                 ->whereMonth('opening_at', $month);
         })
-        ->with(['shift', 'mobile']);        
+        ->with(['shift', 'mobile', 'crew']);        
 
         // Mobiles que estuvieron en servicio
         $mobilesIds = $mobilesInService->clone()->get()->map(fn($i) => $i->mobile->id)->unique();
@@ -93,13 +94,28 @@ class MobilesStats extends Component
             $basicoCE = 0;
             $avanzado = 0;
             $avanzadoCE = 0;
+            $z = 0;
             foreach($mis as $m){
-                $turno = 0;
+                $z++;
                 $turno = 0;
                 if ($m->shift && $m->shift->opening_at && $m->shift->closing_at) {
                     // Duracion del turno en horas
                     $turno = intval($m->shift->opening_at->diffInMinutes($m->shift->closing_at)) / 60;
-                    $excepcion = ($m->status == 0) ? true : false;
+                    $status = ($m->status == 0) ? true : false;
+                    $crew = $m->currentCrew->map(fn($i)=>$i->pivot->job_type_id)->toArray();
+                    // $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->pluck('job_type_id')->toArray();
+                    $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->get();
+                    // $validCrew = in_array(6, $crew) && in_array(7, $crew);
+                    $validCrew = $crew->contains('job_type_id', 6) && $crew->contains('job_type_id', 7);
+                    // if($validCrew == false){dd($m, $crew);}
+                    // if($validCrew == false && $z>5){dd($m, $crew->pluck('job_type_id'));}
+                    // $excepcion = $status || $validCrew;
+                    $excepcion = $status;
+                    // $excepcion = false;
+                    // $turno = $validCrew?$turno:false;
+                    /** 
+                     * mobilecrew job_type_id 6 and 7 has to be in else exception 
+                    */
                     $total += $turno;
                     $totalCE += ($excepcion)?0:$turno;
                     $TotalFinal += $turno;
