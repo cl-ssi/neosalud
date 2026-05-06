@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Samu\Event;
 use App\Models\Commune;
 use App\Models\Samu\Event;
 use App\Models\Samu\Key;
+use App\Models\Samu\Mobile;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,6 +16,7 @@ class EventFilter extends Component
 
     public $keys;
     public $communes;
+    public $mobiles;
 
     public $useRange = false;
 
@@ -24,6 +26,7 @@ class EventFilter extends Component
         'single' => null,
     ];
     public $key_id;
+    public $mobile_id;
     public $address;
     public $commune_id;
     public $filter_by;
@@ -33,6 +36,7 @@ class EventFilter extends Component
     {
         $this->filter_by = "all";
         $this->keys = Key::orderBy('key')->get();
+        $this->mobiles = Mobile::where('status', 1)->orderBy('code')->get();
         $this->communes = Commune::whereHas('samu')->pluck('id', 'name')->sort();
     }
 
@@ -57,6 +61,10 @@ class EventFilter extends Component
 
         $query->when($this->key_id, function ($query) {
             $query->where('key_id', $this->key_id);
+        });
+
+        $query->when($this->mobile_id, function ($query) {
+            $query->where('mobile_id', $this->mobile_id);
         });
 
         $query->when($this->address, function ($query) {

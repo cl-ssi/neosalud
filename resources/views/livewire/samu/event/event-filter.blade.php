@@ -53,7 +53,19 @@
             </select>
         </fieldset>
 
-        <fieldset class=" form-group col-sm-3">
+        <fieldset class="form-group col-sm-1">
+            <label for="for_mobile">Mobil</label>
+            <select class="form-select" wire:model.defer="mobile_id">
+                <option value=""></option>
+                @foreach($mobiles as $mobile)
+                <option value="{{ $mobile->id }}">
+                        {{ $mobile->code }} {{ $mobile->name }} 
+                    </option>
+                @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class=" form-group col-sm-2">
                     <label for="for_address">Dirección</label>
                     <input
                         type="text"
