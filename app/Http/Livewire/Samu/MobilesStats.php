@@ -12,57 +12,26 @@ use App\Models\Samu\MobileCrew;
 
 class MobilesStats extends Component
 {
+    protected $listeners = ['updateDate' => 'changePeriod'];
 
-    public $year = 2026;
-    public $month = 4;
+    public int $year;
+    public int $month;
+
+    public function mount()
+    {
+        $this->changePeriod();
+    }
 
     public function render()
     {
         $mobiles = Mobile::get();
-        $todo = $this->calculateAllHours2();
+        $todo = $this->calculateHours();
         $valores = collect($todo['Valores']);
         $totales = $todo['Totales'];
         return view('livewire.samu.mobiles-stats', ['mobiles' => $valores, 'totales' => $totales]);
     }
-       
-    public function calculateAllHours()
-    {
-        // Periodo
-        $year = $this->year;
-        $month = $this->month;
-        $out = array();
 
-        //Mobiles en servicio del periodo
-        $mobilesInService = MobileInService::whereHas('shift', function ($q) use ($year, $month) {
-            $q->whereYear('opening_at', $year)
-                ->whereMonth('opening_at', $month);
-        })
-        ->with(['shift', 'mobile'])
-        ->distinct();
-
-        // Mobiles que existen
-        $mobiles = Mobile::where('status', 1)->get();
-        foreach($mobiles as $mobile){
-            $total = 0;
-            $mis = $mobilesInService->whereHas('mobile', fn($q) => $q = $mobile->id)->get();
-            dd($mis->toArray());
-            // $mis = $mis->take(2);
-            foreach($mis as $m) {        
-                if ($m->shift && $m->shift->opening_at && $m->shift->closing_at) {            
-                    // dd($m->shift);
-                    $total += intval($m->shift->opening_at->diffInMinutes($m->shift->closing_at));
-                }
-            }
-            $total = intval($total / 60);
-            $out[$mobile->code]['code'] = $mobile->code;
-            $out[$mobile->code]['total'] = $total;
-        }
-        return $out;
-    }
-
-
-
-    public function calculateAllHours2()
+    public function calculateHours()
     {
         // Periodo
         $year = $this->year;
@@ -82,13 +51,13 @@ class MobilesStats extends Component
             $q->whereYear('opening_at', $year)
                 ->whereMonth('opening_at', $month);
         })
-        ->with(['shift', 'mobile', 'crew']);        
+            ->with(['shift', 'mobile', 'crew']);
 
         // Mobiles que estuvieron en servicio
         $mobilesIds = $mobilesInService->clone()->get()->map(fn($i) => $i->mobile->id)->unique();
-        foreach($mobilesIds as $mobileId){
+        foreach ($mobilesIds as $mobileId) {
             // Mobiles en servicio de cierto mobile_id
-            $mis = $mobilesInService->clone()->whereHas('mobile', fn($q)=>$q->where('id', $mobileId))->orderBy('id', 'desc')->get();
+            $mis = $mobilesInService->clone()->whereHas('mobile', fn($q) => $q->where('id', $mobileId))->orderBy('id', 'desc')->get();
             $total = 0;
             $totalCE = 0;
             $basico = 0;
@@ -96,14 +65,14 @@ class MobilesStats extends Component
             $avanzado = 0;
             $avanzadoCE = 0;
             $z = 0;
-            foreach($mis as $m){
+            foreach ($mis as $m) {
                 $z++;
                 $turno = 0;
                 if ($m->shift && $m->shift->opening_at && $m->shift->closing_at) {
                     // Duracion del turno en horas
                     $turno = intval($m->shift->opening_at->diffInMinutes($m->shift->closing_at)) / 60;
                     $status = ($m->status == 0) ? true : false;
-                    $crew = $m->crew->map(fn($i)=>$i->pivot->job_type_id)->toArray();
+                    $crew = $m->crew->map(fn($i) => $i->pivot->job_type_id)->toArray();
                     // $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->pluck('job_type_id')->toArray();
                     $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->get();
                     // $validCrew = in_array(6, $crew) && in_array(7, $crew);
@@ -116,39 +85,39 @@ class MobilesStats extends Component
                     // $turno = $validCrew?$turno:false;
                     /** 
                      * mobilecrew job_type_id 6 and 7 has to be in else exception 
-                    */
+                     */
                     $total += $turno;
-                    $totalCE += ($excepcion)?0:$turno;
+                    $totalCE += ($excepcion) ? 0 : $turno;
                     $TotalFinal += $turno;
-                    $TotalFinalCE += ($excepcion)?0:$turno;
-                    
+                    $TotalFinalCE += ($excepcion) ? 0 : $turno;
+
+
+                    switch ($m->type_id) {
+                        case 1:
+                        case 4:
+                        case 5:
+                            $test[] = $m->id;
+                            $basico += $turno;
+                            $basicoCE += ($excepcion) ? 0 : $turno;
+                            $TotalBasicos += $turno;
+                            $TotalBasicosCE += ($excepcion) ? 0 : $turno;
+                            break;
+                        case 2:
+                        case 3:
+                        case 6:
+                            $avanzado += $turno;
+                            $avanzadoCE += ($excepcion) ? 0 : $turno;
+                            $TotalAvanzados += $turno;
+                            $TotalAvanzadosCE += ($excepcion) ? 0 : $turno;
+                            break;
+                        default:
+                            $basico += $turno;
+                            $basicoCE += ($excepcion) ? 0 : $turno;
+                            $TotalBasicos += $turno;
+                            $TotalBasicosCE += ($excepcion) ? 0 : $turno;
+                            break;
+                    }
                 }
-                switch ($m->type_id) {
-                    case 1:
-                    case 4:
-                    case 5:
-                        $test[] = $m->id;
-                        $basico += $turno;
-                        $basicoCE += ($excepcion)?0:$turno;
-                        $TotalBasicos += $turno;
-                        $TotalBasicosCE += ($excepcion)?0:$turno;
-                        break;
-                    case 2:
-                    case 3:
-                    case 6:
-                        $avanzado += $turno;
-                        $avanzadoCE += ($excepcion)?0:$turno;
-                        $TotalAvanzados += $turno;
-                        $TotalAvanzadosCE += ($excepcion)?0:$turno;
-                        break;
-                    default:
-                        $basico += $turno;
-                        $basicoCE += ($excepcion)?0:$turno;
-                        $TotalBasicos += $turno;
-                        $TotalBasicosCE += ($excepcion)?0:$turno;
-                        break;
-                }
-                
             }
 
             $out[$mobileId]['code'] = Mobile::find($mobileId)->code;
@@ -158,7 +127,7 @@ class MobilesStats extends Component
             $out[$mobileId]['basicoCE'] = round($basico - $basicoCE);
             $out[$mobileId]['avanzado'] = round($avanzado);
             $out[$mobileId]['avanzadoCE'] = round($avanzado - $avanzadoCE);
-            
+
 
             $out2['Totales']['TotalFinal'] = round($TotalFinal);
             $out2['Totales']['TotalFinalCE'] = round($TotalFinal - $TotalFinalCE);
@@ -167,7 +136,6 @@ class MobilesStats extends Component
             $out2['Totales']['TotalAvanzados'] = round($TotalAvanzados);
             $out2['Totales']['TotalAvanzadosCE'] = round($TotalAvanzados - $TotalAvanzadosCE);
             $out2['Valores'] = $out;
-
         }
         // dd($test);
         return $out2;
@@ -175,7 +143,36 @@ class MobilesStats extends Component
 
     public function calculatePercentage(?int $n, ?int $d)
     {
-        return ($d == 0)?'':round(($n / $d) * 100, 2);
+        return ($d == 0) ? '' : round(($n / $d) * 100, 2);
+    }
+
+    /**
+     * Lista de años disponibles hasta el año actual (por defecto: -2 años hasta el actual)
+     */
+    public function availableYears(): array
+    {
+        $current = now()->year;
+        $start = $current - 2;
+        return range($start, $current);
+    }
+
+    /**
+     * Lista de meses disponibles según el año seleccionado.
+     * Si el año es el actual, solo devuelve meses hasta el mes actual.
+     */
+    public function availableMonths(): array
+    {
+        $currentMonth = now()->month;
+        if ($this->year === now()->year) {
+            return range(1, $currentMonth);
+        }
+        return range(1, 12);
+    }
+
+    public function changePeriod($month = null, $year = null)
+    {
+        $this->month = $month ?? now()->month;
+        $this->year = $year ?? now()->year;
     }
 
     /**
