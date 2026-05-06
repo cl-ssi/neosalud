@@ -15,11 +15,11 @@
                             
                             <th>Mobil</th>
                             <th>Horas Basico Segun Dotacion</th>
-                            <th>Horas Basico Con Excepciones</th>
+                            <th>Horas Basico D  isponibles</th>
                             <th>Horas Avanzado Segun Dotacion</th>
-                            <th>Horas Avanzado Con Excepciones</th>
+                            <th>Horas Avanzado Disponibles</th>
                             <th>Horas Totales Segun Dotacion</th>                            
-                            <th>Horas Totales Con Excepciones</th>                            
+                            <th>Horas Totales Disponibles</th>                            
                         </tr>
                     </thead>
                     <tbody>                        
@@ -38,16 +38,16 @@
                             <th>Totales</th>
                             <th>{{ $totales['TotalBasicos'] }}</th>
                             <th>{{ $totales['TotalBasicosCE'] }}</th>
-                            <th>{{ $totales['TotalAvanzados'] }} ({{ round(($totales['TotalAvanzados'] / $totales['TotalFinal']) * 100, 2) }}%)</th>
-                            <th>{{ $totales['TotalAvanzadosCE'] }} ({{ round(($totales['TotalAvanzadosCE'] / $totales['TotalFinalCE']) * 100, 2) }}%)</th>
+                            <th>{{ $totales['TotalAvanzados'] }} ({{ $this->calculatePercentage($totales['TotalAvanzados'], $totales['TotalFinal']) }}%)</th>
+                            <th>{{ $totales['TotalAvanzadosCE'] }} ({{ $this->calculatePercentage($totales['TotalAvanzadosCE'], $totales['TotalFinalCE']) }}%)</th>
                             <th>{{ $totales['TotalFinal'] }}</th>
                             <th>{{ $totales['TotalFinalCE'] }}</th>
                         </tr>
                         <tr>
                             <th>Porcentajes</th>
-                            <th colspan="2" class="text-center"> ({{ round(($totales['TotalBasicosCE'] / $totales['TotalBasicos']) * 100, 2) }}%) </th>
-                            <th colspan="2" class="text-center">({{ round(($totales['TotalAvanzadosCE'] / $totales['TotalAvanzados']) * 100, 2) }}%)</th>
-                            <th colspan="2" class="text-center">({{ round(($totales['TotalFinalCE'] / $totales['TotalFinal']) * 100, 2) }}%)</th>                            
+                            <th colspan="2" class="text-center"> ({{ $this->calculatePercentage($totales['TotalBasicosCE'], $totales['TotalBasicos']) }}%) </th>
+                            <th colspan="2" class="text-center">({{ $this->calculatePercentage($totales['TotalAvanzadosCE'], $totales['TotalAvanzados']) }}%)</th>
+                            <th colspan="2" class="text-center">({{ $this->calculatePercentage($totales['TotalFinalCE'], $totales['TotalFinal']) }}%)</th>                            
                         </tr>
                     </tbody>
                 </table>

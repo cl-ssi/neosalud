@@ -14,8 +14,7 @@ class MobilesStats extends Component
 {
 
     public $year = 2026;
-    public $month = 3;
-    protected $mobilesInMonth;
+    public $month = 4;
 
     public function render()
     {
@@ -69,12 +68,14 @@ class MobilesStats extends Component
         $year = $this->year;
         $month = $this->month;
         $out = array();
+        $out2 = array();
         $TotalFinal = 0;
         $TotalFinalCE = 0;
         $TotalBasicos = 0;
         $TotalBasicosCE = 0;
         $TotalAvanzados = 0;
         $TotalAvanzadosCE = 0;
+        $test = array();
 
         //Mobiles en servicio del periodo en diferentes turnos
         $mobilesInService = MobileInService::whereHas('shift', function ($q) use ($year, $month) {
@@ -102,15 +103,15 @@ class MobilesStats extends Component
                     // Duracion del turno en horas
                     $turno = intval($m->shift->opening_at->diffInMinutes($m->shift->closing_at)) / 60;
                     $status = ($m->status == 0) ? true : false;
-                    $crew = $m->currentCrew->map(fn($i)=>$i->pivot->job_type_id)->toArray();
+                    $crew = $m->crew->map(fn($i)=>$i->pivot->job_type_id)->toArray();
                     // $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->pluck('job_type_id')->toArray();
                     $crew = MobileCrew::where('mobiles_in_service_id', $m->id)->get();
                     // $validCrew = in_array(6, $crew) && in_array(7, $crew);
                     $validCrew = $crew->contains('job_type_id', 6) && $crew->contains('job_type_id', 7);
                     // if($validCrew == false){dd($m, $crew);}
                     // if($validCrew == false && $z>5){dd($m, $crew->pluck('job_type_id'));}
-                    // $excepcion = $status || $validCrew;
-                    $excepcion = $status;
+                    $excepcion = $status || $validCrew;
+                    // $excepcion = $status;
                     // $excepcion = false;
                     // $turno = $validCrew?$turno:false;
                     /** 
@@ -126,6 +127,7 @@ class MobilesStats extends Component
                     case 1:
                     case 4:
                     case 5:
+                        $test[] = $m->id;
                         $basico += $turno;
                         $basicoCE += ($excepcion)?0:$turno;
                         $TotalBasicos += $turno;
@@ -150,26 +152,31 @@ class MobilesStats extends Component
             }
 
             $out[$mobileId]['code'] = Mobile::find($mobileId)->code;
-            $out[$mobileId]['total'] = $total;
-            $out[$mobileId]['totalCE'] = $totalCE;
-            $out[$mobileId]['basico'] = $basico;
-            $out[$mobileId]['basicoCE'] = $basicoCE;
-            $out[$mobileId]['avanzado'] = $avanzado;
-            $out[$mobileId]['avanzadoCE'] = $avanzadoCE;
-            $out2 = array();
+            $out[$mobileId]['total'] = round($total);
+            $out[$mobileId]['totalCE'] = round($total - $totalCE);
+            $out[$mobileId]['basico'] = round($basico);
+            $out[$mobileId]['basicoCE'] = round($basico - $basicoCE);
+            $out[$mobileId]['avanzado'] = round($avanzado);
+            $out[$mobileId]['avanzadoCE'] = round($avanzado - $avanzadoCE);
+            
 
-            $out2['Totales']['TotalFinal'] = $TotalFinal;
-            $out2['Totales']['TotalFinalCE'] = $TotalFinalCE;
-            $out2['Totales']['TotalBasicos'] = $TotalBasicos;
-            $out2['Totales']['TotalBasicosCE'] = $TotalBasicosCE;
-            $out2['Totales']['TotalAvanzados'] = $TotalAvanzados;
-            $out2['Totales']['TotalAvanzadosCE'] = $TotalAvanzadosCE;
+            $out2['Totales']['TotalFinal'] = round($TotalFinal);
+            $out2['Totales']['TotalFinalCE'] = round($TotalFinal - $TotalFinalCE);
+            $out2['Totales']['TotalBasicos'] = round($TotalBasicos);
+            $out2['Totales']['TotalBasicosCE'] = round($TotalBasicos - $TotalBasicosCE);
+            $out2['Totales']['TotalAvanzados'] = round($TotalAvanzados);
+            $out2['Totales']['TotalAvanzadosCE'] = round($TotalAvanzados - $TotalAvanzadosCE);
             $out2['Valores'] = $out;
 
         }
+        // dd($test);
         return $out2;
     }
 
+    public function calculatePercentage(?int $n, ?int $d)
+    {
+        return ($d == 0)?'':round(($n / $d) * 100, 2);
+    }
 
     /**
      * 
