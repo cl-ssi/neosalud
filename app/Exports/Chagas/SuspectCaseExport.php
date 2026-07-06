@@ -26,12 +26,12 @@ class SuspectCaseExport implements FromQuery, WithChunkReading, WithBatchInserts
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 100;
     }
 
     public function batchSize(): int
     {
-        return 1000;
+        return 100;
     }
 
     public function map($suspectCase): array
