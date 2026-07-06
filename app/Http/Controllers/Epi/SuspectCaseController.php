@@ -66,7 +66,7 @@ class SuspectCaseController extends Controller
     {
         $sc = new SuspectCase($request->All());
         $sc->requester_id = Auth::id();
-        $sc->request_at =  date('Y-m-d H:i:s');
+        $sc->request_at = date('Y-m-d H:i:s');
         $sc->save();
         session()->flash('success', 'Se creo caso sospecha exitosamente, esperando por su toma de muestra');
         return redirect()->route('chagas.welcome');
@@ -186,7 +186,7 @@ class SuspectCaseController extends Controller
      */
     public function destroy(SuspectCase $suspectCase, Request $request)
     {
-        
+
         $deleteReason = $request->input('delete_reason');
         $suspectCase->delete_reason = $deleteReason;
         $suspectCase->delete_user_id = auth()->user()->id;
@@ -229,22 +229,22 @@ class SuspectCaseController extends Controller
         $organizations = Organization::whereIn('id', Auth::user()->practitioners->pluck('organization_id'))
             ->orderBy('alias')
             ->get();
-    
+
         $userTrayIds = Auth::user()->practitioners->pluck('organization_id');
-    
+
         $query = User::whereHas('practitioners', function ($query) use ($userTrayIds) {
             $query->whereIn('organization_id', $userTrayIds);
         })->whereHas('permissions', function ($query) {
             $query->where('name', 'LIKE', 'Chagas%')->OrderBy('name');
         });
-    
-        
+
+
         if ($request->has('search')) {
             $searchTerm = $request->input('search');
-    
+
             // Dividir la cadena de búsqueda en palabras
             $searchTerms = explode(' ', $searchTerm);
-    
+
             $query->where(function ($q) use ($searchTerms) {
                 foreach ($searchTerms as $term) {
                     $q->where(function ($qq) use ($term) {
@@ -258,12 +258,12 @@ class SuspectCaseController extends Controller
                 }
             });
         }
-    
+
         $users = $query->get();
-    
+
         return view('epi.chagas.user_index', compact('organizations', 'users'));
     }
-    
+
 
     public function patientRecord()
     {
@@ -298,7 +298,7 @@ class SuspectCaseController extends Controller
         if ($endDate) {
             $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
         }
-    
+
         $suspectcases = SuspectCase::where('organization_id', $organization->id)
             ->with([
                 'patient',
@@ -308,7 +308,7 @@ class SuspectCaseController extends Controller
             ->whereNotNull('requester_id')
             ->whereNull('sampler_id')
             ->when($searchTerm, function ($query, $searchTerm) {
-    
+
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {
                     $query->whereHas('patient', function ($query) use ($word) {
@@ -316,15 +316,15 @@ class SuspectCaseController extends Controller
                         $query->where('given', 'LIKE', '%' . $word . '%')
                             ->orWhere('fathers_family', 'LIKE', '%' . $word . '%')
                             ->orWhere('mothers_family', 'LIKE', '%' . $word . '%')
-    
+
                             // Búsqueda por identificadores del paciente
                             ->orWhereHas('identifiers', function ($query) use ($word) {
-                                $query->where('value', 'LIKE', '%' . $word . '%');
-                            });
+                            $query->where('value', 'LIKE', '%' . $word . '%');
+                        });
                     });
                 }
             })
-            ->when($lab_id, fn ($query, $lab_id) => $query->where('laboratory_id', $lab_id))
+            ->when($lab_id, fn($query, $lab_id) => $query->where('laboratory_id', $lab_id))
             ->orderByDesc('id')
             ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
@@ -333,10 +333,10 @@ class SuspectCaseController extends Controller
             ->whereHas('suspectcasesAsLaboratory')
             ->orderBy('alias')
             ->get();
-    
+
         return view('epi.chagas.sample.index', compact('organization', 'suspectcases', 'laboratories'));
     }
-    
+
 
 
     public function sampleBlood($id, Request $request)
@@ -383,7 +383,7 @@ class SuspectCaseController extends Controller
     {
         $trayType = 'myTray';
         $searchTerm = request('search');
-        
+
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = request('end_date', now()->format('Y-m-d'));
@@ -460,12 +460,12 @@ class SuspectCaseController extends Controller
     {
         $trayType = 'allMyTray';
         $searchTerm = request('search');
-        
+
         $organizationIds = Auth::user()->practitioners->pluck('organization_id');
 
         // Set default date range
         $startDate = request('start_date', now()->startOfMonth()->format('Y-m-d'));
-        $endDate = request('end_date', now()->format('Y-m-d'));  
+        $endDate = request('end_date', now()->format('Y-m-d'));
 
         if ($endDate) {
             $endDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
@@ -493,11 +493,11 @@ class SuspectCaseController extends Controller
             })
             ->whereBetween('request_at', [$startDate, $endDate])
             ->paginate(100);
-    
-        
+
+
         return view('chagas.trays.index', compact('suspectcases', 'trayType'));
     }
-    
+
 
     /**
      * Exporta a Excel el listado de solicitudes de examenes de Chagas
@@ -506,33 +506,26 @@ class SuspectCaseController extends Controller
      */
     public function exportExcel(Request $request)
     {
-        // Capturamos el tipo de tray
         $trayType = $request->input('my_tray') ? 'myTray' : ($request->input('all_my_tray') ? 'allMyTray' : 'tray');
         $searchTerm = $request->input('search');
-        
-        // Obtenemos las organizaciones del usuario autenticado
+
         $organizationIds = Auth::user()->practitioners->pluck('organization_id');
         $organizationId = $request->input('organization');
-    
-        // Consultamos los casos sospechosos con los filtros correspondientes
-        if($trayType == 'myTray'){
-        $suspectcases = SuspectCase::when($trayType === 'myTray', function ($query) {
-                $query->where('requester_id', Auth::user()->id);
-            });
-        } else {
 
-        
-        
-        $suspectcases = SuspectCase::when($trayType === 'allMyTray' && $organizationId == null, function ($query) use ($organizationIds) {
+        $query = SuspectCase::query();
+
+        if ($trayType === 'myTray') {
+            $query->where('requester_id', Auth::user()->id);
+        } else {
+            $query->when($trayType === 'allMyTray' && $organizationId == null, function ($query) use ($organizationIds) {
                 $query->whereIn('organization_id', $organizationIds);
             }, function ($query) use ($organizationId) {
                 $query->where('organization_id', $organizationId);
             });
-
         }
 
-        $suspectcases = $suspectcases->orderByDesc('id')
-            ->with(['requester', 'organization', 'patient'])
+        $query->with(['requester', 'organization', 'patient'])
+            ->orderByDesc('id')
             ->when($searchTerm, function ($query, $searchTerm) {
                 $searchWords = explode(' ', $searchTerm);
                 foreach ($searchWords as $word) {
@@ -545,36 +538,13 @@ class SuspectCaseController extends Controller
                             });
                     });
                 }
-            })
-            ->get()
-            ->map(function ($suspectCase) {
-                return [
-                    'ID' => $suspectCase->id,
-                    'Grupo de Pesquisa' => $suspectCase->research_group,
-                    'Solicitado por' => $suspectCase->requester?->officialFullName,
-                    'Fecha de Solicitud' => $suspectCase->request_at,
-                    'Origen' => $suspectCase->organization->alias,
-                    'Paciente' => $suspectCase->patient?->officialFullName,
-                    'Run o Identificación' => $suspectCase->patient->identifierRun
-                        ? $suspectCase->patient->identifierRun->value . '-' . $suspectCase->patient->identifierRun->dv
-                        : $suspectCase->patient->identification->value,
-                    'Edad' => $suspectCase->patient->AgeString,
-                    'Sexo' => $suspectCase->patient->actualSex()->text ?? '',
-                    'Nacionalidad' => $suspectCase->patient->nationality->name ?? '',
-                    'Fecha de Resultado Tamizaje' => $suspectCase->chagas_result_screening_at,
-                    'Resultado Tamizaje' => $suspectCase->chagas_result_screening,
-                    'Fecha de Resultado Confirmación' => $suspectCase->chagas_result_confirmation_at,
-                    'Resultado Confirmación' => $suspectCase->chagas_result_confirmation,
-                    'Observación' => $suspectCase->observation,
-                ];
             });
-    
-        // Se retorna el archivo de Excel
-        return Excel::download(new SuspectCaseExport($suspectcases), 'reporte_chagas.xlsx');
+
+        return Excel::download(new SuspectCaseExport($query), 'reporte_chagas.xlsx');
     }
-    
-    
-    
+
+
+
 
 
 }

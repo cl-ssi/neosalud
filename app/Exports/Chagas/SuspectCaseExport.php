@@ -2,36 +2,71 @@
 
 namespace App\Exports\Chagas;
 
-
-use App\Models\Epi\SuspectCase;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class SuspectCaseExport implements FromCollection, WithHeadings, ShouldAutoSize
+class SuspectCaseExport implements FromQuery, WithChunkReading, WithBatchInserts, WithHeadings, WithMapping, ShouldAutoSize
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    protected $suspectcases;
+    protected Builder $query;
 
-    public function __construct($suspectcases)
+    public function __construct(Builder $query)
     {
-        $this->suspectcases = $suspectcases;
+        $this->query = $query;
     }
 
-    public function collection()
+    public function query(): Builder
     {
-        return $this->suspectcases;
+        return $this->query;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function map($suspectCase): array
+    {
+        $patient = $suspectCase->patient;
+        $identifier = $patient?->identifierRun
+            ? $patient->identifierRun->value . '-' . $patient->identifierRun->dv
+            : ($patient?->identification?->value ?? '');
+
+        return [
+            'ID' => $suspectCase->id,
+            'Grupo de Pesquisa' => $suspectCase->research_group,
+            'Solicitado por' => $suspectCase->requester?->officialFullName,
+            'Fecha de Solicitud' => $suspectCase->request_at,
+            'Origen' => $suspectCase->organization?->alias,
+            'Paciente' => $patient?->officialFullName,
+            'Run o Identificación' => $identifier,
+            'Edad' => $patient?->AgeString,
+            'Sexo' => $patient?->actualSex()?->text ?? '',
+            'Nacionalidad' => $patient?->nationality?->name ?? '',
+            'Fecha de Resultado Tamizaje' => $suspectCase->chagas_result_screening_at,
+            'Resultado Tamizaje' => $suspectCase->chagas_result_screening,
+            'Fecha de Resultado Confirmación' => $suspectCase->chagas_result_confirmation_at,
+            'Resultado Confirmación' => $suspectCase->chagas_result_confirmation,
+            'Observación' => $suspectCase->observation,
+        ];
     }
 
     public function headings(): array
     {
         return [
-            'ID', 
-            'Grupo de Pesquiza',
+            'ID',
+            'Grupo de Pesquisa',
             'Solicitado por',
-            'Fecha de Solicitud', 
+            'Fecha de Solicitud',
             'Origen',
             'Paciente',
             'Run o Identificación',
@@ -45,6 +80,4 @@ class SuspectCaseExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Observación',
         ];
     }
-
-
 }
