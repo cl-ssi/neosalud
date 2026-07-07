@@ -21,8 +21,8 @@ class EventFilter extends Component
     public $useRange = false;
 
     public $date = [
-        'from'   => null,
-        'to'     => null,
+        'from' => null,
+        'to' => null,
         'single' => null,
     ];
     public $key_id;
@@ -49,7 +49,7 @@ class EventFilter extends Component
 
     public function getEvents()
     {
-        $query =  Event::query();
+        $query = Event::with(['mobile' => fn($q) => $q->withTrashed()]);
 
         $query->when($this->date, function ($query) {
             if ($this->useRange) {
