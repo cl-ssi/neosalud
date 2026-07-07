@@ -2,13 +2,16 @@
 
 namespace App\Charts\Samu;
 
+use App\Models\Commune;
+use App\Models\Samu\Call;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class CallsByClassification
 {
     public $year;
     public $month;
+    public $mobilesFilter;
+    public $classificationFilter;
     public $dataset;
     public $legend;
 
@@ -20,10 +23,12 @@ class CallsByClassification
      * @param  string  $month
      * @return void
      */
-    public function __construct($year = null, $month = null)
+    public function __construct($year = null, $month = null, $mobilesFilter = 'all', $classificationFilter = 'all')
     {
         $this->year = $year ?? now()->year;
         $this->month = $month ?? now()->month;
+        $this->mobilesFilter = $mobilesFilter;
+        $this->classificationFilter = $classificationFilter;
 
         $this->setDataset();
     }
@@ -41,14 +46,23 @@ class CallsByClassification
         $end = $start->copy()->endOfMonth();
 
         // Obtener las comunas
-        $communes = DB::select('select id, name from communes');
+        $communes = Commune::select('id', 'name')->get();
 
         // Preparar los datos
-        $records = DB::table('samu_calls')
+        $records = Call::query()
             ->selectRaw('count(*) as total, classification, commune_id')
             ->groupBy('classification', 'commune_id')
             ->whereNull('call_id')
             ->whereBetween('hour', [$start, $end])
+
+            ->when($this->mobilesFilter === 'samu', function ($query) {
+                $query->whereHas('events.mobile', function ($query) {
+                    $query->where('managed', 1);
+                });
+            })
+            ->when($this->classificationFilter === 't1_t2', function ($query) {
+                $query->whereIn('classification', ['T1', 'T2']);
+            })
             ->get();
 
         // Inicializar array para los datos

@@ -5,12 +5,19 @@
         <fieldset class="form-group col-md-12">
             <div class="input-group">
                 <span class="input-group-text" id="for-month">Mes y Año</span>
-                <input
-                    type="month"
-                    id="for-month"
-                    class="form-control form-control-sm"
-                    wire:model.debounce.1000ms="year_month"
-                >
+                <input type="month" id="for-month" class="form-control form-control-sm"
+                    wire:model.debounce.1000ms="year_month">
+                <span class="input-group-text" id="for-mobiles">Mobiles</span>
+                <select id="mobiles" class="form-select form-select-sm" wire:model.debounce.1000ms="mobiles_filter">
+                    <option value="all">Todos</option>
+                    <option value="samu">solo SAMU</option>
+                </select>
+                <span class="input-group-text" id="for-classification">Clasificación</span>
+                <select id="classification" class="form-select form-select-sm"
+                    wire:model.debounce.1000ms="classification_filter">
+                    <option value="all">Todas</option>
+                    <option value="t1_t2">Solo T1 y T2</option>
+                </select>
             </div>
         </fieldset>
     </div>
@@ -20,7 +27,7 @@
     </div>
 
     <script>
-        google.charts.load('current', {'packages' : ['corechart']});
+        google.charts.load('current', { 'packages': ['corechart'] });
 
         window.livewire.on('calls-by-classification', data => {
             var data = google.visualization.arrayToDataTable(data);
