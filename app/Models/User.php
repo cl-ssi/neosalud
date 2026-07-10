@@ -68,7 +68,7 @@ class User extends Authenticatable implements Auditable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'birthday' => 'datetime'
+        'birthday' => 'date'
     ];
 
 
@@ -305,7 +305,7 @@ class User extends Authenticatable implements Auditable
         $queryUser = User::query();
         $arraySearch = explode(' ', $searchText);
         foreach ($arraySearch as $word) {
-            $queryUser->whereHas('humanNames',  function ($q) use ($word) {
+            $queryUser->whereHas('humanNames', function ($q) use ($word) {
                 $q->where('text', 'LIKE', '%' . $word . '%')
                     ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
                     ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
