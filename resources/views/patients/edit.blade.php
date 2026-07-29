@@ -55,7 +55,7 @@
                     <fieldset class="form-group col-md-4">
                         <label for="for_birthday">Fecha de nacimiento</label>
                         <input type="date" class="form-control" name="birthday" id="for_birthday"
-                            value="{{ $patient->birthday->format('Y-m-d') }}">
+                            value="{{ $patient->birthday?->format('Y-m-d') }}">
                     </fieldset>
 
                     <fieldset class="form-group col-md-3">
