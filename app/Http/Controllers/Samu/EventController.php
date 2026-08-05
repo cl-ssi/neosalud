@@ -82,14 +82,14 @@ class EventController extends Controller
             return redirect()->route('samu.welcome');
         }
 
-        $mobiles            = Mobile::whereManaged(false)->get();
-        $establishments     = Organization::whereHas('samu')->pluck('id', 'name')->sort();
-        $nextCounter        = EventCounter::getNext();
-        $receptionPlaces    = ReceptionPlace::pluck('id', 'name')->sort();
-        $identifierTypes    = CodConIdentifierType::pluck('id', 'text')->sort();
-        $keys               = Key::orderBy('key')->get();
-        $communes           = Commune::whereHas('samu')->pluck('id', 'name')->sort();
-        $mobilesInService   = $shift->mobilesInService->where('shift_id', $shift->id)->where('status', true)->sortBy('position');
+        $mobiles = Mobile::whereManaged(false)->get();
+        $establishments = Organization::whereHas('samu')->pluck('id', 'name')->sort();
+        $nextCounter = EventCounter::getNext();
+        $receptionPlaces = ReceptionPlace::pluck('id', 'name')->sort();
+        $identifierTypes = CodConIdentifierType::pluck('id', 'text')->sort();
+        $keys = Key::orderBy('key')->get();
+        $communes = Commune::whereHas('samu')->pluck('id', 'name')->sort();
+        $mobilesInService = $shift->mobilesInService->where('shift_id', $shift->id)->where('status', true)->sortBy('position');
 
         $event = $event
             ? Event::select('id', 'observation', 'address', 'address_reference', 'commune_id', 'key_id', 'call_id')->find($event->id)
@@ -127,8 +127,8 @@ class EventController extends Controller
     {
         Gate::allowIf(
             auth()->user()->cannot('SAMU auditor')
-                ? Response::allow()
-                : Response::deny('Acción no autorizada para "SAMU auditor".')
+            ? Response::allow()
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         $shift = Shift::whereStatus(true)->first();
@@ -171,12 +171,12 @@ class EventController extends Controller
             session()->flash('danger', 'Debe abrir un turno primero');
             return redirect()->route('samu.welcome');
         }
-        $establishments     = Organization::whereHas('samu')->pluck('id', 'name')->sort();
-        $keys               = Key::orderBy('key')->get();
-        $mobiles            = Mobile::where('managed', false)->get();
-        $receptionPlaces    = ReceptionPlace::pluck('id', 'name')->sort();
-        $identifierTypes    = CodConIdentifierType::pluck('id', 'text')->sort();
-        $mobilesInService   = $event->shift->mobilesInService->where('status', true)->sortBy('position');
+        $establishments = Organization::whereHas('samu')->pluck('id', 'name')->sort();
+        $keys = Key::orderBy('key')->get();
+        $mobiles = Mobile::where('managed', false)->get();
+        $receptionPlaces = ReceptionPlace::pluck('id', 'name')->sort();
+        $identifierTypes = CodConIdentifierType::pluck('id', 'text')->sort();
+        $mobilesInService = $event->shift->mobilesInService?->where('status', true)->sortBy('position');
 
         /* TODO: Parametrizar */
         $communes = Commune::whereHas('samu')->pluck('id', 'name')->sort();
@@ -209,8 +209,8 @@ class EventController extends Controller
     {
         Gate::allowIf(
             auth()->user()->cannot('SAMU auditor')
-                ? Response::allow()
-                : Response::deny('Acción no autorizada para "SAMU auditor".')
+            ? Response::allow()
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         (new EventService())->update($event, $request->validated());
@@ -229,8 +229,8 @@ class EventController extends Controller
     {
         Gate::allowIf(
             auth()->user()->cannot('SAMU auditor')
-                ? Response::allow()
-                : Response::deny('Acción no autorizada para "SAMU auditor".')
+            ? Response::allow()
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         $event->mobileInService()->dissociate();
@@ -251,8 +251,8 @@ class EventController extends Controller
     {
         Gate::allowIf(
             auth()->user()->cannot('SAMU auditor')
-                ? Response::allow()
-                : Response::deny('Acción no autorizada para "SAMU auditor".')
+            ? Response::allow()
+            : Response::deny('Acción no autorizada para "SAMU auditor".')
         );
 
         if ($event->created_at->gt(now()->subDays(30))) {
