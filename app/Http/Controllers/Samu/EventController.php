@@ -176,7 +176,7 @@ class EventController extends Controller
         $mobiles = Mobile::where('managed', false)->get();
         $receptionPlaces = ReceptionPlace::pluck('id', 'name')->sort();
         $identifierTypes = CodConIdentifierType::pluck('id', 'text')->sort();
-        $mobilesInService = $event->shift->mobileInService?->where('status', true)->sortBy('position');
+        $mobilesInService = $event->shift->mobilesInService?->where('status', true)->sortBy('position');
 
         /* TODO: Parametrizar */
         $communes = Commune::whereHas('samu')->pluck('id', 'name')->sort();
