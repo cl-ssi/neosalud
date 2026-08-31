@@ -17,18 +17,23 @@ class OrganizationalUnit extends Model
      * @var array
      */
     protected $fillable = [
-        'name','level', 'organizational_unit_id','establishment_id'
+        'name',
+        'level',
+        'organizational_unit_id',
+        'establishment_id'
     ];
 
     // public function users() {
     //     return $this->hasMany('\App\User');
     // }
 
-    public function father() {
+    public function father()
+    {
         return $this->belongsTo('\App\Models\OrganizationalUnit', 'organizational_unit_id');
     }
 
-    public function childs() {
+    public function childs()
+    {
         return $this->hasMany('\App\Models\OrganizationalUnit', 'organizational_unit_id');
     }
 
@@ -49,12 +54,16 @@ class OrganizationalUnit extends Model
         $words = explode(' ', $this->name);
         $initials = '';
         foreach ($words as $word) {
-            if ($word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
-                && $word != 'al' && $word != 'en' && $word != 'el') {
+            if (
+                $word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
+                && $word != 'al' && $word != 'en' && $word != 'el'
+            ) {
                 if ($word === 'Subdirección') {
                     $initials .= 'SD';
-                } elseif ($word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
-                    $word === 'GES/PPV') {
+                } elseif (
+                    $word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
+                    $word === 'GES/PPV'
+                ) {
                     $initials .= $word;
                 } else {
                     $initials .= $word[0];
@@ -63,11 +72,4 @@ class OrganizationalUnit extends Model
         }
         return $initials;
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [];
 }

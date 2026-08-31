@@ -25,11 +25,13 @@ class Commune extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime'
+    ];
     
     public function agreements() 
     {

@@ -8,33 +8,35 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class OperatingRoomSpecialty extends Model implements Auditable
 {
-  use \OwenIt\Auditing\Auditable;
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-      'operating_room_id', 'specialty_id'
-  ];
+    use \OwenIt\Auditing\Auditable;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'operating_room_id',
+        'specialty_id'
+    ];
 
-  // public function operating_rooms()
-  // {
-  //     return $this->hasMany('App\Models\MedicalProgrammer\OperatingRoom');
-  // }
+    // public function operating_rooms()
+    // {
+    //     return $this->hasMany('App\Models\MedicalProgrammer\OperatingRoom');
+    // }
 
-  use SoftDeletes;
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
-  protected $dates = ['deleted_at'];
+    use SoftDeletes;
+    /**
+     * The casted attributes.
+     *
+     * @var array
+     */
+    protected $casts = ['deleted_at' => 'datetime'];
 
-  /**
-   * The table associated with the model.
-   *
-   * @var string
-   */
-  protected $table = 'mp_operating_room_specialties';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'mp_operating_room_specialties';
+    // NOT IN BBDD  
 }

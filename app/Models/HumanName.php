@@ -10,6 +10,8 @@ class HumanName extends Model
 {
     use HasFactory;
 
+    // NOT IN BBDD
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,13 +29,13 @@ class HumanName extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    protected $dates = [
-        'period_start',
-        'period_end'
+    protected $casts = [
+        'period_start' => 'datetime',
+        'period_end' => 'datetime'
     ];
 
     public function getfullNameAttribute()

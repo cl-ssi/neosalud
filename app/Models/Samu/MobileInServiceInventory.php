@@ -32,13 +32,13 @@ class MobileInServiceInventory extends Model implements Auditable
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    protected $dates = [
-        'creation_date',
-        'approbation_date',
+    protected $casts = [
+        'creation_date' => 'date',
+        'approbation_date' => 'date',
     ];
 
     public function mobileInService()

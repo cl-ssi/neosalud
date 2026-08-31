@@ -11,29 +11,59 @@ class FqRequest extends Model
     use HasFactory;
     use softDeletes;
 
+    // NOT IN BBDD
+    protected $table = 'fq_requests';
+
     protected $fillable = [
-        'name', 'specialties', 'other_specialty', 'prescription_file',
-        'patient_id', 'observation_patient', 'date_confirm', 'attention',
-        'practitioner_id', 'value', 'link', 'place', 'observation_request'
+        'name',
+        'specialties',
+        'other_specialty',
+        'prescription_file',
+        'patient_id',
+        'observation_patient',
+        'date_confirm',
+        'attention',
+        'practitioner_id',
+        'value',
+        'link',
+        'place',
+        'observation_request'
     ];
 
-    public function contactUser() {
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $casts = [
+        'date_confirm' => 'datetime',
+        'date_confirm_record' => 'datetime'
+    ];
+
+    
+
+    public function contactUser()
+    {
         return $this->belongsTo('\App\Models\User', 'contact_user_id');
     }
 
-    public function patient() {
+    public function patient()
+    {
         return $this->belongsTo('\App\Models\User', 'patient_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\Models\User');
     }
 
-    public function fq_medicines() {
+    public function fq_medicines()
+    {
         return $this->HasMany('\App\Models\Fq\FqMedicine', 'request_id');
     }
 
-    public function requestFiles() {
+    public function requestFiles()
+    {
         return $this->HasMany('\App\Models\Fq\RequestFile', 'request_id');
     }
 
@@ -42,104 +72,99 @@ class FqRequest extends Model
         return $this->belongsTo('\App\Models\Practitioner', 'practitioner_id');
     }
 
-    public function getNameValueAttribute(){
+    public function getNameValueAttribute()
+    {
         switch ($this->name) {
             case 'specialty hours':
-              return 'Horas de especialidad';
-              break;
+                return 'Horas de especialidad';
+                break;
             case 'dispensing':
-              return 'Dispensación de receta';
-              break;
+                return 'Dispensación de receta';
+                break;
             case 'home hospitalization':
-              return 'Contacto con hospitalización domiciliaria';
-              break;
+                return 'Contacto con hospitalización domiciliaria';
+                break;
             case 'exam request':
-              return 'Solicitud de exámenes';
-              break;
+                return 'Solicitud de exámenes';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
 
-    public function getSpecialtiesValueAttribute(){
+    public function getSpecialtiesValueAttribute()
+    {
         switch ($this->specialties) {
             case 'broncopulmonar':
-              return 'Broncopulmonar';
-              break;
+                return 'Broncopulmonar';
+                break;
             case 'otorrinolaringología':
-              return 'Otorrinolaringología';
-              break;
+                return 'Otorrinolaringología';
+                break;
             case 'endocrinología':
-              return 'Endocrinología';
-              break;
+                return 'Endocrinología';
+                break;
             case 'gastroenterología':
-              return 'Gastroenterología';
-              break;
+                return 'Gastroenterología';
+                break;
             case 'other':
-              return 'Otra';
-              break;
+                return 'Otra';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
 
-    public function getOtherSpecialtiesValueAttribute(){
+    public function getOtherSpecialtiesValueAttribute()
+    {
         switch ($this->other_specialty) {
             case 'kinesiología':
-              return 'Kinesiología';
-              break;
+                return 'Kinesiología';
+                break;
             case 'nutrición':
-              return 'Nutrición';
-              break;
+                return 'Nutrición';
+                break;
             case 'enfermería':
-              return 'Enfermería';
-              break;
+                return 'Enfermería';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
 
-    public function getStatusValueAttribute(){
+    public function getStatusValueAttribute()
+    {
         switch ($this->status) {
             case 'pending':
-              return 'Pendiente';
-              break;
+                return 'Pendiente';
+                break;
             case 'complete':
-              return 'Completada';
-              break;
+                return 'Completada';
+                break;
             case 'rejected':
-              return 'Rachazada';
-              break;
+                return 'Rachazada';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
 
-    public function getAttentionValueAttribute(){
+    public function getAttentionValueAttribute()
+    {
         switch ($this->attention) {
             case 'face-to-face':
-              return 'Presencial';
-              break;
+                return 'Presencial';
+                break;
             case 'teleconsultation':
-              return 'Teleconsulta';
-              break;
+                return 'Teleconsulta';
+                break;
             default:
-              return '';
-              break;
+                return '';
+                break;
         }
     }
-
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
-    protected $dates = [
-        'date_confirm', 'date_confirm_record'
-    ];
-
-    protected $table = 'fq_requests';
 }

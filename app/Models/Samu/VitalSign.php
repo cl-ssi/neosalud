@@ -32,14 +32,14 @@ class VitalSign extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'registered_at',
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'registered_at' => 'datetime',
     ];
 
     protected $names = [

@@ -11,6 +11,7 @@ class Contact extends Model
     use HasFactory;
     use SoftDeletes;
 
+    // NOT IN BBDD
     protected $table = 'epi_contacts';
 
     protected $fillable = [
@@ -22,8 +23,8 @@ class Contact extends Model
         'observation'
     ];
 
-    protected $dates = [
-        'last_contact_at',
+    protected $casts = [
+        'last_contact_at' => 'datetime',
     ];
 
     public function patient()

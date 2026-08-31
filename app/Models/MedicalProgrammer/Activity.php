@@ -9,15 +9,44 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Activity extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'mp_activities';
+    // NOT IN BBDD
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'process_id', 'id_activity', 'mother_activity_id', 'activity_type_id', 'activity_name', 'description', 'performance', 'programmable'
+        'id',
+        'process_id',
+        'id_activity',
+        'mother_activity_id',
+        'activity_type_id',
+        'activity_name',
+        'description',
+        'performance',
+        'programmable'
         //, 'user_id'
     ];
+
+    /**
+     * The casted attributes.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'deleted_at' => 'datetime'
+    ];
+
+
 
     public function unscheduled_programmings()
     {
@@ -67,19 +96,4 @@ class Activity extends Model implements Auditable
     {
         return $this->hasMany('App\Models\MedicalProgrammer\SubActivity');
     }
-
-    use SoftDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'mp_activities';
 }

@@ -57,13 +57,13 @@ class Call extends Model implements Auditable
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = [
-        'hour',
-        'bls'
+    protected $casts = [
+        'hour' => 'datetime',
+        'bls' => 'datetime'
     ];
 
     protected $appends = [
