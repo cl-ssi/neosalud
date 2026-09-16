@@ -12,23 +12,23 @@
         </thead>
         <tbody>
             @forelse($novelties as $noveltie)
-            <tr wire:loading.class="text-muted">
-                <td>
-                    @if($noveltie->shift->status)
-                    <a class="btn btn-sm btn-outline-primary" href="{{ route('samu.noveltie.edit', $noveltie) }}">
-                    <i class="fas fa-edit"></i> {{ $noveltie->id }}</a>
-                    @endif
-                </td>
-                <td>{{ $noveltie->created_at }}</td>
-                <td>{{ $noveltie->telephone }}</td>
-                <td>{{ $noveltie->detail ?? '' }} </td>
-                <td>{{ $noveltie->creator->officialFullName }}</td>
-                <td>{{ $noveltie->type}}</td>
-            </tr>
+                <tr wire:loading.class="text-muted">
+                    <td>
+                        @if($noveltie->shift?->status)
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('samu.noveltie.edit', $noveltie) }}">
+                                <i class="fas fa-edit"></i> {{ $noveltie->id }}</a>
+                        @endif
+                    </td>
+                    <td>{{ $noveltie->created_at }}</td>
+                    <td>{{ $noveltie->telephone }}</td>
+                    <td>{{ $noveltie->detail ?? '' }} </td>
+                    <td>{{ $noveltie->creator->officialFullName }}</td>
+                    <td>{{ $noveltie->type}}</td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="5" class="h4 text-bg-info text-center">No se encontraron resultados</td>
-            </tr>
+                <tr>
+                    <td colspan="5" class="h4 text-bg-info text-center">No se encontraron resultados</td>
+                </tr>
             @endforelse
         </tbody>
     </table>

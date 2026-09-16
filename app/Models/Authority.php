@@ -7,17 +7,42 @@ use Illuminate\Database\Eloquent\Model;
 class Authority extends Model
 {
     protected $connection = 'mysql_ionline';
+
+    // NOT IN BBDD
+    protected $table = 'rrhh_authorities';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 'from', 'to', 'position', 'type',
-        'decree', 'organizational_unit_id', 'creator_id'
+        'user_id',
+        'from',
+        'to',
+        'position',
+        'type',
+        'decree',
+        'organizational_unit_id',
+        'creator_id'
     ];
 
-    public function organizationalUnit() {
+
+
+    /**
+     * The Casted attributes.
+     *
+     * @var array
+     */
+
+    protected $casts = [
+        'from' => 'datetime',
+        'to' => 'datetime'
+    ];
+
+
+    public function organizationalUnit()
+    {
         return $this->belongsTo('App\Models\OrganizationalUnit');
     }
 
@@ -33,20 +58,22 @@ class Authority extends Model
     //     return $this->hasMany('App\Agreements\Agreement');
     // }
 
-    public static function getAuthorityFromDate($ou_id, $date, $type) {
+    public static function getAuthorityFromDate($ou_id, $date, $type)
+    {
         return Authority::with('organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
             // ->where('type', $type)
             ->when(is_array($type), function ($q) use ($type) {
-              return $q->whereIn('type', $type);
+                return $q->whereIn('type', $type);
             })
             ->when(!is_array($type), function ($q) use ($type) {
-              return $q->where('type', $type);
+                return $q->where('type', $type);
             })
-            ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
+            ->where('from', '<=', $date)->where('to', '>=', $date)->get()->last();
     }
 
-    public static function getAmIAuthorityFromOu($date, $type, $user_id) {
+    public static function getAmIAuthorityFromOu($date, $type, $user_id)
+    {
         // return Authority::with('user','organizationalUnit')
         //                 ->where('user_id', $user_id)
         //                 ->where('type', $type)
@@ -54,32 +81,23 @@ class Authority extends Model
 
         $ous = OrganizationalUnit::All();
         $authorities = array();
-        foreach($ous as $ou) {
+        foreach ($ous as $ou) {
             $authority = Authority::with('organizationalUnit')
                 ->where('organizational_unit_id', $ou->id)
                 // ->where('type', $type)
                 ->when(is_array($type), function ($q) use ($type) {
-                  return $q->whereIn('type', $type);
+                    return $q->whereIn('type', $type);
                 })
                 ->when(!is_array($type), function ($q) use ($type) {
-                  return $q->where('type', $type);
+                    return $q->where('type', $type);
                 })
-                ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
-            if($authority) {
-                if($authority->user_id == $user_id){
-                        $authorities[] = $authority;
+                ->where('from', '<=', $date)->where('to', '>=', $date)->get()->last();
+            if ($authority) {
+                if ($authority->user_id == $user_id) {
+                    $authorities[] = $authority;
                 }
             }
         }
         return $authorities;
     }
-
-    protected $table = 'rrhh_authorities';
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['from','to'];
 }

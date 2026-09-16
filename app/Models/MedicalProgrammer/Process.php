@@ -16,18 +16,22 @@ class Process extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'name'
+        'id',
+        'name'
     ];
 
     use SoftDeletes;
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = ['created_at',
-                        'updated_at',
-                        'deleted_at'];
+    protected $casts =
+    [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
+    ];
 
     /**
      * The table associated with the model.
@@ -35,4 +39,5 @@ class Process extends Model implements Auditable
      * @var string
      */
     protected $table = 'mp_process';
+    // NOT IN BBDD    
 }

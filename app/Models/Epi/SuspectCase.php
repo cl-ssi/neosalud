@@ -14,6 +14,7 @@ class SuspectCase extends Model implements Auditable
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
+    // NOT IN BBDD
     protected $table = 'epi_suspect_cases';
     protected $fillable = [
         'type',
@@ -26,18 +27,43 @@ class SuspectCase extends Model implements Auditable
         'newborn_week',
         //fin datos chagas
 
-        'age', 'gender', 'sample_at', 'epidemiological_week',
-        'origin', 'run_medic', 'symptoms', 'symptoms_at',
-        
-        'result_ifd_at', 'result_ifd', 'subtype',
-        'pcr_sars_cov_2_at', 'pcr_sars_cov_2', 'sample_type', 'validator_id',
-        'sent_external_lab_at', 'external_laboratory', 'paho_flu', 'epivigila',
-        'gestation', 'gestation_week', 'close_contact', 'functionary',
-        'notification_at', 'notification_mechanism',
+        'age',
+        'gender',
+        'sample_at',
+        'epidemiological_week',
+        'origin',
+        'run_medic',
+        'symptoms',
+        'symptoms_at',
+
+        'result_ifd_at',
+        'result_ifd',
+        'subtype',
+        'pcr_sars_cov_2_at',
+        'pcr_sars_cov_2',
+        'sample_type',
+        'validator_id',
+        'sent_external_lab_at',
+        'external_laboratory',
+        'paho_flu',
+        'epivigila',
+        'gestation',
+        'gestation_week',
+        'close_contact',
+        'functionary',
+        'notification_at',
+        'notification_mechanism',
         'discharged_at',
-        'observation', 'minsal_ws_id', 'case_type', 'positive_condition',
-        'patient_id', 'laboratory_id', 'establishment_id', 'organization_id',
-        'user_id', 'mother_id',
+        'observation',
+        'minsal_ws_id',
+        'case_type',
+        'positive_condition',
+        'patient_id',
+        'laboratory_id',
+        'establishment_id',
+        'organization_id',
+        'user_id',
+        'mother_id',
         'chagas_result_screening_file',
         'chagas_result_confirmation_file',
 
@@ -76,7 +102,7 @@ class SuspectCase extends Model implements Auditable
         'sample_at',
 
         //datos del receptor
-        'reception_at', 
+        'reception_at',
         'receptor_id',
 
 
@@ -85,14 +111,23 @@ class SuspectCase extends Model implements Auditable
         'delete_user_id',
     ];
 
-    protected $dates = [
-        'sample_at', 'symptoms_at', 'reception_at', 'result_ifd_at', 'pcr_sars_cov_2_at', 'sent_external_lab_at',
-        'notification_at', 'discharged_at', 'deleted_at', 'chagas_result_confirmation_at', 'chagas_result_screening_at',
-        'direct_exam_at',
-        'pcr_first_at',
-        'pcr_second_at',
-        'pcr_third_at',
-        'request_at',
+    protected $casts = [
+        'sample_at' => 'datetime',
+        'symptoms_at' => 'datetime',
+        'reception_at' => 'datetime',
+        'result_ifd_at' => 'datetime',
+        'pcr_sars_cov_2_at' => 'datetime',
+        'sent_external_lab_at' => 'datetime',
+        'notification_at' => 'datetime',
+        'discharged_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'chagas_result_confirmation_at' => 'datetime',
+        'chagas_result_screening_at' => 'datetime',
+        'direct_exam_at' => 'datetime',
+        'pcr_first_at' => 'datetime',
+        'pcr_second_at' => 'datetime',
+        'pcr_third_at' => 'datetime',
+        'request_at' => 'datetime',
     ];
 
 
@@ -146,6 +181,4 @@ class SuspectCase extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Epi\Tracing');
     }
-
-    
 }

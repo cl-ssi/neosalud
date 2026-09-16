@@ -10,6 +10,8 @@ class Tracing extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    // NOT IN BBDD
     protected $table = 'epi_tracings';
 
     protected $fillable = [
@@ -60,8 +62,8 @@ class Tracing extends Model
 
     ];
 
-    protected $dates = [
-        'next_control_at',
+    protected $casts = [
+        'next_control_at' => 'datetime',
     ];
 
     public function patient()

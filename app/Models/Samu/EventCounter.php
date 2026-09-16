@@ -20,12 +20,12 @@ class EventCounter extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    protected $dates = [
-        'date',
+    protected $casts = [
+        'date' => 'date',
     ];
 
     /**

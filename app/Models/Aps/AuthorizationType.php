@@ -10,22 +10,29 @@ use OwenIt\Auditing\Contracts\Auditable;
 class AuthorizationType extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id','name','start_date','end_date','status'
+        'id',
+        'name',
+        'start_date',
+        'end_date',
+        'status'
     ];
 
-    use SoftDeletes;
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = ['start_date','end_date'];
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date'
+    ];
 
     /**
      * The table associated with the model.
@@ -34,4 +41,3 @@ class AuthorizationType extends Model implements Auditable
      */
     protected $table = 'aps_authorizations_types';
 }
-

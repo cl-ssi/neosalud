@@ -9,6 +9,16 @@ use OwenIt\Auditing\Contracts\Auditable;
 class CalendarProgramming extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'mp_calendar_programming';
+    // NOT IN BBDD    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +27,22 @@ class CalendarProgramming extends Model implements Auditable
     protected $fillable = [
         'id',
         // 'rut',
-        'user_id','specialty_id', 'profession_id', 'activity_id', 'operating_room_id', 'start_date', 'end_date'
+        'user_id',
+        'specialty_id',
+        'profession_id',
+        'activity_id',
+        'operating_room_id',
+        'start_date',
+        'end_date'
+    ];
+
+    /**
+     * The casted attributes.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'deleted_at' => 'datetime'
     ];
 
     public function operatingRoom()
@@ -59,18 +84,4 @@ class CalendarProgramming extends Model implements Auditable
     //     return $this->belongsTo('App\User');
     // }
 
-    use SoftDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'mp_calendar_programming';
 }

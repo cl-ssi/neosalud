@@ -33,11 +33,11 @@ class UserService extends Model implements Auditable
 
   use SoftDeletes;
   /**
-   * The attributes that should be mutated to dates.
+   * The casted attributes.
    *
    * @var array
    */
-  protected $dates = ['deleted_at'];
+  protected $casts = ['deleted_at' => 'datetime'];
 
   /**
    * The table associated with the model.
@@ -45,4 +45,5 @@ class UserService extends Model implements Auditable
    * @var string
    */
   protected $table = 'mp_user_services';
+  // NOT IN BBDD
 }

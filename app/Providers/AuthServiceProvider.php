@@ -24,7 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+        // No necesario para laravel 10
+        // $this->registerPolicies(); 
 
         //Rutas para oauth2 passport test
         if (! $this->app->routesAreCached()) {

@@ -9,24 +9,56 @@ use OwenIt\Auditing\Contracts\Auditable;
 class ExecutedActivity extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'mp_executed_activities';
+    // NOT IN BBDD
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'correlative', 'programming_date', 'operating_room', 'origin_request', 'origin_request_desc', 'profession', 'medic_rut','medic_dv',
-        'medic_name', 'medic_specialty', 'medic_specialty_desc',
-        'intervention_procedure', 'intervention_procedure_desc',
-        'plane','plane_desc','extremity','extremity_desc',
-        'estimated_intervention_time', 'estado_intervencion',
+        'id',
+        'correlative',
+        'programming_date',
+        'operating_room',
+        'origin_request',
+        'origin_request_desc',
+        'profession',
+        'medic_rut',
+        'medic_dv',
+        'medic_name',
+        'medic_specialty',
+        'medic_specialty_desc',
+        'intervention_procedure',
+        'intervention_procedure_desc',
+        'plane',
+        'plane_desc',
+        'extremity',
+        'extremity_desc',
+        'estimated_intervention_time',
+        'estado_intervencion',
         'tx_entrance_date',
-        'intervention_status','intervention_status_desc','intervention_start_date','intervention_end_date',
-        'surgery_category','surgery_category_desc',
+        'intervention_status',
+        'intervention_status_desc',
+        'intervention_start_date',
+        'intervention_end_date',
+        'surgery_category',
+        'surgery_category_desc',
         'operating_room_entrance_date',
-        'surgery_room_entrance_date', 'surgery_room_exit_date',
-        'table_surgery_category', 'table_surgery_category_desc',
-        'suspencion_cause', 'suspencion_cause_desc'
+        'surgery_room_entrance_date',
+        'surgery_room_exit_date',
+        'table_surgery_category',
+        'table_surgery_category_desc',
+        'suspencion_cause',
+        'suspencion_cause_desc'
     ];
 
     public function rrhh()
@@ -49,23 +81,21 @@ class ExecutedActivity extends Model implements Auditable
     {
         $duracion = $this->intervention_end_date->getTimestamp()
             - $this->intervention_start_date->getTimestamp();
-            // dd("x",$duracion);
+        // dd("x",$duracion);
         return gmdate("H:i:s", $duracion);
     }
 
 
-    use SoftDeletes;
+
     /**
-     * The attributes that should be mutated to dates.
+     * The Casted attributes.
      *
      * @var array
      */
-    protected $dates = ['deleted_at', 'intervention_start_date', 'intervention_end_date'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+        'intervention_start_date' => 'datetime',
+        'intervention_end_date' => 'datetime'
+    ];
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'mp_executed_activities';
 }
