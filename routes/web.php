@@ -545,7 +545,7 @@ Route::prefix('soap')->name('soap.')->group(function () {
 
 use App\Http\Controllers\Samu\ShiftController;
 use App\Http\Controllers\Samu\MobileInServiceController;
-use App\Http\Controllers\Samu\MobileExceptionController;
+// use App\Http\Controllers\Samu\MobileExceptionController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryDetailController;
 use App\Http\Controllers\Samu\MobileInServiceInventoryTemplateController;
@@ -610,55 +610,55 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('shifts')->name('shift.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
         ->group(function () {
-            Route::get('/',                [ShiftController::class, 'index'])->name('index');
-            Route::get('/create',        [ShiftController::class, 'create'])->name('create')->middleware('ensure.shift');
-            Route::post('/store',        [ShiftController::class, 'store'])->name('store');
-            Route::get('/searcher',        ShiftSearcher::class)->name('searcher');
-            Route::get('/edit/{shift}',    [ShiftController::class, 'edit'])->name('edit');
-            Route::put('/{shift}',        [ShiftController::class, 'update'])->name('update');
-            Route::delete('/{shift}',     [ShiftController::class, 'destroy'])->name('destroy');
+            Route::get('/', [ShiftController::class, 'index'])->name('index');
+            Route::get('/create', [ShiftController::class, 'create'])->name('create')->middleware('ensure.shift');
+            Route::post('/store', [ShiftController::class, 'store'])->name('store');
+            Route::get('/searcher', ShiftSearcher::class)->name('searcher');
+            Route::get('/edit/{shift}', [ShiftController::class, 'edit'])->name('edit');
+            Route::put('/{shift}', [ShiftController::class, 'update'])->name('update');
+            Route::delete('/{shift}', [ShiftController::class, 'destroy'])->name('destroy');
             Route::get('/shift-user/{shiftUser}/edit', ShiftUserEdit::class)->name('user.edit');
         });
 
     Route::prefix('mobiles-in-service')->name('mobileinservice.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
         ->group(function () {
-            Route::get('/',                            [MobileInServiceController::class, 'index'])->name('index');
-            Route::get('/create',                    [MobileInServiceController::class, 'create'])->name('create');
-            Route::post('/store',                    [MobileInServiceController::class, 'store'])->name('store');
-            Route::get('/{mobileInService}/edit',    [MobileInServiceController::class, 'edit'])->name('edit');
-            Route::put('/{mobileInService}',        [MobileInServiceController::class, 'update'])->name('update');
-            Route::get('/crewedit/{mobileCrew}',    [MobileInServiceController::class, 'crewedit'])->name('crewedit');
-            Route::put('/crewupdate/{mobileCrew}',    [MobileInServiceController::class, 'crewupdate'])->name('crewupdate');
-            Route::delete('/{mobileInService}',     [MobileInServiceController::class, 'destroy'])->name('destroy');
+            Route::get('/', [MobileInServiceController::class, 'index'])->name('index');
+            Route::get('/create', [MobileInServiceController::class, 'create'])->name('create');
+            Route::post('/store', [MobileInServiceController::class, 'store'])->name('store');
+            Route::get('/{mobileInService}/edit', [MobileInServiceController::class, 'edit'])->name('edit');
+            Route::put('/{mobileInService}', [MobileInServiceController::class, 'update'])->name('update');
+            Route::get('/crewedit/{mobileCrew}', [MobileInServiceController::class, 'crewedit'])->name('crewedit');
+            Route::put('/crewupdate/{mobileCrew}', [MobileInServiceController::class, 'crewupdate'])->name('crewupdate');
+            Route::delete('/{mobileInService}', [MobileInServiceController::class, 'destroy'])->name('destroy');
             Route::get('/{mobileInService}/location', [MobileInServiceController::class, 'location'])->name('location');
         });
 
-    // Mobile Exceptions Routes
-    Route::prefix('exceptions')->name('exception.')
-        ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
-        ->group(function () {
-            Route::post('/{mobileInService}', [MobileExceptionController::class, 'store'])->name('store');
-            Route::delete('/{exception}', [MobileExceptionController::class, 'destroy'])->name('destroy');
-        });
-
+    /*     // Mobile Exceptions Routes
+        Route::prefix('exceptions')->name('exception.')
+            ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')
+            ->group(function () {
+                Route::post('/{mobileInService}', [MobileExceptionController::class, 'store'])->name('store');
+                Route::delete('/{exception}', [MobileExceptionController::class, 'destroy'])->name('destroy');
+            });
+     */
     Route::prefix('mobiles-in-service-inventory')->name('mobileinserviceinventory.')->group(function () {
-        Route::get('/',                           [MobileInServiceInventoryController::class, 'index'])->name('index');
+        Route::get('/', [MobileInServiceInventoryController::class, 'index'])->name('index');
 
         Route::prefix('mobiles-in-service-inventory-details')->name('details.')->group(function () {
             Route::get('/{mobileInService}/create', [MobileInServiceInventoryDetailController::class, 'create'])->name('create');
-            Route::post('/store',                   [MobileInServiceInventoryDetailController::class, 'store'])->name('store');
-            Route::get('/{mobileInService}/edit',  [MobileInServiceInventoryDetailController::class, 'edit'])->name('edit');
-            Route::put('/{mobileInService}',       [MobileInServiceInventoryDetailController::class, 'update'])->name('update');
-            Route::get('/{mobileInService}/confirm_inventory',  [MobileInServiceInventoryDetailController::class, 'confirm_inventory'])->name('confirm_inventory');
+            Route::post('/store', [MobileInServiceInventoryDetailController::class, 'store'])->name('store');
+            Route::get('/{mobileInService}/edit', [MobileInServiceInventoryDetailController::class, 'edit'])->name('edit');
+            Route::put('/{mobileInService}', [MobileInServiceInventoryDetailController::class, 'update'])->name('update');
+            Route::get('/{mobileInService}/confirm_inventory', [MobileInServiceInventoryDetailController::class, 'confirm_inventory'])->name('confirm_inventory');
         });
 
         Route::prefix('mobiles-in-service-inventory-templates')->name('templates.')->group(function () {
-            Route::get('/',                      [MobileInServiceInventoryTemplateController::class, 'index'])->name('index');
+            Route::get('/', [MobileInServiceInventoryTemplateController::class, 'index'])->name('index');
             Route::get('/{mobileType}/create', [MobileInServiceInventoryTemplateController::class, 'create'])->name('create');
-            Route::post('/store',              [MobileInServiceInventoryTemplateController::class, 'store'])->name('store');
-            Route::get('/{mobileType}/edit',  [MobileInServiceInventoryTemplateController::class, 'edit'])->name('edit');
-            Route::put('/{mobileType}',            [MobileInServiceInventoryTemplateController::class, 'update'])->name('update');
+            Route::post('/store', [MobileInServiceInventoryTemplateController::class, 'store'])->name('store');
+            Route::get('/{mobileType}/edit', [MobileInServiceInventoryTemplateController::class, 'edit'])->name('edit');
+            Route::put('/{mobileType}', [MobileInServiceInventoryTemplateController::class, 'update'])->name('update');
         });
     });
 
@@ -673,9 +673,9 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('novelties')->name('noveltie.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
         ->group(function () {
-            Route::get('/',             Novelties::class)->name('index');
-            Route::get('/create',         [NoveltieController::class, 'create'])->name('create');
-            Route::post('/store',         [NoveltieController::class, 'store'])->name('store');
+            Route::get('/', Novelties::class)->name('index');
+            Route::get('/create', [NoveltieController::class, 'create'])->name('create');
+            Route::post('/store', [NoveltieController::class, 'store'])->name('store');
             Route::get('/edit/{noveltie}', [NoveltieController::class, 'edit'])->name('edit');
             Route::put('/update/{noveltie}', [NoveltieController::class, 'update'])->name('update');
         });
@@ -695,12 +695,12 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('calls')->name('call.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU operador|SAMU despachador')
         ->group(function () {
-            Route::get('/',                [CallController::class, 'index'])->name('index');
-            Route::get('/ots',            [CallController::class, 'ots'])->name('ots');
-            Route::get('/create',        [CallController::class, 'create'])->name('create');
-            Route::get('/edit/{call}',    [CallController::class, 'edit'])->name('edit');
-            Route::post('/store',        [CallController::class, 'store'])->name('store');
-            Route::delete('/{call}',     [CallController::class, 'destroy'])->name('destroy');
+            Route::get('/', [CallController::class, 'index'])->name('index');
+            Route::get('/ots', [CallController::class, 'ots'])->name('ots');
+            Route::get('/create', [CallController::class, 'create'])->name('create');
+            Route::get('/edit/{call}', [CallController::class, 'edit'])->name('edit');
+            Route::post('/store', [CallController::class, 'store'])->name('store');
+            Route::delete('/{call}', [CallController::class, 'destroy'])->name('destroy');
             Route::put('/update/{call}', [CallController::class, 'update'])->name('update');
             Route::get('/search', SearchCalls::class)->name('search');
         });
@@ -708,7 +708,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('events')->name('event.')
         ->middleware('permission:SAMU administrador|SAMU despachador')
         ->group(function () {
-            Route::get('/',             [EventController::class, 'index'])->name('index');
+            Route::get('/', [EventController::class, 'index'])->name('index');
             Route::get('/{event}/duplicate', [EventController::class, 'create'])->name('duplicate');
             Route::get('/create/{call?}', [EventController::class, 'create'])->name('create');
             Route::post('/store/{call?}', [EventController::class, 'store'])->name('store');
@@ -717,7 +717,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
             Route::post('/store/{event?}/duplicate', [EventController::class, 'store'])->name('store.duplicate');
             Route::get('/edit/{event}', [EventController::class, 'edit'])->name('edit');
             Route::put('/update/{event}', [EventController::class, 'update'])->name('update');
-            Route::delete('/{event}',     [EventController::class, 'destroy'])->name('destroy');
+            Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy');
             Route::get('/{event}/reopen', [EventController::class, 'reopen'])
                 ->middleware('permission:SAMU administrador')->name('reopen');
             Route::get('/filter', EventFilter::class)->name('filter');
@@ -733,24 +733,24 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('keys')->name('key.')
         ->middleware('permission:SAMU administrador')
         ->group(function () {
-            Route::get('/',             [KeyController::class, 'index'])->name('index');
-            Route::get('/create',         [KeyController::class, 'create'])->name('create');
-            Route::post('/store',         [KeyController::class, 'store'])->name('store');
-            Route::put('/{key}',        [KeyController::class, 'update'])->name('update');
-            Route::get('/edit/{key}',    [KeyController::class, 'edit'])->name('edit');
-            Route::delete('/{key}',        [KeyController::class, 'destroy'])->name('destroy');
+            Route::get('/', [KeyController::class, 'index'])->name('index');
+            Route::get('/create', [KeyController::class, 'create'])->name('create');
+            Route::post('/store', [KeyController::class, 'store'])->name('store');
+            Route::put('/{key}', [KeyController::class, 'update'])->name('update');
+            Route::get('/edit/{key}', [KeyController::class, 'edit'])->name('edit');
+            Route::delete('/{key}', [KeyController::class, 'destroy'])->name('destroy');
         });
 
     Route::prefix('mobiles')->name('mobile.')
         ->middleware('permission:SAMU administrador')
         ->group(function () {
-            Route::get('/',                [MobileController::class, 'index'])->name('index');
-            Route::get('/create',        [MobileController::class, 'create'])->name('create');
-            Route::post('/store',        [MobileController::class, 'store'])->name('store');
-            Route::get('/stats',        MobilesStats::class)->name('stats');
+            Route::get('/', [MobileController::class, 'index'])->name('index');
+            Route::get('/create', [MobileController::class, 'create'])->name('create');
+            Route::post('/store', [MobileController::class, 'store'])->name('store');
+            Route::get('/stats', MobilesStats::class)->name('stats');
             Route::get('/edit/{mobile}', [MobileController::class, 'edit'])->name('edit');
-            Route::put('/{mobile}',        [MobileController::class, 'update'])->name('update');
-            Route::delete('/{mobile}',     [MobileController::class, 'destroy'])->name('destroy');
+            Route::put('/{mobile}', [MobileController::class, 'update'])->name('update');
+            Route::delete('/{mobile}', [MobileController::class, 'destroy'])->name('destroy');
             Route::get('/{mobile}/gps', [GpsController::class, 'index'])->name('gps');
             Route::get('/gps', GetLocation::class);
 
@@ -762,15 +762,15 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::prefix('establishments')->name('establishment.')
         ->middleware('permission:SAMU administrador')
         ->group(function () {
-            Route::get('/',             [EstablishmentController::class, 'index'])->name('index');
-            Route::post('/',             [EstablishmentController::class, 'store'])->name('store');
+            Route::get('/', [EstablishmentController::class, 'index'])->name('index');
+            Route::post('/', [EstablishmentController::class, 'store'])->name('store');
         });
 
     Route::prefix('communes')->name('commune.')
         ->middleware('permission:SAMU administrador')
         ->group(function () {
-            Route::get('/',             [CommuneController::class, 'index'])->name('index');
-            Route::post('/',             [CommuneController::class, 'store'])->name('store');
+            Route::get('/', [CommuneController::class, 'index'])->name('index');
+            Route::post('/', [CommuneController::class, 'store'])->name('store');
         });
 
     Route::prefix('coordinates')->name('coordinate.')
@@ -794,11 +794,11 @@ Route::post('/miubicacion', [CoordinateController::class, 'store'])->name('coord
 // ]);
 
 Route::prefix('absences')->name('absences.')->group(function () {
-    Route::get('/',             [AbsenceController::class, 'index'])->name('index');
-    Route::get('/create',         [AbsenceController::class, 'create'])->name('create');
-    Route::post('/',             [AbsenceController::class, 'store'])->name('store');
-    Route::get('/load',         [AbsenceController::class, 'load'])->name('load');
-    Route::post('/import',         [AbsenceController::class, 'import'])->name('import');
+    Route::get('/', [AbsenceController::class, 'index'])->name('index');
+    Route::get('/create', [AbsenceController::class, 'create'])->name('create');
+    Route::post('/', [AbsenceController::class, 'store'])->name('store');
+    Route::get('/load', [AbsenceController::class, 'load'])->name('load');
+    Route::post('/import', [AbsenceController::class, 'import'])->name('import');
     Route::delete('/{absence}', [AbsenceController::class, 'destroy'])->name('destroy');
 });
 
