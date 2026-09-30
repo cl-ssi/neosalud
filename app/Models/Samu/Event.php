@@ -80,21 +80,21 @@ class Event extends Model implements Auditable
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = [
-        'date',
-        'departure_at',
-        'mobile_departure_at',
-        'mobile_arrival_at',
-        'route_to_healtcenter_at',
-        'healthcenter_at',
-        'patient_reception_at',
-        'return_base_at',
-        'on_base_at',
-        'birthday',
+    protected $casts = [
+        'date' => 'date',
+        'departure_at' => 'datetime',
+        'mobile_departure_at' => 'datetime',
+        'mobile_arrival_at' => 'datetime',
+        'route_to_healtcenter_at' => 'datetime',
+        'healthcenter_at' => 'datetime',
+        'patient_reception_at' => 'datetime',
+        'return_base_at' => 'datetime',
+        'on_base_at' => 'datetime',
+        'birthday' => 'date',
     ];
 
     protected $appends = [

@@ -19,13 +19,13 @@ class GlasgowScale extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    // protected $dates = [
-    //     'valid_from',
-    //     'valid_to'
+    // protected $casts = [
+    //     'valid_from' => 'datetime',
+    //     'valid_to' => 'datetime'
     // ];
 
     /**

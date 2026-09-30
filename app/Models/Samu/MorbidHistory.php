@@ -19,16 +19,6 @@ class MorbidHistory extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
-    // protected $dates = [
-    //     'valid_from',
-    //     'valid_to'
-    // ];
-
-    /**
     * The primary key associated with the table.
     *
     * @var string

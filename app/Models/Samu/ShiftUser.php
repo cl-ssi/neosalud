@@ -31,13 +31,13 @@ class ShiftUser extends pivot
     ];
 
     /**
-    * The attributes that should be mutated to dates.
+    * The casted attributes.
     *
     * @var array
     */
-    protected $dates = [
-        'assumes_at',
-        'leaves_at'
+    protected $casts = [
+        'assumes_at' => 'datetime',
+        'leaves_at' => 'datetime'
     ];
 
     public function shift()

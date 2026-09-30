@@ -14,22 +14,35 @@ class ProgrammingProposal extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'id','type','user_id','contract_id','specialty_id','profession_id','request_date','start_date','end_date','status','observation'
+        'id',
+        'type',
+        'user_id',
+        'contract_id',
+        'specialty_id',
+        'profession_id',
+        'request_date',
+        'start_date',
+        'end_date',
+        'status',
+        'observation'
     ];
 
     use HasFactory;
     use SoftDeletes;
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('App\Models\User', 'user_id');
     }
 
-    public function details() {
-        return $this->hasMany('App\Models\MedicalProgrammer\ProgrammingProposalDetail','programming_proposal_id');
+    public function details()
+    {
+        return $this->hasMany('App\Models\MedicalProgrammer\ProgrammingProposalDetail', 'programming_proposal_id');
     }
 
-    public function signatureFlows() {
-        return $this->hasMany('App\Models\MedicalProgrammer\ProgrammingProposalSignatureFlow','programming_proposal_id');
+    public function signatureFlows()
+    {
+        return $this->hasMany('App\Models\MedicalProgrammer\ProgrammingProposalSignatureFlow', 'programming_proposal_id');
     }
 
     public function contract()
@@ -50,20 +63,18 @@ class ProgrammingProposal extends Model implements Auditable
 
     public function employeeCanModify(ProgrammingProposal $programmingProposal)
     {
-        
+
         //si la solicitud ya fue confirmada, no se deja modificar a nadie
         if ($this->status == "Confirmado") {
             return 0;
-        }
-        else
-        {
+        } else {
             // Si es administrador, se deja modificar
             if (Auth::user()->hasPermissionTo('Mp: perfil administrador')) {
                 return 1;
             }
 
             //cuando esta asignado como visador, retonar 0
-            if(Auth::user()->programmerVisator->count() > 0){
+            if (Auth::user()->programmerVisator->count() > 0) {
                 return 0;
             }
 
@@ -76,24 +87,25 @@ class ProgrammingProposal extends Model implements Auditable
             // else{
 
             // si es jefe de unidad    
-            if($programmingProposal->specialty_id!=null){
-                if(Auth::user()->unitHead->where('specialty_id',$programmingProposal->specialty_id)->count() > 0){
+            if ($programmingProposal->specialty_id != null) {
+                if (Auth::user()->unitHead->where('specialty_id', $programmingProposal->specialty_id)->count() > 0) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
-            if($programmingProposal->profession_id!=null){
-                if(Auth::user()->unitHead->where('profession_id',$programmingProposal->profession_id)->count() > 0){
+            if ($programmingProposal->profession_id != null) {
+                if (Auth::user()->unitHead->where('profession_id', $programmingProposal->profession_id)->count() > 0) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
         }
     }
 
-    public function countUnopenedDetailsBetween($from, $to){
+    public function countUnopenedDetailsBetween($from, $to)
+    {
         $count = 0;
         // Obtener rango de fechas a recorrer
         $start_date = ($from > $this->start_date) ? Carbon::parse($from) : $this->start_date;
@@ -108,7 +120,7 @@ class ProgrammingProposal extends Model implements Auditable
                     // verifica si está aperturado o no
                     $start = Carbon::parse($start_date->format('Y-m-d') . " " . $detail->start_hour);
                     if ($detail->appointments->where('start', $start)->count() == 0) {
-                      $count++;
+                        $count++;
                     }
                 }
             }
@@ -119,17 +131,22 @@ class ProgrammingProposal extends Model implements Auditable
     }
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = ['request_date', 'start_date', 'end_date', 'deleted_at'];
+    protected $casts = [
+        'request_date' => 'datetime',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'deleted_at' => 'datetime'
+    ];
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-
     protected $table = 'mp_programming_proposals';
+    // NOT IN BBDD    
 }

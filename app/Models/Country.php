@@ -8,24 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Country extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
 	/**
-	* The attributes that are mass assignable.
-	*
-	* @var array
-	*/
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = [
-		'id','iso_cod','name'
-		
+		'id',
+		'iso_cod',
+		'name'
+
 	];
-	
+
 	/**
-	* The attributes that should be mutated to dates.
-	*
-	* @var array
-	*/
-	protected $dates = [
-		'deleted_at',
+	 * The casted attributes.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'deleted_at' => 'datetime',
 	];
 }

@@ -20,8 +20,34 @@ class Absence extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'user_id', 'contract_id', 'practitioner_id', 'health_insurance', 'social_insurance', 'legal_quality', 'staff', 'res_number', 'res_date', 
-        'start_date', 'end_date', 'total_days', 'period_days', 'license_cost', 'type', 'balance_days_not_replaced', 'load_source', 'created_at', 'updated_at'
+        'user_id',
+        'contract_id',
+        'practitioner_id',
+        'health_insurance',
+        'social_insurance',
+        'legal_quality',
+        'staff',
+        'res_number',
+        'res_date',
+        'start_date',
+        'end_date',
+        'total_days',
+        'period_days',
+        'license_cost',
+        'type',
+        'balance_days_not_replaced',
+        'load_source',
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $casts = [
+        'res_date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
 
     public function user()
@@ -38,6 +64,4 @@ class Absence extends Model implements Auditable
     {
         return $this->belongsTo(Practitioner::class, 'practitioner_id');
     }
-
-    protected $dates = ['res_date', 'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at'];
 }

@@ -9,6 +9,16 @@ use OwenIt\Auditing\Contracts\Auditable;
 class CutOffDate extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'mp_cutoff_dates';
+    // NOT IN BBDD
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,23 +29,20 @@ class CutOffDate extends Model implements Auditable
         //, 'user_id'
     ];
 
+    /**
+     * The casted attributes.
+     *
+     * @var array
+     */
+    protected $casts = ['deleted_at' => 'datetime'];
+
     public function user()
     {
         return $this->belongsTo('App\User');
     }
 
-    use SoftDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'mp_cutoff_dates';
+
+
+    
 }

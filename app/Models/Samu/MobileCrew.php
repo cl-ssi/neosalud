@@ -23,9 +23,9 @@ class MobileCrew extends pivot
         'leaves_at'
     ];
 
-    protected $dates = [
-        'assumes_at',
-        'leaves_at'
+    protected $casts = [
+        'assumes_at' => 'datetime',
+        'leaves_at' => 'datetime'
     ];
 
     public function mobileInService()

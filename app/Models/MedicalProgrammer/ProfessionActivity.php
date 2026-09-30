@@ -22,17 +22,17 @@ class ProfessionActivity extends Model implements Auditable
     }
     
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = ['deleted_at' => 'datetime'];
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-
     protected $table = 'mp_profession_activities';
+    // NOT IN BBDD    
 }

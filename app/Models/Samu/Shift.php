@@ -30,13 +30,13 @@ class Shift extends Model implements Auditable
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = [
-        'opening_at',
-        'closing_at'
+    protected $casts = [
+        'opening_at' => 'datetime',
+        'closing_at' => 'datetime'
     ];
 
     /**

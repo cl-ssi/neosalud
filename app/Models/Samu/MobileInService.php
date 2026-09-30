@@ -41,15 +41,15 @@ class MobileInService extends Model implements Auditable
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The casted attributes.
      *
      * @var array
      */
-    protected $dates = [
-        'lunch_start_at',
-        'lunch_break_start_at',
-        'lunch_break_end_at',
-        'lunch_end_at',
+    protected $casts = [
+        'lunch_start_at' => 'datetime',
+        'lunch_break_start_at' => 'datetime',
+        'lunch_break_end_at' => 'datetime',
+        'lunch_end_at' => 'datetime',
     ];
 
     public function shift()
