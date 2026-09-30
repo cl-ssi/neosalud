@@ -2,30 +2,47 @@
 
 namespace App\Exports\Samu;
 
-use App\Http\Livewire\Samu\MinsalStatistics;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
+use App\Http\Livewire\Samu\TransparencyStatistics;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class AverageResponseTimeExport implements FromView, WithTitle
+class AverageResponseTimeExport implements FromArray, WithHeadings, WithTitle, ShouldAutoSize
 {
     protected $year;
+    protected $data;
 
-    public function __construct($year)
+    public function __construct($year, $data = null)
     {
         $this->year = $year;
+        if ($data !== null) {
+            $this->data = $data;
+        } else {
+            $component = new TransparencyStatistics();
+            $component->year = $this->year;
+            $this->data = $component->getAverageResponseTimeMonthly();
+        }
     }
 
-    public function view(): View
+    public function headings(): array
     {
-        $component = new MinsalStatistics();
-        $component->year = $this->year;
-        $data = $component->getAverageResponseTimeMonthly();
+        return ['Tipo de Emergencia', 'Mes', 'Tiempo Promedio (min)'];
+    }
 
-        return view('samu.minsal.average-response-time', [
-            'data' => $data,
-            'year' => $this->year
-        ]);
+    public function array(): array
+    {
+        $rows = [];
+        foreach ($this->data as $emergencyType => $monthlyData) {
+            foreach ($monthlyData as $item) {
+                $rows[] = [
+                    $emergencyType,
+                    $item->month_name ?? '',
+                    $item->avg_response_time ?? 0,
+                ];
+            }
+        }
+        return $rows;
     }
 
     public function title(): string

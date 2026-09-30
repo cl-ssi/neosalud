@@ -2,30 +2,44 @@
 
 namespace App\Exports\Samu;
 
-use App\Http\Livewire\Samu\MinsalStatistics;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
+use App\Http\Livewire\Samu\TransparencyStatistics;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ManagedCallsExport implements FromView, WithTitle
+class ManagedCallsExport implements FromArray, WithHeadings, WithTitle, ShouldAutoSize
 {
     protected $year;
+    protected $data;
 
-    public function __construct($year)
+    public function __construct($year, $data = null)
     {
         $this->year = $year;
+        if ($data !== null) {
+            $this->data = $data;
+        } else {
+            $component = new TransparencyStatistics();
+            $component->year = $this->year;
+            $this->data = $component->getTotalManagedCallsMonthly();
+        }
     }
 
-    public function view(): View
+    public function headings(): array
     {
-        $component = new MinsalStatistics();
-        $component->year = $this->year;
-        $data = $component->getTotalManagedCallsMonthly();
+        return ['Mes', 'Total Llamadas Gestionadas'];
+    }
 
-        return view('samu.minsal.managed-calls', [
-            'data' => $data,
-            'year' => $this->year
-        ]);
+    public function array(): array
+    {
+        $rows = [];
+        foreach ($this->data as $item) {
+            $rows[] = [
+                $item->month_name ?? '',
+                $item->total ?? 0,
+            ];
+        }
+        return $rows;
     }
 
     public function title(): string

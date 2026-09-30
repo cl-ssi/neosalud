@@ -586,6 +586,7 @@ use App\Http\Livewire\Samu\Dashboard\DashboardIndex;
 use App\Http\Livewire\Samu\RemStatistics;
 use App\Http\Livewire\Samu\MinsalStatistics;
 use App\Http\Livewire\Samu\MobilesStats;
+use App\Http\Livewire\Samu\TransparencyStatistics;
 use App\Http\Livewire\Samu\ShiftReception;
 use App\Http\Livewire\Samu\ShiftReceptionForm;
 
@@ -606,6 +607,7 @@ Route::prefix('samu')->name('samu.')->middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardIndex::class)->name('dashboard');
     Route::get('/rem', RemStatistics::class)->name('rem');
     Route::get('/minsal', MinsalStatistics::class)->name('minsal');
+    Route::get('/transparency', TransparencyStatistics::class)->name('transparency');
 
     Route::prefix('shifts')->name('shift.')
         ->middleware('permission:SAMU administrador|SAMU regulador|SAMU despachador')

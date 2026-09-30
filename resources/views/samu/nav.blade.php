@@ -149,7 +149,7 @@ $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
 
     <li class="nav-item dropdown">
         <a
-            class="nav-link dropdown-toggle {{ active(['samu.dashboard', 'samu.event.filter', 'samu.event-by-month', 'samu.call.search', 'samu.shift.searcher']) }}"
+            class="nav-link dropdown-toggle {{ active(['samu.dashboard', 'samu.transparency', 'samu.minsal', 'samu.rem', 'samu.mobile.stats', 'samu.event.filter', 'samu.event-by-month', 'samu.call.search', 'samu.shift.searcher']) }}"
             href="#"
             id="navbarDropdown"
             role="button"
@@ -176,6 +176,11 @@ $disabled = (!App\Models\Samu\Shift::todayShiftVerify()) ? 'disabled':'';
             <li>
                 <a class="dropdown-item {{ active('samu.minsal') }}" href="{{ route('samu.minsal') }}">
                     <i class="fas fa-chart-line"></i> Estadísticas MINSAL
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {{ active('samu.transparency') }}" href="{{ route('samu.transparency') }}">
+                    <i class="fas fa-chart-line"></i> Estadísticas de Transparencia
                 </a>
             </li>
             <li>
