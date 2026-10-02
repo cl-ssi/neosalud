@@ -13,25 +13,31 @@ use App\Models\ContactPoint;
 
 class ClaveUnicaController extends Controller
 {
-    public function autenticar(Request $request){
+    public function autenticar(Request $request, $route = null)
+    {
+        /* Si ya tiene sesión iniciada en iOnline y es el login normal, no volver a pasar por clave única */
+        if (auth()->check() && !$route && !$request->has('redirect')) {
+            return redirect()->route('home');
+        }
         /* Primer paso, redireccionar al login de clave única */
-        $url_base       = "https://accounts.claveunica.gob.cl/openid/authorize/";
-        $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
+        $url_base = "https://accounts.claveunica.gob.cl/openid/authorize/";
+        $client_id = env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri = urlencode(env('APP_URL') . "/claveunica/callback");
 
-        $state          = csrf_token();
-        $scope          = 'openid run name';
+        $state = csrf_token();
+        $scope = 'openid run name';
 
-        $params         = '?client_id='.$client_id.
-                        '&redirect_uri='.$redirect_uri.
-                        '&scope='.$scope.
-                        '&response_type=code'.
-                        '&state='.$state;
+        $params = '?client_id=' . $client_id .
+            '&redirect_uri=' . $redirect_uri .
+            '&scope=' . $scope .
+            '&response_type=code' .
+            '&state=' . $state;
 
-        return redirect()->to($url_base.$params)->send();
+        return redirect()->to($url_base . $params)->send();
     }
 
-    public function callback(Request $request) {
+    public function callback(Request $request)
+    {
         /* Segundo paso, el usuario ya se autentificó correctamente en CU y retornó a nuestro sistema */
 
         /* Nos aseguramos que vengan los parámetros desde CU */
@@ -40,26 +46,26 @@ class ClaveUnicaController extends Controller
         // }
 
         /* Recepcionamos los siguientes parametros desde CU */
-        $code   = $request->input('code');
-        $state  = $request->input('state'); 
+        $code = $request->input('code');
+        $state = $request->input('state');
 
-        $url_base       = "https://accounts.claveunica.gob.cl/openid/token/";
-        $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $client_secret  = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
+        $url_base = "https://accounts.claveunica.gob.cl/openid/token/";
+        $client_id = env("CLAVEUNICA_CLIENT_ID");
+        $client_secret = env("CLAVEUNICA_SECRET_ID");
+        $redirect_uri = urlencode(env('APP_URL') . "/claveunica/callback");
 
         $scope = 'openid+run+name';
 
         try {
             $response = Http::asForm()->post($url_base, [
-                'client_id'     => $client_id,
+                'client_id' => $client_id,
                 'client_secret' => $client_secret,
-                'redirect_uri'  => $redirect_uri,
-                'grant_type'    => 'authorization_code',
-                'code'          => $code,
-                'state'         => $state,
+                'redirect_uri' => $redirect_uri,
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'state' => $state,
             ]);
-        } catch(ConnectionException $e) {
+        } catch (ConnectionException $e) {
             session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
             return redirect()->route('welcome');
         }
@@ -68,8 +74,14 @@ class ClaveUnicaController extends Controller
         $access_token = json_decode($response)->access_token ?? null;
 
         /** Si no existe el acces token */
-        if(is_null($access_token))
-        {
+        if (is_null($access_token)) {
+            logger()->error('Clave Única: no se obtuvo access_token en callback', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+                'client_id_presente' => !empty($client_id),
+                'secret_presente' => !empty($client_secret),
+                'redirect_uri' => $redirect_uri,
+            ]);
             session()->flash(
                 'info',
                 'No se pudo iniciar Sesión con Clave Única'
@@ -81,7 +93,7 @@ class ClaveUnicaController extends Controller
         $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo/";
         try {
             $response = Http::withToken(json_decode($response)->access_token)->post($url_base);
-        } catch(ConnectionException $e) {
+        } catch (ConnectionException $e) {
             session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
             return redirect()->route('welcome');
         }
@@ -91,19 +103,18 @@ class ClaveUnicaController extends Controller
         /* Registrar los datos del usuario en la BD local */
 
         $user_local = User::query()
-                        ->getByRun($user_clave_unica->RolUnico->numero)
-                        ->first();
+            ->getByRun($user_clave_unica->RolUnico->numero)
+            ->first();
 
-        if($user_local) {
+        if ($user_local) {
             /* Actualiza el correo si es que ha cambiado */
-            if(property_exists($user_clave_unica,'email')) {
-                if($user_local->email != $user_clave_unica->email) {
+            if (property_exists($user_clave_unica, 'email')) {
+                if ($user_local->email != $user_clave_unica->email) {
                     $user_local->email = $user_clave_unica->email;
                     $user_local->save();
                 }
             }
-        } 
-        else {
+        } else {
             $user_local = new User();
             $user_local->active = 1;
             $user_local->claveunica = true;
@@ -129,11 +140,11 @@ class ClaveUnicaController extends Controller
             $human_name->user_id = $user_local->id;
             $human_name->save();
 
-            if(property_exists($user_clave_unica,'email')) { 
+            if (property_exists($user_clave_unica, 'email')) {
                 $contact_point = new ContactPoint();
-                $contact_point->system = 'email'; 
+                $contact_point->system = 'email';
                 $contact_point->use = 'home';
-                $contact_point->value = $user_clave_unica->email; 
+                $contact_point->value = $user_clave_unica->email;
                 $contact_point->user_id = $user_local->id;
                 $contact_point->save();
             }
@@ -141,9 +152,9 @@ class ClaveUnicaController extends Controller
 
         Auth::login($user_local, true);
 
-        return redirect()->route('home');
-        
-            
+        return redirect()->to('/home');
+
+
         /* CU Entrega los datos del usuario en este formato
         [RolUnico] => stdClass Object
             (
@@ -173,33 +184,32 @@ class ClaveUnicaController extends Controller
         */
     }
 
-    public function logout() {
+    public function logout()
+    {
         /* Nos iremos al cerrar sesión en clave única y luego volvermos a nuestro sistema */
-        if(env('APP_ENV') == 'local')
-        {
+        if (env('APP_ENV') == 'local') {
             /* Si es ambiente de desarrollo cerramos sólo localmente */
             return redirect()->route('logout');
-        }
-        else
-        {
+        } else {
             /** Cerrar sesión clave única */
             /* Url para cerrar sesión en clave única */
-            $url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+            $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             /* Url para luego cerrar sesión en nuestro sisetema */
-            $url_redirect   = env('APP_URL')."/logout";
-            $url            = $url_logout.urlencode($url_redirect);
+            $url_redirect = env('APP_URL') . "/logout";
+            $url = $url_logout . urlencode($url_redirect);
             return redirect($url);
         }
     }
 
 
     /** Luego de integrar CU ya no es necesario esta función */
-    public function getUserInfo($access_token, $redirect = null) {
+    public function getUserInfo($access_token, $redirect = null)
+    {
         /* Tercer Paso, obtener los datos de usuario  */
         $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
         try {
             $response = Http::withToken($access_token)->post($url_base);
-        } catch(ConnectionException $e) {
+        } catch (ConnectionException $e) {
             session()->flash('danger', 'Disculpe, no nos pudimos conectar con Clave Única, por favor intente más tarde.');
             return redirect()->route('welcome');
         }
@@ -210,19 +220,18 @@ class ClaveUnicaController extends Controller
         // $user_local = User::find($user_clave_unica->RolUnico->numero);
 
         $user_local = User::query()
-                        ->getByRun($user_clave_unica->RolUnico->numero)
-                        ->first();
+            ->getByRun($user_clave_unica->RolUnico->numero)
+            ->first();
 
-        if($user_local) {
+        if ($user_local) {
             /* Actualiza el correo si es que ha cambiado */
-            if(property_exists($user_clave_unica,'email')) {
-                if($user_local->email != $user_clave_unica->email) {
+            if (property_exists($user_clave_unica, 'email')) {
+                if ($user_local->email != $user_clave_unica->email) {
                     $user_local->email = $user_clave_unica->email;
                     $user_local->save();
                 }
             }
-        } 
-        else {
+        } else {
             $user_local = new User();
             $user_local->active = 1;
             $user_local->claveunica = true;
@@ -247,27 +256,26 @@ class ClaveUnicaController extends Controller
             $human_name->user_id = $user_local->id;
             $human_name->save();
 
-            if(property_exists($user_clave_unica,'email')) { 
+            if (property_exists($user_clave_unica, 'email')) {
                 $contact_point = new ContactPoint();
-                $contact_point->system = 'email'; 
+                $contact_point->system = 'email';
                 $contact_point->use = 'home';
-                $contact_point->value = $user_clave_unica->email; 
+                $contact_point->value = $user_clave_unica->email;
                 $contact_point->user_id = $user_local->id;
                 $contact_point->save();
             }
         }
 
         Auth::login($user_local, true);
-        
+
         /* Si tiene una redirección o de lo contrario se va al home */
-        if($redirect) {
+        if ($redirect) {
             $route = $redirect;
-        }
-        else {
+        } else {
             $route = 'home';
         }
 
         return redirect()->route($route);
-        
+
     }
 }

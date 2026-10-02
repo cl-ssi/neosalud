@@ -95,6 +95,10 @@ Route::get('/exception/{message}', function ($message) {
 });
 
 Route::get('/', function () {
+    /* Si ya tiene sesión iniciada, no mostrar el botón de login */
+    if (auth()->check()) {
+        return redirect()->route('home');
+    }
     return view('welcome');
 })->name('welcome');
 
