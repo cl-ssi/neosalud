@@ -152,7 +152,10 @@ class ClaveUnicaController extends Controller
 
         Auth::login($user_local, true);
 
-        return redirect()->to('/home');
+        // 🔑 OBLIGATORIO PARA LARAVEL 10:
+        $request->session()->regenerate();
+
+        return redirect()->route('home');
 
 
         /* CU Entrega los datos del usuario en este formato
@@ -267,6 +270,7 @@ class ClaveUnicaController extends Controller
         }
 
         Auth::login($user_local, true);
+        request()->session()->regenerate();
 
         /* Si tiene una redirección o de lo contrario se va al home */
         if ($redirect) {
