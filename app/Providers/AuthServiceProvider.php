@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use Laravel\Passport\Passport;
+// use Illuminate\Support\Facades\Gate;
+// use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,12 +25,12 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         // No necesario para laravel 10
-        $this->registerPolicies();
+        // $this->registerPolicies();
 
         //Rutas para oauth2 passport test
         // if (! $this->app->routesAreCached()) {
         //     Passport::routes();
         // }
-        Passport::tokensExpireIn(now()->addMinutes(30));
+        // Passport::tokensExpireIn(now()->addMinutes(30));
     }
 }
