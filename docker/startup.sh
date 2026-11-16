@@ -1,4 +1,6 @@
 #!/bin/sh
+echo "--- Iniciando contenedor con PHP: ---"
+php -v
 
 sed -i "s,LISTEN_PORT,$PORT,g" /etc/nginx/nginx.conf
 
