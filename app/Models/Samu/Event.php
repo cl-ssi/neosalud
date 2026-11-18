@@ -208,6 +208,90 @@ class Event extends Model implements Auditable
         return $jobs;
     }
 
+    public function getMobileInLettersAttribute()
+    {
+        $mobile = $this->mobile ?? optional($this->mobileInService)->mobile;
+        if ($mobile) {
+            return trim($mobile->code . ' ' . $mobile->name);
+        }
+        return null;
+    }
+
+    public function getMobileInstitutionAttribute()
+    {
+        $mobile = $this->mobile ?? optional($this->mobileInService)->mobile;
+        if ($mobile) {
+            return $mobile->managed ? 'SAMU' : 'APS';
+        }
+        return null;
+    }
+
+    public function getOriginEstablishmentAttribute()
+    {
+        if ($this->relationLoaded('originEstablishment') && $this->originEstablishment) {
+            return $this->originEstablishment->name;
+        }
+
+        $text = strtoupper(($this->address ?? '') . ' ' . ($this->address_reference ?? ''));
+        if ($this->call) {
+            $text .= ' ' . strtoupper(($this->call->address ?? '') . ' ' . ($this->call->address_reference ?? ''));
+        }
+        $text = trim($text);
+
+        if (empty($text)) {
+            return null;
+        }
+
+        $abbreviations = [
+            '/\bHETG\b/' => 'Hospital Dr. Ernesto Torres Galdames (Iquique)',
+            '/\bHAH\b/'  => 'Hospital Alto Hospicio',
+        ];
+        foreach ($abbreviations as $pattern => $fullName) {
+            if (preg_match($pattern, $text)) {
+                return $fullName;
+            }
+        }
+
+        static $samuEstablishments = null;
+        if ($samuEstablishments === null) {
+            $samuEstablishments = Organization::whereHas('samu')->get(['id', 'name', 'alias']);
+        }
+
+        foreach ($samuEstablishments as $est) {
+            $name = strtoupper($est->name);
+            $alias = strtoupper($est->alias ?? '');
+
+            if (!empty($alias) && str_contains($text, $alias)) {
+                return $est->name;
+            }
+            if (str_contains($text, $name)) {
+                return $est->name;
+            }
+
+            $simpleName = trim(preg_replace('/\s*\(.*?\)\s*/', '', $est->name));
+            if (!empty($simpleName) && str_contains($text, strtoupper($simpleName))) {
+                return $est->name;
+            }
+        }
+
+        foreach ($samuEstablishments as $est) {
+            $clean = strtoupper(preg_replace('/^(POSTA DE SALUD RURAL|CENTRO DE SALUD FAMILIAR|HOSPITAL REGIONAL|HOSPITAL|SAPU|SAR|CESFAM|POSTA RURAL|POSTA)\s+/i', '', $est->name));
+            $clean = trim(preg_replace('/\s*\(.*?\)\s*/', '', $clean));
+
+            if (strlen($clean) >= 4) {
+                $words = explode(' ', $clean);
+                $keyword = end($words);
+                if (strlen($keyword) >= 4 && str_contains($text, $keyword)) {
+                    if (preg_match('/\b(SAR|SAPU|POSTA|CESFAM|CECOSF|HOSPITAL|CLINICA)\b/i', $text)) {
+                        return $est->name;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getMobileTypeAttribute()
     {
         if ($this->mobileInService)

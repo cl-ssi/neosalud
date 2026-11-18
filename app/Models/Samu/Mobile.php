@@ -57,6 +57,11 @@ class Mobile extends Model implements Auditable
         return null;
     }
 
+    public function getInstitutionAttribute()
+    {
+        return $this->managed ? 'SAMU' : 'APS';
+    }
+
     public function getManagedInLettersAttribute()
     {
         if ($this->managed)

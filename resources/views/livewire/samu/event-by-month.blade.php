@@ -15,7 +15,7 @@
                         type="month"
                         id="for-month"
                         class="form-control form-control-sm"
-                        wire:model.debounce.1000ms="year_month"
+                        wire:model="year_month"
                     >
                 </div>
             </fieldset>
@@ -23,27 +23,21 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-small">
+        <table class="table table-bordered table-sm">
             <thead>
                 <tr>
-                    <th class="text-center">
-                        Evento ID
-                    </th>
-                    <th>
-                        Hora de Llamado
-                    </th>
-                    <th>
-                        Hora de Despacho
-                    </th>
-                    <th>
-                        Hora de Arribo
-                    </th>
-                    <th>
-                        Hora de Regreso
-                    </th>
-                    <th>
-                        Centro Asistencial
-                    </th>
+                    <th class="text-center">Evento ID</th>
+                    <th>Fecha</th>
+                    <th>Móvil / Inst.</th>
+                    <th>Comuna Origen</th>
+                    <th>Hora Llamado</th>
+                    <th>Hora Despacho</th>
+                    <th>Hora Arribo</th>
+                    <th>Centro Asistencial (Destino)</th>
+                    <th>Llegada C.A.</th>
+                    <th>Recep. Pcte</th>
+                    <th>Retorno Base</th>
+                    <th>En Base</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,15 +48,28 @@
                             {{ $event->id }}
                         </a>
                     </td>
-                    <td>{{ $event->call ? $event->call->created_at : 'No posee llamada' }}</td>
-                    <td>{{ $event->mobile_departure_at }}</td>
-                    <td>{{ $event->mobile_arrival_at }}</td>
-                    <td>{{ $event->return_base_at }}</td>
-                    <td>{{ $event->establishment->name ?? 'Desconocido' }}</td>
+                    <td>{{ optional($event->date)->format('Y-m-d') }}</td>
+                    <td>
+                        {{ $event->mobile_in_letters }}
+                        @if($event->mobile_institution)
+                            <span class="badge {{ $event->mobile_institution == 'SAMU' ? 'bg-primary' : 'bg-secondary' }}">
+                                {{ $event->mobile_institution }}
+                            </span>
+                        @endif
+                    </td>
+                    <td>{{ optional($event->commune)->name ?? optional(optional($event->call)->commune)->name }}</td>
+                    <td>{{ $event->call ? optional($event->call->created_at)->format('H:i') : 'No posee' }}</td>
+                    <td>{{ optional($event->mobile_departure_at)->format('H:i') }}</td>
+                    <td>{{ optional($event->mobile_arrival_at)->format('H:i') }}</td>
+                    <td>{{ optional($event->establishment)->name ?? optional($event->receptionPlace)->name ?? 'Desconocido' }}</td>
+                    <td>{{ optional($event->healthcenter_at)->format('H:i') }}</td>
+                    <td>{{ optional($event->patient_reception_at)->format('H:i') }}</td>
+                    <td>{{ optional($event->return_base_at)->format('H:i') }}</td>
+                    <td>{{ optional($event->on_base_at)->format('H:i') }}</td>
                 </tr>
                 @empty
                 <tr class="text-center">
-                    <td colspan="6">
+                    <td colspan="12">
                         <em>
                             No hay eventos para el mes seleccionado
                         </em>
@@ -98,7 +105,7 @@
                     <i class="fas fa-download"></i>
                 </span>
 
-                Descargar
+                Descargar Excel
             </button>
         </div>
     </div>
